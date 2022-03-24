@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-class Semester extends BaseModel
+class Thesis extends BaseModel
 {
 
 }

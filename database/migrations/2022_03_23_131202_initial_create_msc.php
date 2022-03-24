@@ -13,9 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('semesters', function (Blueprint $table) {
+        Schema::create('venues', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('name')->nullable();
+            $table->timestamps();
+        });
+
+        Schema::create('slots', function (Blueprint $table) {
+            $table->id();
+            $table->string('name')->nullable();
             $table->timestamps();
         });
 
@@ -31,6 +37,13 @@ return new class extends Migration
             $table->foreignId('cluster_id')->constrained();
             $table->string('name');
             $table->string('short_name');
+            $table->timestamps();
+        });
+
+        Schema::create('theses', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('specialization_id')->constrained();
+            $table->string('name');
             $table->timestamps();
         });
 
@@ -52,7 +65,16 @@ return new class extends Migration
         Schema::create('courses', function (Blueprint $table) {
             $table->id();
             $table->foreignId('cluster_id')->nullable()->constrained();
+            $table->foreignId('as_slot_id')->nullable()->constrained('slots');
+            $table->foreignId('ss_slot_id')->nullable()->constrained('slots');
             $table->foreignId('specialization_id')->nullable()->constrained();
+            $table->foreignId('venue_id')->constrained();
+            $table->string('name');
+            $table->string('internal_name');
+            $table->string('short_name');
+            $table->string('content');
+            $table->unsignedInteger('ects');
+            $table->boolean('block');
             $table->timestamps();
         });
 
@@ -91,8 +113,10 @@ return new class extends Migration
         Schema::dropIfExists('courses');
         Schema::dropIfExists('course_group_specialization');
         Schema::dropIfExists('course_groups');
+        Schema::dropIfExists('theses');
         Schema::dropIfExists('specializations');
         Schema::dropIfExists('clusters');
-        Schema::dropIfExists('semesters');
+        Schema::dropIfExists('slots');
+        Schema::dropIfExists('venues');
     }
 };
