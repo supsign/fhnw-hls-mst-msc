@@ -564,6 +564,9 @@ input:invalid, textarea:invalid, select:invalid {
 .mr-4 {
   margin-right: 1rem;
 }
+.mt-10 {
+  margin-top: 2.5rem;
+}
 .ml-3 {
   margin-left: 0.75rem;
 }
@@ -602,6 +605,12 @@ input:invalid, textarea:invalid, select:invalid {
 }
 .cursor-default {
   cursor: default;
+}
+.select-none {
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
 }
 .flex-col {
   flex-direction: column;
@@ -661,6 +670,9 @@ input:invalid, textarea:invalid, select:invalid {
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
 }
+.p-2 {
+  padding: 0.5rem;
+}
 .py-12 {
   padding-top: 3rem;
   padding-bottom: 3rem;
@@ -687,6 +699,10 @@ input:invalid, textarea:invalid, select:invalid {
 .text-5xl {
   font-size: 3rem;
   line-height: 1;
+}
+.text-xl {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
 }
 .text-sm {
   font-size: 0.875rem;
