@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Thesis;
+use App\Services\Imports\ConfigurationImportService;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -12,12 +12,8 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
-    public function test()
+    public function test(ConfigurationImportService $configurationImportSerivce)
     {
-
-        dump(
-            Thesis::all()
-        );        
-
+        $configurationImportSerivce('Konfiguration_v1.3.xlsx');
     }
 }
