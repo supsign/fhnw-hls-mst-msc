@@ -2,13 +2,29 @@
 
 namespace App\Imports\ConfigurationSheets;
 
-use Maatwebsite\Excel\Concerns\ToModel;
+use App\Models\Cluster;
+use Illuminate\Support\Collection;
+use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class ClusterSheetImport implements ToModel, WithHeadingRow
+class ClusterSheetImport implements ToCollection, WithHeadingRow
 {
-    public function model(array $row): void
+    public function collection(Collection $rows)
     {
-    	// dump($row);
+        foreach ($rows as $row)
+        {
+            $row = $row->ToArray();
+
+            if (!isset($row['id'])) {
+                continue;
+            }
+
+            Cluster::updateOrCreate([
+                'id' => $row['id'],
+            ], [
+                'name' => $row['cluster'],
+                'core_competences' => $row['corecompetences'],
+            ]);
+        }
     }
 }

@@ -16,13 +16,15 @@ class ConfigurationImport implements WithMultipleSheets
    public function sheets(): array
     {
     	return [
-    		'Specialisation' => new SpecialisationSheetImport,
-    		'ClusterCore' => new ClusterSheetImport,
-    		'Module Groups' => new CourseGroupSheetImport,
-    		'Modules' => new CourseSheetImport,
+    		// 'ClusterCore' => new ClusterSheetImport,
+    		// 'Specialisation' => new SpecialisationSheetImport,
     		'Thesis' => new ThesisSheetImport,
-    		'Texte' => new PageContentSheetImport,
-    		'links' => new LinkImport,
+
+    		// 'Module Groups' => new CourseGroupSheetImport,
+    		// 'Modules' => new CourseSheetImport,
+
+    		// 'Texte' => new PageContentSheetImport,
+    		// 'links' => new LinkImport,
     	];
     }
 }

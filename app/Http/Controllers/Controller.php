@@ -15,5 +15,7 @@ class Controller extends BaseController
     public function test(ConfigurationImportService $configurationImportSerivce)
     {
         $configurationImportSerivce('Konfiguration_v1.3.xlsx');
+
+        return 1;
     }
 }
