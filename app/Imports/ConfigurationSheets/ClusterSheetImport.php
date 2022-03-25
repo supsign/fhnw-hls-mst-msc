@@ -19,9 +19,8 @@ class ClusterSheetImport implements ToCollection, WithHeadingRow
                 continue;
             }
 
-            Cluster::updateOrCreate([
+            Cluster::create([
                 'id' => $row['id'],
-            ], [
                 'name' => $row['cluster'],
                 'core_competences' => $row['corecompetences'],
             ]);

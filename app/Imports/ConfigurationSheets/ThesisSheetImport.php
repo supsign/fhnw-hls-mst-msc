@@ -2,7 +2,7 @@
 
 namespace App\Imports\ConfigurationSheets;
 
-use App\Models\Specialization;
+use App\Models\Thesis;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
@@ -11,7 +11,7 @@ class ThesisSheetImport implements ToCollection, WithHeadingRow
 {
     public function __construct()
     {
-        $this->validSpecializationIds = Specialization::all()->pluck('id')->toArray();   
+        // $this->validSpecializationIds = $validSpecializationIds;
     }
 
     public function collection(Collection $rows)
@@ -24,13 +24,16 @@ class ThesisSheetImport implements ToCollection, WithHeadingRow
                 continue;
             }
 
-            if (!in_array($row['specialisation'], $this->validSpecializationIds)) {
-                //  error handling
+            // if (!in_array($row['specialisation'], $this->validSpecializationIds)) {
+            //     //  error handling
 
-                return;
-            }
+            //     return;
+            // }
 
-            dump($row);
+            Thesis::create([
+                'name' => $row['subject'],
+                'specialization_id' => $row['specialisation'],
+            ]);
         }
     }
 }

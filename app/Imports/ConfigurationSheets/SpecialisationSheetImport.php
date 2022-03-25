@@ -2,7 +2,6 @@
 
 namespace App\Imports\ConfigurationSheets;
 
-use App\Models\Cluster;
 use App\Models\Specialization;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
@@ -12,7 +11,7 @@ class SpecialisationSheetImport implements ToCollection, WithHeadingRow
 {
     public function __construct()
     {
-        $this->validClusterIds = Cluster::all()->pluck('id')->toArray();   
+        // $this->validClusterIds = $validClusterIds;  
     }
 
     public function collection(Collection $rows)
@@ -21,19 +20,20 @@ class SpecialisationSheetImport implements ToCollection, WithHeadingRow
         {
             $row = $row->ToArray();
 
+            dump($row);
+
             if (!isset($row['id'])) {
                 continue;
             }
 
-            if (!in_array($row['clustercore'], $this->validClusterIds)) {
-                //  error handling
+            // if (!in_array($row['clustercore'], $this->validClusterIds)) {
+            //     //  error handling
 
-                return;
-            }
+            //     continue;
+            // }
 
-            Specialization::updateOrCreate([
+            Specialization::create([
                 'id' => $row['id'],
-            ], [
                 'cluster_id' => $row['clustercore'],
                 'name' => $row['name'],
                 'short_name' => $row['shortname'],
