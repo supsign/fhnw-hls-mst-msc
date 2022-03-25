@@ -20,6 +20,20 @@ use Illuminate\Support\Facades\Storage;
 
 class ConfigurationImportService
 {
+    protected array $tablesToTruncate = [
+        PageContent::class,
+        Link::class,
+        CourseCourseGroup::class,
+        Course::class,
+        CourseGroupSpecialization::class,
+        CourseGroup::class,
+        Thesis::class,
+        Specialization::class,
+        Cluster::class,
+        Slot::class,
+        Venue::class,
+    ];
+
     public function __construct(protected ConfigurationImport $configurationImport, protected Excel $excel)
     {
         $this->truncateTables();
@@ -36,17 +50,9 @@ class ConfigurationImportService
 
     protected function truncateTables(): self
     {
-        PageContent::getQuery()->delete();
-        Link::getQuery()->delete();
-        CourseCourseGroup::getQuery()->delete();
-        Course::getQuery()->delete();
-        CourseGroupSpecialization::getQuery()->delete();
-        CourseGroup::getQuery()->delete();
-        Thesis::getQuery()->delete();
-        Specialization::getQuery()->delete();
-        Cluster::getQuery()->delete();
-        Slot::getQuery()->delete();
-        Venue::getQuery()->delete();
+        foreach ($this->tablesToTruncate AS $table) {
+            $table::getQuery()->delete();
+        }
 
         return $this;
     }

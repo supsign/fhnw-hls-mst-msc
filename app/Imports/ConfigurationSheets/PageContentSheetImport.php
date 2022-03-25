@@ -2,13 +2,17 @@
 
 namespace App\Imports\ConfigurationSheets;
 
-use Maatwebsite\Excel\Concerns\ToModel;
+use Illuminate\Support\Collection;
+use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class PageContentSheetImport implements ToModel, WithHeadingRow
+class PageContentSheetImport implements ToCollection, WithHeadingRow
 {
-    public function model(array $row): void
+    public function collection(Collection $rows): void
     {
-    	// dump($row);
+        foreach ($rows as $row)
+        {
+
+        }
     }
 }

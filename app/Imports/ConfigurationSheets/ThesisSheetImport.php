@@ -14,7 +14,7 @@ class ThesisSheetImport implements ToCollection, WithHeadingRow
         // $this->validSpecializationIds = $validSpecializationIds;
     }
 
-    public function collection(Collection $rows)
+    public function collection(Collection $rows): void
     {
         foreach ($rows as $row)
         {
