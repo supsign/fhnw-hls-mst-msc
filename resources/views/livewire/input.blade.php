@@ -1,12 +1,17 @@
 <div class="mt-10" x-data="{hide: true}">
-    @if($typing)
-        <div>typing...</div>
-    @else
         <template x-if="!hide">
-        <div >{{$input}}</div>
+            <div>{{$input}}</div>
         </template>
-    @endif
+    <button @mousedown="hide = false" @mouseup="hide = true" class="border bg-gray-300 shadow-2xl p2">El Button</button>
+    <div class="flex flex-col">
+    <input wire:model="input" type="text">
+        @error('input') <span class="text-red-600">{{ $message }}</span> @enderror
+        <div wire:dirty wire:target="input">
+            typing...
+        </div>
+    </div>
 
-    <input wire:model="input" wire:keydown="changeType({{true}})" wire:keyup.debounce="changeType" type="text">
-    <button @mousedown="hide = false" @mouseup="hide = true">Show Message</button>
 </div>
+<script>
+
+</script>

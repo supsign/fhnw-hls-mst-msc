@@ -7,11 +7,15 @@ use Livewire\Component;
 class Input extends Component
 {
     public $input;
-    public bool $typing = false;
+    protected $rules = [
+        'input' => 'required|min:6',
+    ];
 
-    public function changeType(bool $state = false) {
-        $this->typing = $state;
+    public function updated($input)
+    {
+        $this->validateOnly($input);
     }
+
     public function render()
     {
         return view('livewire.input');
