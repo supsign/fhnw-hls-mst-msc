@@ -6,13 +6,7 @@
 .env
 .env.backup
 .phpunit.result.cache
-Homestead.json
-Homestead.yaml
-npm-debug.log
-yarn-error.log
-/.idea
-/.vscode
-.npmrc
+docker-compose.override.yml
 public/css/
 public/fonts/
 public/images/
@@ -20,3 +14,11 @@ public/js/
 public/ts/
 public/json/
 public/vendors/
+public/mix-manifest.json
+Homestead.json
+Homestead.yaml
+npm-debug.log
+yarn-error.log
+/.idea
+/.vscode
+.npmrc
