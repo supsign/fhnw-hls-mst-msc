@@ -3,6 +3,7 @@
 namespace App\Imports\ConfigurationSheets;
 
 use App\Models\Course;
+use App\Models\CourseCourseGroup;
 use App\Models\Slot;
 use App\Models\Venue;
 use Illuminate\Support\Collection;
@@ -11,6 +12,8 @@ use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
 class CourseSheetImport implements ToCollection, WithHeadingRow
 {
+    protected array $courseCourseGroupColumns = ['ac', 'acb', 'ba', 'bme', 'bt', 'ce', 'et', 'osc', 'pt'];
+
     public function collection(Collection $rows): void
     {
         foreach ($rows as $row)
@@ -36,6 +39,16 @@ class CourseSheetImport implements ToCollection, WithHeadingRow
                 'block' => $row['block'],
             ]);
 
+            foreach ($this->courseCourseGroupColumns AS $column) {
+                if (empty($row[$column])) {
+                    continue;
+                }
+
+                CourseCourseGroup::firstOrCreate([
+                    'course_id' => $row['id'],
+                    'course_group_id' => $row[$column],
+                ]);
+            }
         }
     }
 }
