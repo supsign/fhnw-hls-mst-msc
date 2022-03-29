@@ -70,7 +70,7 @@ return new class extends Migration
             $table->foreignId('slot_as_id')->nullable()->constrained('slots');
             $table->foreignId('slot_ss_id')->nullable()->constrained('slots');
             $table->foreignId('specialization_id')->nullable()->constrained();
-            $table->foreignId('venue_id')->constrained();
+            $table->foreignId('venue_id')->nullable()->constrained();
             $table->string('name');
             $table->string('internal_name');
             $table->string('short_name')->nullable();

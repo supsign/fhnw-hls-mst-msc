@@ -15,8 +15,10 @@ use App\Models\Specialization;
 use App\Models\Thesis;
 use App\Models\Venue;
 use Exception;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Excel;
 use Illuminate\Support\Facades\Storage;
+use Spatie\FlareClient\Http\Exceptions\InvalidData;
 
 class ConfigurationImportService
 {
@@ -24,8 +26,8 @@ class ConfigurationImportService
         PageContent::class,
         Link::class,
         CourseCourseGroup::class,
-        Course::class,
         CourseGroupSpecialization::class,
+        Course::class,
         CourseGroup::class,
         Thesis::class,
         Specialization::class,
@@ -39,23 +41,33 @@ class ConfigurationImportService
         
     }
 
-    public function __invoke(string $file)
+    public function __invoke(string $file): string
     {
         if (!Storage::exists($file)) {
             throw new Exception('"'.$file.'" not found');
         }
 
-        $this
-            ->truncateTables()
-            ->excel
-                ->import($this->configurationImport, $file);
+        try {
+            $this
+                ->truncateTables()
+                ->excel
+                    ->import($this->configurationImport, $file);
+        } catch (InvalidData $e) {
+            return $e->getMessage();
+        }
+
+        return 'success';
     }
 
     protected function truncateTables(): self
     {
+        DB::statement('SET FOREIGN_KEY_CHECKS = 0;');
+
         foreach ($this->tablesToTruncate AS $table) {
-            $table::getQuery()->delete();
+            $table::getQuery()->truncate();
         }
+
+        DB::statement('SET FOREIGN_KEY_CHECKS = 1;');
 
         return $this;
     }
