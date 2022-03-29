@@ -14,7 +14,9 @@ class ConfigurationController extends Controller
             $request->config_file->storeAs('config', $request->config_file->getClientOriginalName())
         );
 
-        return $status;
+        //  Sweet Alert with $status meldung einbauen
+
+        return redirect()->view('admin.config');
     }
 
     public function show()
