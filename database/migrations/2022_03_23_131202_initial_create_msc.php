@@ -1,9 +1,9 @@
 <?php
 
 use App\Models\App;
+use App\Services\Auth\PasswordService;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -107,7 +107,10 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        App::create(['admin_password' => Hash::make(env('ADMIN_PASSWORD'))]);
+        App::create([
+            'id' => 1,
+            'admin_password' => PasswordService::hash(env('ADMIN_PASSWORD'))
+        ]);
     }
 
     /**
