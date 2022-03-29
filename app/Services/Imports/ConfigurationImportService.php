@@ -41,7 +41,7 @@ class ConfigurationImportService
         
     }
 
-    public function __invoke(string $file): string
+    public function __invoke(string $file): array
     {
         if (!Storage::exists($file)) {
             throw new Exception('"'.$file.'" not found');
@@ -53,10 +53,15 @@ class ConfigurationImportService
                 ->excel
                     ->import($this->configurationImport, $file);
         } catch (InvalidData $e) {
-            return $e->getMessage();
+            return [
+                'status' => 'error',
+                'error' => $e->getMessage(),
+            ];
         }
 
-        return 'success';
+        return [
+            'status' => 'success',
+        ];
     }
 
     protected function truncateTables(): self
