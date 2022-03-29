@@ -20,8 +20,6 @@ class SpecialisationSheetImport implements ToCollection, WithHeadingRow
         {
             $row = $row->ToArray();
 
-            dump($row);
-
             if (!isset($row['id'])) {
                 continue;
             }

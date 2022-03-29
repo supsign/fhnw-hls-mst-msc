@@ -26,12 +26,10 @@ class ConfigurationImport implements WithMultipleSheets
     		'ClusterCore' => new ClusterSheetImport,
     		'Specialisation' => new SpecialisationSheetImport(),
     		'Thesis' => new ThesisSheetImport(),
-
-    		// 'Module Groups' => new CourseGroupSheetImport,
-    		// 'Modules' => new CourseSheetImport,
-
-    		// 'Texte' => new PageContentSheetImport,
-    		// 'links' => new LinkImport,
+    		'Module Groups' => new CourseGroupSheetImport,
+    		'Modules' => new CourseSheetImport,
+    		'Texte' => new PageContentSheetImport,
+    		'links' => new LinkImport,
     	];
     }
 }

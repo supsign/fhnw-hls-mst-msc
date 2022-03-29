@@ -36,7 +36,7 @@ class ConfigurationImportService
 
     public function __construct(protected ConfigurationImport $configurationImport, protected Excel $excel)
     {
-        $this->truncateTables();
+        
     }
 
     public function __invoke(string $file)
@@ -45,7 +45,10 @@ class ConfigurationImportService
             throw new Exception('"'.$file.'" not found');
         }
 
-        $this->excel->import($this->configurationImport, $file);
+        $this
+            ->truncateTables()
+            ->excel
+                ->import($this->configurationImport, $file);
     }
 
     protected function truncateTables(): self
