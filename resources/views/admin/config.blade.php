@@ -10,19 +10,14 @@
                     @if ($errors->count())
                         @dump($errors)
                     @endif
-                    <x-app.card>
-                    <form method="POST" action="{{ route('admin.config.post') }}" enctype="multipart/form-data">
-                        @csrf
-                        Password: 
-                        <br/>
-                        <input type="password" name="password">
-                        <br/>
-                        <input type="file" name="config_file">
-                        <br/>
-                        <br/>
-                        <input type="submit" name="submit">
-                    </form>
-                    </x-app.card>
+                    <x-base.card>
+                        <form method="POST" action="{{ route('admin.config.post') }}" enctype="multipart/form-data"  class="flex flex-col justify-center gap-5">
+                            @csrf
+                            <x-base.input label="Password" type="password" name="password" />
+                            <input type="file" name="config_file">
+                            <input type="submit" name="submit" class="button-primary">
+                        </form>
+                    </x-base.card>
                 </div>
             </div>
         </div>
