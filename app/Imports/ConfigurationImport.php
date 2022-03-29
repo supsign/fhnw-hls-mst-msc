@@ -15,11 +15,6 @@ class ConfigurationImport implements WithMultipleSheets
 {
 	protected array $clusters;
 
-	public function __construct()
-	{
-
-	}
-
    	public function sheets(): array
     {
     	return [
