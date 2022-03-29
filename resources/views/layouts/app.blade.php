@@ -19,7 +19,9 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('vendors/fontawesome-pro/css/all.min.css') }}">
 
 </head>
+
 <body class="font-body">
+@include('sweetalert::alert')
 <div id="app" class="w-full bg-gray-200 overflow-auto">
     <div class="flex flex-col h-screen relative">
         <x-layout.top/>
