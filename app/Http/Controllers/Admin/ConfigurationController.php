@@ -9,6 +9,8 @@ class ConfigurationController extends Controller
 {
     public function post(PostConfigurationRequest $request)
     {
+        dd($request->validated());
+
 
     }
 
