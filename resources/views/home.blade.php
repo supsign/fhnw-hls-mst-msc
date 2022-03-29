@@ -11,11 +11,6 @@
                     </div>
                     <div>
                         Hello i'm a friendly Card
-
-                        @dump(
-                            $semesters,
-                        )
-
                     </div>
                 </div>
             </x-app.card>
