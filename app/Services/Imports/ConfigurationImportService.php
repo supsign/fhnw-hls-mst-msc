@@ -23,16 +23,16 @@ use Spatie\FlareClient\Http\Exceptions\InvalidData;
 class ConfigurationImportService
 {
     protected array $tablesToTruncate = [
-        PageContent::class,
-        Link::class,
-        CourseCourseGroup::class,
-        CourseGroupSpecialization::class,
-        Course::class,
-        CourseGroup::class,
-        Thesis::class,
-        Specialization::class,
         Cluster::class,
+        Course::class,
+        CourseCourseGroup::class,
+        CourseGroup::class,
+        CourseGroupSpecialization::class,
+        Link::class,
+        PageContent::class,
         Slot::class,
+        Specialization::class,
+        Thesis::class,
         Venue::class,
     ];
 
