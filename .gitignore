@@ -12,3 +12,11 @@ npm-debug.log
 yarn-error.log
 /.idea
 /.vscode
+.npmrc
+public/css/
+public/fonts/
+public/images/
+public/js/
+public/ts/
+public/json/
+public/vendors/

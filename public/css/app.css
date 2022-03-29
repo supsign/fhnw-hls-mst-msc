@@ -525,6 +525,34 @@ input:invalid, textarea:invalid, select:invalid {
 /**
  * This injects any component classes registered by plugins.
  */
+.container {
+  width: 100%;
+}
+@media (min-width: 640px) {
+  .container {
+    max-width: 640px;
+  }
+}
+@media (min-width: 768px) {
+  .container {
+    max-width: 768px;
+  }
+}
+@media (min-width: 1024px) {
+  .container {
+    max-width: 1024px;
+  }
+}
+@media (min-width: 1280px) {
+  .container {
+    max-width: 1280px;
+  }
+}
+@media (min-width: 1536px) {
+  .container {
+    max-width: 1536px;
+  }
+}
 /**
  * Here you would add any of your custom component classes; stuff that you'd
  * want loaded *before* the utilities so that the utilities could still
@@ -539,9 +567,6 @@ input:invalid, textarea:invalid, select:invalid {
  * This injects all of Tailwind's utility classes, generated based on your
  * config file.
  */
-.static {
-  position: static;
-}
 .absolute {
   position: absolute;
 }
@@ -561,11 +586,24 @@ input:invalid, textarea:invalid, select:invalid {
   margin-left: auto;
   margin-right: auto;
 }
+.my-auto {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+.mb-4 {
+  margin-bottom: 1rem;
+}
 .mt-4 {
   margin-top: 1rem;
 }
 .mr-4 {
   margin-right: 1rem;
+}
+.mt-auto {
+  margin-top: auto;
+}
+.mb-2 {
+  margin-bottom: 0.5rem;
 }
 .ml-3 {
   margin-left: 0.75rem;
@@ -588,17 +626,35 @@ input:invalid, textarea:invalid, select:invalid {
 .table {
   display: table;
 }
+.contents {
+  display: contents;
+}
 .hidden {
   display: none;
 }
 .h-16 {
   height: 4rem;
 }
+.h-screen {
+  height: 100vh;
+}
+.h-auto {
+  height: auto;
+}
 .h-5 {
   height: 1.25rem;
 }
+.max-h-20 {
+  max-height: 5rem;
+}
+.max-h-12 {
+  max-height: 3rem;
+}
 .min-h-screen {
   min-height: 100vh;
+}
+.w-full {
+  width: 100%;
 }
 .w-auto {
   width: auto;
@@ -609,11 +665,17 @@ input:invalid, textarea:invalid, select:invalid {
 .flex-1 {
   flex: 1 1 0%;
 }
+.flex-grow {
+  flex-grow: 1;
+}
 .cursor-default {
   cursor: default;
 }
 .flex-col {
   flex-direction: column;
+}
+.content-center {
+  align-content: center;
 }
 .items-center {
   align-items: center;
@@ -637,13 +699,23 @@ input:invalid, textarea:invalid, select:invalid {
   margin-top: calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));
   margin-bottom: calc(1.5rem * var(--tw-space-y-reverse));
 }
+.overflow-auto {
+  overflow: auto;
+}
 .truncate {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+.rounded {
+  border-radius: 0.25rem;
+}
 .rounded-md {
   border-radius: 0.375rem;
+}
+.rounded-t {
+  border-top-left-radius: 0.25rem;
+  border-top-right-radius: 0.25rem;
 }
 .rounded-l-md {
   border-top-left-radius: 0.375rem;
@@ -655,6 +727,9 @@ input:invalid, textarea:invalid, select:invalid {
 }
 .border {
   border-width: 1px;
+}
+.border-b {
+  border-bottom-width: 1px;
 }
 .border-t {
   border-top-width: 1px;
@@ -671,9 +746,31 @@ input:invalid, textarea:invalid, select:invalid {
   --tw-bg-opacity: 1;
   background-color: rgb(249 250 251 / var(--tw-bg-opacity));
 }
+.bg-gray-200 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(229 231 235 / var(--tw-bg-opacity));
+}
 .bg-white {
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+}
+.bg-gray-700 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(55 65 81 / var(--tw-bg-opacity));
+}
+.bg-hls {
+  --tw-bg-opacity: 1;
+  background-color: rgb(253 231 14 / var(--tw-bg-opacity));
+}
+.object-cover {
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+.p-3 {
+  padding: 0.75rem;
+}
+.p-2 {
+  padding: 0.5rem;
 }
 .py-12 {
   padding-top: 3rem;
@@ -682,6 +779,10 @@ input:invalid, textarea:invalid, select:invalid {
 .px-4 {
   padding-left: 1rem;
   padding-right: 1rem;
+}
+.px-3 {
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
 }
 .py-3 {
   padding-top: 0.75rem;
@@ -695,6 +796,12 @@ input:invalid, textarea:invalid, select:invalid {
   padding-left: 0.5rem;
   padding-right: 0.5rem;
 }
+.pr-4 {
+  padding-right: 1rem;
+}
+.pt-2 {
+  padding-top: 0.5rem;
+}
 .text-center {
   text-align: center;
 }
@@ -702,9 +809,25 @@ input:invalid, textarea:invalid, select:invalid {
   font-size: 3rem;
   line-height: 1;
 }
+.text-base {
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
 .text-sm {
   font-size: 0.875rem;
   line-height: 1.25rem;
+}
+.text-xs {
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+.text-lg {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+}
+.text-xl {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
 }
 .font-medium {
   font-weight: 500;
@@ -726,6 +849,10 @@ input:invalid, textarea:invalid, select:invalid {
   --tw-text-opacity: 1;
   color: rgb(75 85 99 / var(--tw-text-opacity));
 }
+.text-white {
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
+}
 .text-gray-500 {
   --tw-text-opacity: 1;
   color: rgb(107 114 128 / var(--tw-text-opacity));
@@ -733,6 +860,14 @@ input:invalid, textarea:invalid, select:invalid {
 .text-gray-700 {
   --tw-text-opacity: 1;
   color: rgb(55 65 81 / var(--tw-text-opacity));
+}
+.opacity-60 {
+  opacity: 0.6;
+}
+.shadow-xl {
+  --tw-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --tw-shadow-colored: 0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
 .shadow-sm {
   --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
@@ -804,6 +939,9 @@ input:invalid, textarea:invalid, select:invalid {
   color: rgb(107 114 128 / var(--tw-text-opacity));
 }
 @media (min-width: 640px) {
+  .sm\:mb-0 {
+    margin-bottom: 0px;
+  }
   .sm\:flex {
     display: flex;
   }
@@ -812,6 +950,9 @@ input:invalid, textarea:invalid, select:invalid {
   }
   .sm\:flex-1 {
     flex: 1 1 0%;
+  }
+  .sm\:flex-grow {
+    flex-grow: 1;
   }
   .sm\:items-center {
     align-items: center;
@@ -824,7 +965,30 @@ input:invalid, textarea:invalid, select:invalid {
     padding-right: 1.5rem;
   }
 }
+@media (min-width: 768px) {
+  .md\:max-h-20 {
+    max-height: 5rem;
+  }
+  .md\:flex-row {
+    flex-direction: row;
+  }
+  .md\:py-4 {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+  .md\:text-lg {
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+  }
+  .md\:text-base {
+    font-size: 1rem;
+    line-height: 1.5rem;
+  }
+}
 @media (min-width: 1024px) {
+  .lg\:justify-start {
+    justify-content: flex-start;
+  }
   .lg\:px-8 {
     padding-left: 2rem;
     padding-right: 2rem;
