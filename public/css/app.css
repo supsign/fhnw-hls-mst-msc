@@ -567,6 +567,9 @@ input:invalid, textarea:invalid, select:invalid {
  * This injects all of Tailwind's utility classes, generated based on your
  * config file.
  */
+.static {
+  position: static;
+}
 .absolute {
   position: absolute;
 }
