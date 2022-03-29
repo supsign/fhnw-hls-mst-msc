@@ -539,6 +539,9 @@ input:invalid, textarea:invalid, select:invalid {
  * This injects all of Tailwind's utility classes, generated based on your
  * config file.
  */
+.static {
+  position: static;
+}
 .absolute {
   position: absolute;
 }
@@ -570,6 +573,9 @@ input:invalid, textarea:invalid, select:invalid {
 .-ml-px {
   margin-left: -1px;
 }
+.block {
+  display: block;
+}
 .inline {
   display: inline;
 }
@@ -578,6 +584,9 @@ input:invalid, textarea:invalid, select:invalid {
 }
 .inline-flex {
   display: inline-flex;
+}
+.table {
+  display: table;
 }
 .hidden {
   display: none;
@@ -627,6 +636,11 @@ input:invalid, textarea:invalid, select:invalid {
   --tw-space-y-reverse: 0;
   margin-top: calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));
   margin-bottom: calc(1.5rem * var(--tw-space-y-reverse));
+}
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .rounded-md {
   border-radius: 0.375rem;
