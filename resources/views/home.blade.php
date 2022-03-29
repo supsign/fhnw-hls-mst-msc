@@ -17,7 +17,7 @@
                     @csrf
                     <x-base.input label="Surname" type="text" name="surname" />
                     <x-base.input label="Given Name" type="text" name="given_name" />$
-                    <livewire:select />
+                    <livewire:select label="TEst" :options="$semesters"/>
                     <x-base.select label="Study Mode" :options="$studyModes"></x-base.select>
                     <livewire:select />
                     <input type="submit" name="submit" class="button-primary">
