@@ -10,7 +10,7 @@
                         <i class="far fa-lightbulb fa-2x" aria-hidden="true"></i>
                     </div>
                     <div>
-                    Hello i'm a friendly Card
+                        Hello i'm a friendly Card
                     </div>
                 </div>
             </x-app.card>
