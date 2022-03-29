@@ -108,7 +108,10 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        App::create(['admin_password' => PasswordService::hash(env('ADMIN_PASSWORD'))]);
+        App::create([
+            'id' => 1,
+            'admin_password' => PasswordService::hash(env('ADMIN_PASSWORD'))
+        ]);
     }
 
     /**
