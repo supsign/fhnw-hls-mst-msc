@@ -9,9 +9,9 @@ class ConfigurationController extends Controller
 {
     public function post(PostConfigurationRequest $request)
     {
-        dd($request->validated());
+        dump($request->validated());
 
-
+        return 1;
     }
 
     public function show()

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Admin;
 
+use App\Services\PasswordService;
 use Illuminate\Foundation\Http\FormRequest;
 
 class PostConfigurationRequest extends FormRequest
@@ -13,7 +14,7 @@ class PostConfigurationRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return PasswordService::check($this->password);
     }
 
     /**
