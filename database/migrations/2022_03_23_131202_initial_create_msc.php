@@ -1,7 +1,9 @@
 <?php
 
+use App\Models\App;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -12,7 +14,7 @@ return new class extends Migration
      * @return void
      */
     public function up()
-    {
+    {        
         Schema::create('venues', function (Blueprint $table) {
             $table->id();
             $table->string('name')->nullable();
@@ -98,6 +100,14 @@ return new class extends Migration
             $table->text('content');
             $table->timestamps();
         });
+
+        Schema::create('app', function (Blueprint $table) {
+            $table->id();
+            $table->string('admin_password');
+            $table->timestamps();
+        });
+
+        App::create(['admin_password' => Hash::make(env('ADMIN_PASSWORD'))]);
     }
 
     /**
@@ -107,6 +117,7 @@ return new class extends Migration
      */
     public function down()
     {
+        Schema::dropIfExists('app');
         Schema::dropIfExists('page_contents');
         Schema::dropIfExists('links');
         Schema::dropIfExists('course_course_group');
