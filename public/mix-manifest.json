@@ -1,20 +1,5 @@
 {
     "/js/app.js": "/js/app.js",
     "/css/app.css": "/css/app.css",
-    "/img/calendarIcon.svg": "/img/calendarIcon.svg",
-    "/vendors/fontawesome-pro/webfonts/fa-brands-400.ttf": "/vendors/fontawesome-pro/webfonts/fa-brands-400.ttf",
-    "/vendors/fontawesome-pro/webfonts/fa-brands-400.woff2": "/vendors/fontawesome-pro/webfonts/fa-brands-400.woff2",
-    "/vendors/fontawesome-pro/webfonts/fa-duotone-900.ttf": "/vendors/fontawesome-pro/webfonts/fa-duotone-900.ttf",
-    "/vendors/fontawesome-pro/webfonts/fa-duotone-900.woff2": "/vendors/fontawesome-pro/webfonts/fa-duotone-900.woff2",
-    "/vendors/fontawesome-pro/webfonts/fa-light-300.ttf": "/vendors/fontawesome-pro/webfonts/fa-light-300.ttf",
-    "/vendors/fontawesome-pro/webfonts/fa-light-300.woff2": "/vendors/fontawesome-pro/webfonts/fa-light-300.woff2",
-    "/vendors/fontawesome-pro/webfonts/fa-regular-400.ttf": "/vendors/fontawesome-pro/webfonts/fa-regular-400.ttf",
-    "/vendors/fontawesome-pro/webfonts/fa-regular-400.woff2": "/vendors/fontawesome-pro/webfonts/fa-regular-400.woff2",
-    "/vendors/fontawesome-pro/webfonts/fa-solid-900.ttf": "/vendors/fontawesome-pro/webfonts/fa-solid-900.ttf",
-    "/vendors/fontawesome-pro/webfonts/fa-solid-900.woff2": "/vendors/fontawesome-pro/webfonts/fa-solid-900.woff2",
-    "/vendors/fontawesome-pro/webfonts/fa-thin-100.ttf": "/vendors/fontawesome-pro/webfonts/fa-thin-100.ttf",
-    "/vendors/fontawesome-pro/webfonts/fa-thin-100.woff2": "/vendors/fontawesome-pro/webfonts/fa-thin-100.woff2",
-    "/vendors/fontawesome-pro/webfonts/fa-v4compatibility.ttf": "/vendors/fontawesome-pro/webfonts/fa-v4compatibility.ttf",
-    "/vendors/fontawesome-pro/webfonts/fa-v4compatibility.woff2": "/vendors/fontawesome-pro/webfonts/fa-v4compatibility.woff2",
-    "/vendors/fontawesome-pro/css/all.min.css": "/vendors/fontawesome-pro/css/all.min.css"
+    "/img/calendarIcon.svg": "/img/calendarIcon.svg"
 }
