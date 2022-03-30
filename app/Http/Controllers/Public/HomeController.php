@@ -10,11 +10,16 @@ use Illuminate\View\View;
 
 class HomeController extends Controller
 {
+    public $start = "";
+    public $specialization;
+    public $test ="Hello"
+
     public function show(GetSemestersService $getSemestersService): View
     {
         $introTitle = PageContent::where('name', 'intro_title')->first()->content;
         $introContent = PageContent::where('name', 'intro_content')->first()->content;
         $introLink = PageContent::where('name', 'intro_link')->first()->content;
+
 
         return view('home', [
             'semesters' => $getSemestersService(),
@@ -22,7 +27,9 @@ class HomeController extends Controller
             'studyModes' => config('constants.studyModes'),
             'introContent' => $introContent,
             'introLink' => $introLink,
-            'introTitle' => $introTitle
+            'introTitle' => $introTitle,
+            'start' => $this->start,
+            'this' => $this->test
         ]);
     }
 }
