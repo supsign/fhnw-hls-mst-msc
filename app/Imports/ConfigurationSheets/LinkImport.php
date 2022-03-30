@@ -28,7 +28,7 @@ class LinkImport implements ToCollection, WithHeadingRow
                     'url' => $row['link'],
                 ]);
             } catch (QueryException $e) {
-                throw new InvalidData('"internal_name"- and "link" column for link id "'.$row['id_link'].'" can not be empty');
+                throw new InvalidData('"internal_name" and "link" column for link id "'.$row['id_link'].'" can not be empty');
             }
         }
     }
