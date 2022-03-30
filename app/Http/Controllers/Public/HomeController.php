@@ -10,9 +10,8 @@ use Illuminate\View\View;
 
 class HomeController extends Controller
 {
-    public $start = "";
+    public $start = '';
     public $specialization;
-    public $test ="Hello"
 
     public function show(GetSemestersService $getSemestersService): View
     {
@@ -29,7 +28,6 @@ class HomeController extends Controller
             'introLink' => $introLink,
             'introTitle' => $introTitle,
             'start' => $this->start,
-            'this' => $this->test
         ]);
     }
 }
