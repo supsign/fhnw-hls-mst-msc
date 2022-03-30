@@ -27,7 +27,19 @@ class ThesisSheetImport implements ToCollection, WithHeadingRow
                     'specialization_id' => $row['specialisation'],
                 ]);
             } catch (QueryException $e) {
-                throw new InvalidData('invalid specialisation id "'.$row['specialisation'].'" found in thesis "'.$row['subject'].'"');
+
+
+                switch (true) {
+                    case str_contains($e->getMessage(), 'theses_specialization_id_foreign'):
+                        $error = 'invalid specialisation id "'.$row['specialisation'].'" found in thesis "'.$row['subject'].'"';
+                        break;
+
+                    default:
+                        $error = config('constants.errors.unknown');
+                        break;
+                }
+
+                throw new InvalidData($error);
             }
         }
     }

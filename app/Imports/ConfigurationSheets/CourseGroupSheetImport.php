@@ -37,7 +37,25 @@ class CourseGroupSheetImport implements ToCollection, WithHeadingRow
                     ]);
                 }
             } catch (QueryException $e) {
-                throw new InvalidData('invalid specialisation id "'.$specialisationId.'" found in module group "'.$row['id'].'" ('.$row['name'].')');
+                switch (true) {
+                    case str_contains($e->getMessage(), 'course_group_specialization_specialization_id_foreign'):
+                        $error = 'invalid specialisation id "'.$specialisationId.'" found in module group "'.$row['id'].'" ('.$row['name'].')';
+                        break;
+
+                    case str_contains($e->getMessage(), '\'name\' cannot be null'):
+                        $error = 'the column "name" found in module group id "'.$row['id'].'" ('.$row['internalname'].') can not be empty';
+                        break;
+
+                    case str_contains($e->getMessage(), '\'internal_name\' cannot be null'):
+                        $error = 'the column "internalName" found in module group id "'.$row['id'].'" ('.$row['name'].') can not be empty';
+                        break;
+
+                    default:
+                        $error = config('constants.errors.unknown');
+                        break;
+                }
+
+                throw new InvalidData($error);
             }
         }
     }
