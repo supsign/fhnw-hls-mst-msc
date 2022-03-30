@@ -19,8 +19,8 @@ class ConfigurationImport implements WithMultipleSheets
     {
     	return [
     		'ClusterCore' => new ClusterSheetImport,
-    		'Specialisation' => new SpecialisationSheetImport(),
-    		'Thesis' => new ThesisSheetImport(),
+    		'Specialisation' => new SpecialisationSheetImport,
+    		'Thesis' => new ThesisSheetImport,
     		'Module Groups' => new CourseGroupSheetImport,
     		'Modules' => new CourseSheetImport,
     		'Texte' => new PageContentSheetImport,
