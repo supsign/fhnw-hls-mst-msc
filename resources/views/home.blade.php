@@ -8,8 +8,8 @@
                 <div class="text-2xl">{{$introTitle}}</div>
                 <div class="flex flex-col">
                     <div class="whitespace-pre-line">
-                        {{$introContent}}</div>
-                        <x-base.link href="{{$introLink}}">{{$introLink}}</x-base.link>
+                        {{ $introContent }}</div>
+                        <x-base.link href="{{ $introLink }}">{{ $introLink }}</x-base.link>
                 </div>
             </x-base.card>
             <livewire:module-selection-form :semesters="$semesters" :specializations="$specializations" :studyModes="$studyModes"/>
