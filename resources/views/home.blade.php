@@ -12,7 +12,7 @@
                         <x-base.link href="{{$introLink}}">{{$introLink}}</x-base.link>
                 </div>
             </x-base.card>
-            <livewire:study-form :semesters="$semesters" :specializations="$specializations" :studyModes="$studyModes"/>
+            <livewire:module-selection-form :semesters="$semesters" :specializations="$specializations" :studyModes="$studyModes"/>
         </div>
     </div>
 </x-layout.app>
