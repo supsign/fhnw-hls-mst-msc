@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\App;
+use App\Models\CourseGroupType;
 use App\Services\Auth\PasswordService;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -49,8 +50,19 @@ return new class extends Migration
             $table->timestamps();
         });
 
+        Schema::create('course_group_types', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->timestamps();
+        });
+
+        foreach (['Core Competences', 'Cluster-Specific', 'Elective', 'Others'] AS $typeName) {
+            CourseGroupType::firstOrCreate(['name' => $typeName]);
+        }
+
         Schema::create('course_groups', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('course_group_type_id')->constrained();
             $table->string('name');
             $table->string('internal_name');
             $table->unsignedInteger('required_courses_count');
