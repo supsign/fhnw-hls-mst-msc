@@ -19,21 +19,46 @@ class ModuleSelectionForm extends Component
     public CourseCollection $defaultCourses;
     public Course $electiveCourse;
     public CourseCollection $electiveCourses;
+    public string $givenName;
     public string $semester;
     public array $semesters;
     public int $specialization;
     public Collection $specializations;
+    public string $surname;
     public string $studyMode;
     public array $studyModes;
+
 
     public function __construct()
     {
 
     }
 
-    protected $listeners = ['changeSpecialization', 'changeStart'];
+    protected $listeners = ['changeSurname', 'changeGivenName', 'changeSemester','changeSpecialization', 'changeStart'];
+    protected array $rules = [
+        'surname' => 'required',
+        'givenName' => 'required',
+        'specialization' => 'required'
+    ];
+    public function updated($surname)
+    {
+        $this->validateOnly($surname);
+    }
 
-    public function changeStart(string $selected): void
+    public function submit()
+    {
+        $this->validate();
+    }
+
+    public function changeSurname(string $value): void
+    {
+        $this->surname = $value;
+    }
+    public function changeGivenName(string $value): void
+    {
+        $this->givenName = $value;
+    }
+    public function changeSemester(string $selected): void
     {
         $this->semester = $selected;
     }

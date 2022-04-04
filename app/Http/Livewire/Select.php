@@ -13,6 +13,8 @@ class Select extends Component
     public array|Collection $options;
     public string $optionKey;
     public int|string $selected = '';
+    public string $placeholder;
+    public string $message;
 
     public function updated(): void
     {
