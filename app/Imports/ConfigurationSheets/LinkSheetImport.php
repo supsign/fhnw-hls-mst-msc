@@ -9,7 +9,7 @@ use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Spatie\FlareClient\Http\Exceptions\InvalidData;
 
-class LinkImport implements ToCollection, WithHeadingRow
+class LinkSheetImport implements ToCollection, WithHeadingRow
 {
     public function collection(Collection $rows): void
     {
