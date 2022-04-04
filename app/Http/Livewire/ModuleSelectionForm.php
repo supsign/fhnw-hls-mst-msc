@@ -2,28 +2,31 @@
 
 namespace App\Http\Livewire;
 
+use Illuminate\Contracts\View\View;
+use Illuminate\Support\Collection;
 use Livewire\Component;
 
 class ModuleSelectionForm extends Component
 {
 
-    public $semesters;
-    public $studyModes;
-    public $specializations;
-    public $semester;
-    public $specialization;
+    public array $semesters;
+    public array $studyModes;
+    public Collection $specializations;
+    public string $semester;
+    public int $specialization;
 
-    protected $listeners = ['changestart','changespecialization'];
+    protected $listeners = ['changeSpecialization', 'changeStart'];
 
-    public function changestart($selected) {
+    public function changeStart(string $selected): void
+    {
         $this->semester = $selected;
     }
-    public function changespecialization($selected) {
+    public function changeSpecialization(int $selected): void
+    {
         $this->specialization = $selected;
     }
 
-
-    public function render()
+    public function render(): View
     {
         return view('livewire.module-selection-form');
     }
