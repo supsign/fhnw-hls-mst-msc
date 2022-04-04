@@ -13,7 +13,7 @@ class Select extends Component
     public string $name ='';
 
     public function updated(){
-        $this->emit('test', $this->selected);
+        $this->emit("change{$this->name}", $this->selected);
     }
 
     public function render()

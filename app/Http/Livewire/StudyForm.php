@@ -10,13 +10,18 @@ class StudyForm extends Component
     public $semesters;
     public $studyModes;
     public $specializations;
-    public $test= 'Init';
+    public $semester;
+    public $specialization;
 
-    protected $listeners = ['test'];
+    protected $listeners = ['changestart','changespecialization'];
 
-    public function test($selected) {
-        $this->test = $selected;
+    public function changestart($selected) {
+        $this->semester = $selected;
     }
+    public function changespecialization($selected) {
+        $this->specialization = $selected;
+    }
+
 
     public function render()
     {
