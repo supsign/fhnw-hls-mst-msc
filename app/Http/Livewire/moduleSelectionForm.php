@@ -4,7 +4,7 @@ namespace App\Http\Livewire;
 
 use Livewire\Component;
 
-class StudyForm extends Component
+class moduleSelectionForm extends Component
 {
 
     public $semesters;
@@ -25,6 +25,6 @@ class StudyForm extends Component
 
     public function render()
     {
-        return view('livewire.study-form');
+        return view('livewire.module-selection-form');
     }
 }
