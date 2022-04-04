@@ -12,16 +12,16 @@ class ConfigurationController extends Controller
 {
     public function post(PostConfigurationRequest $request, ConfigurationImportService $configurationImportService): RedirectResponse
     {
-        $status = $configurationImportService(
+        $response = $configurationImportService(
             $request->config_file->storeAs('config', $request->config_file->getClientOriginalName())
         );
 
-        if($status["status"] === "success") {
-            toast($status["status"] ,$status["status"]);
-
-        } elseif ($status["status"] === "error") {
-            toast($status["error"] ,$status["status"]);
+        if ($response['status'] === 'success') {
+            toast($response['status'], $response['status']);
+        } elseif ($response['status'] === 'error') {
+            toast($response['error'], $response['status']);
         }
+
         return redirect()->route('admin.config.show');
     }
 

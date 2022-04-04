@@ -10,10 +10,8 @@ use App\Models\CourseGroup;
 use App\Models\CourseGroupSpecialization;
 use App\Models\Link;
 use App\Models\PageContent;
-use App\Models\Slot;
 use App\Models\Specialization;
 use App\Models\Thesis;
-use App\Models\Venue;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Excel;
@@ -30,10 +28,8 @@ class ConfigurationImportService
         CourseGroupSpecialization::class,
         Link::class,
         PageContent::class,
-        Slot::class,
         Specialization::class,
         Thesis::class,
-        Venue::class,
     ];
 
     public function __construct(protected ConfigurationImport $configurationImport, protected Excel $excel)
@@ -47,17 +43,23 @@ class ConfigurationImportService
             throw new Exception('"'.$file.'" not found');
         }
 
+        DB::beginTransaction();
+
         try {
             $this
                 ->truncateTables()
                 ->excel
                     ->import($this->configurationImport, $file);
         } catch (InvalidData $e) {
+            DB::rollBack();
+
             return [
                 'status' => 'error',
                 'error' => $e->getMessage(),
             ];
         }
+
+        DB::commit();
 
         return [
             'status' => 'success',
@@ -69,7 +71,7 @@ class ConfigurationImportService
         DB::statement('SET FOREIGN_KEY_CHECKS = 0;');
 
         foreach ($this->tablesToTruncate AS $table) {
-            $table::getQuery()->truncate();
+            $table::getQuery()->delete();
         }
 
         DB::statement('SET FOREIGN_KEY_CHECKS = 1;');

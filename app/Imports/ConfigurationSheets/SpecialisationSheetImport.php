@@ -29,7 +29,25 @@ class SpecialisationSheetImport implements ToCollection, WithHeadingRow
                     'short_name' => $row['shortname'],
                 ]);
             } catch (QueryException $e) {
-                throw new InvalidData('invalid cluster id "'.$row['clustercore'].'" found in specialization id "'.$row['id'].'" ('.$row['name'].')');
+                switch (true) {
+                    case str_contains($e->getMessage(), 'specializations_cluster_id_foreign'):
+                        $error = 'invalid cluster id "'.$row['clustercore'].'" found in specialization id "'.$row['id'].'" ('.$row['name'] ?? $row['shortname'].')';
+                        break;
+
+                    case str_contains($e->getMessage(), '\'name\' cannot be null'):
+                        $error = 'the column "name" found in specialization id "'.$row['id'].'" ('.$row['shortname'].') can not be empty';
+                        break;
+
+                    case str_contains($e->getMessage(), '\'short_name\' cannot be null'):
+                        $error = 'the column "shortName" found in specialization id "'.$row['id'].'" ('.$row['name'].') can not be empty';
+                        break;
+
+                    default:
+                        $error = config('constants.errors.unknown');
+                        break;
+                }
+
+                throw new InvalidData($error);
             }
         }
     }
