@@ -12,13 +12,9 @@ use Livewire\Component;
 class ModuleSelectionForm extends Component
 {
     public array $coreCompetenceCourseGroup;
-    public array $coreCompetenceCourses;
     public array $clusterSpecificCourseGroup;
-    public array $clusterSpecificCourses;
     public array $defaultCourseGroup;
-    public array $defaultCourses;
     public array $electiveCourseGroup;
-    public array $electiveCourses;
     public string $givenName;
     public string $semester;
     public array $semesters;
@@ -68,10 +64,10 @@ class ModuleSelectionForm extends Component
         $this->specializationId = $selected;
         $specialization = Specialization::find($selected);
 
-        [$this->coreCompetenceCourseGroup, $this->coreCompetenceCourses] = $getCourseSelectDataService(CourseGroupType::CoreCompetences, $specialization);
-        [$this->clusterSpecificCourseGroup, $this->clusterSpecificCourses] = $getCourseSelectDataService(CourseGroupType::ClusterSpecific, $specialization);
-        [$this->defaultCourseGroup, $this->defaultCourses] = $getCourseSelectDataService(CourseGroupType::Default, $specialization);
-        [$this->electiveCourseGroup, $this->electiveCourses] = $getCourseSelectDataService(CourseGroupType::Elective, $specialization);
+        $this->coreCompetenceCourseGroup = $getCourseSelectDataService(CourseGroupType::CoreCompetences, $specialization);
+        $this->clusterSpecificCourseGroup = $getCourseSelectDataService(CourseGroupType::ClusterSpecific, $specialization);
+        $this->defaultCourseGroup = $getCourseSelectDataService(CourseGroupType::Default, $specialization);
+        $this->electiveCourseGroup = $getCourseSelectDataService(CourseGroupType::Elective, $specialization);
     }
     public function changeCoreCompetenceCourse(Course $selected): void
     {

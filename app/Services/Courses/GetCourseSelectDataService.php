@@ -3,7 +3,6 @@
 namespace App\Services\Courses;
 
 use App\Enums\CourseGroupType;
-use App\Models\CourseCollection;
 use App\Models\CourseGroup;
 use App\Models\CourseGroupSpecialization;
 use App\Models\Specialization;
@@ -25,10 +24,7 @@ class GetCourseSelectDataService
         $this->courseGroupType = $courseGroupType;
         $this->specialization = $specialization;
 
-        return [
-            $this->getCourseGroup()->toArray(),
-            $this->getCourses()->toArray(),
-        ];
+        return $this->getCourseGroup()->toArray();
     }
 
     protected function getCourseGroup(): CourseGroup
@@ -39,10 +35,5 @@ class GetCourseSelectDataService
             ->with(['courseGroup', 'courseGroup.courses'])
             ->first()
                 ->courseGroup;
-    }
-
-    protected function getCourses(): CourseCollection
-    {
-        return $this->getCourseGroup()->courses;
     }
 }
