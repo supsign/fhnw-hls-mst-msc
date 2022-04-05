@@ -7,7 +7,7 @@
         <livewire:input label="Surname" type="text" name="surname" />
         <livewire:input label="Given Name" type="text" name="givenName"/>
         <livewire:select label="Semester" name="semester" :options="$semesters" />
-        <x-base.select label="Study Mode" name="mode" :options="$studyModes" />
+        <x-base.select label="Study Mode" name="mode" :options="$studyModes" optionKey="label" />
         <livewire:select label="Specialization" name="specialization" :options="$specializations" optionKey="name" placeholder="-- Choose Specialization --" />
         @if($coreCompetenceCourses)
             <livewire:select label="Core Course Competence" name="coreCompetenceCourse" :options="$coreCompetenceCourses" optionKey="name" placeholder="-- Choose Core Competence Course --" />

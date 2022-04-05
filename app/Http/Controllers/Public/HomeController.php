@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Public;
 
+use App\Enums\StudyMode;
 use App\Http\Controllers\Controller;
 use App\Models\Specialization;
 use App\Services\Home\HomePageContentService;
@@ -17,11 +18,10 @@ class HomeController extends Controller
         return view('home', [
             'semesters' => $getSemestersService(),
             'specializations' => Specialization::all(),
-            'studyModes' => config('constants.studyModes'),
+            'studyModes' => StudyMode::cases(),
             'introContent' => $introContent,
             'introLink' => $introLink,
             'introTitle' => $introTitle,
-            'start' => '',  //  Do we need this?
         ]);
     }
 }
