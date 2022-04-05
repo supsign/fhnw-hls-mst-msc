@@ -31,7 +31,7 @@ class Course extends BaseModel
 		return $this->belongsTo(Venue::class);
 	}
 
-    public function newCollection(array $models = [])
+    public function newCollection(array $models = []): CourseCollection
     {
         return new CourseCollection($models);
     }

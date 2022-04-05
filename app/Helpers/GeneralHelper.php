@@ -4,7 +4,27 @@ namespace App\Helpers;
 
 class GeneralHelper
 {
-    public static function camelToSnakeCase($string): string
+    public static function camelToSnakeCase(string $string): string
+    {
+        return static::splitStringOnUppercase($string, '_', 'strtolower');
+    }
+
+    public static function pascalToSnakeCase(string $string): string
+    {
+        return static::camelToSnakeCase($string);
+    }
+
+    public static function snakeToCamelCase(string $string): string
+    {
+        return lcfirst(static::snakeToPascalCase($string));
+    }
+
+    public static function snakeToPascalCase(string $string): string
+    {
+        return implode('', array_map('ucfirst', explode('_', $string)));
+    }
+
+    public static function splitStringOnUppercase(string $string, string $delimiter, string $castTo): string
     {
         $parts = [];
 
@@ -16,21 +36,6 @@ class GeneralHelper
             isset($parts[$j]) ? $parts[$j] .= $string[$i] : $parts[$j] = $string[$i];
         }
 
-        return implode('_', array_map('strtolower', $parts));
-    }
-
-    public static function pascalToSnakeCase($string): string
-    {
-        return static::camelToSnakeCase($string);
-    }
-
-    public static function snakeToCamelCase($string): string
-    {
-        return lcfirst(static::snakeToPascalCase($string));
-    }
-
-    public static function snakeToPascalCase($string): string
-    {
-        return implode('', array_map('ucfirst', explode('_', $string)));
+        return implode($delimiter, array_map($castTo, $parts)); 
     }
 }
