@@ -6,9 +6,9 @@ use App\Helpers\GeneralHelper;
 
 enum CourseGroupType: int
 {
-    case Default = 1;
     case CoreCompetences = 2;
     case ClusterSpecific = 3;
+    case Default = 1;
     case Elective = 4;
 
     public function label(): string
