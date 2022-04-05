@@ -35,7 +35,7 @@ class CourseGroupSheetImport implements ToCollection, WithHeadingRow
                 }
 
                 if (empty($typeId)) {
-                    $typeId = CourseGroupType::default->value;
+                    $typeId = CourseGroupType::Default->value;
                 }
 
                 CourseGroup::create([
