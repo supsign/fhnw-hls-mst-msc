@@ -2,6 +2,7 @@
 
 namespace App\Imports\ConfigurationSheets;
 
+use App\Enums\Error;
 use App\Models\Course;
 use App\Models\CourseCourseGroup;
 use App\Models\Slot;
@@ -68,7 +69,7 @@ class CourseSheetImport implements ToCollection, WithHeadingRow
                         break;
 
                     default:
-                        $error = config('constants.errors.unknown');
+                        $error = Error::Unknown->label();
                         break;
                 }
 
@@ -93,7 +94,7 @@ class CourseSheetImport implements ToCollection, WithHeadingRow
                         break;
 
                     default:
-                        $error = config('constants.errors.unknown');
+                        $error = Error::Unknown->label();
                         break;
                 }
 
