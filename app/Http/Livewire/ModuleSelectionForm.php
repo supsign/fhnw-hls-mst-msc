@@ -4,23 +4,19 @@ namespace App\Http\Livewire;
 
 use App\Enums\CourseGroupType;
 use App\Models\Course;
-use App\Models\CourseCollection;
 use App\Models\Specialization;
-use App\Services\Courses\GetCoursesService;
+use App\Services\Courses\GetCourseSelectDataService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
 use Livewire\Component;
+use stdClass;
 
 class ModuleSelectionForm extends Component
 {
-    public Course $coreCompetenceCourse;
-    public CourseCollection $coreCompetenceCourses;
-    public Course $clusterSpecificCourse;
-    public CourseCollection $clusterSpecificCourses;
-    public Course $defaultCourse;
-    public CourseCollection $defaultCourses;
-    public Course $electiveCourse;
-    public CourseCollection $electiveCourses;
+    public stdClass $coreCompetenceCourseData;
+    public stdClass $clusterSpecificCourseData;
+    public stdClass $defaultCoursesData;
+    public stdClass $electiveCourseData;
     public string $givenName;
     public string $semester;
     public array $semesters;
@@ -67,14 +63,16 @@ class ModuleSelectionForm extends Component
     {
         $this->semester = $selected;
     }
-    public function changeSpecialization(int $selected, GetCoursesService $getCoursesService): void
+    public function changeSpecialization(int $selected, GetCourseSelectDataService $getCourseSelectDataService): void
     {
         $this->specialization = $selected;
 
-        $this->coreCompetenceCourses = $getCoursesService(CourseGroupType::CoreCompetences, Specialization::find($selected));
-        $this->clusterSpecificCourses = $getCoursesService(CourseGroupType::ClusterSpecific, Specialization::find($selected));
-        $this->defaultCourse = $getCoursesService(CourseGroupType::Default, Specialization::find($selected));
-        $this->electiveCourses = $getCoursesService(CourseGroupType::Elective, Specialization::find($selected));
+        $specalisation = Specialization::find($selected);       //  umbauen das '$selected' bereits das Specialization Model enthält
+
+        $this->coreCompetenceCoursesData = $getCourseSelectDataService(CourseGroupType::CoreCompetences, $specalisation);
+        $this->clusterSpecificCoursesData = $getCourseSelectDataService(CourseGroupType::ClusterSpecific, $specalisation);
+        $this->defaultCoursesData = $getCourseSelectDataService(CourseGroupType::Default, $specalisation);
+        $this->electiveCoursesData = $getCourseSelectDataService(CourseGroupType::Elective, $specalisation);
     }
     public function changeCoreCompetenceCourse(Course $selected): void
     {
