@@ -6,15 +6,12 @@
         <div class="flex items-center justify-center">
             <div class="flex flex-col justify-around">
                 <div class="space-y-6">
-
-                    @if ($errors->count())
-                        @dump($errors)
-                    @endif
                     <x-base.card>
                         <form method="POST" action="{{ route('admin.config.post') }}" enctype="multipart/form-data"  class="flex flex-col justify-center gap-5">
                             @csrf
                             <x-base.input label="Password" type="password" name="password" />
                             <input type="file" name="config_file">
+                            @error("config_file") <span class="text-red-500">{{ $message }}</span> @enderror
                             <input type="submit" name="submit" class="button-primary">
                         </form>
                     </x-base.card>
