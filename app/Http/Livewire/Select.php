@@ -14,7 +14,15 @@ class Select extends Component
     public string $optionKey;
     public int|string $selected = '';
     public string $placeholder;
-    public string $message;
+
+    protected $listeners = [
+        'formErrorBag',
+    ];
+
+    public function formErrorBag($errorBag)
+    {
+        $this->setErrorBag($errorBag);
+    }
 
     public function updated(): void
     {

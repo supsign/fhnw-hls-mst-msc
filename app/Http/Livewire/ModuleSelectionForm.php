@@ -15,7 +15,7 @@ class ModuleSelectionForm extends Component
     public CourseCollection $coreCompetenceCourses;
     public Course $clusterSpecificCourse;
     public CourseCollection $clusterSpecificCourses;
-    public Course $defaultCours;
+    public Course $defaultCourse;
     public CourseCollection $defaultCourses;
     public Course $electiveCourse;
     public CourseCollection $electiveCourses;
@@ -38,13 +38,19 @@ class ModuleSelectionForm extends Component
     protected array $rules = [
         'surname' => 'required',
         'givenName' => 'required',
-        'specialization' => 'required'
+        'specialization' => 'required',
+        'coreCompetenceCourses' => 'required',
+        'clusterSpecificCourses' => 'required'
     ];
+
     public function updated($surname)
     {
         $this->validateOnly($surname);
     }
-
+    public function dehydrate()
+    {
+        $this->emit('formErrorBag', $this->getErrorBag());
+    }
     public function submit()
     {
         $this->validate();

@@ -10,7 +10,15 @@ class Input extends Component
     public string $name;
     public string $type;
     public int|string $value = '';
-    public string $message;
+
+    protected $listeners = [
+        'formErrorBag',
+    ];
+
+    public function formErrorBag($errorBag)
+    {
+        $this->setErrorBag($errorBag);
+    }
 
     public function updated(): void
     {
