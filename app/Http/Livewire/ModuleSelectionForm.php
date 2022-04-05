@@ -20,7 +20,7 @@ class ModuleSelectionForm extends Component
     public string $givenName;
     public string $semester;
     public array $semesters;
-    public int $specialization;
+    public Specialization $specialization;
     public Collection $specializations;
     public string $surname;
     public string $studyMode;
@@ -38,8 +38,6 @@ class ModuleSelectionForm extends Component
         'surname' => 'required',
         'givenName' => 'required',
         'specialization' => 'required',
-        'coreCompetenceCourse' => 'required',
-        'clusterSpecificCourse' => 'required'
     ];
 
     public function dehydrate()
@@ -65,14 +63,11 @@ class ModuleSelectionForm extends Component
     }
     public function changeSpecialization(int $selected, GetCourseSelectDataService $getCourseSelectDataService): void
     {
-        $this->specialization = $selected;
-
-        $specalisation = Specialization::find($selected);       //  umbauen das '$selected' bereits das Specialization Model enthält
-
-        $this->coreCompetenceCoursesData = $getCourseSelectDataService(CourseGroupType::CoreCompetences, $specalisation);
-        $this->clusterSpecificCoursesData = $getCourseSelectDataService(CourseGroupType::ClusterSpecific, $specalisation);
-        $this->defaultCoursesData = $getCourseSelectDataService(CourseGroupType::Default, $specalisation);
-        $this->electiveCoursesData = $getCourseSelectDataService(CourseGroupType::Elective, $specalisation);
+        $this->specialization = Specialization::find($selected);
+        $this->coreCompetenceCoursesData = $getCourseSelectDataService(CourseGroupType::CoreCompetences, $this->specialization);
+        $this->clusterSpecificCoursesData = $getCourseSelectDataService(CourseGroupType::ClusterSpecific, $this->specialization);
+        $this->defaultCoursesData = $getCourseSelectDataService(CourseGroupType::Default, $this->specialization);
+        $this->electiveCoursesData = $getCourseSelectDataService(CourseGroupType::Elective, $this->specialization);
     }
     public function changeCoreCompetenceCourse(Course $selected): void
     {

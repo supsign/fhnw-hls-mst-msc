@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Specialization extends BaseModel
 {
-	public function cluster(): BelongsTo
+    public function cluster(): BelongsTo
 	{
 		return $this->belongsTo(Cluster::class);
 	}
