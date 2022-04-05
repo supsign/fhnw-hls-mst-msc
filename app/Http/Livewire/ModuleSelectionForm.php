@@ -2,9 +2,12 @@
 
 namespace App\Http\Livewire;
 
+use App\Enums\CourseGroupType;
 use App\Models\Course;
 use App\Models\CourseCollection;
 use App\Models\CourseGroupSpecialization;
+use App\Models\Specialization;
+use App\Services\Courses\GetCoursesService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
 use Livewire\Component;
@@ -64,11 +67,14 @@ class ModuleSelectionForm extends Component
     {
         $this->semester = $selected;
     }
-    public function changeSpecialization(int $selected): void
+    public function changeSpecialization(int $selected, GetCoursesService $getCoursesService): void
     {
         $this->specialization = $selected;
-        $this->coreCompetenceCourses = $this->getCoreCompetenceCourses();
-        $this->clusterSpecificCourses = $this->getClusterSpecificCourses();
+
+        $this->coreCompetenceCourses = $getCoursesService(CourseGroupType::CoreCompetences, Specialization::find($selected));
+        $this->clusterSpecificCourses = $getCoursesService(CourseGroupType::ClusterSpecific, Specialization::find($selected));
+        $this->defaultCourse = $getCoursesService(CourseGroupType::Default, Specialization::find($selected));
+        $this->electiveCourses = $getCoursesService(CourseGroupType::Elective, Specialization::find($selected));
     }
     public function changeCoreCompetenceCourse(Course $selected): void
     {
@@ -82,33 +88,5 @@ class ModuleSelectionForm extends Component
     public function render(): View
     {
         return view('livewire.module-selection-form');
-    }
-
-    protected function getCoreCompetenceCourses(): CourseCollection
-    {
-        return new CourseCollection(
-            CourseGroupSpecialization::where('specialization_id', $this->specialization)
-                ->join('course_groups', 'course_group_specialization.course_group_id', '=', 'course_groups.id')
-                ->where('course_group_type_id', 1)
-                ->with(['courseGroup', 'courseGroup.courses'])
-                ->get()
-                    ->pluck('courseGroup')
-                    ->pluck('courses')
-                    ->flatten()
-        );
-    }
-
-    protected function getClusterSpecificCourses(): CourseCollection
-    {
-        return new CourseCollection(
-            CourseGroupSpecialization::where('specialization_id', $this->specialization)
-                ->join('course_groups', 'course_group_specialization.course_group_id', '=', 'course_groups.id')
-                ->where('course_group_type_id', 2)
-                ->with(['courseGroup', 'courseGroup.courses'])
-                ->get()
-                    ->pluck('courseGroup')
-                    ->pluck('courses')
-                    ->flatten()
-        );
     }
 }
