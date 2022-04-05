@@ -6,18 +6,11 @@ use App\Enums\CourseGroupType;
 use App\Models\CourseGroup;
 use App\Models\CourseGroupSpecialization;
 use App\Models\Specialization;
-use stdClass;
 
 class GetCourseSelectDataService
 {
-    protected stdClass $data;
     protected CourseGroupType $courseGroupType;
     protected Specialization $specialization;
-
-    public function __construct()
-    {
-        $this->data = new stdClass;
-    }
 
     public function __invoke(CourseGroupType $courseGroupType, Specialization $specialization): array
     {
