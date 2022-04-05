@@ -34,19 +34,15 @@ class ModuleSelectionForm extends Component
 
     }
 
-    protected $listeners = ['changeSurname', 'changeGivenName', 'changeSemester','changeSpecialization', 'changeStart'];
+    protected $listeners = ['changeSurname', 'changeGivenName', 'changeSemester','changeSpecialization', 'changeStart', 'changeCoreCompetenceCourse', 'changeClusterSpecificCourse'];
     protected array $rules = [
         'surname' => 'required',
         'givenName' => 'required',
         'specialization' => 'required',
-        'coreCompetenceCourses' => 'required',
-        'clusterSpecificCourses' => 'required'
+        'coreCompetenceCourse' => 'required',
+        'clusterSpecificCourse' => 'required'
     ];
 
-    public function updated($surname)
-    {
-        $this->validateOnly($surname);
-    }
     public function dehydrate()
     {
         $this->emit('formErrorBag', $this->getErrorBag());
@@ -74,7 +70,15 @@ class ModuleSelectionForm extends Component
         $this->coreCompetenceCourses = $this->getCoreCompetenceCourses();
         $this->clusterSpecificCourses = $this->getClusterSpecificCourses();
     }
+    public function changeCoreCompetenceCourse(Course $selected): void
+    {
+        $this->coreCompetenceCourse = $selected;
+    }
 
+    public function changeClusterSpecificCourse(Course $selected): void
+    {
+        $this->clusterSpecificCourse = $selected;
+    }
     public function render(): View
     {
         return view('livewire.module-selection-form');

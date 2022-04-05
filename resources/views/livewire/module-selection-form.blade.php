@@ -13,7 +13,7 @@
             <livewire:select label="Core Course Competence" name="coreCompetenceCourse" :options="$coreCompetenceCourses" optionKey="name" placeholder="-- Choose Core Competence Course --" />
         @endif
         @if($clusterSpecificCourses)
-            <livewire:select label="Cluster Course Competence" name="coreCompetenceCourse" :options="$clusterSpecificCourses" optionKey="name" placeholder="-- Choose Core Competence Course --" />
+            <livewire:select label="Cluster Course Competence" name="clusterSpecificCourse" :options="$clusterSpecificCourses" optionKey="name" placeholder="-- Choose Cluster Competence Course --" />
         @endif
         <input type="submit" name="submit" class="button-primary" />
     </form>
