@@ -2,7 +2,7 @@
 
 namespace App\Enums;
 
-enum Error: string
+enum Error: int
 {
     case Unknown = 1;
 
