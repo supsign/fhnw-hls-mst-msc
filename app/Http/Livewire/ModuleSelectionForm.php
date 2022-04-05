@@ -31,13 +31,14 @@ class ModuleSelectionForm extends Component
     public string $studyMode;
     public array $studyModes;
 
-
-    public function __construct()
-    {
-
-    }
-
-    protected $listeners = ['changeSurname', 'changeGivenName', 'changeSemester','changeSpecialization', 'changeStart', 'changeCoreCompetenceCourse', 'changeClusterSpecificCourse'];
+    protected $listeners = [
+        'changeSurname',
+        'changeGivenName',
+        'changeSemester','changeSpecialization',
+        'changeStart',
+        'changeCoreCompetenceCourse',
+        'changeClusterSpecificCourse'
+    ];
     protected array $rules = [
         'surname' => 'required',
         'givenName' => 'required',
