@@ -3,6 +3,7 @@
 namespace App\Imports\ConfigurationSheets;
 
 use App\Enums\CourseGroupType;
+use App\Enums\Error;
 use App\Models\CourseGroup;
 use App\Models\CourseGroupSpecialization;
 use Illuminate\Database\QueryException;
@@ -67,7 +68,7 @@ class CourseGroupSheetImport implements ToCollection, WithHeadingRow
                         break;
 
                     default:
-                        $error = config('constants.errors.unknown');
+                        $error = Error::Unknown->label();
                         break;
                 }
 

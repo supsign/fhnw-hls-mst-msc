@@ -2,6 +2,7 @@
 
 namespace App\Imports\ConfigurationSheets;
 
+use App\Enums\Error;
 use App\Models\Thesis;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Collection;
@@ -35,7 +36,7 @@ class ThesisSheetImport implements ToCollection, WithHeadingRow
                         break;
 
                     default:
-                        $error = config('constants.errors.unknown');
+                        $error = Error::Unknown->label();
                         break;
                 }
 
