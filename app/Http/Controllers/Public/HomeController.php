@@ -10,9 +10,6 @@ use Illuminate\View\View;
 
 class HomeController extends Controller
 {
-    public $start = '';
-    public $specialization;
-
     public function show(GetSemestersService $getSemestersService, HomePageContentService $homePageContentService): View
     {
         extract($homePageContentService());
@@ -24,7 +21,7 @@ class HomeController extends Controller
             'introContent' => $introContent,
             'introLink' => $introLink,
             'introTitle' => $introTitle,
-            'start' => $this->start,
+            'start' => '',  //  Do we need this?
         ]);
     }
 }

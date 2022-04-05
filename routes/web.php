@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\Admin\ConfigurationController;
 use App\Http\Controllers\Public\HomeController;
-use App\Http\Controllers\TestController;
+use App\Http\Controllers\Admin\TestController;
 use Illuminate\Support\Facades\Route;
 
 /*

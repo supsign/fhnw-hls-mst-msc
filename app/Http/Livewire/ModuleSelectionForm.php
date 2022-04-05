@@ -5,7 +5,6 @@ namespace App\Http\Livewire;
 use App\Enums\CourseGroupType;
 use App\Models\Course;
 use App\Models\CourseCollection;
-use App\Models\CourseGroupSpecialization;
 use App\Models\Specialization;
 use App\Services\Courses\GetCoursesService;
 use Illuminate\Contracts\View\View;
