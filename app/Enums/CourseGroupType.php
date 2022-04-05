@@ -15,8 +15,8 @@ enum CourseGroupType: int
     {
         return match($this) {
             static::CoreCompetences, 
-            static::Elective, 
-            static::Default => GeneralHelper::splitStringOnUppercase($this->name, ' ', 'ucfirst'),
+            static::Default,
+            static::Elective => GeneralHelper::splitStringOnUppercase($this->name, ' ', 'ucfirst'),
             static::ClusterSpecific => GeneralHelper::splitStringOnUppercase($this->name, '-', 'ucfirst'),
         };
     }
