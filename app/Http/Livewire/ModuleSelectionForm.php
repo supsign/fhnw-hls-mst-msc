@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use App\DataTransferObjects\Courses\CourseSelectData;
 use App\Enums\CourseGroupType;
 use App\Models\Course;
 use App\Models\Specialization;
@@ -9,14 +10,13 @@ use App\Services\Courses\GetCourseSelectDataService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
 use Livewire\Component;
-use stdClass;
 
 class ModuleSelectionForm extends Component
 {
-    public stdClass $coreCompetenceCourseData;
-    public stdClass $clusterSpecificCourseData;
-    public stdClass $defaultCoursesData;
-    public stdClass $electiveCourseData;
+    public CourseSelectData $coreCompetenceCourseData;
+    public CourseSelectData $clusterSpecificCourseData;
+    public CourseSelectData $defaultCoursesData;
+    public CourseSelectData $electiveCourseData;
     public string $givenName;
     public string $semester;
     public array $semesters;
