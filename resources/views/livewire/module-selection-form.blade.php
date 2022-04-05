@@ -10,7 +10,7 @@
         <livewire:select label="Study Mode" name="semester" :options="$studyModes" optionKey="label" />
         {{-- <x-base.select label="Study Mode" name="mode" :options="$studyModes" optionKey="label" /> --}}
         <livewire:select label="Specialization" name="specialization" :options="$specializations" optionKey="name" placeholder="-- Choose Specialization --" />
-        @if($specialization)
+        @if($specializationId)
             <livewire:course-selection></livewire:course-selection>
         @endif
         <input type="submit" name="submit" class="button-primary" />

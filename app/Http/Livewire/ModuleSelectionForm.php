@@ -2,7 +2,6 @@
 
 namespace App\Http\Livewire;
 
-use App\DataTransferObjects\Courses\CourseSelectData;
 use App\Enums\CourseGroupType;
 use App\Models\Course;
 use App\Models\Specialization;
@@ -12,14 +11,18 @@ use Livewire\Component;
 
 class ModuleSelectionForm extends Component
 {
-    public array $coreCompetenceCourseData;
-    public array $clusterSpecificCourseData;
-    public array $defaultCourseData;
-    public array $electiveCourseData;
+    public array $coreCompetenceCourseGroup;
+    public array $coreCompetenceCourses;
+    public array $clusterSpecificCourseGroup;
+    public array $clusterSpecificCourses;
+    public array $defaultCourseGroup;
+    public array $defaultCourses;
+    public array $electiveCourseGroup;
+    public array $electiveCourses;
     public string $givenName;
     public string $semester;
     public array $semesters;
-    public int $specialization;
+    public int $specializationId;
     public array $specializations;
     public string $surname;
     public string $studyMode;
@@ -62,12 +65,13 @@ class ModuleSelectionForm extends Component
     }
     public function changeSpecialization(int $selected, GetCourseSelectDataService $getCourseSelectDataService): void
     {
-        $this->specialization = $selected;
-        
-        // $this->coreCompetenceCourseData = (string)$getCourseSelectDataService(CourseGroupType::CoreCompetences, $this->specialization);
-        // $this->clusterSpecificCourseData = (string)$getCourseSelectDataService(CourseGroupType::ClusterSpecific, $this->specialization);
-        // $this->defaultCourseData = (string)$getCourseSelectDataService(CourseGroupType::Default, $this->specialization);
-        // $this->electiveCourseData = (string)$getCourseSelectDataService(CourseGroupType::Elective, $this->specialization);
+        $this->specializationId = $selected;
+        $specialization = Specialization::find($selected);
+
+        [$this->coreCompetenceCourseGroup, $this->coreCompetenceCourses] = $getCourseSelectDataService(CourseGroupType::CoreCompetences, $specialization);
+        [$this->clusterSpecificCourseGroup, $this->clusterSpecificCourses] = $getCourseSelectDataService(CourseGroupType::ClusterSpecific, $specialization);
+        [$this->defaultCourseGroup, $this->defaultCourses] = $getCourseSelectDataService(CourseGroupType::Default, $specialization);
+        [$this->electiveCourseGroup, $this->electiveCourses] = $getCourseSelectDataService(CourseGroupType::Elective, $specialization);
     }
     public function changeCoreCompetenceCourse(Course $selected): void
     {

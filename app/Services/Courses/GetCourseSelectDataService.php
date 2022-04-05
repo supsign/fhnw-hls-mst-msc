@@ -2,7 +2,7 @@
 
 namespace App\Services\Courses;
 
-use App\DataTransferObjects\Courses\CourseSelectData;
+// use App\DataTransferObjects\Courses\CourseSelectData;
 use App\Enums\CourseGroupType;
 use App\Enums\CourseGroupType as EnumsCourseGroupType;
 use App\Models\CourseCollection;
@@ -22,15 +22,20 @@ class GetCourseSelectDataService
         $this->data = new stdClass;
     }
 
-    public function __invoke(CourseGroupType $courseGroupType, Specialization $specialization)  //: stdClass
+    public function __invoke(CourseGroupType $courseGroupType, Specialization $specialization): array
     {
         $this->courseGroupType = $courseGroupType;
         $this->specialization = $specialization;
 
-        return new CourseSelectData(
-            courseGroup: $this->getCourseGroup(),
-            courses: $this->getCourses(),
-        );
+        return [
+            $this->getCourseGroup()->toArray(),
+            $this->getCourses()->toArray(),
+        ];
+
+        // return new CourseSelectData(
+        //     courseGroup: $this->getCourseGroup(),
+        //     courses: $this->getCourses(),
+        // );
     }
 
     protected function getCourseGroup(): CourseGroup
