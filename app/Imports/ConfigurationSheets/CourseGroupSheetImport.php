@@ -2,9 +2,9 @@
 
 namespace App\Imports\ConfigurationSheets;
 
+use App\Enums\CourseGroupType;
 use App\Models\CourseGroup;
 use App\Models\CourseGroupSpecialization;
-use App\Models\CourseGroupType;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
@@ -15,7 +15,7 @@ class CourseGroupSheetImport implements ToCollection, WithHeadingRow
 {
     public function collection(Collection $rows): void
     {
-        $courseGroupTypes = CourseGroupType::find([1, 2, 3]);
+        $courseGroupTypes = CourseGroupType::withoutDefault();
 
         foreach ($rows as $row)
         {
@@ -29,18 +29,18 @@ class CourseGroupSheetImport implements ToCollection, WithHeadingRow
                 $typeId = null;
 
                 foreach ($courseGroupTypes AS $courseGroupType) {
-                    if (str_contains($row['name'], $courseGroupType->name)) {
-                        $typeId = $courseGroupType->id;
+                    if (str_contains($row['name'], $courseGroupType->label())) {
+                        $typeId = $courseGroupType->value;
                     }
                 }
 
                 if (empty($typeId)) {
-                    $typeId = 4;
+                    $typeId = CourseGroupType::Default->value;
                 }
 
                 CourseGroup::create([
                     'id' => $row['id'],
-                    'course_group_type_id' => $typeId,
+                    'type' => $typeId,
                     'name' => $row['name'],
                     'internal_name' => $row['internalname'],
                     'required_courses_count' => $row['requiredmodulescount'],

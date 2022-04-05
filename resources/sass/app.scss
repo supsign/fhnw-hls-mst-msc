@@ -1,57 +1,45 @@
-/**
- * This injects Tailwind's base styles, which is a combination of
- * Normalize.css and some additional base styles.
- *
- * You can see the styles here:
- * https://unpkg.com/tailwindcss/dist/base.css
- */
 @tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-/**
- * Remove the default box-shadow for invalid elements to prevent
- * inputs in Livewire components showing with a
- * red border by default in Firefox.
- *
- * See: https://github.com/laravel-frontend-presets/tall/issues/7
- */
  input:invalid, textarea:invalid, select:invalid {
     box-shadow: none;
 }
 
-/**
- * This injects any component classes registered by plugins.
- */
-@tailwind components;
-
-/**
- * Here you would add any of your custom component classes; stuff that you'd
- * want loaded *before* the utilities so that the utilities could still
- * override them.
- *
- * Example:
- *
- * .btn { ... }
- * .form-input { ... }
- */
-
-/**
- * This injects all of Tailwind's utility classes, generated based on your
- * config file.
- */
-@tailwind utilities;
-
-/**
- * Here you would add any custom utilities you need that don't come out of the
- * box with Tailwind.
- *
- * Example :
- *
- * .bg-pattern-graph-paper { ... }
- * .skew-45 { ... }
- */
-
 [x-cloak] {
     display: none;
+}
+
+/* Override Tailwind Basics */
+
+[type='text'],
+[type='email'],
+[type='url'],
+[type='password'],
+[type='number'],
+[type='date'],
+[type='datetime-local'],
+[type='month'],
+[type='search'],
+[type='tel'],
+[type='time'],
+[type='week'],
+[multiple],
+textarea,
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: unset;
+  border-color: unset;
+  border-width: 0;
+  border-radius: 0;
+  padding-top: 0.5rem;
+  padding-right: 0.75rem;
+  padding-bottom: 0.5rem;
+  padding-left: 0.75rem;
+  font-size: 1rem;
+  line-height: 1.5rem;
 }
 
 .button-primary {
@@ -68,11 +56,8 @@
     @apply border-2;
   }
 
-  &__label {
-    @apply left-3 top-3 lg:top-2 px-2 absolute bg-white whitespace-nowrap text-gray-400;
-    transform: translate(0, 0);
-    transform-origin: 0 0;
-    transition: transform 120ms ease-in;
+  label {
+    @apply left-2 -top-4 px-1 absolute bg-white text-gray-400 z-10 scale-90;
   }
 
   &__error {
@@ -80,22 +65,44 @@
   }
 
   &__field {
-    @apply block py-2 px-6 w-full box-border border rounded-lg border-gray-200 shadow-md text-gray-900;
+    @apply block py-2 px-4 w-full box-border border rounded-lg border-gray-200 shadow-md text-gray-900;
 
-    &:focus,
-    &:not(:placeholder-shown) {
-      & + .input__label {
-        transform: translate(-0.15rem, -100%) scale(0.9);
-        @apply font-semibold text-gray-400;
-      }
-
-      &:disabled + .input__label {
-        @apply text-gray-600;
-      }
+    &:disabled {
+      @apply opacity-50;
     }
   }
 }
+.select {
+  @apply relative;
 
+  .is-invalid {
+    @apply border-2;
+  }
+
+  label {
+    @apply left-2 -top-4 px-1 absolute bg-white text-gray-400 z-10 scale-90;
+  }
+
+  &__error {
+    @apply whitespace-nowrap block w-full pr-2 text-right font-light text-gray-800;
+  }
+
+  &__field {
+    @apply block py-2 px-4 w-full box-border border rounded-lg border-gray-200 shadow-md text-gray-900;
+
+    &:disabled {
+      @apply opacity-50;
+    }
+  }
+
+  &__dropdown-option {
+    @apply border-t border-gray-50;
+  }
+}
+
+.link {
+  @apply text-blue-600 hover:text-blue-800
+}
 .vs {
   &__dropdown-toggle {
     @apply py-2 px-4 w-full box-border border rounded-lg bg-white border-gray-200 shadow-md text-gray-900;

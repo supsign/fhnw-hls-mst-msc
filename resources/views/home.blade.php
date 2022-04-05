@@ -1,20 +1,18 @@
 <x-layout.app>
-        <x-slot name="title">
-            Home
-        </x-slot>
+    <x-slot name="title">
+        Home
+    </x-slot>
     <div class="container p-3 mx-auto">
         <div class="w-full sm:flex-grow">
             <x-base.card class="mb-4">
-                <div class="flex">
-                    <div class="pr-4">
-                        <i class="far fa-lightbulb fa-2x" aria-hidden="true"></i>
-                    </div>
-                    <div>
-                        Hello i'm a friendly Card
-                    </div>
+                <div class="text-2xl">{{$introTitle}}</div>
+                <div class="flex flex-col">
+                    <div class="whitespace-pre-line">
+                        {{ $introContent }}</div>
+                        <x-base.link href="{{ $introLink }}">{{ $introLink }}</x-base.link>
                 </div>
             </x-base.card>
-
+            <livewire:module-selection-form :semesters="$semesters" :specializations="$specializations" :studyModes="$studyModes"/>
         </div>
     </div>
 </x-layout.app>
