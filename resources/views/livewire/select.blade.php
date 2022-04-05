@@ -1,14 +1,19 @@
 <div>
     <label class="select__label">{{$label}}</label>
     <select class="select__field" name="{{$name}}" wire:model="selected">
-        @if($placeholder)<option value>{{ $placeholder }} </option>@endif
-    @foreach($options as $option)
-            @if($optionKey)
-                <option value="{{ is_int($option) ? $option : $option->id ?? $option->value }}">{{ is_int($option) ? $option : $option->{$optionKey} ?? $option->{$optionKey}() }}</option>
+        @if($placeholder)
+            <option value>{{ $placeholder }}</option>
+        @endif
+        @foreach($options as $key => $value)
+            @if(is_string($value))
+                <option value="{{ $key }}" >{{ $value }}</option>
             @else
-                <option>{{ $option }}</option>
+                <option value="{{ $value['id'] }}">{{ $option[$optionKey] }}</option>
             @endif
         @endforeach
     </select>
-    @error($name)<span class="text-red-500">{{ $message }}</span> @enderror
+
+    @error($name)
+        <span class="text-red-500">{{ $message }}</span>
+    @enderror
 </div>
