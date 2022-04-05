@@ -18,7 +18,7 @@ class HomeController extends Controller
         return view('home', [
             'semesters' => $getSemestersService(),
             'specializations' => Specialization::all()->toArray(),
-            'studyModes' => StudyMode::cases(),
+            'studyModes' => StudyMode::asArray(),
             'introContent' => $introContent,
             'introLink' => $introLink,
             'introTitle' => $introTitle,
