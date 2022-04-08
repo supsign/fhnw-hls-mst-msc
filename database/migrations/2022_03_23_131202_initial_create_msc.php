@@ -1,7 +1,6 @@
 <?php
 
 use App\Models\App;
-use App\Models\CourseGroupType;
 use App\Services\Auth\PasswordService;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -16,6 +15,12 @@ return new class extends Migration
      */
     public function up()
     {        
+        Schema::create('semesters', function (Blueprint $table) {
+            $table->id();
+            $table->timestamp('start_date')->unique();
+            $table->timestamps();
+        });
+
         Schema::create('venues', function (Blueprint $table) {
             $table->id();
             $table->string('name')->nullable();
@@ -134,5 +139,6 @@ return new class extends Migration
         Schema::dropIfExists('clusters');
         Schema::dropIfExists('slots');
         Schema::dropIfExists('venues');
+        Schema::dropIfExists('semesters');
     }
 };
