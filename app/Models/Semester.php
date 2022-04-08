@@ -10,6 +10,7 @@ class Semester extends BaseModel
 	protected $appends = [
 	    'is_autumn_semester',
 	    'is_spring_semester',
+	    'name',
 	    'year',
 	];
 
@@ -34,7 +35,7 @@ class Semester extends BaseModel
 	public function name(): Attribute
 	{
 		return Attribute::make(
-			get: fn () => $this->year.' '.($this->isAutumnSemester ? 'AS' : 'SS')
+			get: fn () => $this->year.' '.($this->isAutumnSemester ? EnumsSemester::AutumnStart->shortName() : EnumsSemester::SpringStart->shortName())
 		);
 	}
 

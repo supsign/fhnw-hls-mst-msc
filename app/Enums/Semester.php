@@ -12,8 +12,16 @@ enum Semester: string
     public function month(): string
     {
         return match($this) {
-            static::AutumnStart => Carbon::parse('2022-'.static::AutumnStart->value)->monthName,
-            static::SpringStart => Carbon::parse('2022-'.static::SpringStart->value)->monthName,
+            static::AutumnStart => Carbon::parse('1987-'.static::AutumnStart->value)->monthName,
+            static::SpringStart => Carbon::parse('1992-'.static::SpringStart->value)->monthName,
+        };
+    }
+
+    public function shortName(): string
+    {
+        return match($this) {
+            static::AutumnStart => 'AS',
+            static::SpringStart => 'SS',
         };
     }
 }

@@ -15,7 +15,7 @@ class GetSemestersForSelectService
 	{
 		$return = [];
 
-		$semesters = ($this->getUpcomingSemesterService)($numberOfSemesters - 1)->prepend(
+		$semesters = ($this->getUpcomingSemestersService)($numberOfSemesters - 1)->prepend(
 			($this->getCurrentSemesterService)()
 		)->sortBy('start_date')->unique()->shift(8)->values();
 
