@@ -11,7 +11,7 @@ class GetSemestersForSelectService
 		
 	}
 
-	public function __invoke(int $numberOfSemesters = 6): array
+	public function __invoke(int $numberOfSemesters = 8): array
 	{
 		$return = [];
 

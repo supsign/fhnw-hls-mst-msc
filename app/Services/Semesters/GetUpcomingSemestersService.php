@@ -12,7 +12,7 @@ class GetUpcomingSemestersService
     protected Carbon $currentDate;
     protected int $numberOfSemesters;
 
-    public function __invoke(int $numberOfSemesters = 8, Carbon $startDate = null): Collection
+    public function __invoke(int $numberOfSemesters = 10, Carbon $startDate = null): Collection
     {
         $this->currentDate = $startDate ?: Carbon::now();
         $this->numberOfSemesters = $numberOfSemesters;
