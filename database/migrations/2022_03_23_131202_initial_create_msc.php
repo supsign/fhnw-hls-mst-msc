@@ -74,7 +74,6 @@ return new class extends Migration
         Schema::create('courses', function (Blueprint $table) {
             $table->id();
             $table->foreignId('cluster_id')->nullable()->constrained();
-            $table->foreignId('semester_id')->constrained();
             $table->foreignId('slot_as_id')->nullable()->constrained('slots');
             $table->foreignId('slot_ss_id')->nullable()->constrained('slots');
             $table->foreignId('specialization_id')->nullable()->constrained();
@@ -86,6 +85,14 @@ return new class extends Migration
             $table->text('content');
             $table->unsignedInteger('ects');
             $table->timestamps();
+        });
+
+        Schema::create('course_semester', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('course_id')->constrained();
+            $table->foreignId('semester_id')->constrained();
+            $table->timestamps();
+            $table->unique(['course_id', 'semester_id']);
         });
 
         Schema::create('course_course_group', function (Blueprint $table) {
@@ -132,6 +139,7 @@ return new class extends Migration
         Schema::dropIfExists('page_contents');
         Schema::dropIfExists('links');
         Schema::dropIfExists('course_course_group');
+        Schema::dropIfExists('course_semester');
         Schema::dropIfExists('courses');
         Schema::dropIfExists('course_group_specialization');
         Schema::dropIfExists('course_groups');

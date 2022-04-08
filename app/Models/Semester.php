@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\Semester as EnumsSemester;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Semester extends BaseModel
 {
@@ -17,6 +18,11 @@ class Semester extends BaseModel
 	protected $casts = [
 	    'start_date' => 'date',
 	];
+
+	public function courses(): BelongsToMany
+	{
+		return $this->belongsToMany(Course::class);
+	}
 
 	public function isAutumnSemester(): Attribute
 	{

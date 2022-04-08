@@ -8,6 +8,7 @@ use App\Models\Course;
 use App\Models\CourseCourseGroup;
 use App\Models\CourseGroup;
 use App\Models\CourseGroupSpecialization;
+use App\Models\CourseSemester;
 use App\Models\Link;
 use App\Models\PageContent;
 use App\Models\Specialization;
@@ -26,6 +27,7 @@ class ConfigurationImportService
         CourseCourseGroup::class,
         CourseGroup::class,
         CourseGroupSpecialization::class,
+        CourseSemester::class,
         Link::class,
         PageContent::class,
         Specialization::class,
