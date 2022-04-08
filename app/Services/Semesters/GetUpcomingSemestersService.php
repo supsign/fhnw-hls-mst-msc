@@ -11,25 +11,19 @@ class GetUpcomingSemestersService
 {
     protected Carbon $currentDate;
     protected int $numberOfSemesters;
-    protected Collection $semesters;
-
-    public function __construct(protected GetCurrentSemestersService $getCurrentSemestersService)
-    {
-        
-    }
 
     public function __invoke(int $numberOfSemesters = 8): Collection
     {
         $this->currentDate = Carbon::now();
         $this->numberOfSemesters = $numberOfSemesters;
 
-        $this->semesters = Semester::whereDate('start_date', '>', $this->currentDate)
+        $semesters = Semester::whereDate('start_date', '>', $this->currentDate)
             ->orderBy('start_date')
             ->limit($this->numberOfSemesters)
             ->get();
 
-        if ($this->semesters->count() === $this->numberOfSemesters) {
-            return $this->semesters;
+        if ($semesters->count() === $this->numberOfSemesters) {
+            return $semesters;
         }
 
         $this->createSemesters();

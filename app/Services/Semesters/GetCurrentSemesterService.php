@@ -6,7 +6,7 @@ use App\Enums\Semester as EnumsSemester;
 use App\Models\Semester;
 use Carbon\Carbon;
 
-class GetCurrentSemestersService
+class GetCurrentSemesterService
 {
     public function __invoke(): Semester
     {

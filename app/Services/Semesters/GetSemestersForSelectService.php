@@ -5,7 +5,7 @@ namespace App\Services\Semesters;
 class GetSemestersForSelectService
 {
 	public function __construct(
-		protected GetCurrentSemestersService $getCurrentSemestersService, 
+		protected GetCurrentSemesterService $getCurrentSemesterService, 
 		protected GetUpcomingSemestersService $getUpcomingSemestersService
 	) {
 		
@@ -15,8 +15,8 @@ class GetSemestersForSelectService
 	{
 		$return = [];
 
-		$semesters = ($this->getUpcomingSemestersService)($numberOfSemesters - 1)->prepend(
-			($this->getCurrentSemestersService)()
+		$semesters = ($this->getUpcomingSemesterService)($numberOfSemesters - 1)->prepend(
+			($this->getCurrentSemesterService)()
 		)->sortBy('start_date')->unique()->shift(8)->values();
 
 		foreach ($semesters AS $semester) {

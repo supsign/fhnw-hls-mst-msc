@@ -74,6 +74,7 @@ return new class extends Migration
         Schema::create('courses', function (Blueprint $table) {
             $table->id();
             $table->foreignId('cluster_id')->nullable()->constrained();
+            $table->foreignId('semester_id')->constrained();
             $table->foreignId('slot_as_id')->nullable()->constrained('slots');
             $table->foreignId('slot_ss_id')->nullable()->constrained('slots');
             $table->foreignId('specialization_id')->nullable()->constrained();
