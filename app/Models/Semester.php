@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-
+use App\Enums\Semester as EnumsSemester;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Semester extends BaseModel
@@ -20,14 +20,14 @@ class Semester extends BaseModel
 	public function isAutumnSemester(): Attribute
 	{
 		return Attribute::make(
-			get: fn () => $this->start_date->monthName === 'September'
+			get: fn () => $this->start_date->monthName === EnumsSemester::AutumnStart->month()
 		);
 	}
 
 	public function isSpringSemester(): Attribute
 	{
 		return Attribute::make(
-			get: fn () => $this->start_date->monthName === 'February'
+			get: fn () => $this->start_date->monthName === EnumsSemester::SpringStart->month()
 		);
 	}
 

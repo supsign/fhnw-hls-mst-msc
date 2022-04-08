@@ -2,12 +2,12 @@
 
 namespace App\Services\Semesters;
 
+use App\Enums\Semester as EnumsSemester;
 use App\Models\Semester;
 use Carbon\Carbon;
 
 class GetCurrentSemestersService
 {
-
     public function __invoke(): Semester
     {
         $now = Carbon::now();
@@ -17,8 +17,8 @@ class GetCurrentSemestersService
             return $semester;
         }
 
-        $autumnSemesterStart = Carbon::parse($now->year.'-09-01');
-        $springSemesterStart = Carbon::parse($now->year.'-02-01');
+        $autumnSemesterStart = Carbon::parse($now->year.'-'.EnumsSemester::SpringStart->value);
+        $springSemesterStart = Carbon::parse($now->year.'-'.EnumsSemester::AutumnStart->value);
 
         if ($autumnSemesterStart->isBefore($now)) {
             return Semester::create([
