@@ -9,7 +9,7 @@ use Exception;
 
 class GetSemesterService
 {
-    public function __invoke(string $year, bool $autumnSemester = false): Semester
+    public function __invoke(int $year, bool $autumnSemester = false): Semester
     {
         $currentYear = (string)Carbon::now()->year;
 
