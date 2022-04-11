@@ -6,13 +6,9 @@
         <livewire:select label="Semester" name="semester" :options="$semesters" />
         <x-base.select label="Study Mode" name="mode" :options="$studyModes" optionKey="label" />
         <livewire:select label="Specialization" name="specialization" :options="$specializations" optionKey="name" placeholder="-- Choose Specialization --" />
+
         @if($specializationId)
-            <livewire:course-selection
-                    :coreCompetenceCourseGroup="$coreCompetenceCourseGroup",
-                    :clusterSpecificCourseGroup="$clusterSpecificCourseGroup";
-                    :defaultCourseGroup="$defaultCourseGroup";
-                    :electiveCourseGroup="$electiveCourseGroup";
-            >
+            <livewire:course-selection key="{{ now() }}"  :specializationId="$specializationId">
             </livewire:course-selection>
         @endif
         <input type="submit" name="submit" class="button-primary" />

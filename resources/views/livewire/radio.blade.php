@@ -1,4 +1,4 @@
 <div>
-    <input type="checkbox" name="{{$name}}" class="checkbox" wire:model="value"/>
+    <input type="radio" name="{{$name}}" class="radio" wire:model="value"/>
     @error($name) <span class="text-red-500">{{ $message }}</span> @enderror
 </div>

@@ -11,10 +11,7 @@ use Livewire\Component;
 
 class ModuleSelectionForm extends Component
 {
-    public array $coreCompetenceCourseGroup;
-    public array $clusterSpecificCourseGroup;
-    public array $defaultCourseGroup;
-    public array $electiveCourseGroup;
+
     public string $givenName;
     public string $semester;
     public array $semesters;
@@ -59,25 +56,11 @@ class ModuleSelectionForm extends Component
     {
         $this->semester = $selected;
     }
-    public function changeSpecialization(int $selected, GetCourseSelectDataService $getCourseSelectDataService): void
+    public function changeSpecialization(int $selected): void
     {
         $this->specializationId = $selected;
-        $specialization = Specialization::find($selected);
-
-        $this->coreCompetenceCourseGroup = $getCourseSelectDataService(CourseGroupType::CoreCompetences, $specialization);
-        $this->clusterSpecificCourseGroup = $getCourseSelectDataService(CourseGroupType::ClusterSpecific, $specialization);
-        $this->defaultCourseGroup = $getCourseSelectDataService(CourseGroupType::Default, $specialization);
-        $this->electiveCourseGroup = $getCourseSelectDataService(CourseGroupType::Elective, $specialization);
-    }
-    public function changeCoreCompetenceCourse(Course $selected): void
-    {
-        $this->coreCompetenceCourse = $selected;
     }
 
-    public function changeClusterSpecificCourse(Course $selected): void
-    {
-        $this->clusterSpecificCourse = $selected;
-    }
     public function render(): View
     {
         return view('livewire.module-selection-form');
