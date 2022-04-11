@@ -8,7 +8,11 @@ class Radio extends Component
 {
 
     public string $name;
-    public bool $value = false;
+    public string $value;
+
+    public function updated(): void
+    {
+    }
     public function render()
     {
         return view('livewire.radio');
