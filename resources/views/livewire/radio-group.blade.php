@@ -1,6 +1,10 @@
 <div class="border-r flex gap-5">
     @foreach($nextSemesters AS $semester)
-                <input type="radio" name="{{$courseName}}" class="radio" wire:model="{{$semester['name']}}" value="{{$semester['name']}}"/>
+        <div  class="w-20">
+                <input type="radio" name="{{$courseName}}" wire:model="semesterId" value="{{$semester['id']}}" key="{{$semester['id']}}">
+        </div>
     @endforeach
-        <input type="radio" name="{{$courseName}}" class="radio" wire:model="later" value="later"/>
+    <div  class="w-20">
+        <input type="radio" name="{{$courseName}}" wire:model="semesterId" value="99"/>
+    </div>
 </div>

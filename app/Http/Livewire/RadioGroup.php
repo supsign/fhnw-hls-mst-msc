@@ -8,6 +8,7 @@ class RadioGroup extends Component
 {
     public string $courseName;
     public array $nextSemesters;
+    public int $semesterId = 0;
 
     public function render()
     {

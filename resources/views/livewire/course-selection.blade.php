@@ -1,6 +1,6 @@
 <div class="flex flex-col">
     <div class="flex gap-5">
-        <div class="w-80"></div>
+        <div class="w-96"></div>
         <div class="w-6"></div>
         @foreach($nextSemesters AS $semester)
             <div class="w-20">{{$semester['name']}}</div>
