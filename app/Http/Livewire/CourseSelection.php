@@ -21,6 +21,11 @@ class CourseSelection extends Component
     public array $defaultCourseGroup;
     public array $electiveCourseGroup;
     public array $nextSemesters;
+    public array $selectedCourses = [];
+
+    protected $listeners = [
+        'updateSelectedCourse'
+    ];
 
     public function mount(int $specializationId, int $semesterId, GetUpcomingSemestersService $getUpcomingSemestersService, GetCourseSelectDataService $getCourseSelectDataService): void
 
@@ -45,7 +50,9 @@ class CourseSelection extends Component
     {
         $this->clusterSpecificCourse = $selected;
     }
-
+    public function updateSelectedCourse(int $courseId, int $semesterId) {
+        $this->selectedCourses[$courseId] = $semesterId;
+    }
 
     public function render(): View
     {
