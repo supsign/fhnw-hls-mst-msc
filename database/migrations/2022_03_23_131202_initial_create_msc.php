@@ -1,7 +1,6 @@
 <?php
 
 use App\Models\App;
-use App\Models\CourseGroupType;
 use App\Services\Auth\PasswordService;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -16,6 +15,12 @@ return new class extends Migration
      */
     public function up()
     {        
+        Schema::create('semesters', function (Blueprint $table) {
+            $table->id();
+            $table->timestamp('start_date')->unique();
+            $table->timestamps();
+        });
+
         Schema::create('venues', function (Blueprint $table) {
             $table->id();
             $table->string('name')->nullable();
@@ -82,6 +87,14 @@ return new class extends Migration
             $table->timestamps();
         });
 
+        Schema::create('course_semester', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('course_id')->constrained();
+            $table->foreignId('semester_id')->constrained();
+            $table->timestamps();
+            $table->unique(['course_id', 'semester_id']);
+        });
+
         Schema::create('course_course_group', function (Blueprint $table) {
             $table->foreignId('course_id')->nullable()->constrained();
             $table->foreignId('course_group_id')->nullable()->constrained();
@@ -126,6 +139,7 @@ return new class extends Migration
         Schema::dropIfExists('page_contents');
         Schema::dropIfExists('links');
         Schema::dropIfExists('course_course_group');
+        Schema::dropIfExists('course_semester');
         Schema::dropIfExists('courses');
         Schema::dropIfExists('course_group_specialization');
         Schema::dropIfExists('course_groups');
@@ -134,5 +148,6 @@ return new class extends Migration
         Schema::dropIfExists('clusters');
         Schema::dropIfExists('slots');
         Schema::dropIfExists('venues');
+        Schema::dropIfExists('semesters');
     }
 };

@@ -5,10 +5,14 @@ namespace App\Imports\ConfigurationSheets;
 use App\Enums\Error;
 use App\Models\Course;
 use App\Models\CourseCourseGroup;
+use App\Models\CourseSemester;
 use App\Models\Slot;
 use App\Models\Venue;
+use App\Services\Semesters\GetSemesterService;
+use App\Services\Semesters\GetUpcomingSemestersService;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\App;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Spatie\FlareClient\Http\Exceptions\InvalidData;
@@ -19,8 +23,10 @@ class CourseSheetImport implements ToCollection, WithHeadingRow
 
     public function collection(Collection $rows): void
     {
-        foreach ($rows as $row)
-        {
+        $getSemesterService = App::make(GetSemesterService::class);
+        $getUpcomingSemestersService = App::make(GetUpcomingSemestersService::class);
+
+        foreach ($rows as $row) {
             $row = $row->ToArray();
 
             if (!isset($row['id'])) {
@@ -99,6 +105,21 @@ class CourseSheetImport implements ToCollection, WithHeadingRow
                 }
 
                 throw new InvalidData($error);
+            }
+
+            $startSemester = $getSemesterService($row['start'], $row['semshort'] === 'AS');
+            $endSemester = !empty($row['end']) ? $getSemesterService($row['end'], true) : false;        //  endSemester is always the AS of the year
+            $upcomingSemesters = $getUpcomingSemestersService(startDate: $startSemester->start_date);
+
+            foreach ($upcomingSemesters AS $upcomingSemester) {
+                CourseSemester::create([
+                    'course_id' => $row['id'],
+                    'semester_id' => $upcomingSemester->id,
+                ]);
+
+                if ($endSemester && $upcomingSemester->id === $endSemester->id) {
+                    break;
+                }
             }
         }
     }

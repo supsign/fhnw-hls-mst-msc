@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Course extends BaseModel
 {
@@ -14,6 +15,11 @@ class Course extends BaseModel
 	public function autumnSemesterSlot(): BelongsTo
 	{
 		return $this->belongsTo(Slot::class, 'as_slot_id');
+	}
+
+	public function semesters(): BelongsToMany
+	{
+		return $this->belongsToMany(Semester::class);
 	}
 
 	public function springSemesterSlot(): BelongsTo
