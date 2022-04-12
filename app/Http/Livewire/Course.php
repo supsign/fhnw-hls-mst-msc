@@ -8,6 +8,7 @@ class Course extends Component
 {
     public $course;
     public string $internalName;
+    public array $nextSemesters;
 
     public function render()
     {

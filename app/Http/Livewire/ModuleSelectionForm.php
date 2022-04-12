@@ -2,10 +2,7 @@
 
 namespace App\Http\Livewire;
 
-use App\Enums\CourseGroupType;
-use App\Models\Course;
-use App\Models\Specialization;
-use App\Services\Courses\GetCourseSelectDataService;
+
 use Illuminate\Contracts\View\View;
 use Livewire\Component;
 
@@ -13,7 +10,7 @@ class ModuleSelectionForm extends Component
 {
 
     public string $givenName;
-    public string $semester;
+    public int $semesterId;
     public array $semesters;
     public int $specializationId;
     public array $specializations;
@@ -35,6 +32,10 @@ class ModuleSelectionForm extends Component
         'specialization' => 'required',
     ];
 
+    public function mount() {
+       $this->semesterId =  array_key_first($this->semesters);
+    }
+
     public function dehydrate()
     {
         $this->emit('formErrorBag', $this->getErrorBag());
@@ -52,9 +53,10 @@ class ModuleSelectionForm extends Component
     {
         $this->givenName = $value;
     }
-    public function changeSemester(string $selected): void
+    public function changeSemester(int $selected): void
     {
-        $this->semester = $selected;
+        $this->semesterId = $selected;
+
     }
     public function changeSpecialization(int $selected): void
     {

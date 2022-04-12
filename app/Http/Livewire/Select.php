@@ -12,7 +12,7 @@ class Select extends Component
     public string $name;
     public array|Collection $options;
     public string $optionKey;
-    public string|int $selected = '';
+    public string|int $selected = 0;
     public string $placeholder;
 
     protected $listeners = [

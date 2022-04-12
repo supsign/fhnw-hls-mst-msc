@@ -7,7 +7,7 @@ use Livewire\Component;
 class RadioGroup extends Component
 {
     public string $courseName;
-    public array $semesters;
+    public array $nextSemesters;
 
     public function render()
     {
