@@ -8,7 +8,10 @@
         <livewire:select label="Specialization" name="specialization" :options="$specializations" optionKey="name" placeholder="-- Choose Specialization --" />
 
         @if($specializationId)
-            <livewire:course-selection key="{{ now() }}"  :specializationId="$specializationId" :semesterId="$semesterId">
+            <livewire:course-selection 
+                key="{{ now() }}"
+                :specializationId="$specializationId"
+                :semesterId="$semesterId">
             </livewire:course-selection>
         @endif
         <input type="submit" name="submit" class="button-primary" />
