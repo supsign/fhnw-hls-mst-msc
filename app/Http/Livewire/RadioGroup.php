@@ -13,11 +13,12 @@ class RadioGroup extends Component
     public int $semesterId = 0;
     public int $selectedSemester;
 
-    public function mount()
+    public function mount(): void
     {
         $this->semesterId = $this->selectedSemester;
     }
-    public function updated() {
+    public function updated(): void 
+    {
         $this->emit('updateSelectedSemester', $this->courseId, $this->semesterId);
         $this->selectedSemester = $this->semesterId;
     }

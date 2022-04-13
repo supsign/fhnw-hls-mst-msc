@@ -18,7 +18,6 @@ class ModuleSelectionForm extends Component
     public string $studyMode;
     public array $studyModes;
 
-
     protected $listeners = [
         'changeSurname',
         'changeGivenName',
@@ -33,15 +32,17 @@ class ModuleSelectionForm extends Component
         'specialization' => 'required',
     ];
 
-    public function mount() {
+    public function mount(): void
+    {
        $this->semesterId =  array_key_first($this->semesters);
     }
 
-    public function dehydrate()
+    public function dehydrate(): void
     {
         $this->emit('formErrorBag', $this->getErrorBag());
     }
-    public function submit()
+
+    public function submit(): void
     {
         $this->validate();
     }
@@ -50,6 +51,7 @@ class ModuleSelectionForm extends Component
     {
         $this->surname = $value;
     }
+
     public function changeGivenName(string $value): void
     {
         $this->givenName = $value;
@@ -57,8 +59,8 @@ class ModuleSelectionForm extends Component
     public function changeSemester(int $selected): void
     {
         $this->semesterId = $selected;
-
     }
+
     public function changeSpecialization(int $selected): void
     {
         $this->specializationId = $selected;
