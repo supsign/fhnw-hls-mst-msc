@@ -10,9 +10,9 @@
     <div class="flex flex-col">
 
         @dump($selectedCourses)
-        
+
         @foreach($coreCompetenceCourseGroup['courses'] as $course)
-            <livewire:course :internalName="$coreCompetenceCourseGroup['internal_name']" :course="$course" :nextSemesters="$nextSemesters" key="{{$course['id']}}"/>
+            <livewire:course :internalName="$coreCompetenceCourseGroup['internal_name']" :course="$course" :nextSemesters="$nextSemesters" key="{{ $course['id'] }}"/>
         @endforeach
       </div>
     </div>

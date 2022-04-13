@@ -12,7 +12,9 @@ class Radio extends Component
 
     public function updated(): void
     {
+        
     }
+
     public function render()
     {
         return view('livewire.radio');

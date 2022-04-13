@@ -15,6 +15,7 @@ class RadioGroup extends Component
     public function updated() {
         $this->emit('updateSelectedSemester', $this->courseId, $this->semesterId);
     }
+    
     public function render(): View
     {
         return view('livewire.radio-group');
