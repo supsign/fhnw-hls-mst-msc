@@ -37,7 +37,7 @@ class GetCourseSelectDataService
                 ->courseGroup;
     }
 
-    protected function getCourseGroupFilterBySemester()   //: CourseGroup
+    protected function getCourseGroupFilterBySemester(): CourseGroup
     {
         $courseGroup = $this->getCourseGroup();
 
