@@ -27,10 +27,12 @@ class CourseSelection extends Component
         'updateSelectedCourse'
     ];
 
-    public function mount(int $specializationId, int $semesterId, GetUpcomingSemestersService $getUpcomingSemestersService, GetCourseSelectDataService $getCourseSelectDataService): void
-
-    {
-
+    public function mount(
+        int $specializationId, 
+        int $semesterId, 
+        GetUpcomingSemestersService $getUpcomingSemestersService, 
+        GetCourseSelectDataService $getCourseSelectDataService
+    ): void {
         $specialization = Specialization::find($specializationId);
         $semester = Semester::find($semesterId);
 
