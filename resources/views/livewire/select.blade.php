@@ -1,4 +1,5 @@
 <div>
+    @dump($options)
     <label class="select__label">{{$label}}</label>
     <select class="select__field" name="{{$name}}" wire:model="selected">
         @if($placeholder)

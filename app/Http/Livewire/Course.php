@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use App\Models\Semester;
 use Livewire\Component;
 
 class Course extends Component
@@ -9,6 +10,7 @@ class Course extends Component
     public $course;
     public string $internalName;
     public array $nextSemesters;
+    public int $selectedSemester;
 
 
     protected $listeners = [
