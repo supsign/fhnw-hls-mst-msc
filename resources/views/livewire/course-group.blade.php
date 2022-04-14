@@ -12,12 +12,11 @@
             <div class="w-20 text-center">later</div>
         </div>
     </div>
-
     @foreach($group['courses'] as $course)
-        <livewire:course 
-            :internalName="$group['internal_name']" 
-            :course="$course" :selectedSemester="$selectedCourses[$course['id']] ?? null" 
-            :nextSemesters="$nextSemesters" 
+        <livewire:course
+            :internalName="$group['internal_name']"
+            :course="$course" :selectedSemester="$selectedCourses[$course['id']] ?? null"
+            :nextSemesters="$nextSemesters"
             key="{{ $course['id'] }}"
         />
     @endforeach
