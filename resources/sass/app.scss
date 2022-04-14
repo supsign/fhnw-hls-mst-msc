@@ -2,7 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
- input:invalid, textarea:invalid, select:invalid {
+input:invalid,
+textarea:invalid,
+select:invalid {
     box-shadow: none;
 }
 
@@ -28,120 +30,119 @@
 [multiple],
 textarea,
 select {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  background-color: unset;
-  border-color: unset;
-  border-width: 0;
-  border-radius: 0;
-  padding-top: 0.5rem;
-  padding-right: 0.75rem;
-  padding-bottom: 0.5rem;
-  padding-left: 0.75rem;
-  font-size: 1rem;
-  line-height: 1.5rem;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-color: unset;
+    border-color: unset;
+    border-width: 0;
+    border-radius: 0;
+    padding-top: 0.5rem;
+    padding-right: 0.75rem;
+    padding-bottom: 0.5rem;
+    padding-left: 0.75rem;
+    font-size: 1rem;
+    line-height: 1.5rem;
 }
 
 .button-primary {
-  @apply transition transform duration-300 ease-in-out text-white py-1 px-4 rounded-md shadow-sm w-full bg-blue-700 hover:bg-blue-800 hover:shadow-xl cursor-pointer;
+    @apply transition transform duration-300 ease-in-out text-white py-1 px-4 rounded-md shadow-sm w-full bg-blue-700 hover:bg-blue-800 hover:shadow-xl cursor-pointer;
 }
 .button-error {
-  @apply transition transform duration-300 ease-in-out text-white py-1 px-4 rounded-md shadow-sm w-full bg-red-600 hover:bg-red-700 hover:shadow-xl;
+    @apply transition transform duration-300 ease-in-out text-white py-1 px-4 rounded-md shadow-sm w-full bg-red-600 hover:bg-red-700 hover:shadow-xl;
 }
 
 .input {
-  @apply relative;
+    @apply relative;
 
-  .is-invalid {
-    @apply border-2;
-  }
-
-  label {
-    @apply left-2 -top-4 px-1 absolute bg-white text-gray-400 z-10 scale-90;
-  }
-
-  &__error {
-    @apply whitespace-nowrap block w-full pr-2 text-right font-light text-gray-800;
-  }
-
-  &__field {
-    @apply block py-2 px-4 w-full box-border border rounded-lg border-gray-200 shadow-md text-gray-900;
-
-    &:disabled {
-      @apply opacity-50;
+    .is-invalid {
+        @apply border-2;
     }
-  }
+
+    label {
+        @apply left-2 -top-4 px-1 absolute bg-white text-gray-400 z-10 scale-90;
+    }
+
+    &__error {
+        @apply whitespace-nowrap block w-full pr-2 text-right font-light text-gray-800;
+    }
+
+    &__field {
+        @apply block py-2 px-4 w-full box-border border rounded-lg border-gray-200 shadow-md text-gray-900;
+
+        &:disabled {
+            @apply opacity-50;
+        }
+    }
 }
 .select {
-  @apply relative;
+    @apply relative;
 
-  .is-invalid {
-    @apply border-2;
-  }
-
-  label {
-    @apply left-2 -top-4 px-1 absolute bg-white text-gray-400 z-10 scale-90;
-  }
-
-  &__error {
-    @apply whitespace-nowrap block w-full pr-2 text-right font-light text-gray-800;
-  }
-
-  &__field {
-    @apply block py-2 px-4 w-full box-border border rounded-lg border-gray-200 shadow-md text-gray-900;
-
-    &:disabled {
-      @apply opacity-50;
+    .is-invalid {
+        @apply border-2;
     }
-  }
 
-  &__dropdown-option {
-    @apply border-t border-gray-50;
-  }
+    label {
+        @apply left-2 -top-4 px-1 absolute bg-white text-gray-400 z-10 scale-90;
+    }
+
+    &__error {
+        @apply whitespace-nowrap block w-full pr-2 text-right font-light text-gray-800;
+    }
+
+    &__field {
+        @apply block py-2 px-4 w-full box-border border rounded-lg border-gray-200 shadow-md text-gray-900;
+
+        &:disabled {
+            @apply opacity-50;
+        }
+    }
+
+    &__dropdown-option {
+        @apply border-t border-gray-50;
+    }
 }
 
 .link {
-  @apply text-blue-600 hover:text-blue-800
+    @apply text-blue-600 hover:text-blue-800;
 }
 .vs {
-  &__dropdown-toggle {
-    @apply py-2 px-4 w-full box-border border rounded-lg bg-white border-gray-200 shadow-md text-gray-900;
-  }
+    &__dropdown-toggle {
+        @apply py-2 px-4 w-full box-border border rounded-lg bg-white border-gray-200 shadow-md text-gray-900;
+    }
 
-  &__dropdown-menu {
-    @apply border-gray-200 shadow-md p-0;
-    top: calc(100% - 1px);
-  }
+    &__dropdown-menu {
+        @apply border-gray-200 shadow-md p-0;
+        top: calc(100% - 1px);
+    }
 
-  &__dropdown-option {
-    @apply border-t border-gray-200;
-  }
+    &__dropdown-option {
+        @apply border-t border-gray-200;
+    }
 
-  &__selected-options {
-    @apply p-0;
-  }
+    &__selected-options {
+        @apply p-0;
+    }
 
-  &__selected {
-    @apply p-0;
-  }
+    &__selected {
+        @apply p-0;
+    }
 
-  &__error {
-    @apply whitespace-nowrap block w-full pr-2 text-right font-light text-gray-800;
-  }
+    &__error {
+        @apply whitespace-nowrap block w-full pr-2 text-right font-light text-gray-800;
+    }
 }
 
 .sourceHtml {
-  ul {
-    @apply list-disc list-outside ml-4;
-
     ul {
-      @apply ml-8 mb-2;
+        @apply list-disc list-outside ml-4;
+
+        ul {
+            @apply ml-8 mb-2;
+        }
     }
-  }
 
-  div {
-    @apply my-2;
-  }
+    div {
+        @apply my-2;
+    }
 }
-
