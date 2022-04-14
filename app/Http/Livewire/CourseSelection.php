@@ -59,7 +59,7 @@ class CourseSelection extends Component
 
     public function updateSelectedCourse(int $courseId, int|string $semesterId): void
     {
-            $this->selectedCourses[$courseId] = $semesterId !== 'on' ? $semesterId : null;
+        $this->selectedCourses[$courseId] = $semesterId !== 'on' ? $semesterId : null;
     }
 
     public function updateLaterCourse(int $courseId): void
@@ -76,7 +76,7 @@ class CourseSelection extends Component
     {
         $key = array_search($courseId, $this->laterCourses);
 
-        if($key) {
+        if ($key) {
             unset($this->selectedCourses[$key]);
         }
     }
