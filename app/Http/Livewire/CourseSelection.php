@@ -15,7 +15,7 @@ class CourseSelection extends Component
 {
     public array $coreCompetenceCourseGroup;
     public array $clusterSpecificCourseGroup;
-    public array $defaultCourseGroup;
+    public array $specialisationCourseGroup;
     public array $electiveCourseGroup;
     public array $nextSemesters;
     public array $selectedCourses = [];
@@ -42,9 +42,11 @@ class CourseSelection extends Component
 
         $this->coreCompetenceCourseGroup = $getCourseSelectDataService(CourseGroupType::CoreCompetences, $specialization, $semester);
         $this->clusterSpecificCourseGroup = $getCourseSelectDataService(CourseGroupType::ClusterSpecific, $specialization, $semester);
-        $this->defaultCourseGroup = $getCourseSelectDataService(CourseGroupType::Specialization, $specialization, $semester);
         $this->electiveCourseGroup = $getCourseSelectDataService(CourseGroupType::Elective, $specialization, $semester);
+        $this->furtherElectiveCourseGroup = $getCourseSelectDataService(CourseGroupType::Elective, $specialization, $semester, true);
+        $this->furtherSpecialisationCourseGroup = $getCourseSelectDataService(CourseGroupType::Specialization, $specialization, $semester, true);
         $this->nextSemesters = $getUpcomingSemestersService(4, $semester->start_date)->toArray();
+        $this->specialisationCourseGroup = $getCourseSelectDataService(CourseGroupType::Specialization, $specialization, $semester);
     }
 
     public function changeCoreCompetenceCourse(Course $selected): void

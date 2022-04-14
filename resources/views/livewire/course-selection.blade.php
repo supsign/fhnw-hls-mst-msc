@@ -2,13 +2,24 @@
     @if($coreCompetenceCourseGroup)
         <livewire:course-group :group="$coreCompetenceCourseGroup" :nextSemesters="$nextSemesters"/>
     @endif
-    @if($defaultCourseGroup)
-            <livewire:course-group :group="$defaultCourseGroup" :nextSemesters="$nextSemesters"/>
+
+    @if($specialisationCourseGroup)
+            <livewire:course-group :group="$specialisationCourseGroup" :nextSemesters="$nextSemesters"/>
     @endif
+
     @if($electiveCourseGroup)
             <livewire:course-group :group="$electiveCourseGroup" :nextSemesters="$nextSemesters"/>
     @endif
+
     @if($clusterSpecificCourseGroup)
         <livewire:course-group :group="$clusterSpecificCourseGroup" :nextSemesters="$nextSemesters"/>
+    @endif
+
+    @if($furtherSpecialisationCourseGroup)
+            <livewire:course-group :group="$furtherSpecialisationCourseGroup" :nextSemesters="$nextSemesters"/>
+    @endif
+    
+    @if($furtherElectiveCourseGroup)
+        <livewire:course-group :group="$furtherElectiveCourseGroup" :nextSemesters="$nextSemesters"/>
     @endif
 </div>

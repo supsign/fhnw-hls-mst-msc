@@ -11,12 +11,14 @@ use App\Models\Specialization;
 class GetCourseSelectDataService
 {
     protected CourseGroupType $courseGroupType;
+    protected bool $invertSpecialization;
     protected ?Semester $semester;
     protected Specialization $specialization;
 
-    public function __invoke(CourseGroupType $courseGroupType, Specialization $specialization, Semester $semester = null): array
+    public function __invoke(CourseGroupType $courseGroupType, Specialization $specialization, Semester $semester = null, bool $invertSpecialization = false): array
     {
         $this->courseGroupType = $courseGroupType;
+        $this->invertSpecialization = $invertSpecialization;
         $this->semester = $semester;
         $this->specialization = $specialization;
 
@@ -29,8 +31,14 @@ class GetCourseSelectDataService
 
     protected function getCourseGroup(): ?CourseGroup
     {
-        return CourseGroupSpecialization::where('specialization_id', $this->specialization->id)
-            ->join('course_groups', 'course_group_specialization.course_group_id', '=', 'course_groups.id')
+        return CourseGroupSpecialization::join('course_groups', 'course_group_specialization.course_group_id', '=', 'course_groups.id')
+            ->where(function ($query) {
+                if ($this->invertSpecialization) {
+                    $query->whereNotIn('specialization_id', [$this->specialization->id]);
+                } else {
+                    $query->where('specialization_id', $this->specialization->id);
+                }
+            })
             ->where('type', $this->courseGroupType->value)
             ->with(['courseGroup', 'courseGroup.courses', 'courseGroup.courses.semesters'])
             ->first()
