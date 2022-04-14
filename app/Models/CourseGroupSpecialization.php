@@ -12,4 +12,9 @@ class CourseGroupSpecialization extends BaseModel
     {
         return $this->belongsTo(CourseGroup::class);
     }
+
+    public function specialization(): BelongsTo
+    {
+        return $this->belongsTo(Specialization::class);
+    }
 }

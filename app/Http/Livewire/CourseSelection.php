@@ -13,15 +13,14 @@ use Livewire\Component;
 
 class CourseSelection extends Component
 {
-
-    public int $specializationId;
-    public int $semesterId;
     public array $coreCompetenceCourseGroup;
     public array $clusterSpecificCourseGroup;
     public array $defaultCourseGroup;
     public array $electiveCourseGroup;
     public array $nextSemesters;
     public array $selectedCourses = [];
+    public int $semesterId;
+    public int $specializationId;
 
     protected $listeners = [
         'updateSelectedCourse'
@@ -52,7 +51,7 @@ class CourseSelection extends Component
     {
         $this->clusterSpecificCourse = $selected;
     }
-    
+
     public function updateSelectedCourse(int $courseId, int $semesterId): void
     {
         $this->selectedCourses[$courseId] = $semesterId;

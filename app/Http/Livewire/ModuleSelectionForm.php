@@ -32,16 +32,17 @@ class ModuleSelectionForm extends Component
         'specialization' => 'required',
     ];
 
-    public function mount()
+    public function mount(): void
     {
-       $this->semesterId = (int)array_key_first($this->semesters);
+       $this->semesterId =  (int)array_key_first($this->semesters);
     }
 
-    public function dehydrate()
+    public function dehydrate(): void
     {
         $this->emit('formErrorBag', $this->getErrorBag());
     }
-    public function submit()
+
+    public function submit(): void
     {
         $this->validate();
     }

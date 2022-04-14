@@ -2,7 +2,7 @@
 
 namespace App\Http\Livewire;
 
-use App\Models\Semester;
+use Illuminate\View\View;
 use Livewire\Component;
 
 class Course extends Component
@@ -16,12 +16,12 @@ class Course extends Component
         'updateSelectedSemester'
     ];
 
-    public function updateSelectedSemester(int $courseId, int $semesterId) 
+    public function updateSelectedSemester(int $courseId, int $semesterId): void
     {
         $this->emit('updateSelectedCourse', $courseId, $semesterId);
     }
 
-    public function render()
+    public function render(): View
     {
         return view('livewire.course');
     }
