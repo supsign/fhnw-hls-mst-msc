@@ -1,8 +1,8 @@
 <div class="my-5">
     <div class="flex">
-        <div class="w-[26rem] p-1"><b>{{ $group['name']}} ({{$group['internal_name']}})</b></div>
+        <div class="w-[26rem] p-1 border-b"><b>{{ $group['name']}} ({{$group['internal_name']}})</b></div>
        <!-- <div class="w-10"></div>-->
-        <div class="flex gap-5">
+        <div class="flex gap-5 border-b">
             <div class="w-20 text-center">none</div>
 
             @foreach($nextSemesters AS $semester)

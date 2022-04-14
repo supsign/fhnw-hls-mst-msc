@@ -1,5 +1,5 @@
-<div class="flex border">
-    <div class="w-[26rem] border-r p-1">
+<div class="flex">
+    <div class="w-[26rem] border-b border-l border-r p-1">
         {{ $course['name'] }}
     </div>
     

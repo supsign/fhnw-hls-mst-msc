@@ -14,7 +14,7 @@ class Select extends Component
     public string $optionKey;
     public string|int $selected = 0;
     public string $placeholder;
-    public $disablePlaceholder = false;
+    public bool $disablePlaceholder = false;
 
     protected $listeners = [
         'formErrorBag',

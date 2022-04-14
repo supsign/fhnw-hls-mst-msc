@@ -1,7 +1,7 @@
 <div>
     <label class="select__label">{{$label}}</label>
     <select class="select__field" name="{{$name}}" wire:model="selected">
-        @if($placeholder)
+        @if($placeholder && !$disablePlaceholder)
             <option value>{{ $placeholder }}</option>
         @endif
         
