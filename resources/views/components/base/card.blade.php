@@ -6,7 +6,7 @@
         </div>
     @endisset
 
-    <div class="flex-grow">
+    <div class="flex-grow p-3">
         {{ $slot }}
     </div>
 

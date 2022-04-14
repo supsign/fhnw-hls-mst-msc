@@ -9,9 +9,9 @@ class RadioGroup extends Component
 {
     public int $courseId;
     public string $courseName;
-    public array $nextSemesters;
-    public int $semesterId = 0;
-    public int $selectedSemester;
+    public array $selectableSemesters;
+    public int | string $semesterId = 0;
+    public int | string $selectedSemester;
 
     public function mount(): void
     {
@@ -20,7 +20,11 @@ class RadioGroup extends Component
 
     public function updated(): void 
     {
-        $this->emit('updateSelectedCourse', $this->courseId, $this->semesterId);
+        if($this->semesterId === 'later') {
+            $this->emit('updateLaterCourse', $this->courseId);
+        } else {
+            $this->emit('updateSelectedCourse', $this->courseId, $this->semesterId);
+        }
         $this->selectedSemester = $this->semesterId;
     }
     

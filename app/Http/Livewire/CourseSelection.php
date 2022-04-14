@@ -19,11 +19,14 @@ class CourseSelection extends Component
     public array $electiveCourseGroup;
     public array $nextSemesters;
     public array $selectedCourses = [];
+    public array $laterCourses = [];
+
     public int $semesterId;
     public int $specializationId;
 
     protected $listeners = [
-        'updateSelectedCourse'
+        'updateSelectedCourse',
+        'updateLaterCourse'
     ];
 
     public function mount(
@@ -55,6 +58,10 @@ class CourseSelection extends Component
     public function updateSelectedCourse(int $courseId, int $semesterId): void
     {
         $this->selectedCourses[$courseId] = $semesterId;
+    }
+    public function updateLaterCourse(int $courseId): void
+    {
+        $this->laterCourses[] = $courseId;
     }
 
     public function render(): View
