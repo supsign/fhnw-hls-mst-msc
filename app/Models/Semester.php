@@ -41,7 +41,14 @@ class Semester extends BaseModel
 	public function name(): Attribute
 	{
 		return Attribute::make(
-			get: fn () => $this->year.' '.($this->isAutumnSemester ? EnumsSemester::AutumnStart->shortName() : EnumsSemester::SpringStart->shortName())
+			get: fn () => $this->year.' '.$this->semesterTypeShortName
+		);
+	}
+
+	public function semesterTypeShortName(): Attribute
+	{
+		return Attribute::make(
+			get: fn () => $this->isAutumnSemester ? EnumsSemester::AutumnStart->shortName() : EnumsSemester::SpringStart->shortName()
 		);
 	}
 
