@@ -19,7 +19,7 @@ class Select extends Component
         'formErrorBag',
     ];
 
-    public function formErrorBag($errorBag)
+    public function formErrorBag($errorBag): void
     {
         $this->setErrorBag($errorBag);
     }

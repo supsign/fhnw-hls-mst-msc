@@ -52,7 +52,9 @@ class CourseSelection extends Component
     {
         $this->clusterSpecificCourse = $selected;
     }
-    public function updateSelectedCourse(int $courseId, int $semesterId) {
+    
+    public function updateSelectedCourse(int $courseId, int $semesterId): void
+    {
         $this->selectedCourses[$courseId] = $semesterId;
     }
 
