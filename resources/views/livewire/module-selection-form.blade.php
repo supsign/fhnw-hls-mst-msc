@@ -15,6 +15,6 @@
             </livewire:course-selection>
         @endif
 
-        <input type="submit" name="submit" value="Submit" class="button-primary">
+        <input type="submit" name="submit" value="Submit" class="button-primary"/>
     </form>
 </x-base.card>
