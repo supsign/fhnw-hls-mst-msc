@@ -16,7 +16,7 @@ class CourseGroupSheetImport implements ToCollection, WithHeadingRow
 {
     public function collection(Collection $rows): void
     {
-        $courseGroupTypes = CourseGroupType::withoutDefault();
+        $courseGroupTypes = CourseGroupType::withoutSpecialization();
 
         foreach ($rows as $row)
         {
@@ -36,7 +36,7 @@ class CourseGroupSheetImport implements ToCollection, WithHeadingRow
                 }
 
                 if (empty($typeId)) {
-                    $typeId = CourseGroupType::Default->value;
+                    $typeId = CourseGroupType::Specialization->value;
                 }
 
                 CourseGroup::create([
