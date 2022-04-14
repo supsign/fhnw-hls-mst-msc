@@ -6,6 +6,7 @@
             @endif
         </div>
     @endforeach
+    
     <div class="w-20 text-center">
         <input type="radio" name="{{ $courseId }}" wire:model="semesterId" value="later"/>
     </div>

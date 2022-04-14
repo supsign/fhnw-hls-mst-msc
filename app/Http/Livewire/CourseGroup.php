@@ -8,6 +8,7 @@ class CourseGroup extends Component
 {
     public array $group;
     public array $nextSemesters;
+    
     public function render()
     {
         return view('livewire.course-group');

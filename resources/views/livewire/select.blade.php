@@ -4,6 +4,7 @@
         @if($placeholder)
             <option value>{{ $placeholder }}</option>
         @endif
+        
         @foreach($options as $key => $value)
             @if(is_string($value))
                 <option value="{{ $key }}" >{{ $value }}</option>

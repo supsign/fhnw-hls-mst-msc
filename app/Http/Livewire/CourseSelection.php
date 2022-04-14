@@ -42,7 +42,7 @@ class CourseSelection extends Component
         $this->clusterSpecificCourseGroup = $getCourseSelectDataService(CourseGroupType::ClusterSpecific, $specialization);
         $this->defaultCourseGroup = $getCourseSelectDataService(CourseGroupType::Default, $specialization);
         $this->electiveCourseGroup = $getCourseSelectDataService(CourseGroupType::Elective, $specialization);
-        $this->nextSemesters = $getUpcomingSemestersService(4,  $semester->start_date)->toArray();
+        $this->nextSemesters = $getUpcomingSemestersService(4, $semester->start_date)->toArray();
     }
 
     public function changeCoreCompetenceCourse(Course $selected): void
