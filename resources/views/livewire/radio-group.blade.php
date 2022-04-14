@@ -5,7 +5,7 @@
     @foreach($selectableSemesters AS $semester)
         <div class="w-20 text-center">
             @if($semester)
-                <input type="radio" name="{{ $courseId}}" wire:model="semesterId" value="{{ $semester}}" id="{{ $semester }}">
+                <input type="radio" name="{{ $courseId }}" wire:model="semesterId" value="{{ $semester }}" id="{{ $semester }}">
             @endif
         </div>
     @endforeach

@@ -12,6 +12,7 @@ class Semester extends BaseModel
 	    'is_autumn_semester',
 	    'is_spring_semester',
 	    'name',
+	    'short_name',
 	    'year',
 	];
 

@@ -6,7 +6,7 @@
             <div class="w-20 text-center">none</div>
 
             @foreach($nextSemesters AS $semester)
-                <div class="w-20 text-center">{{ $semester['name'] }}</div>
+                <div class="w-20 text-center">{{ $semester['short_name'] }}</div>
             @endforeach
 
             <div class="w-20 text-center">later</div>
