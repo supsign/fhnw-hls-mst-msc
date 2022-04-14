@@ -15,12 +15,9 @@ class Course extends Component
 
     public function mount() {
         foreach($this->nextSemesters AS $semester) {
-            if (array_search($semester['id'], array_column($this->course['semesters'], 'id'))) {
-
-                $this->selectableSemesters[] = $semester['id'];
-            } else {
-                $this->selectableSemesters[] = 0;
-            }
+            $this->selectableSemesters[] = in_array($semester['id'], array_column($this->course['semesters'], 'id'))
+                ? $semester['id']
+                : null;
         }
     }
 
