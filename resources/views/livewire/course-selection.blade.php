@@ -1,6 +1,4 @@
 <div class="flex flex-col">
-        @dump($selectedCourses)
-        @dump($laterCourses)
     @if($coreCompetenceCourseGroup)
         <livewire:course-group :group="$coreCompetenceCourseGroup" :nextSemesters="$nextSemesters"/>
     @endif

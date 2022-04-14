@@ -64,6 +64,10 @@ class CourseSelection extends Component
 
     public function updateLaterCourse(int $courseId): void
     {
+        $key = array_search($courseId, $this->laterCourses);
+        if($key) {
+            $this->laterCourses[$key] = $courseId;
+        }
         $this->laterCourses[] = $courseId;
     }
 
@@ -75,9 +79,8 @@ class CourseSelection extends Component
     public function findAndDeleteUnselectLaterCourse(int $courseId): void
     {
         $key = array_search($courseId, $this->laterCourses);
-
-        if ($key) {
-            unset($this->selectedCourses[$key]);
+        if ($key !== false) {
+            unset($this->laterCourses[$key]);
         }
     }
 
