@@ -57,24 +57,30 @@ class CourseSelection extends Component
         $this->clusterSpecificCourse = $selected;
     }
 
-    public function updateSelectedCourse(int $courseId, int $semesterId): void
+    public function updateSelectedCourse(int $courseId, int|string $semesterId): void
     {
-            $this->selectedCourses[$courseId] = $semesterId;
+            $this->selectedCourses[$courseId] = $semesterId !== 'on' ? $semesterId : null;
     }
+
     public function updateLaterCourse(int $courseId): void
     {
         $this->laterCourses[] = $courseId;
     }
-    public function findAndDeleteUnselectSelectedCourse(int $courseId) {
+
+    public function findAndDeleteUnselectSelectedCourse(int $courseId): void
+    {
         unset($this->selectedCourses[$courseId]);
     }
-    public function findAndDeleteUnselectLaterCourse(int $courseId) {
 
+    public function findAndDeleteUnselectLaterCourse(int $courseId): void
+    {
         $key = array_search($courseId, $this->laterCourses);
+
         if($key) {
             unset($this->selectedCourses[$key]);
         }
     }
+
     public function render(): View
     {
         return view('livewire.course-selection');

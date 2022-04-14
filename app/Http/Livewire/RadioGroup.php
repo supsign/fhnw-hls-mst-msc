@@ -24,17 +24,23 @@ class RadioGroup extends Component
     }
 
     public function updated(): void {
-        if($this->semesterId === 0){
-        $this->emit('findAndDeleteUnselectSelectedCourse',$this->courseId);
-        $this->emit('findAndDeleteUnselectLaterCourse',$this->courseId);
+        switch ($this->semesterId) {
+            case 0:
+                $this->emit('findAndDeleteUnselectSelectedCourse',$this->courseId);
+                $this->emit('findAndDeleteUnselectLaterCourse',$this->courseId);
+                break;
+
+            case 'later':
+                $this->emit('findAndDeleteUnselectSelectedCourse',$this->courseId);
+                $this->emit('updateLaterCourse', $this->courseId);
+                break;
+
+            default:
+                $this->emit('findAndDeleteUnselectLaterCourse',$this->courseId);
+                $this->emit('updateSelectedCourse', $this->courseId, $this->semesterId);
+                break;
         }
-        else if($this->semesterId === 'later') {
-            $this->emit('findAndDeleteUnselectSelectedCourse',$this->courseId);
-            $this->emit('updateLaterCourse', $this->courseId);
-        } else {
-            $this->emit('findAndDeleteUnselectLaterCourse',$this->courseId);
-            $this->emit('updateSelectedCourse', $this->courseId, $this->semesterId);
-        }
+
         $this->selectedSemester = $this->semesterId;
     }
     
