@@ -11,7 +11,7 @@ class RadioGroup extends Component
     public string $courseName;
     public array $selectableSemesters;
     public int|string|null $semesterId = null;
-    public int|string|null $selectedSemester;
+    public int|string|null $selectedSemester = null;
 
     public function mount(): void
     {
