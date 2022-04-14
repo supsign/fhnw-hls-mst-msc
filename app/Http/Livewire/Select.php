@@ -14,6 +14,7 @@ class Select extends Component
     public string $optionKey;
     public string|int $selected = 0;
     public string $placeholder;
+    public $disablePlaceholder = false;
 
     protected $listeners = [
         'formErrorBag',
@@ -26,6 +27,7 @@ class Select extends Component
 
     public function updated(): void
     {
+        $this->disablePlaceholder = true;
         $this->emit('change'.ucfirst($this->name), $this->selected);
     }
 

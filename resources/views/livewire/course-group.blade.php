@@ -1,7 +1,7 @@
 <div class="my-5">
     <div class="flex">
-        <div class="w-[26rem] p-1"><b>{{ $group['name'] }}</b></div>
-        <div class="w-10"></div>
+        <div class="w-[26rem] p-1"><b>{{ $group['name']}} ({{$group['internal_name']}})</b></div>
+       <!-- <div class="w-10"></div>-->
         <div class="flex gap-5">
             <div class="w-20 text-center">none</div>
 
