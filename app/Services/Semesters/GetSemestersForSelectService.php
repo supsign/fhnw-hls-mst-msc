@@ -20,7 +20,7 @@ class GetSemestersForSelectService
 		)->sortBy('start_date')->unique()->shift($numberOfSemesters)->values();
 
 		foreach ($semesters AS $semester) {
-			$return[$semester->id] = $semester->name;
+			$return[$semester->id.'_'] = $semester->name;
 		}
 
 		return $return;

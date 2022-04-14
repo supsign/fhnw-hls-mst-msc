@@ -14,6 +14,7 @@
                 :semesterId="$semesterId">
             </livewire:course-selection>
         @endif
+
         <input type="submit" name="submit" class="button-primary" />
     </form>
 </x-base.card>
