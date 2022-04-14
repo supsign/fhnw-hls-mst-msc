@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use Illuminate\View\View;
 use Livewire\Component;
 
 class Input extends Component
@@ -15,7 +16,7 @@ class Input extends Component
         'formErrorBag',
     ];
 
-    public function formErrorBag($errorBag)
+    public function formErrorBag($errorBag): void
     {
         $this->setErrorBag($errorBag);
     }
@@ -25,7 +26,7 @@ class Input extends Component
         $this->emit('change'.ucfirst($this->name), $this->value);
     }
 
-    public function render()
+    public function render(): View
     {
         return view('livewire.input');
     }

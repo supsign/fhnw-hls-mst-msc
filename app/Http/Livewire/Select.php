@@ -12,14 +12,14 @@ class Select extends Component
     public string $name;
     public array|Collection $options;
     public string $optionKey;
-    public int|string $selected = '';
+    public string|int $selected = 0;
     public string $placeholder;
 
     protected $listeners = [
         'formErrorBag',
     ];
 
-    public function formErrorBag($errorBag)
+    public function formErrorBag($errorBag): void
     {
         $this->setErrorBag($errorBag);
     }

@@ -13,6 +13,7 @@
 /* Override Tailwind Basics */
 
 [type='text'],
+[type='checkbox'],
 [type='email'],
 [type='url'],
 [type='password'],
@@ -143,3 +144,4 @@ select {
     @apply my-2;
   }
 }
+

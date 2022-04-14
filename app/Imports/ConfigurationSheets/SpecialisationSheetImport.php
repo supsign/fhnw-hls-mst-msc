@@ -2,6 +2,7 @@
 
 namespace App\Imports\ConfigurationSheets;
 
+use App\Enums\Error;
 use App\Models\Specialization;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Collection;
@@ -43,7 +44,7 @@ class SpecialisationSheetImport implements ToCollection, WithHeadingRow
                         break;
 
                     default:
-                        $error = config('constants.errors.unknown');
+                        $error = Error::Unknown->label();
                         break;
                 }
 
