@@ -3,7 +3,6 @@
         $optionKey = $attributes->get('optionKey');
         $placeholder = $attributes->get('placeholder')
     @endphp
-
     <label class="select__label">{{ $attributes->get('label') }}</label>
     <select class="select__field" name="{{ $attributes->get('name') }}" >
         @if($placeholder)

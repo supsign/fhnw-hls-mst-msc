@@ -108,10 +108,14 @@ class CourseSheetImport implements ToCollection, WithHeadingRow
             }
 
             $startSemester = $getSemesterService($row['start'], $row['semshort'] === 'AS');
-            $endSemester = !empty($row['end']) ? $getSemesterService($row['end'], true) : false;        //  endSemester is always the AS of the year
+            $endSemester = !empty($row['end']) ? $getSemesterService($row['end'], $row['semshort'] === 'AS') : false;
             $upcomingSemesters = $getUpcomingSemestersService(startDate: $startSemester->start_date);
 
             foreach ($upcomingSemesters AS $upcomingSemester) {
+                if ($upcomingSemester->semesterTypeShortName !== $row['semshort']) {
+                    continue;
+                }
+
                 CourseSemester::create([
                     'course_id' => $row['id'],
                     'semester_id' => $upcomingSemester->id,

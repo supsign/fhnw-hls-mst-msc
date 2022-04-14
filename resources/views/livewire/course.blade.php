@@ -1,4 +1,15 @@
-<div class="flex border gap-5">
-    <div class="w-96 border-r">{{ $course['name'] }}</div><div class="w-6 border-r">{{ $internalName }}</div>
-    <livewire:radio-group :courseId="$course['id']" :courseName="$course['name']" :selectedSemester="$selectedSemester" :nextSemesters="$nextSemesters"/>
+<div class="flex">
+    <div class="w-[26rem] border-b border-l border-r p-1">
+        {{ $course['name'] }}
+    </div>
+    
+    <!--<div class="w-10 border-r p-1">
+       {{  $internalName  }}
+    </div> -->
+    <livewire:radio-group 
+        :courseId="$course['id']" 
+        :courseName="$course['name']" 
+        :selectedSemester="$selectedSemester" 
+        :selectableSemesters="$selectableSemesters"
+    />
 </div>

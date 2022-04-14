@@ -19,11 +19,16 @@ class CourseSelection extends Component
     public array $electiveCourseGroup;
     public array $nextSemesters;
     public array $selectedCourses = [];
+    public array $laterCourses = [];
+
     public int $semesterId;
     public int $specializationId;
 
     protected $listeners = [
-        'updateSelectedCourse'
+        'updateSelectedCourse',
+        'updateLaterCourse',
+        'findAndDeleteUnselectSelectedCourse',
+        'findAndDeleteUnselectLaterCourse'
     ];
 
     public function mount(
@@ -35,11 +40,11 @@ class CourseSelection extends Component
         $specialization = Specialization::find($specializationId);
         $semester = Semester::find($semesterId);
 
-        $this->coreCompetenceCourseGroup = $getCourseSelectDataService(CourseGroupType::CoreCompetences, $specialization);
-        $this->clusterSpecificCourseGroup = $getCourseSelectDataService(CourseGroupType::ClusterSpecific, $specialization);
-        $this->defaultCourseGroup = $getCourseSelectDataService(CourseGroupType::Default, $specialization);
-        $this->electiveCourseGroup = $getCourseSelectDataService(CourseGroupType::Elective, $specialization);
-        $this->nextSemesters = $getUpcomingSemestersService(4,  $semester->start_date)->toArray();
+        $this->coreCompetenceCourseGroup = $getCourseSelectDataService(CourseGroupType::CoreCompetences, $specialization, $semester);
+        $this->clusterSpecificCourseGroup = $getCourseSelectDataService(CourseGroupType::ClusterSpecific, $specialization, $semester);
+        $this->defaultCourseGroup = $getCourseSelectDataService(CourseGroupType::Specialization, $specialization, $semester);
+        $this->electiveCourseGroup = $getCourseSelectDataService(CourseGroupType::Elective, $specialization, $semester);
+        $this->nextSemesters = $getUpcomingSemestersService(4, $semester->start_date)->toArray();
     }
 
     public function changeCoreCompetenceCourse(Course $selected): void
@@ -52,9 +57,31 @@ class CourseSelection extends Component
         $this->clusterSpecificCourse = $selected;
     }
 
-    public function updateSelectedCourse(int $courseId, int $semesterId): void
+    public function updateSelectedCourse(int $courseId, int|string $semesterId): void
     {
-        $this->selectedCourses[$courseId] = $semesterId;
+        $this->selectedCourses[$courseId] = $semesterId !== 'on' ? $semesterId : null;
+    }
+
+    public function updateLaterCourse(int $courseId): void
+    {
+        $key = array_search($courseId, $this->laterCourses);
+        if($key) {
+            $this->laterCourses[$key] = $courseId;
+        }
+        $this->laterCourses[] = $courseId;
+    }
+
+    public function findAndDeleteUnselectSelectedCourse(int $courseId): void
+    {
+        unset($this->selectedCourses[$courseId]);
+    }
+
+    public function findAndDeleteUnselectLaterCourse(int $courseId): void
+    {
+        $key = array_search($courseId, $this->laterCourses);
+        if ($key !== false) {
+            unset($this->laterCourses[$key]);
+        }
     }
 
     public function render(): View

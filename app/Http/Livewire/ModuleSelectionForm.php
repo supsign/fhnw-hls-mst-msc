@@ -34,7 +34,7 @@ class ModuleSelectionForm extends Component
 
     public function mount(): void
     {
-       $this->semesterId =  (int)array_key_first($this->semesters);
+       $this->semesterId = (int)array_key_first($this->semesters);
     }
 
     public function dehydrate(): void

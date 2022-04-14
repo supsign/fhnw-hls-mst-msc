@@ -10,15 +10,15 @@ class Course extends Component
     public $course;
     public string $internalName;
     public array $nextSemesters;
-    public int $selectedSemester;
+    public int|string|null $selectedSemester = null;
+    public array $selectableSemesters = [];
 
-    protected $listeners = [
-        'updateSelectedSemester'
-    ];
-
-    public function updateSelectedSemester(int $courseId, int $semesterId): void
-    {
-        $this->emit('updateSelectedCourse', $courseId, $semesterId);
+    public function mount() {
+        foreach($this->nextSemesters AS $semester) {
+            $this->selectableSemesters[] = in_array($semester['id'], array_column($this->course['semesters'], 'id'))
+                ? $semester['id']
+                : null;
+        }
     }
 
     public function render(): View

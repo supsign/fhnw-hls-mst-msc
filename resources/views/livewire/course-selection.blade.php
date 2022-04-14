@@ -1,16 +1,14 @@
 <div class="flex flex-col">
-    <div class="flex gap-5">
-        <div class="w-96"></div>
-        <div class="w-6"></div>
-        @foreach($nextSemesters AS $semester)
-            <div class="w-20">{{ $semester['name'] }}</div>
-        @endforeach
-            <div>later</div>
-    </div>
-    <div class="flex flex-col">
-        @foreach($coreCompetenceCourseGroup['courses'] as $course)
-            <livewire:course :internalName="$coreCompetenceCourseGroup['internal_name']" :course="$course" :selectedSemester="$selectedCourses[$course['id']] ?? 0" :nextSemesters="$nextSemesters" key="{{ $course['id'] }}"/>
-        @endforeach
-      </div>
-    </div>
+    @if($coreCompetenceCourseGroup)
+        <livewire:course-group :group="$coreCompetenceCourseGroup" :nextSemesters="$nextSemesters"/>
+    @endif
+    @if($defaultCourseGroup)
+            <livewire:course-group :group="$defaultCourseGroup" :nextSemesters="$nextSemesters"/>
+    @endif
+    @if($electiveCourseGroup)
+            <livewire:course-group :group="$electiveCourseGroup" :nextSemesters="$nextSemesters"/>
+    @endif
+    @if($clusterSpecificCourseGroup)
+        <livewire:course-group :group="$clusterSpecificCourseGroup" :nextSemesters="$nextSemesters"/>
+    @endif
 </div>

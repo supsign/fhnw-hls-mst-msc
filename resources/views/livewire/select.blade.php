@@ -1,9 +1,10 @@
 <div>
     <label class="select__label">{{$label}}</label>
     <select class="select__field" name="{{$name}}" wire:model="selected">
-        @if($placeholder)
+        @if($placeholder && !$disablePlaceholder)
             <option value>{{ $placeholder }}</option>
         @endif
+        
         @foreach($options as $key => $value)
             @if(is_string($value))
                 <option value="{{ $key }}" >{{ $value }}</option>
