@@ -22,7 +22,7 @@ class CourseSelection extends Component
     public int $semesterId;
     public int $specializationId;
 
-    protected array $listeners = [
+    protected $listeners = [
         'updateSelectedCourse'
     ];
 
