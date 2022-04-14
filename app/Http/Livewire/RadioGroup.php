@@ -17,6 +17,7 @@ class RadioGroup extends Component
     {
         $this->semesterId = $this->selectedSemester;
     }
+
     public function updated(): void 
     {
         $this->emit('updateSelectedSemester', $this->courseId, $this->semesterId);

@@ -12,7 +12,6 @@ class Course extends Component
     public array $nextSemesters;
     public int $selectedSemester;
 
-
     protected $listeners = [
         'updateSelectedSemester'
     ];
