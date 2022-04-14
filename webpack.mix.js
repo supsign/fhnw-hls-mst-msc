@@ -1,6 +1,6 @@
-const mix = require("laravel-mix");
+const mix = require('laravel-mix');
 
-require("laravel-mix-tailwind");
+require('laravel-mix-tailwind');
 
 /*
  |--------------------------------------------------------------------------
@@ -16,9 +16,9 @@ mix.copyDirectory('resources/img/', 'public/img/');
 
 // // FontAwesome Main CSS + Webfonts / SVG
 
-mix.js("resources/js/app.js", "public/js/app.js")
-    .sass("resources/sass/app.scss", "public/css/app.css")
-    .tailwind("./tailwind.config.js")
+mix.js('resources/js/app.js', 'public/js/app.js')
+    .sass('resources/sass/app.scss', 'public/css/app.css')
+    .tailwind('./tailwind.config.js')
     .sourceMaps();
 
 if (mix.inProduction()) {
