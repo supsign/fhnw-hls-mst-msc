@@ -1,4 +1,7 @@
-<div class="border-r flex gap-5">
+<div class="border-r border-b flex gap-5">
+    <div class="w-20 text-center">
+        <input type="radio" name="{{ $courseId }}" wire:model="semesterId" value="0"/>
+    </div>
     @foreach($selectableSemesters AS $semester)
         <div class="w-20 text-center">
             @if($semester)

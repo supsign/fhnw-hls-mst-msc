@@ -57,6 +57,9 @@ class CourseSelection extends Component
 
     public function updateSelectedCourse(int $courseId, int $semesterId): void
     {
+        if(!$semesterId) {
+            unset($this->selectedCourses[$courseId]);
+        }
         $this->selectedCourses[$courseId] = $semesterId;
     }
     public function updateLaterCourse(int $courseId): void
