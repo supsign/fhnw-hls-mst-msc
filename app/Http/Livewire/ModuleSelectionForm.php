@@ -32,7 +32,8 @@ class ModuleSelectionForm extends Component
         'specialization' => 'required',
     ];
 
-    public function mount() {
+    public function mount()
+    {
        $this->semesterId = (int)array_key_first($this->semesters);
     }
 
@@ -49,10 +50,12 @@ class ModuleSelectionForm extends Component
     {
         $this->surname = $value;
     }
+
     public function changeGivenName(string $value): void
     {
         $this->givenName = $value;
     }
+    
     public function changeSemester(string $selected): void
     {
         $this->semesterId = (int)$selected;
