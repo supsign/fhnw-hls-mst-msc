@@ -20,7 +20,7 @@ class RadioGroup extends Component
 
     public function updated(): void 
     {
-        $this->emit('updateSelectedSemester', $this->courseId, $this->semesterId);
+        $this->emit('updateSelectedCourse', $this->courseId, $this->semesterId);
         $this->selectedSemester = $this->semesterId;
     }
     
