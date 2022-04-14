@@ -26,7 +26,9 @@ class CourseSelection extends Component
 
     protected $listeners = [
         'updateSelectedCourse',
-        'updateLaterCourse'
+        'updateLaterCourse',
+        'findAndDeleteUnselectSelectedCourse',
+        'findAndDeleteUnselectLaterCourse'
     ];
 
     public function mount(
@@ -38,10 +40,10 @@ class CourseSelection extends Component
         $specialization = Specialization::find($specializationId);
         $semester = Semester::find($semesterId);
 
-        $this->coreCompetenceCourseGroup = $getCourseSelectDataService(CourseGroupType::CoreCompetences, $specialization);
-        $this->clusterSpecificCourseGroup = $getCourseSelectDataService(CourseGroupType::ClusterSpecific, $specialization);
-        $this->defaultCourseGroup = $getCourseSelectDataService(CourseGroupType::Default, $specialization);
-        $this->electiveCourseGroup = $getCourseSelectDataService(CourseGroupType::Elective, $specialization);
+        $this->coreCompetenceCourseGroup = $getCourseSelectDataService(CourseGroupType::CoreCompetences, $specialization, $semester);
+        $this->clusterSpecificCourseGroup = $getCourseSelectDataService(CourseGroupType::ClusterSpecific, $specialization, $semester);
+        $this->defaultCourseGroup = $getCourseSelectDataService(CourseGroupType::Default, $specialization, $semester);
+        $this->electiveCourseGroup = $getCourseSelectDataService(CourseGroupType::Elective, $specialization, $semester);
         $this->nextSemesters = $getUpcomingSemestersService(4, $semester->start_date)->toArray();
     }
 
@@ -57,16 +59,22 @@ class CourseSelection extends Component
 
     public function updateSelectedCourse(int $courseId, int $semesterId): void
     {
-        if(!$semesterId) {
-            unset($this->selectedCourses[$courseId]);
-        }
-        $this->selectedCourses[$courseId] = $semesterId;
+            $this->selectedCourses[$courseId] = $semesterId;
     }
     public function updateLaterCourse(int $courseId): void
     {
         $this->laterCourses[] = $courseId;
     }
+    public function findAndDeleteUnselectSelectedCourse(int $courseId) {
+        unset($this->selectedCourses[$courseId]);
+    }
+    public function findAndDeleteUnselectLaterCourse(int $courseId) {
 
+        $key = array_search($courseId, $this->laterCourses);
+        if($key) {
+            unset($this->selectedCourses[$key]);
+        }
+    }
     public function render(): View
     {
         return view('livewire.course-selection');

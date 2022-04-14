@@ -6,7 +6,6 @@
     <div class="w-10 border-r p-1">
         {{  $internalName  }}
     </div>
-
     <livewire:radio-group 
         :courseId="$course['id']" 
         :courseName="$course['name']" 

@@ -15,17 +15,26 @@ class RadioGroup extends Component
 
     public function mount(): void
     {
-        $this->semesterId = $this->selectedSemester;
-    }
-
-    public function updated(): void
-    {
-        if($this->semesterId === 'later') {
-            $this->emit('updateLaterCourse', $this->courseId);
+        if(!$this->selectedSemester) {
+            $this->semesterId = 0;
         } else {
-            $this->emit('updateSelectedCourse', $this->courseId, $this->semesterId);
+            $this->semesterId = $this->selectedSemester;
         }
 
+    }
+
+    public function updated(): void {
+        if($this->semesterId === 0){
+        $this->emit('findAndDeleteUnselectSelectedCourse',$this->courseId);
+        $this->emit('findAndDeleteUnselectLaterCourse',$this->courseId);
+        }
+        else if($this->semesterId === 'later') {
+            $this->emit('findAndDeleteUnselectSelectedCourse',$this->courseId);
+            $this->emit('updateLaterCourse', $this->courseId);
+        } else {
+            $this->emit('findAndDeleteUnselectLaterCourse',$this->courseId);
+            $this->emit('updateSelectedCourse', $this->courseId, $this->semesterId);
+        }
         $this->selectedSemester = $this->semesterId;
     }
     

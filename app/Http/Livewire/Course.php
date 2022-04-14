@@ -10,7 +10,7 @@ class Course extends Component
     public $course;
     public string $internalName;
     public array $nextSemesters;
-    public ?int $selectedSemester;
+    public int|string|null $selectedSemester = null;
     public array $selectableSemesters = [];
 
     public function mount() {
