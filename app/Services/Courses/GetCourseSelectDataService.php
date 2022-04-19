@@ -7,6 +7,7 @@ use App\Models\CourseGroup;
 use App\Models\CourseGroupSpecialization;
 use App\Models\Semester;
 use App\Models\Specialization;
+use Illuminate\Support\Collection;
 
 class GetCourseSelectDataService
 {
@@ -23,13 +24,27 @@ class GetCourseSelectDataService
         $this->specialization = $specialization;
 
         if (!$this->semester) {
+            if ($this->invertSpecialization) {
+                return $this->getCourses()->toArray();
+            }
+
             return $this->getCourseGroup()?->toArray() ?? [];
         }
 
         return $this->getCourseGroupFilterBySemester()?->toArray() ?? [];
     }
 
+    protected function getCourses(): Collection
+    {
+        return $this->getCourseGroupSpecialization()->get()->pluck('courseGroup.courses')->flatten(1)->unique()->values();
+    }
+
     protected function getCourseGroup(): ?CourseGroup
+    {
+        return $this->getCourseGroupSpecialization()->first()?->courseGroup;   
+    }
+
+    protected function getCourseGroupSpecialization()
     {
         return CourseGroupSpecialization::join('course_groups', 'course_group_specialization.course_group_id', '=', 'course_groups.id')
             ->where(function ($query) {
@@ -40,9 +55,7 @@ class GetCourseSelectDataService
                 }
             })
             ->where('type', $this->courseGroupType->value)
-            ->with(['courseGroup', 'courseGroup.courses', 'courseGroup.courses.semesters'])
-            ->first()
-                ?->courseGroup;
+            ->with(['courseGroup', 'courseGroup.courses', 'courseGroup.courses.semesters']);
     }
 
     protected function getCourseGroupFilterBySemester(): ?CourseGroup
