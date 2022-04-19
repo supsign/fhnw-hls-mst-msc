@@ -28,23 +28,10 @@ class GetCourseSelectDataService
         $this->specialization = $specialization;
 
         if ($this->invertSpecialization) {
-            return $this->getCourses()->toArray() ?? [];
+            return $this->getCourseGroups()->toArray() ?? [];
         }
 
         return $this->getCourseGroup()?->toArray() ?? [];
-    }
-
-    protected function getCourses(): Collection
-    {
-        $courses = $this->getCourseGroupSpecialization()->get()->pluck('courseGroup.courses')->flatten(1)->unique();
-
-        if ($this->semester) {
-            $courses = $courses->filter(function ($course) {
-                return $course->semesters->contains($this->semester);
-            });
-        }
-
-        return $courses->values();
     }
 
     protected function getCourseGroup(): ?CourseGroup
@@ -58,6 +45,25 @@ class GetCourseSelectDataService
         }
 
         return $courseGroup;
+    }
+
+    protected function getCourseGroups(): Collection
+    {
+        $courseGroups = $this
+            ->getCourseGroupSpecialization()
+            ->get()
+            ->pluck('courseGroup')
+            ->filter(function ($courseGroup) {
+                return $courseGroup->courses->count();
+            });
+
+        foreach ($courseGroups AS $courseGroup) {
+            $courseGroup->courses = $courseGroup->courses->filter(function ($course) {
+                return $course->specialization_id !== $this->specialization->id;
+            });
+        }
+
+        return $courseGroups->values();
     }
 
     protected function getCourseGroupSpecialization()
