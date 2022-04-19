@@ -58,12 +58,15 @@ class GetCourseSelectDataService
                 return $courseGroup->courses->count();
             });
 
-        ////  should be obsolete
-        // foreach ($courseGroups AS $courseGroup) {
-        //     $courseGroup->courses = $courseGroup->courses->filter(function ($course) {
-        //         return $course->specialization_id !== $this->specialization->id;
-        //     });
-        // }
+        foreach ($courseGroups AS $courseGroup) {
+            // //should be obsolete
+            // $courseGroup->courses = $courseGroup->courses->filter(function ($course) {
+            //     return $course->specialization_id !== $this->specialization->id;
+            // });
+
+            $courseGroup->specialization = $courseGroup->specializations->first()->toArray();
+            unset($courseGroup->specializations);
+        }
 
         return $courseGroups->values();
     }
@@ -79,6 +82,6 @@ class GetCourseSelectDataService
                 }
             })
             ->where('type', $this->courseGroupType->value)
-            ->with(['courseGroup', 'courseGroup.courses', 'courseGroup.courses.semesters']);
+            ->with(['courseGroup', 'courseGroup.courses', 'courseGroup.courses.semesters', 'courseGroup.specializations']);
     }
 }
