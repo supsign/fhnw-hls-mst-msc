@@ -7,6 +7,7 @@ use App\Models\CourseGroup;
 use App\Models\CourseGroupSpecialization;
 use App\Models\Semester;
 use App\Models\Specialization;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 
 class GetCourseSelectDataService
@@ -57,16 +58,17 @@ class GetCourseSelectDataService
                 return $courseGroup->courses->count();
             });
 
-        foreach ($courseGroups AS $courseGroup) {
-            $courseGroup->courses = $courseGroup->courses->filter(function ($course) {
-                return $course->specialization_id !== $this->specialization->id;
-            });
-        }
+        ////  should be obsolete
+        // foreach ($courseGroups AS $courseGroup) {
+        //     $courseGroup->courses = $courseGroup->courses->filter(function ($course) {
+        //         return $course->specialization_id !== $this->specialization->id;
+        //     });
+        // }
 
         return $courseGroups->values();
     }
 
-    protected function getCourseGroupSpecialization()
+    protected function getCourseGroupSpecialization(): Builder
     {
         return CourseGroupSpecialization::join('course_groups', 'course_group_specialization.course_group_id', '=', 'course_groups.id')
             ->where(function ($query) {
