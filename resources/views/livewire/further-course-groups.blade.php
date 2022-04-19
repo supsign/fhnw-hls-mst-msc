@@ -13,6 +13,6 @@
     </div>
 
     @foreach($groups AS $group)
-        <livewire:course-group :group="$group" :nextSemesters="$nextSemesters"  :index="$loop->index"  further="true"/>
+        <livewire:course-group :group="$group" :nextSemesters="$nextSemesters" further="true"/>
     @endforeach
 </div>
