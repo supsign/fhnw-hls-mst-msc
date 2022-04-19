@@ -15,11 +15,11 @@
         <livewire:course-group :group="$clusterSpecificCourseGroup" :nextSemesters="$nextSemesters"/>
     @endif
 
-    @if($furtherSpecialisationCourseGroup)
-            <livewire:course-group :group="$furtherSpecialisationCourseGroup" :nextSemesters="$nextSemesters"/>
+    @if(count($furtherSpecialisationCourses))
+        {{-- <livewire:course-group :group="$furtherSpecialisationCourseGroup" :nextSemesters="$nextSemesters"/> --}}
     @endif
     
-    @if($furtherElectiveCourseGroup)
-        <livewire:course-group :group="$furtherElectiveCourseGroup" :nextSemesters="$nextSemesters"/>
+    @if(count($furtherElectiveCourses))
+        {{-- <livewire:course-group :group="$furtherElectiveCourseGroup" :nextSemesters="$nextSemesters"/> --}}
     @endif
 </div>

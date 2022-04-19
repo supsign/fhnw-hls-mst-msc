@@ -43,8 +43,8 @@ class CourseSelection extends Component
         $this->coreCompetenceCourseGroup = $getCourseSelectDataService(CourseGroupType::CoreCompetences, $specialization, $semester);
         $this->clusterSpecificCourseGroup = $getCourseSelectDataService(CourseGroupType::ClusterSpecific, $specialization, $semester);
         $this->electiveCourseGroup = $getCourseSelectDataService(CourseGroupType::Elective, $specialization, $semester);
-        $this->furtherElectiveCourseGroup = $getCourseSelectDataService(CourseGroupType::Elective, $specialization, $semester, true);
-        $this->furtherSpecialisationCourseGroup = $getCourseSelectDataService(CourseGroupType::Specialization, $specialization, $semester, true);
+        $this->furtherElectiveCourses = $getCourseSelectDataService(CourseGroupType::Elective, $specialization, $semester, true);
+        $this->furtherSpecialisations = $getCourseSelectDataService(CourseGroupType::Specialization, $specialization, $semester, true);
         $this->nextSemesters = $getUpcomingSemestersService(4, $semester->start_date)->toArray();
         $this->specialisationCourseGroup = $getCourseSelectDataService(CourseGroupType::Specialization, $specialization, $semester);
     }
