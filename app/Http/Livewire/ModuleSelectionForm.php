@@ -15,14 +15,14 @@ class ModuleSelectionForm extends Component
     public int $specializationId;
     public array $specializations;
     public string $surname;
-    public string $studyMode;
+    public int $studyModeId;
     public array $studyModes;
 
     protected $listeners = [
         'changeSurname',
         'changeGivenName',
         'changeSemester','changeSpecialization',
-        'changeStart',
+        'changeStart', 'changeStudyMode',
         'changeCoreCompetenceCourse',
         'changeClusterSpecificCourse',
     ];
@@ -35,6 +35,7 @@ class ModuleSelectionForm extends Component
     public function mount(): void
     {
        $this->semesterId = (int)array_key_first($this->semesters);
+       $this->studyModeId = array_key_first($this->studyModes);
     }
 
     public function dehydrate(): void
@@ -65,6 +66,11 @@ class ModuleSelectionForm extends Component
     public function changeSpecialization(int $selected): void
     {
         $this->specializationId = $selected;
+    }
+
+    public function changeStudyMode(int $selected): void
+    {
+        $this->studyModeId = $selected;
     }
 
     public function render(): View

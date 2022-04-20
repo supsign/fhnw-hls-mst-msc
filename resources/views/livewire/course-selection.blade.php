@@ -1,4 +1,5 @@
 <div class="flex flex-col">
+        @dump($selectedCourses)
     @if($specialisationCourseGroup && count($specialisationCourseGroup['courses']) > 0)
         <livewire:course-group :group="$specialisationCourseGroup" :nextSemesters="$nextSemesters" class="my-5"/>
     @endif
