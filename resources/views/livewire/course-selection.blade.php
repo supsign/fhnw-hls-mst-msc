@@ -15,9 +15,11 @@
     @if($clusterSpecificCourseGroup && count($clusterSpecificCourseGroup['courses']) > 0)
         <livewire:course-group :group="$clusterSpecificCourseGroup" :nextSemesters="$nextSemesters" class="my-5"/>
     @endif
+
     @if(count($furtherSpecialisationCourseGroups))
-            <livewire:further-course-groups :groups="$furtherSpecialisationCourseGroups" :nextSemesters="$nextSemesters" class="my-5"/>
+        <livewire:further-course-groups :groups="$furtherSpecialisationCourseGroups" :nextSemesters="$nextSemesters" class="my-5"/>
     @endif
+
     @if(count($furtherClusterSpecificCourseGroups))
         <livewire:further-course-groups :groups="$furtherClusterSpecificCourseGroups" :nextSemesters="$nextSemesters" class="my-5"/>
     @endif
