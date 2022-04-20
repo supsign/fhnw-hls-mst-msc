@@ -22,6 +22,7 @@ class CourseSelection extends Component
     public array $laterCourses = [];
 
     public int $semesterId;
+    public int $studyModeId;
     public int $specializationId;
 
     protected $listeners = [
@@ -45,7 +46,7 @@ class CourseSelection extends Component
         $this->electiveCourseGroup = $getCourseSelectDataService(CourseGroupType::Elective, $specialization, $semester);
         $this->furtherClusterSpecificCourseGroups = $getCourseSelectDataService(CourseGroupType::ClusterSpecific, $specialization, $semester, true);
         $this->furtherSpecialisationCourseGroups = $getCourseSelectDataService(CourseGroupType::Specialization, $specialization, $semester, true);
-        $this->nextSemesters = $getUpcomingSemestersService(4, $semester->start_date)->toArray();
+        $this->nextSemesters = $getUpcomingSemestersService($this->studyModeId === 1 ? 4 : 2 , $semester->start_date)->toArray();
         $this->specialisationCourseGroup = $getCourseSelectDataService(CourseGroupType::Specialization, $specialization, $semester);
     }
 

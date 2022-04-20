@@ -4,14 +4,15 @@
         <livewire:input label="Surname" type="text" name="surname" />
         <livewire:input label="Given Name" type="text" name="givenName"/>
         <livewire:select label="Semester" name="semester" :options="$semesters" />
-        <x-base.select label="Study Mode" name="mode" :options="$studyModes" optionKey="label" />
+        <livewire:select label="Study" name="studyMode" :options="$studyModes" />
         <livewire:select label="Specialization" name="specialization" :options="$specializations" optionKey="name" placeholder="-- Choose Specialization --" />
 
         @if($specializationId)
             <livewire:course-selection 
                 key="{{ now() }}"
-                :specializationId="$specializationId"
-                :semesterId="$semesterId">
+                :semesterId="$semesterId"
+                :studyModeId="$studyModeId"
+                :specializationId="$specializationId">
             </livewire:course-selection>
         @endif
 
