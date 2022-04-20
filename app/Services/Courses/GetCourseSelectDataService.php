@@ -39,7 +39,7 @@ class GetCourseSelectDataService
     {
         $courseGroup = $this->getCourseGroupSpecialization()->first()?->courseGroup;
 
-        if ($this->semester && $courseGroup) {
+        if ($courseGroup && $this->semester) {
             $courseGroup->courses = $courseGroup->courses->filter(function ($course) {
                 return $course->semesters->contains($this->semester);
             })->values();

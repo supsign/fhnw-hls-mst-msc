@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\CourseGroupType;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Collection;
 
 class CourseGroup extends BaseModel
 {
@@ -29,8 +30,8 @@ class CourseGroup extends BaseModel
 	public function coursesFiltered(): Attribute
 	{
 		return Attribute::make(
-			get: fn () => $this->attributes['courses_filtered'] ?? null,
-			set: fn ($value) => $this->attributes['courses_filtered'] = $value,
+			get: fn () => $this->attributes['courses_filtered'] ?? collect(),
+			set: fn (Collection $value) => $this->attributes['courses_filtered'] = $value,
 		);
 	}
 
