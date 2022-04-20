@@ -10,6 +10,7 @@ class FurtherCourseGroups extends Component
     public array $groups;
     public array $nextSemesters;
     public string $class;
+    public string $title;
 
     public function render()
     {

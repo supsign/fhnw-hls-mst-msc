@@ -1,4 +1,5 @@
 <div class="{{$class}}">
+    <div class="mb-3"><b>{{$title}}</b></div>
     <div class="flex">
         <div class="w-[26rem] p-1 border-b"></div>
         <div class="w-10 border-b"></div>

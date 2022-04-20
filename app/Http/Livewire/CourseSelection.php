@@ -4,6 +4,7 @@ namespace App\Http\Livewire;
 
 use App\Enums\CourseGroupType;
 use App\Models\Course;
+use App\Models\PageContent;
 use App\Models\Semester;
 use App\Models\Specialization;
 use App\Services\Courses\GetCourseSelectDataService;
@@ -25,6 +26,11 @@ class CourseSelection extends Component
     public int $studyModeId;
     public int $specializationId;
 
+    public string $coreCompetencesDescription;
+    public string $descriptionBeforeFurther;
+    public string $furtherSpecialisationTitle;
+    public string $furtherClusterTitle;
+
     protected $listeners = [
         'updateSelectedCourse',
         'updateLaterCourse',
@@ -40,6 +46,11 @@ class CourseSelection extends Component
     ): void {
         $specialization = Specialization::find($specializationId);
         $semester = Semester::find($semesterId);
+
+        $this->coreCompetencesDescription = PageContent::where('name', 'core_competences_description')->first()->content;
+        $this->descriptionBeforeFurther = PageContent::where('name', 'description_before_further')->first()->content;
+        $this->furtherSpecialisationTitle = PageContent::where('name', 'further_specialisation_title')->first()->content;
+        $this->furtherClusterTitle = PageContent::where('name', 'further_cluster_title')->first()->content;
 
         $this->coreCompetenceCourseGroup = $getCourseSelectDataService(CourseGroupType::CoreCompetences, $specialization, $semester);
         $this->clusterSpecificCourseGroup = $getCourseSelectDataService(CourseGroupType::ClusterSpecific, $specialization, $semester);
