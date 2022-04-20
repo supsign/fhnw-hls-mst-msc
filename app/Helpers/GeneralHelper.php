@@ -9,6 +9,19 @@ class GeneralHelper
         return static::splitStringOnUppercase($string, '_', 'strtolower');
     }
 
+    public static function getInitialsOnUpperCase(string $string): string
+    {
+        $initals = '';
+
+        for ($i = 0, $n = strlen($string); $i < $n; $i++) {
+            if (ctype_upper($string[$i])) {
+                $initals .= $string[$i];
+            }
+        }
+
+        return $initals;
+    }
+
     public static function pascalToSnakeCase(string $string): string
     {
         return static::camelToSnakeCase($string);

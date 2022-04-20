@@ -21,6 +21,16 @@ enum CourseGroupType: int
         };
     }
 
+    public function labelShort(): string
+    {
+        return match($this) {
+            static::CoreCompetences, 
+            static::Specialization,
+            static::Elective,
+            static::ClusterSpecific => GeneralHelper::getInitialsOnUpperCase($this->name),
+        };
+    }
+
     public static function withoutSpecialization(): array
     {
         return array_filter(self::cases(), fn($case) => $case->value !== self::Specialization->value);

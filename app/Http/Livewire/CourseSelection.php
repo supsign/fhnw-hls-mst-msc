@@ -4,6 +4,7 @@ namespace App\Http\Livewire;
 
 use App\Enums\CourseGroupType;
 use App\Models\Course;
+use App\Models\PageContent;
 use App\Models\Semester;
 use App\Models\Specialization;
 use App\Services\Courses\GetCourseSelectDataService;
@@ -15,14 +16,20 @@ class CourseSelection extends Component
 {
     public array $coreCompetenceCourseGroup;
     public array $clusterSpecificCourseGroup;
-    public array $defaultCourseGroup;
+    public array $specialisationCourseGroup;
     public array $electiveCourseGroup;
     public array $nextSemesters;
     public array $selectedCourses = [];
     public array $laterCourses = [];
 
     public int $semesterId;
+    public int $studyModeId;
     public int $specializationId;
+
+    public string $coreCompetencesDescription;
+    public string $descriptionBeforeFurther;
+    public string $furtherSpecialisationTitle;
+    public string $furtherClusterTitle;
 
     protected $listeners = [
         'updateSelectedCourse',
@@ -40,11 +47,18 @@ class CourseSelection extends Component
         $specialization = Specialization::find($specializationId);
         $semester = Semester::find($semesterId);
 
+        $this->coreCompetencesDescription = PageContent::where('name', 'core_competences_description')->first()->content;
+        $this->descriptionBeforeFurther = PageContent::where('name', 'description_before_further')->first()->content;
+        $this->furtherSpecialisationTitle = PageContent::where('name', 'further_specialisation_title')->first()->content;
+        $this->furtherClusterTitle = PageContent::where('name', 'further_cluster_title')->first()->content;
+
         $this->coreCompetenceCourseGroup = $getCourseSelectDataService(CourseGroupType::CoreCompetences, $specialization, $semester);
         $this->clusterSpecificCourseGroup = $getCourseSelectDataService(CourseGroupType::ClusterSpecific, $specialization, $semester);
-        $this->defaultCourseGroup = $getCourseSelectDataService(CourseGroupType::Specialization, $specialization, $semester);
         $this->electiveCourseGroup = $getCourseSelectDataService(CourseGroupType::Elective, $specialization, $semester);
-        $this->nextSemesters = $getUpcomingSemestersService(4, $semester->start_date)->toArray();
+        $this->furtherClusterSpecificCourseGroups = $getCourseSelectDataService(CourseGroupType::ClusterSpecific, $specialization, $semester, true);
+        $this->furtherSpecialisationCourseGroups = $getCourseSelectDataService(CourseGroupType::Specialization, $specialization, $semester, true);
+        $this->nextSemesters = $getUpcomingSemestersService($this->studyModeId === 1 ? 4 : 2 , $semester->start_date)->toArray();
+        $this->specialisationCourseGroup = $getCourseSelectDataService(CourseGroupType::Specialization, $specialization, $semester);
     }
 
     public function changeCoreCompetenceCourse(Course $selected): void
