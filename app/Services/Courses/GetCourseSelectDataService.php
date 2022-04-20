@@ -39,7 +39,7 @@ class GetCourseSelectDataService
     {
         $courseGroup = $this->getCourseGroupSpecialization()->first()?->courseGroup;
 
-        if ($this->semester && $courseGroup) {
+        if ($courseGroup && $this->semester) {
             $courseGroup->courses = $courseGroup->courses->filter(function ($course) {
                 return $course->semesters->contains($this->semester);
             })->values();
@@ -48,40 +48,52 @@ class GetCourseSelectDataService
         return $courseGroup;
     }
 
-    protected function getCourseGroups(): Collection
+    protected function getCourseGroups($ignoreInversion = false): Collection
     {
         $courseGroups = $this
-            ->getCourseGroupSpecialization()
+            ->getCourseGroupSpecialization($ignoreInversion)
             ->get()
             ->pluck('courseGroup')
             ->filter(function ($courseGroup) {
                 return $courseGroup->courses->count();
             });
 
-        foreach ($courseGroups AS $courseGroup) {
-            // //should be obsolete
-            // $courseGroup->courses = $courseGroup->courses->filter(function ($course) {
-            //     return $course->specialization_id !== $this->specialization->id;
-            // });
+        if (!$ignoreInversion) {
+            $coursesInSpecialization = $this->getCourseGroups(true)->pluck('courses')->flatten()->pluck('id')->toArray();
 
-            $courseGroup->specialization = $courseGroup->specializations->first()->toArray();
-            unset($courseGroup->specializations);
+            foreach ($courseGroups AS $courseGroup) {
+                $courseGroup->courses_filtered = $courseGroup->courses->filter(function ($course) use ($coursesInSpecialization) {
+                    return !in_array($course->id, $coursesInSpecialization);
+                });
+
+                $courseGroup->specialization = $courseGroup->specializations->first()->toArray();
+
+                unset($courseGroup->courses);
+                unset($courseGroup->specializations);
+            }   
         }
 
         return $courseGroups->values();
     }
 
-    protected function getCourseGroupSpecialization(): Builder
+    protected function getCourseGroupSpecialization($ignoreInversion = false): Builder
     {
         return CourseGroupSpecialization::join('course_groups', 'course_group_specialization.course_group_id', '=', 'course_groups.id')
-            ->where(function ($query) {
-                if ($this->invertSpecialization) {
+            ->where(function ($query) use ($ignoreInversion) {
+                if ($this->invertSpecialization && !$ignoreInversion) {
                     $query->whereNotIn('specialization_id', [$this->specialization->id]);
                 } else {
                     $query->where('specialization_id', $this->specialization->id);
                 }
-            })
-            ->where('type', $this->courseGroupType->value)
-            ->with(['courseGroup', 'courseGroup.courses', 'courseGroup.courses.semesters', 'courseGroup.specializations']);
+            })->where(function ($query) use ($ignoreInversion) {
+                if (!$ignoreInversion) {
+                    $query->where('type', $this->courseGroupType->value);
+                }
+            })->with([
+                'courseGroup', 
+                'courseGroup.courses', 
+                'courseGroup.courses.semesters', 
+                'courseGroup.specializations'
+            ]);
     }
 }
