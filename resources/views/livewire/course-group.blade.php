@@ -12,7 +12,7 @@
     </div>
     @foreach($group['courses'] as $course)
         <livewire:course
-                :internalName="$group['internal_name']"
+                :courseGroupTypeShortName="$group['course_group_type_short_name']"
                 :course="$course" :selectedSemester="$selectedCourses[$course['id']] ?? null"
                 :nextSemesters="$nextSemesters"
                 key="{{ $course['id'] }}"
