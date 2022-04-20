@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class CourseGroup extends BaseModel
 {
-	protected $appends = ['course_group_type_short_name'];
+	protected $appends = ['courses_filtered', 'course_group_type_short_name'];
 
 	protected $casts = [
 	    'type' => CourseGroupType::class,
@@ -22,7 +22,15 @@ class CourseGroup extends BaseModel
 	public function courseGroupTypeShortName(): Attribute
 	{
 		return Attribute::make(
-			get: fn () => $this->type->labelShort()
+			get: fn () => $this->type->labelShort(),
+		);
+	}
+
+	public function coursesFiltered(): Attribute
+	{
+		return Attribute::make(
+			get: fn () => $this->attributes['courses_filtered'] ?? null,
+			set: fn ($value) => $this->attributes['courses_filtered'] = $value,
 		);
 	}
 
