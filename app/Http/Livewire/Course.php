@@ -8,7 +8,7 @@ use Livewire\Component;
 class Course extends Component
 {
     public $course;
-    public string $internalName;
+    public string $courseGroupTypeShortName;
     public array $nextSemesters;
     public int|string|null $selectedSemester = null;
     public array $selectableSemesters = [];
