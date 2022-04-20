@@ -12,15 +12,11 @@ class RadioGroup extends Component
     public array $selectableSemesters;
     public int|string|null $semesterId = null;
     public int|string|null $selectedSemester = null;
+    public int $groupId;
 
     public function mount(): void
     {
-        if(!$this->selectedSemester) {
-            $this->semesterId = 'on';
-        } else {
-            $this->semesterId = $this->selectedSemester;
-        }
-
+        $this->semesterId = 'on';
     }
 
     public function updated(): void {
@@ -29,16 +25,19 @@ class RadioGroup extends Component
             case 'on':
                 $this->emit('findAndDeleteUnselectSelectedCourse', $this->courseId);
                 $this->emit('findAndDeleteUnselectLaterCourse', $this->courseId);
+                //$this->emit('updateGroupCoursesCount',$this->groupId, $this->courseId);
                 break;
 
             case 'later':
                 $this->emit('findAndDeleteUnselectSelectedCourse', $this->courseId);
                 $this->emit('updateLaterCourse', $this->courseId);
+                //$this->emit('updateGroupCoursesCount',$this->groupId, $this->courseId);
                 break;
 
             default:
                 $this->emit('findAndDeleteUnselectLaterCourse',$this->courseId);
-                $this->emit('updateSelectedCourse', $this->courseId, $this->semesterId);
+                $this->emit('updateSelectedCourse', $this->courseId, $this->semesterId);;
+                $this->emit('updateGroupCoursesCount',$this->groupId, 199, true);
                 break;
         }
 

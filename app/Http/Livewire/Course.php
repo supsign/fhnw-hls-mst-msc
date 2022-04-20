@@ -12,6 +12,7 @@ class Course extends Component
     public array $nextSemesters;
     public int|string|null $selectedSemester = null;
     public array $selectableSemesters = [];
+    public int $groupId;
 
     public function mount() {
         foreach($this->nextSemesters AS $semester) {
@@ -19,6 +20,7 @@ class Course extends Component
                 ? $semester['id']
                 : null;
         }
+
     }
 
     public function render(): View

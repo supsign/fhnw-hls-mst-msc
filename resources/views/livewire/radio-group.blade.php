@@ -2,6 +2,7 @@
     <div class="w-20 text-center">
         <input type="radio" name="{{ $courseId }}" wire:model="semesterId"/>
     </div>
+    @dump($selectedSemester)
     @foreach($selectableSemesters AS $semester)
         <div class="w-20 text-center">
             @if($semester)

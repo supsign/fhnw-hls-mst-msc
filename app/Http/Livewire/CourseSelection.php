@@ -21,6 +21,7 @@ class CourseSelection extends Component
     public array $nextSemesters;
     public array $selectedCourses = [];
     public array $laterCourses = [];
+    public array $selectedCoursesIds = [];
 
     public int $semesterId;
     public int $studyModeId;
@@ -57,7 +58,7 @@ class CourseSelection extends Component
         $this->electiveCourseGroup = $getCourseSelectDataService(CourseGroupType::Elective, $specialization, $semester);
         $this->furtherClusterSpecificCourseGroups = $getCourseSelectDataService(CourseGroupType::ClusterSpecific, $specialization, $semester, true);
         $this->furtherSpecialisationCourseGroups = $getCourseSelectDataService(CourseGroupType::Specialization, $specialization, $semester, true);
-        $this->nextSemesters = $getUpcomingSemestersService($this->studyModeId === 1 ? 4 : 2 , $semester->start_date)->toArray();
+        $this->nextSemesters = $getUpcomingSemestersService($this->studyModeId === 1 ? 2 : 4 , $semester->start_date)->toArray();
         $this->specialisationCourseGroup = $getCourseSelectDataService(CourseGroupType::Specialization, $specialization, $semester);
     }
 
@@ -74,6 +75,7 @@ class CourseSelection extends Component
     public function updateSelectedCourse(int $courseId, int|string $semesterId): void
     {
         $this->selectedCourses[$courseId] = $semesterId !== 'on' ? $semesterId : null;
+
     }
 
     public function updateLaterCourse(int $courseId): void
@@ -83,11 +85,13 @@ class CourseSelection extends Component
             $this->laterCourses[$key] = $courseId;
         }
         $this->laterCourses[] = $courseId;
+
     }
 
     public function findAndDeleteUnselectSelectedCourse(int $courseId): void
     {
         unset($this->selectedCourses[$courseId]);
+
     }
 
     public function findAndDeleteUnselectLaterCourse(int $courseId): void
@@ -96,6 +100,7 @@ class CourseSelection extends Component
         if ($key !== false) {
             unset($this->laterCourses[$key]);
         }
+
     }
 
     public function render(): View

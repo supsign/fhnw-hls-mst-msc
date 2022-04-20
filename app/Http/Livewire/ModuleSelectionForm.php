@@ -18,6 +18,7 @@ class ModuleSelectionForm extends Component
     public int $studyModeId;
     public array $studyModes;
 
+
     protected $listeners = [
         'changeSurname',
         'changeGivenName',
