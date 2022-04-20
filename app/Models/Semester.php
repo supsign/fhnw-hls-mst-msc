@@ -12,6 +12,7 @@ class Semester extends BaseModel
 	    'is_autumn_semester',
 	    'is_spring_semester',
 	    'name',
+	    'lomg_name',
 	    'short_name',
 	    'year',
 	];
@@ -46,10 +47,24 @@ class Semester extends BaseModel
 		);
 	}
 
+	public function longName(): Attribute
+	{
+		return Attribute::make(
+			get: fn () => $this->year.' '.$this->semesterTypeLongName
+		);
+	}
+
 	public function semesterTypeShortName(): Attribute
 	{
 		return Attribute::make(
 			get: fn () => $this->isAutumnSemester ? EnumsSemester::AutumnStart->shortName() : EnumsSemester::SpringStart->shortName()
+		);
+	}
+
+	public function semesterTypeLongName(): Attribute
+	{
+		return Attribute::make(
+			get: fn () => $this->isAutumnSemester ? EnumsSemester::AutumnStart->longName() : EnumsSemester::SpringStart->longName()
 		);
 	}
 
