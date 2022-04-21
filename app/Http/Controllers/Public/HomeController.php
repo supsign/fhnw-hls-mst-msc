@@ -15,11 +15,6 @@ class HomeController extends Controller
     {
         extract($homePageContentService());
 
-        if (!isset($introContent) || !isset($introLink) || !isset($introTitle)) {
-            //  Abfangen wenn required config values fehlen, was anzeigen?
-            abort(500);
-        }
-
         return view('home', [
             'semesters' => $getSemestersForSelectService(),
             'specializations' => Specialization::all()->toArray(),

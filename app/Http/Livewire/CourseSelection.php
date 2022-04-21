@@ -26,10 +26,10 @@ class CourseSelection extends Component
     public int $studyModeId;
     public int $specializationId;
 
-    public string $coreCompetencesDescription;
-    public string $descriptionBeforeFurther;
-    public string $furtherSpecialisationTitle;
-    public string $furtherClusterTitle;
+    public ?string $coreCompetencesDescription;
+    public ?string $descriptionBeforeFurther;
+    public ?string $furtherSpecialisationTitle;
+    public ?string $furtherClusterTitle;
 
     protected $listeners = [
         'updateSelectedCourse',
@@ -47,10 +47,10 @@ class CourseSelection extends Component
         $specialization = Specialization::find($specializationId);
         $semester = Semester::find($semesterId);
 
-        $this->coreCompetencesDescription = PageContent::where('name', 'core_competences_description')->first()->content;
-        $this->descriptionBeforeFurther = PageContent::where('name', 'description_before_further')->first()->content;
-        $this->furtherSpecialisationTitle = PageContent::where('name', 'further_specialisation_title')->first()->content;
-        $this->furtherClusterTitle = PageContent::where('name', 'further_cluster_title')->first()->content;
+        $this->coreCompetencesDescription = PageContent::where('name', 'core_competences_description')->first()?->content;
+        $this->descriptionBeforeFurther = PageContent::where('name', 'description_before_further')->first()?->content;
+        $this->furtherSpecialisationTitle = PageContent::where('name', 'further_specialisation_title')->first()?->content;
+        $this->furtherClusterTitle = PageContent::where('name', 'further_cluster_title')->first()?->content;
 
         $this->coreCompetenceCourseGroup = $getCourseSelectDataService(CourseGroupType::CoreCompetences, $specialization, $semester);
         $this->clusterSpecificCourseGroup = $getCourseSelectDataService(CourseGroupType::ClusterSpecific, $specialization, $semester);
