@@ -25,7 +25,7 @@ class RadioGroup extends Component
             case 'on':
                 $this->emit('findAndDeleteUnselectSelectedCourse', $this->courseId);
                 $this->emit('findAndDeleteUnselectLaterCourse', $this->courseId);
-                //$this->emit('updateGroupCoursesCount',$this->groupId, $this->courseId);
+                //$this->emit('updateGroupCoursesCount',$this->groupId, $this->courseId, true);
                 break;
 
             case 'later':
@@ -37,10 +37,9 @@ class RadioGroup extends Component
             default:
                 $this->emit('findAndDeleteUnselectLaterCourse',$this->courseId);
                 $this->emit('updateSelectedCourse', $this->courseId, $this->semesterId);;
-                $this->emit('updateGroupCoursesCount',$this->groupId, 199, true);
+                //$this->emit("updateGroupCoursesCount$this->groupId", $this->courseId, false);
                 break;
         }
-
         $this->selectedSemester = $this->semesterId;
     }
     

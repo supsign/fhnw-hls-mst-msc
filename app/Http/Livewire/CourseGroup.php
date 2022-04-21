@@ -16,36 +16,26 @@ class CourseGroup extends Component
     public array $groupCoursesIds = [];
     public array $selectedCoursesIds = [];
 
-    protected $listeners = [
-        'updateGroupCoursesCount'
-    ];
-
     public function mount() {
         $requiredCoursesCount = $this->group['required_courses_count'];
         $groupName = $this->group['name'];
+        $groupId = $this->group['id'];
+        $this->listeners = [ "updateGroupCoursesCount$groupId" => 'updateGroupCoursesCount'];
         $content = PageContent::where('name', 'group_title')->first()->content;
-        $titleWithRequired = str_replace("#requiredCoursesCount", $requiredCoursesCount, $content);
+        $titleWithRequired = str_replace('#requiredCoursesCount', $requiredCoursesCount, $content);
         $this->title = str_replace('#groupName', $groupName, $titleWithRequired);
         $this->fillGroupCoursesIds();
     }
 
     public function fillGroupCoursesIds() {
-        foreach($this->group['courses'] as $course) {
-            $this->groupCoursesIds[] = $course['id'];
-        }
-
-    }
-    public function updateGroupCoursesCount(int $groupId, int $courseId, bool $delete){
-        if($groupId === $this->group['id']) {
-            $key = array_search($courseId, $this->selectedCoursesIds);
-            if($key) {
-                if($delete) {
-                    unset($this->selectedCoursesIds[$key]);
-                } else {
-                    $this->selectedCoursesIds[$key] = $courseId;
-                }
+        if($this->further) {
+            foreach($this->group['courses_filtered'] as $course) {
+                $this->groupCoursesIds[] = $course['id'];
             }
-            $this->selectedCoursesIds[] = $courseId;
+        } else {
+            foreach ($this->group['courses'] as $course) {
+                $this->groupCoursesIds[] = $course['id'];
+            }
         }
     }
 
