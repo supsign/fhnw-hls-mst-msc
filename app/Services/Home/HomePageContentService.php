@@ -14,8 +14,10 @@ class HomePageContentService
         $contents = PageContent::whereIn('name', $this->contentKeys)->get();
         $result = [];
 
-        foreach ($contents AS $content) {
-            $result[GeneralHelper::snakeToCamelCase($content->name)] = $content->content;
+        $i = 0;
+
+        foreach ($this->contentKeys AS $contentKey) {
+            $result[GeneralHelper::snakeToCamelCase($contentKey)] = $contents[$i++]->content ?? null;
         }
 
         return $result;
