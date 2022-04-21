@@ -15,12 +15,10 @@ class GetSemestersForSelectService
 	{
 		$return = [];
 
-		$semesters = ($this->getUpcomingSemestersService)($numberOfSemesters - 1)->prepend(
-			($this->getCurrentSemesterService)()
-		)->sortBy('start_date')->unique()->shift($numberOfSemesters)->values();
+		$semesters = ($this->getUpcomingSemestersService)($numberOfSemesters)->sortBy('start_date')->unique()->shift($numberOfSemesters)->values();
 
 		foreach ($semesters AS $semester) {
-			$return[$semester->id.'_'] = $semester->name;
+			$return[$semester->id.'_'] = $semester->longName;
 		}
 
 		return $return;
