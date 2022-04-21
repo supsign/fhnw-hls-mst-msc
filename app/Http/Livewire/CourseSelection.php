@@ -70,7 +70,6 @@ class CourseSelection extends Component
     public function changeClusterSpecificCourse(Course $selected): void
     {
         $this->clusterSpecificCourse = $selected;
-
     }
 
     public function updateSelectedCourse(int $courseId, int|string $semesterId): void
@@ -82,9 +81,11 @@ class CourseSelection extends Component
     public function updateLaterCourse(int $courseId): void
     {
         $key = array_search($courseId, $this->laterCourses);
-        if($key) {
+
+        if ($key) {
             $this->laterCourses[$key] = $courseId;
         }
+
         $this->laterCourses[] = $courseId;
         $this->selectedCoursesIds[] = $courseId;
     }
@@ -93,26 +94,26 @@ class CourseSelection extends Component
     {
         unset($this->selectedCourses[$courseId]);
         $key = array_search($courseId, $this->selectedCoursesIds);
+
         if ($key !== false) {
             unset($this->selectedCoursesIds[$key]);
         }
-
-
     }
 
     public function findAndDeleteUnselectLaterCourse(int $courseId): void
     {
         $key = array_search($courseId, $this->laterCourses);
+
         if ($key !== false) {
             unset($this->laterCourses[$key]);
         }
+
         $key = array_search($courseId, $this->selectedCoursesIds);
+
         if ($key !== false) {
             unset($this->selectedCoursesIds[$key]);
         }
-
     }
-
 
     public function render(): View
     {
