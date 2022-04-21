@@ -10,7 +10,7 @@
             @if(is_string($value))
                 <option value="{{ $key }}" >{{ $value }}</option>
             @else
-                    @dump($value['id'])
+                {{-- @dump($value['id']) --}}
                 <option value="{{ $value['id'] }}">{{ $value[$optionKey] }}</option>
             @endif
         @endforeach

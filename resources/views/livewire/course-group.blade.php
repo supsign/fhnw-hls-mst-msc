@@ -2,11 +2,13 @@
     @if(!$further)
         <div class="mb-3"><b>{{$title}}</b></div>
     @endif
-    
+
     @if($description)
         <div>{{$description}}</div>
     @endif
+
     {{-- @dump($group) --}}
+    
     <div class="flex">
         <div class="w-[26rem] p-1 border-b {{$further ? 'border-l' : '' }}"><b>{{ $further ? $group['specialization']['name']: '' }}</b></div>
         <div class="w-10 border-b"></div>
