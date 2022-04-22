@@ -12,6 +12,8 @@ class Course extends Component
     public array $selectableSemesters;
     public array $selectedCourses;
 
+    public bool $further = false;
+
     public int $courseGroupId;
 
     public string $courseGroupTypeShortName;

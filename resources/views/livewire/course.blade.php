@@ -5,11 +5,12 @@
     <div class="w-10 border-r border-b p-1">
        {{  $courseGroupTypeShortName  }}
     </div>
+
     <livewire:radio-group
         :courseId="$course['id']" 
         :courseName="$course['name']" 
         :selectableSemesters="$selectableSemesters"
         :courseGroupId="$courseGroupId"
-        :selectedSemester="$selectedCourses[$course['id']] ?? 'none'"
+        :selectedSemester="$further ? ($selectedCourses[$courseGroupId][$course['id']] ?? 'none') : ($selectedCourses[$course['id']] ?? 'none')"
     />
 </div>

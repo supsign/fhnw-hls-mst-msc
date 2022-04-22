@@ -1,4 +1,7 @@
 <div class="border-r border-b flex gap-5" wire:ignore>
+
+    {{-- @dump($selectedSemester) --}}
+
     @foreach($selectableSemesters AS $semesterId)
         <div class="w-20 text-center">
             @if($semesterId)

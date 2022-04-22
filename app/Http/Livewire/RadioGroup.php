@@ -13,7 +13,7 @@ class RadioGroup extends Component
     public int $courseGroupId;
 
     public string $courseName;
-    public string $selectedSemester;
+    public $selectedSemester;
 
     public function updatedSelectedSemester(): void
     {
