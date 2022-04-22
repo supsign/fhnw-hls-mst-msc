@@ -26,15 +26,13 @@
     @endphp
 
     @foreach($courses as $course)
-        @dump($course);
-
-{{--         <livewire:course
+        <livewire:course
             :courseGroupTypeShortName="$courseGroup['course_group_type_short_name']"
             :course="$course"
-            :selectedSemester="$selectedCourses[$course['id']] ?? null"
+            {{-- :selectedSemester="$selectedCourses[$course['id']] ?? null" --}}
             :nextSemesters="$nextSemesters"
-            :groupId="$group['id']"
+            :groupId="$courseGroup['id']"
             key="{{ $course['id'] }}"
-        /> --}}
+        />
     @endforeach
 </div>
