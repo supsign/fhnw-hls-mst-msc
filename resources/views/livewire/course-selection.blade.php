@@ -1,8 +1,5 @@
 <div class="flex flex-col">
-
-    {{-- @dump($selectedCoursesIds) --}}
-
-    @if($specialisationCourseGroup && count($specialisationCourseGroup['courses']))
+{{--     @if($specialisationCourseGroup && count($specialisationCourseGroup['courses']))
         <livewire:course-group :group="$specialisationCourseGroup" :nextSemesters="$nextSemesters" class="my-5"/>
     @endif
 
@@ -26,5 +23,5 @@
 
     @if(count($furtherClusterSpecificCourseGroups))
         <livewire:further-course-groups :groups="$furtherClusterSpecificCourseGroups" :nextSemesters="$nextSemesters" :title="$furtherClusterTitle" class="my-5"/>
-    @endif
+    @endif --}}
 </div>
