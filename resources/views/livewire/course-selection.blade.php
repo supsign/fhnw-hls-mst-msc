@@ -39,10 +39,20 @@
     <div>{{ $descriptionBeforeFurther }}</div>
 
 {{--     @if(count($furtherSpecialisationCourseGroups))
-        <livewire:further-course-groups :groups="$furtherSpecialisationCourseGroups" :nextSemesters="$nextSemesters" :title="$furtherSpecialisationTitle"  class="my-5"/>
+        <livewire:further-course-groups 
+            :groups="$furtherSpecialisationCourseGroups" 
+            :nextSemesters="$nextSemesters" 
+            :title="$furtherSpecialisationTitle"
+            :selectedCourses="$selectedCourses"
+            class="my-5"/>
     @endif
 
     @if(count($furtherClusterSpecificCourseGroups))
-        <livewire:further-course-groups :groups="$furtherClusterSpecificCourseGroups" :nextSemesters="$nextSemesters" :title="$furtherClusterTitle" class="my-5"/>
+        <livewire:further-course-groups 
+            :groups="$furtherClusterSpecificCourseGroups" 
+            :nextSemesters="$nextSemesters" 
+            :title="$furtherClusterTitle"
+            :selectedCourses="$selectedCourses"
+            class="my-5"/>
     @endif --}}
 </div>

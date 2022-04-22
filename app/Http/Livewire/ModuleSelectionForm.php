@@ -44,4 +44,9 @@ class ModuleSelectionForm extends Component
     {
         return view('livewire.module-selection-form');
     }
+
+    public function updating(): void
+    {
+        $this->selectedCourses = [];
+    }
 }
