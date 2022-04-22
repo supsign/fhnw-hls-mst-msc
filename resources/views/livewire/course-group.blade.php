@@ -31,7 +31,7 @@
             :course="$course"
             {{-- :selectedSemester="$selectedCourses[$course['id']] ?? null" --}}
             :nextSemesters="$nextSemesters"
-            :groupId="$courseGroup['id']"
+            :courseGroupId="$courseGroup['id']"
             key="{{ $course['id'] }}"
         />
     @endforeach

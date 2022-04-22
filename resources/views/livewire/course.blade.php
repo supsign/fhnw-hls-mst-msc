@@ -5,11 +5,11 @@
     <div class="w-10 border-r border-b p-1">
        {{  $courseGroupTypeShortName  }}
     </div>
-{{--     <livewire:radio-group 
-        :courseId="$course['id']" 
+    <livewire:radio-group 
+        :courseGroupId="$course['id']" 
         :courseName="$course['name']" 
-        :selectedSemester="$selectedSemester" 
+        {{-- :selectedSemester="$selectedSemester"  --}}
         :selectableSemesters="$selectableSemesters"
-        :groupId="$groupId"
-    /> --}}
+        :courseGroupId="$courseGroupId"
+    />
 </div>
