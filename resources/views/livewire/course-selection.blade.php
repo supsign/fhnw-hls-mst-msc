@@ -44,7 +44,8 @@
             :nextSemesters="$nextSemesters" 
             :title="$furtherSpecialisationTitle"
             :selectedCourses="$selectedCourses"
-            class="my-5"/>
+            class="my-5"
+        />
     @endif
 
     @if(count($furtherClusterSpecificCourseGroups))
@@ -53,6 +54,7 @@
             :nextSemesters="$nextSemesters" 
             :title="$furtherClusterTitle"
             :selectedCourses="$selectedCourses"
-            class="my-5"/>
+            class="my-5"
+        />
     @endif
 </div>
