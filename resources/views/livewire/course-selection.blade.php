@@ -1,5 +1,5 @@
 <div class="flex flex-col gap-5">
-    @if($specialisationCourseGroup && count($specialisationCourseGroup['courses']))
+    @if($specializationCourseGroup && count($specializationCourseGroup['courses']))
         <livewire:course-group 
             :courseGroup="$specializationCourseGroup"
             :nextSemesters="$nextSemesters"
