@@ -5,15 +5,19 @@
         <div class="w-10 border-b"></div>
         <div class="flex gap-5 border-b">
             <div class="w-20 text-center">none</div>
-            @foreach($nextSemesters AS $semester)
-                <div class="w-20 text-center ">{{ $semester['short_name']}}</div>
+            @foreach($nextSemesters AS $nextSemester)
+                <div class="w-20 text-center ">{{ $nextSemester['short_name']}}</div>
             @endforeach
             <div class="w-20 text-center">later</div>
         </div>
-
     </div>
 
-    @foreach($groups AS $group)
-        <livewire:course-group :group="$group" :nextSemesters="$nextSemesters" further="true"/>
+    @foreach($courseGroups AS $courseGroup)
+        <livewire:course-group
+            :courseGroup="$courseGroup"
+            :nextSemesters="$nextSemesters"
+            :selectedCourses="$selectedCourses"
+            further="true"
+        />
     @endforeach
 </div>

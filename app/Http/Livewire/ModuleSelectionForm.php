@@ -2,7 +2,7 @@
 
 namespace App\Http\Livewire;
 
-
+use App\Models\Course;
 use Illuminate\Contracts\View\View;
 use Livewire\Component;
 
@@ -14,15 +14,14 @@ class ModuleSelectionForm extends Component
 
     public array $selectedCourses = [];
 
-    public ?string $semesterId = null;
+    public int $ects = 0;
     public ?int $specializationId = null;
     public ?int $studyModeId = null;
+    public ?string $semesterId = null;
 
     protected $listeners = [
         'courseSelected'
     ];
-
-    protected bool $noRender = false;
 
     public function courseSelected(int $courseGroupId, int $courseId, int|string $semesterId): void
     {
@@ -31,13 +30,13 @@ class ModuleSelectionForm extends Component
         } else {
             unset($this->selectedCourses[$courseGroupId][$courseId]);
         }
+
+        $this->getEcts();
     }
 
     public function mount(): void
     {
-        $this->semesterId = array_key_first($this->semesters);
-        $this->specializationId = $this->specializations[0]['id'];      //  remove when reintroducing placeholder
-        $this->studyModeId = array_key_first($this->studyModes);
+        $this->init();
     }
 
     public function render(): ?View
@@ -48,5 +47,29 @@ class ModuleSelectionForm extends Component
     public function updating(): void
     {
         $this->selectedCourses = [];
+    }
+
+    protected function getEcts(): self
+    {
+        $this->ects = 0;
+
+        if (empty($this->selectedCourses)) {
+            return $this;
+        }
+
+        foreach (Course::find(array_keys(array_replace_recursive(...$this->selectedCourses))) AS $course) {
+            $this->ects += $course->ects;
+        }
+
+        return $this;
+    }
+
+    protected function init(): self
+    {
+        $this->semesterId = array_key_first($this->semesters);
+        $this->specializationId = $this->specializations[0]['id'];      //  remove when reintroducing placeholder
+        $this->studyModeId = array_key_first($this->studyModes);
+
+        return $this;   
     }
 }

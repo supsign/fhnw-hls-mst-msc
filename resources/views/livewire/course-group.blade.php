@@ -29,10 +29,9 @@
         <livewire:course
             :courseGroupTypeShortName="$courseGroup['course_group_type_short_name']"
             :course="$course"
-            {{-- :selectedSemester="$selectedCourses[$course['id']] ?? null" --}}
             :nextSemesters="$nextSemesters"
             :courseGroupId="$courseGroup['id']"
-            :selectedCourses="$selectedCourses"
+            :selectedCourses="$selectedCourses[$courseGroup['id']] ?? []"
             key="{{ $course['id'] }}"
         />
     @endforeach

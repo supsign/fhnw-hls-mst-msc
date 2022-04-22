@@ -36,11 +36,11 @@
         />
     @endif
 
-    <div>{{ $descriptionBeforeFurther }}</div>
+    <div>{{ $descriptionBeforeFurther }} - current ECTS: {{ $ects }}/50</div>
 
-{{--     @if(count($furtherSpecialisationCourseGroups))
+    @if(count($furtherSpecialisationCourseGroups))
         <livewire:further-course-groups 
-            :groups="$furtherSpecialisationCourseGroups" 
+            :courseGroups="$furtherSpecialisationCourseGroups" 
             :nextSemesters="$nextSemesters" 
             :title="$furtherSpecialisationTitle"
             :selectedCourses="$selectedCourses"
@@ -49,10 +49,10 @@
 
     @if(count($furtherClusterSpecificCourseGroups))
         <livewire:further-course-groups 
-            :groups="$furtherClusterSpecificCourseGroups" 
+            :courseGroups="$furtherClusterSpecificCourseGroups" 
             :nextSemesters="$nextSemesters" 
             :title="$furtherClusterTitle"
             :selectedCourses="$selectedCourses"
             class="my-5"/>
-    @endif --}}
+    @endif
 </div>

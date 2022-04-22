@@ -5,7 +5,7 @@
                 <input 
                     wire:model="selectedSemester"
                     type="radio" 
-                    name="{{ $courseId }}" 
+                    name="{{ uniqid().$courseId }}"
                     value="{{ $semesterId }}" 
                     id="{{ $semesterId }}"
                     @if($selectedSemester === $semesterId) 

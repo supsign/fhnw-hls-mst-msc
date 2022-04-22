@@ -1,5 +1,4 @@
 <x-base.card>
-    @dump($selectedCourses)
     <form wire:submit.prevent="submit" class="flex flex-col justify-center gap-5">
         @csrf
         <livewire:input label="Surname" type="text" name="surname" />
@@ -26,6 +25,7 @@
         @if($specializationId)
             <livewire:course-selection
                 key="{{ now() }}"
+                :ects="$ects"
                 :semesterId="(int)$semesterId"
                 :studyModeId="$studyModeId"
                 :specializationId="$specializationId"

@@ -27,6 +27,7 @@ class CourseSelection extends Component
     public array $nextSemesters;
     public array $selectedCourses;
 
+    public int $ects;
     public int $semesterId;
     public int $specializationId;
     public int $studyModeId;
