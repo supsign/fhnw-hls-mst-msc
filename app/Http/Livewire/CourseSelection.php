@@ -30,10 +30,18 @@ class CourseSelection extends Component
     public ?string $furtherClusterTitle;
     public ?string $furtherSpecialisationTitle;
 
+    protected GetCourseSelectDataService $getCourseSelectDataService;
+    protected GetUpcomingSemestersService $getUpcomingSemestersService;
     protected Semester $semester;
+    protected Specialization $specialization;
 
     public function mount(): void
     {
+        $this->getCourseSelectDataService = App::make(GetCourseSelectDataService::class);
+        $this->getUpcomingSemestersService = App::make(GetUpcomingSemestersService::class);
+        $this->semester = Semester::find($this->semesterId);
+        $this->specialization = Specialization::find($this->specializationId);
+
         $this
             ->getCourseGroups()
             ->getNextSemesters()
@@ -47,23 +55,17 @@ class CourseSelection extends Component
 
     protected function getCourseGroups(): self
     {
-        $this->semester = Semester::find($this->semesterId);
-        $specialization = Specialization::find($this->specializationId);
-
-        $getCourseSelectDataService = App::make(GetCourseSelectDataService::class);
-        $this->coreCompetenceCourseGroup = $getCourseSelectDataService(CourseGroupType::CoreCompetences, $specialization, $this->semester);
-        $this->clusterSpecificCourseGroup = $getCourseSelectDataService(CourseGroupType::ClusterSpecific, $specialization, $this->semester);
-        $this->electiveCourseGroup = $getCourseSelectDataService(CourseGroupType::Elective, $specialization, $this->semester);
-        $this->specialisationCourseGroup = $getCourseSelectDataService(CourseGroupType::Specialization, $specialization, $this->semester);
+        $this->coreCompetenceCourseGroup = ($this->getCourseSelectDataService)(CourseGroupType::CoreCompetences, $this->specialization, $this->semester);
+        $this->clusterSpecificCourseGroup = ($this->getCourseSelectDataService)(CourseGroupType::ClusterSpecific, $this->specialization, $this->semester);
+        $this->electiveCourseGroup = ($this->getCourseSelectDataService)(CourseGroupType::Elective, $this->specialization, $this->semester);
+        $this->specialisationCourseGroup = ($this->getCourseSelectDataService)(CourseGroupType::Specialization, $this->specialization, $this->semester);
 
         return $this;
     }
 
     protected function getNextSemesters(): self
     {
-        $getUpcomingSemestersService = App::make(GetUpcomingSemestersService::class);
-        
-        $this->nextSemesters = $getUpcomingSemestersService($this->studyModeId === 1 ? 2 : 4 , $this->semester->start_date)->toArray();
+        $this->nextSemesters = ($this->getUpcomingSemestersService)($this->studyModeId === 1 ? 2 : 4 , $this->semester->start_date)->toArray();
 
         return $this;
     }
