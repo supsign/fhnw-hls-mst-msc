@@ -1,9 +1,9 @@
 <div class="flex flex-col">
-    @if($specialisationCourseGroup && count($specialisationCourseGroup['courses']))
+    @if($specializationCourseGroup && count($specializationCourseGroup['courses']))
         <livewire:course-group 
-            :courseGroup="$specialisationCourseGroup" 
+            :courseGroup="$specializationCourseGroup" 
             :nextSemesters="$nextSemesters"
-            :selectedCourses="$selectedCourses[$specialisationCourseGroup['id']] ?? []"
+            :selectedCourses="$selectedCourses[$specializationCourseGroup['id']] ?? []"
             class="my-5"
         />
     @endif
@@ -17,12 +17,12 @@
         />
     @endif
 
-    @if($coreCompetenceCourseGroup && count($coreCompetenceCourseGroup['courses']))
+    @if($coreCompetencesCourseGroup && count($coreCompetencesCourseGroup['courses']))
         <livewire:course-group 
-            :courseGroup="$coreCompetenceCourseGroup" 
+            :courseGroup="$coreCompetencesCourseGroup" 
             :nextSemesters="$nextSemesters"  
             :description="$coreCompetencesDescription"
-            :selectedCourses="$selectedCourses[$coreCompetenceCourseGroup['id']] ?? []"
+            :selectedCourses="$selectedCourses[$coreCompetencesCourseGroup['id']] ?? []"
             class="my-5"
         />
     @endif
