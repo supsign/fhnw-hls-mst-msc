@@ -1,19 +1,19 @@
 <div class="flex flex-col">
 
     @if($specialisationCourseGroup && count($specialisationCourseGroup['courses']))
-        <livewire:course-group :group="$specialisationCourseGroup" :nextSemesters="$nextSemesters" class="my-5"/>
+        <livewire:course-group :courseGroup="$specialisationCourseGroup" :nextSemesters="$nextSemesters" class="my-5"/>
     @endif
 
     @if($electiveCourseGroup && count($electiveCourseGroup['courses']))
-        <livewire:course-group :group="$electiveCourseGroup" :nextSemesters="$nextSemesters" class="my-5"/>
+        <livewire:course-group :courseGroup="$electiveCourseGroup" :nextSemesters="$nextSemesters" class="my-5"/>
     @endif
 
     @if($coreCompetenceCourseGroup && count($coreCompetenceCourseGroup['courses']))
-        <livewire:course-group :group="$coreCompetenceCourseGroup" :nextSemesters="$nextSemesters"  :description="$coreCompetencesDescription" class="my-5"/>
+        <livewire:course-group :courseGroup="$coreCompetenceCourseGroup" :nextSemesters="$nextSemesters"  :description="$coreCompetencesDescription" class="my-5"/>
     @endif
 
     @if($clusterSpecificCourseGroup && count($clusterSpecificCourseGroup['courses']))
-        <livewire:course-group :group="$clusterSpecificCourseGroup" :nextSemesters="$nextSemesters" class="my-5"/>
+        <livewire:course-group :courseGroup="$clusterSpecificCourseGroup" :nextSemesters="$nextSemesters" class="my-5"/>
     @endif
 
     <div>{{ $descriptionBeforeFurther }}</div>
