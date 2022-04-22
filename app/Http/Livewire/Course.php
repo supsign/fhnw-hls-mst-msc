@@ -9,14 +9,30 @@ class Course extends Component
 {
     public array $course;
     public array $nextSemesters;
-    public array $selectableSemesters = ['test1', 'test2'];
+    public array $selectableSemesters;
 
     public int $courseGroupId;
 
     public string $courseGroupTypeShortName;
+
+    public function mount(): void
+    {
+        $this->getSelectableSemesters();
+    }
     
     public function render(): View
     {
         return view('livewire.course');
+    }
+
+    protected function getSelectableSemesters(): self
+    {
+        foreach ($this->nextSemesters AS $nextSemester) {
+            $this->selectableSemesters[] = in_array($nextSemester['id'], array_column($this->course['semesters'], 'id'))
+                ? $nextSemester['id']
+                : null;
+        }
+
+        return $this;
     }
 }

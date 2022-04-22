@@ -2,9 +2,6 @@
     <div class="w-20 text-center">
         <input type="radio" name="{{ $courseGroupId }}" wire:model="semesterId"/>
     </div>
-
-{{--     @dump($semesterId)
-    @dump($selectedSemester) --}}
     
     @foreach($selectableSemesters AS $semester)
         <div class="w-20 text-center">
