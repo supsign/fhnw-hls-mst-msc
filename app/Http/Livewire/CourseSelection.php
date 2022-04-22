@@ -16,10 +16,10 @@ use Livewire\Component;
 
 class CourseSelection extends Component
 {
-    public array $coreCompetenceCourseGroup;
+    public array $coreCompetencesCourseGroup;
     public array $clusterSpecificCourseGroup;
     public array $electiveCourseGroup;
-    public array $specialisationCourseGroup;
+    public array $specializationCourseGroup;
 
     public array $furtherClusterSpecificCourseGroups;
     public array $furtherSpecializationCourseGroups;
