@@ -12,12 +12,14 @@ class ModuleSelectionForm extends Component
     public array $specializations;
     public array $studyModes;
 
+
     public array $selectedCourses = [];
 
     public int $ects = 0;
     public ?int $specializationId = null;
     public ?int $studyModeId = null;
     public ?string $semesterId = null;
+    public ?string $specializationPlaceholder = null;
 
     protected $listeners = [
         'courseSelected'
@@ -45,6 +47,10 @@ class ModuleSelectionForm extends Component
         $this->init();
     }
 
+    public function hydrate(): void {
+
+    }
+
     public function render(): ?View
     {
         return view('livewire.module-selection-form');
@@ -54,6 +60,12 @@ class ModuleSelectionForm extends Component
     {
         $this->ects = 0;
         $this->selectedCourses = [];
+
+    }
+    public function updated(): void {
+        if($this->specializationId > 0) {
+            $this->specializationPlaceholder = null;
+        }
     }
 
     protected function getEcts(): self
@@ -74,9 +86,10 @@ class ModuleSelectionForm extends Component
     protected function init(): self
     {
         $this->semesterId = array_key_first($this->semesters);
-        $this->specializationId = $this->specializations[0]['id'];      //  remove when reintroducing placeholder
+        $this->specializationId = array_key_first($this->specializations);
+        $this->specializationPlaceholder = "-- Choose Specialization --";
         $this->studyModeId = array_key_first($this->studyModes);
 
-        return $this;   
+        return $this;
     }
 }

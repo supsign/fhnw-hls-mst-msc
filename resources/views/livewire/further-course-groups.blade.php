@@ -1,3 +1,4 @@
+
 <div class="{{$class}}">
     <div class="mb-3"><b>{{$title}}</b></div>
     <div class="flex">
