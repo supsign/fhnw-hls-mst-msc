@@ -19,7 +19,7 @@ class ModuleSelectionForm extends Component
     public ?int $specializationId = null;
     public ?int $studyModeId = null;
     public ?string $semesterId = null;
-    public ?string $specializationPlaceholder = null;
+    public ?string $specializationPlaceholder = '-- Choose Specialization --';
 
     protected $listeners = [
         'courseSelected'
@@ -86,8 +86,6 @@ class ModuleSelectionForm extends Component
     protected function init(): self
     {
         $this->semesterId = array_key_first($this->semesters);
-        $this->specializationId = array_key_first($this->specializations);
-        $this->specializationPlaceholder = "-- Choose Specialization --";
         $this->studyModeId = array_key_first($this->studyModes);
 
         return $this;
