@@ -8,6 +8,7 @@
         @if($placeholder)
             <option value>{{ $placeholder }}</option>
         @endif
+
         @foreach($attributes->get('options') as $key => $value)
             @if(is_string($value))
                 <option value="{{ $key }}" >{{ $value }}</option>
@@ -16,6 +17,7 @@
             @endif
         @endforeach
     </select>
+
     @error($name)
     <span class="text-red-500">{{ $message }}</span>
     @enderror
