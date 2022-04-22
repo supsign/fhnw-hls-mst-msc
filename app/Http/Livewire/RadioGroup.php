@@ -13,6 +13,12 @@ class RadioGroup extends Component
     public int $courseGroupId;
 
     public string $courseName;
+    public string $selectedSemester;
+
+    public function updatedSelectedSemester(): void
+    {
+        $this->emit('courseSelected', $this->courseGroupId, $this->courseId, $this->selectedSemester);
+    }
 
     public function render(): View
     {

@@ -1,7 +1,7 @@
 <div class="">
-{{--     @if(!$further)
+    @if(!$further)
         <div class="mb-3"><b>{{ $title }}</b></div>
-    @endif --}}
+    @endif
 
     @if($description)
         <div>{{ $description }}</div>
@@ -32,6 +32,7 @@
             {{-- :selectedSemester="$selectedCourses[$course['id']] ?? null" --}}
             :nextSemesters="$nextSemesters"
             :courseGroupId="$courseGroup['id']"
+            :selectedCourses="$selectedCourses"
             key="{{ $course['id'] }}"
         />
     @endforeach

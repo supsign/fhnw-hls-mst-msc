@@ -3,6 +3,8 @@
 namespace App\Http\Livewire;
 
 use App\Enums\CourseGroupType;
+use App\Enums\StudyMode;
+use App\Helpers\GeneralHelper;
 use App\Models\PageContent;
 use App\Models\Semester;
 use App\Models\Specialization;
@@ -19,31 +21,39 @@ class CourseSelection extends Component
     public array $electiveCourseGroup;
     public array $specialisationCourseGroup;
 
+    public array $furtherClusterSpecificCourseGroups;
+    public array $furtherSpecialisationCourseGroups;
+
     public array $nextSemesters;
+    public array $selectedCourses;
 
     public int $semesterId;
     public int $specializationId;
     public int $studyModeId;
 
-    public ?string $coreCompetencesDescription;
-    public ?string $descriptionBeforeFurther;
-    public ?string $furtherClusterTitle;
-    public ?string $furtherSpecialisationTitle;
+    public ?string $coreCompetencesDescription = null;
+    public ?string $descriptionBeforeFurther = null;
+    public ?string $furtherClusterTitle = null;
+    public ?string $furtherSpecialisationTitle = null;
 
     protected GetCourseSelectDataService $getCourseSelectDataService;
     protected GetUpcomingSemestersService $getUpcomingSemestersService;
     protected Semester $semester;
     protected Specialization $specialization;
 
+    protected array $pageContents = [
+        'core_competences_description',
+        'description_before_further',
+        'further_cluster_title',
+        'further_specialisation_title',
+    ];
+
     public function mount(): void
     {
-        $this->getCourseSelectDataService = App::make(GetCourseSelectDataService::class);
-        $this->getUpcomingSemestersService = App::make(GetUpcomingSemestersService::class);
-        $this->semester = Semester::find($this->semesterId);
-        $this->specialization = Specialization::find($this->specializationId);
-
         $this
+            ->initSerivces()
             ->getCourseGroups()
+            ->getFurtherCourseGroups()
             ->getNextSemesters()
             ->getPageContents();
     }
@@ -63,19 +73,44 @@ class CourseSelection extends Component
         return $this;
     }
 
+    protected function getFurtherCourseGroups(): self
+    {
+        $this->furtherClusterSpecificCourseGroups = ($this->getCourseSelectDataService)(CourseGroupType::ClusterSpecific, $this->specialization, $this->semester, true);
+        $this->furtherSpecialisationCourseGroups = ($this->getCourseSelectDataService)(CourseGroupType::Specialization, $this->specialization, $this->semester, true);
+
+        return $this;
+    }
+
     protected function getNextSemesters(): self
     {
-        $this->nextSemesters = ($this->getUpcomingSemestersService)($this->studyModeId === 1 ? 2 : 4 , $this->semester->start_date)->toArray();
+        $this->nextSemesters = ($this->getUpcomingSemestersService)($this->studyModeId === StudyMode::FullTime->value ? 2 : 4 , $this->semester->start_date)->toArray();
 
         return $this;
     }
 
     protected function getPageContents(): self
     {
-        $this->coreCompetencesDescription = PageContent::where('name', 'core_competences_description')->first()?->content;
-        $this->descriptionBeforeFurther = PageContent::where('name', 'description_before_further')->first()?->content;
-        $this->furtherSpecialisationTitle = PageContent::where('name', 'further_specialisation_title')->first()?->content;
-        $this->furtherClusterTitle = PageContent::where('name', 'further_cluster_title')->first()?->content;
+        $pageContents = PageContent::whereIn('name', $this->pageContents)->get();
+
+        foreach ($pageContents AS $pageContent) {
+            $this->{GeneralHelper::snakeToCamelCase($pageContent->name)} = $pageContent->content;
+        }
+
+        return $this;
+    }
+
+    protected function initSerivces(): self
+    {
+        $this->getCourseSelectDataService = App::make(GetCourseSelectDataService::class);
+        $this->getUpcomingSemestersService = App::make(GetUpcomingSemestersService::class);
+
+        return $this->initSerivceData();
+    }
+
+    protected function initSerivceData(): self
+    {
+        $this->semester = Semester::find($this->semesterId);
+        $this->specialization = Specialization::find($this->specializationId);
 
         return $this;
     }

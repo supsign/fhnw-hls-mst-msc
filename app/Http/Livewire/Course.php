@@ -10,6 +10,7 @@ class Course extends Component
     public array $course;
     public array $nextSemesters;
     public array $selectableSemesters;
+    public array $selectedCourses;
 
     public int $courseGroupId;
 
@@ -27,11 +28,15 @@ class Course extends Component
 
     protected function getSelectableSemesters(): self
     {
+        $this->selectableSemesters[] = 'none';
+
         foreach ($this->nextSemesters AS $nextSemester) {
             $this->selectableSemesters[] = in_array($nextSemester['id'], array_column($this->course['semesters'], 'id'))
                 ? $nextSemester['id']
                 : null;
         }
+
+        $this->selectableSemesters[] = 'later';
 
         return $this;
     }
