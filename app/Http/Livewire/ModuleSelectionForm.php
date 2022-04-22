@@ -28,7 +28,13 @@ class ModuleSelectionForm extends Component
         if ($semesterId !== 'none') {
             $this->selectedCourses[$courseGroupId][$courseId] = $semesterId;
         } else {
-            unset($this->selectedCourses[$courseGroupId][$courseId]);
+            foreach ($this->selectedCourses AS $key => $value) {
+                unset($this->selectedCourses[$key][$courseId]);
+
+                if (empty($this->selectedCourses[$key])) {
+                    unset($this->selectedCourses[$key]);
+                }
+            }
         }
 
         $this->getEcts();
@@ -46,6 +52,7 @@ class ModuleSelectionForm extends Component
 
     public function updating(): void
     {
+        $this->ects = 0;
         $this->selectedCourses = [];
     }
 
