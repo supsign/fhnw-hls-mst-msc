@@ -11,6 +11,11 @@ enum CourseGroupType: int
     case Specialization = 1;
     case Elective = 4;
 
+    public static function furtherCases(): array
+    {
+        return [static::ClusterSpecific, static::Specialization];
+    }
+
     public function label(): string
     {
         return match($this) {

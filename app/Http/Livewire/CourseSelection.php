@@ -22,7 +22,7 @@ class CourseSelection extends Component
     public array $specialisationCourseGroup;
 
     public array $furtherClusterSpecificCourseGroups;
-    public array $furtherSpecialisationCourseGroups;
+    public array $furtherSpecializationCourseGroups;
 
     public array $nextSemesters;
     public array $selectedCourses;
@@ -66,19 +66,19 @@ class CourseSelection extends Component
 
     protected function getCourseGroups(): self
     {
-        $this->coreCompetenceCourseGroup = ($this->getCourseSelectDataService)(CourseGroupType::CoreCompetences, $this->specialization, $this->semester);
-        $this->clusterSpecificCourseGroup = ($this->getCourseSelectDataService)(CourseGroupType::ClusterSpecific, $this->specialization, $this->semester);
-        $this->electiveCourseGroup = ($this->getCourseSelectDataService)(CourseGroupType::Elective, $this->specialization, $this->semester);
-        $this->specialisationCourseGroup = ($this->getCourseSelectDataService)(CourseGroupType::Specialization, $this->specialization, $this->semester);
+        foreach (CourseGroupType::cases() AS $case) {
+            $this->{lcfirst($case->name).'CourseGroup'} = ($this->getCourseSelectDataService)($case, $this->specialization, $this->semester);
+        }
 
         return $this;
     }
 
     protected function getFurtherCourseGroups(): self
     {
-        $this->furtherClusterSpecificCourseGroups = ($this->getCourseSelectDataService)(CourseGroupType::ClusterSpecific, $this->specialization, $this->semester, true);
-        $this->furtherSpecialisationCourseGroups = ($this->getCourseSelectDataService)(CourseGroupType::Specialization, $this->specialization, $this->semester, true);
-
+        foreach (CourseGroupType::furtherCases() AS $case) {
+            $this->{'further'.$case->name.'CourseGroups'} = ($this->getCourseSelectDataService)($case, $this->specialization, $this->semester, true);
+        }
+        
         return $this;
     }
 
