@@ -1,4 +1,4 @@
-<div class="{{$class}}">
+<div class="">
 {{--     @if(!$further)
         <div class="mb-3"><b>{{ $title }}</b></div>
     @endif --}}
