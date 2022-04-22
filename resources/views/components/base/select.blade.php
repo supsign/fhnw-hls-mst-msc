@@ -6,7 +6,7 @@
     <label class="select__label">{{  $attributes->get('label') }}</label>
     <select class="select__field" name="{{ $attributes->get('name') }}" {{ $attributes->only('wire:model') }}>
         @if($placeholder)
-            <option value>{{ $placeholder }}</option>
+            <option value="{{ 0 }}">{{ $placeholder }}</option>
         @endif
         @foreach($attributes->get('options') as $key => $value)
             @if(is_string($value))
