@@ -20,6 +20,7 @@ class HomePageContentService
             foreach ($contents AS $content) {
                 if (GeneralHelper::snakeToCamelCase($content->name) === $contentKey) {
                     $result[$contentKey] = $content->content;
+                    continue 2;
                 }
             }
 
