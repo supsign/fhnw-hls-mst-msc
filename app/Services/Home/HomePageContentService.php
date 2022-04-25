@@ -7,19 +7,25 @@ use App\Models\PageContent;
 
 class HomePageContentService
 {
-    protected array $contentKeys = ['intro_content', 'intro_title'];
+    protected array $contentKeys = ['intro_content', 'intro_title', 'blubb'];
 
     public function __invoke(): array
     {
         $contents = PageContent::whereIn('name', $this->contentKeys)->get();
         $result = [];
 
-        $i = 0;
-
-        // dump($this->contentKeys, $contents);
-
         foreach ($this->contentKeys AS $contentKey) {
-            $result[GeneralHelper::snakeToCamelCase($contents[$i]->name)] = $contents[$i++]->content ?? null;
+            $contentKey = GeneralHelper::snakeToCamelCase($contentKey);
+
+            foreach ($contents AS $content) {
+                if (GeneralHelper::snakeToCamelCase($content->name) === $contentKey) {
+                    $result[$contentKey] = $content->content;
+                }
+            }
+
+            if (!isset($result[$contentKey])) {
+                $result[$contentKey] = null;
+            }
         }
 
         return $result;
