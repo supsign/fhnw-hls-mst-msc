@@ -32,6 +32,6 @@ class CourseGroup extends Component
             ['#requiredCoursesCount', '#groupName'], 
             [$this->courseGroup['required_courses_count'], $this->courseGroup['name']],
             PageContent::where('name', 'group_title')->first()?->content
-        ).' - ('.count($this->selectedCourses).' selected)';
+        );
     }
 }

@@ -1,4 +1,5 @@
 <div class="flex flex-col gap-5">
+
     @if($specializationCourseGroup && count($specializationCourseGroup['courses']))
         <livewire:course-group 
             :courseGroup="$specializationCourseGroup"
@@ -35,16 +36,14 @@
             class="my-5"
         />
     @endif
-
-    <div>{{ $descriptionBeforeFurther }} - current ECTS: {{ $ects }}/50</div>
-
+        <div class="sticky top-0 bg-hls p-2 z-10 self-end w-[30rem]">{{ $descriptionBeforeFurther }} - current ECTS: {{ $ects }}/50</div>
     @if(count($furtherSpecializationCourseGroups))
         <livewire:further-course-groups 
             :courseGroups="$furtherSpecializationCourseGroups" 
             :nextSemesters="$nextSemesters" 
             :title="$furtherSpecialisationTitle"
             :selectedCourses="$selectedCourses"
-            class="my-5"
+            class="-mt-20"
         />
     @endif
 
@@ -57,4 +56,5 @@
             class="my-5"
         />
     @endif
+
 </div>
