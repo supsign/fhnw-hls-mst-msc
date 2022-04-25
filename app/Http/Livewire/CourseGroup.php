@@ -7,23 +7,31 @@ use Livewire\Component;
 
 class CourseGroup extends Component
 {
-    public array $group;
+    public array $courseGroup;
     public array $nextSemesters;
-    public bool $further = false;
-    public string $class;
-    public ?string $title;
-    public ?string $description;
+    public array $selectedCourses;
 
-    public function mount() {
-        $requiredCoursesCount = $this->group['required_courses_count'];
-        $groupName = $this->group['name'];
-        $content = PageContent::where('name', 'group_title')->first()?->content;
-        $titleWithRequired = str_replace("#requiredCoursesCount", $requiredCoursesCount, $content);
-        $this->title = str_replace('#groupName', $groupName, $titleWithRequired);
+    public bool $further = false;
+
+    public ?string $description = null;
+    public ?string $title = null;
+
+    public function mount() 
+    {
+        $this->getTitle();
     }
-    
+
     public function render()
     {
         return view('livewire.course-group');
+    }
+
+    protected function getTitle()
+    {
+        $this->title = str_replace(
+            ['#requiredCoursesCount', '#groupName'], 
+            [$this->courseGroup['required_courses_count'], $this->courseGroup['name']],
+            PageContent::where('name', 'group_title')->first()?->content
+        );
     }
 }

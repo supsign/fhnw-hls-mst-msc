@@ -23,11 +23,11 @@
 
 <body class="font-body">
 @include('sweetalert::alert')
-<div id="app" class="w-full bg-gray-200 overflow-auto">
+<div id="app" class="w-full">
     <div class="flex flex-col h-screen relative">
         <x-layout.top/>
         <x-layout.header/>
-        <div id="main" class="flex-grow mb-4">
+        <div id="main" class="flex-grow mb-4 bg-gray-200">
             {{ $slot }}
         </div>
         <x-layout.footer/>

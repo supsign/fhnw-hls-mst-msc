@@ -1,21 +1,27 @@
 <x-base.card>
     <form wire:submit.prevent="submit" class="flex flex-col justify-center gap-5">
         @csrf
-        <livewire:input label="Surname" type="text" name="surname" />
-        <livewire:input label="Given Name" type="text" name="givenName"/>
-        <livewire:select label="Semester" name="semester" :options="$semesters" />
-        <livewire:select label="Study" name="studyMode" :options="$studyModes" />
-        <livewire:select label="Specialization" name="specialization" :options="$specializations" optionKey="name" placeholder="-- Choose Specialization --" />
-
+        <x-base.input label="Surname" type="text" name="surname" />
+        <x-base.input label="Given Name" type="text" name="givenName"/>
+        <x-base.select wire:model="semesterId" label="Semester" :options="$semesters" />
+        <x-base.select wire:model="studyModeId" label="Study Mode" :options="$studyModes" />
+        <x-base.select wire:model="specializationId" label="Specialization" :options="$specializations" optionKey="name" placeholder="-- Choose Specialization --"/>
         @if($specializationId)
-            <livewire:course-selection 
+            <livewire:course-selection
                 key="{{ now() }}"
-                :semesterId="$semesterId"
+                :ects="$ects"
+                :semesterId="(int)$semesterId"
                 :studyModeId="$studyModeId"
-                :specializationId="$specializationId">
-            </livewire:course-selection>
-        @endif
+                :specializationId="$specializationId"
+                :selectedCourses="$selectedCourses"
+            />
 
+        <livewire:modules-outside-curriculum />
+        <x-double-degree />
+        <livewire:master-thesis />
+        <x-optional-english />
+        <x-additional-comments />
         <input type="submit" name="submit" value="Submit" class="button-primary"/>
+        @endif
     </form>
 </x-base.card>

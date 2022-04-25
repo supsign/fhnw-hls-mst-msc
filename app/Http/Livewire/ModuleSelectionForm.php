@@ -2,79 +2,92 @@
 
 namespace App\Http\Livewire;
 
-
+use App\Models\Course;
 use Illuminate\Contracts\View\View;
 use Livewire\Component;
 
 class ModuleSelectionForm extends Component
 {
-
-    public string $givenName;
-    public int $semesterId;
     public array $semesters;
-    public int $specializationId;
     public array $specializations;
-    public string $surname;
-    public int $studyModeId;
     public array $studyModes;
 
+
+    public array $selectedCourses = [];
+
+    public int $ects = 0;
+    public ?int $specializationId = null;
+    public ?int $studyModeId = null;
+    public ?string $semesterId = null;
+    public ?string $specializationPlaceholder = '-- Choose Specialization --';
+
     protected $listeners = [
-        'changeSurname',
-        'changeGivenName',
-        'changeSemester','changeSpecialization',
-        'changeStart', 'changeStudyMode',
-        'changeCoreCompetenceCourse',
-        'changeClusterSpecificCourse',
+        'courseSelected'
     ];
-    protected array $rules = [
-        'surname' => 'required',
-        'givenName' => 'required',
-        'specialization' => 'required',
-    ];
+
+    public function courseSelected(int $courseGroupId, int $courseId, int|string $semesterId): void
+    {
+        if ($semesterId !== 'none') {
+            $this->selectedCourses[$courseGroupId][$courseId] = $semesterId;
+        } else {
+            foreach ($this->selectedCourses AS $key => $value) {
+                unset($this->selectedCourses[$key][$courseId]);
+
+                if (empty($this->selectedCourses[$key])) {
+                    unset($this->selectedCourses[$key]);
+                }
+            }
+        }
+
+        $this->getEcts();
+    }
 
     public function mount(): void
     {
-       $this->semesterId = (int)array_key_first($this->semesters);
-       $this->studyModeId = array_key_first($this->studyModes);
+        $this->init();
     }
 
-    public function dehydrate(): void
-    {
-        $this->emit('formErrorBag', $this->getErrorBag());
+    public function hydrate(): void {
+
     }
 
-    public function submit(): void
-    {
-        $this->validate();
-    }
-
-    public function changeSurname(string $value): void
-    {
-        $this->surname = $value;
-    }
-
-    public function changeGivenName(string $value): void
-    {
-        $this->givenName = $value;
-    }
-    
-    public function changeSemester(string $selected): void
-    {
-        $this->semesterId = (int)$selected;
-    }
-
-    public function changeSpecialization(int $selected): void
-    {
-        $this->specializationId = $selected;
-    }
-
-    public function changeStudyMode(int $selected): void
-    {
-        $this->studyModeId = $selected;
-    }
-
-    public function render(): View
+    public function render(): ?View
     {
         return view('livewire.module-selection-form');
+    }
+
+    public function updating(): void
+    {
+        $this->ects = 0;
+        $this->selectedCourses = [];
+
+    }
+    public function updated(): void {
+        if($this->specializationId > 0) {
+            $this->specializationPlaceholder = null;
+        }
+    }
+
+    protected function getEcts(): self
+    {
+        $this->ects = 0;
+
+        if (empty($this->selectedCourses)) {
+            return $this;
+        }
+
+        foreach (Course::find(array_keys(array_replace_recursive(...$this->selectedCourses))) AS $course) {
+            $this->ects += $course->ects;
+        }
+
+        return $this;
+    }
+
+    protected function init(): self
+    {
+        $this->semesterId = array_key_first($this->semesters);
+        $this->studyModeId = array_key_first($this->studyModes);
+
+        return $this;
     }
 }

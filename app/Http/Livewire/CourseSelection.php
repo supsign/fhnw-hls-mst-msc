@@ -3,103 +3,120 @@
 namespace App\Http\Livewire;
 
 use App\Enums\CourseGroupType;
-use App\Models\Course;
+use App\Enums\StudyMode;
+use App\Helpers\GeneralHelper;
 use App\Models\PageContent;
 use App\Models\Semester;
 use App\Models\Specialization;
 use App\Services\Courses\GetCourseSelectDataService;
 use App\Services\Semesters\GetUpcomingSemestersService;
+use Illuminate\Support\Facades\App;
 use Illuminate\View\View;
 use Livewire\Component;
 
 class CourseSelection extends Component
 {
-    public array $coreCompetenceCourseGroup;
+    public array $coreCompetencesCourseGroup;
     public array $clusterSpecificCourseGroup;
-    public array $specialisationCourseGroup;
     public array $electiveCourseGroup;
+    public array $specializationCourseGroup;
+
+    public array $furtherClusterSpecificCourseGroups;
+    public array $furtherSpecializationCourseGroups;
+
     public array $nextSemesters;
-    public array $selectedCourses = [];
-    public array $laterCourses = [];
+    public array $selectedCourses;
 
+    public int $ects;
     public int $semesterId;
-    public int $studyModeId;
     public int $specializationId;
+    public int $studyModeId;
 
-    public ?string $coreCompetencesDescription;
-    public ?string $descriptionBeforeFurther;
-    public ?string $furtherSpecialisationTitle;
-    public ?string $furtherClusterTitle;
+    public ?string $coreCompetencesDescription = null;
+    public ?string $descriptionBeforeFurther = null;
+    public ?string $furtherClusterTitle = null;
+    public ?string $furtherSpecialisationTitle = null;
 
-    protected $listeners = [
-        'updateSelectedCourse',
-        'updateLaterCourse',
-        'findAndDeleteUnselectSelectedCourse',
-        'findAndDeleteUnselectLaterCourse'
+    protected GetCourseSelectDataService $getCourseSelectDataService;
+    protected GetUpcomingSemestersService $getUpcomingSemestersService;
+    protected Semester $semester;
+    protected Specialization $specialization;
+
+    protected array $pageContents = [
+        'core_competences_description',
+        'description_before_further',
+        'further_cluster_title',
+        'further_cluster_description',
+        'further_specialisation_title',
+        'further_specialisation_description',
+        'further_other_cluster_title',
+        'further_other_cluster_description'
     ];
 
-    public function mount(
-        int $specializationId, 
-        int $semesterId, 
-        GetUpcomingSemestersService $getUpcomingSemestersService, 
-        GetCourseSelectDataService $getCourseSelectDataService
-    ): void {
-        $specialization = Specialization::find($specializationId);
-        $semester = Semester::find($semesterId);
-
-        $this->coreCompetencesDescription = PageContent::where('name', 'core_competences_description')->first()?->content;
-        $this->descriptionBeforeFurther = PageContent::where('name', 'description_before_further')->first()?->content;
-        $this->furtherSpecialisationTitle = PageContent::where('name', 'further_specialisation_title')->first()?->content;
-        $this->furtherClusterTitle = PageContent::where('name', 'further_cluster_title')->first()?->content;
-
-        $this->coreCompetenceCourseGroup = $getCourseSelectDataService(CourseGroupType::CoreCompetences, $specialization, $semester);
-        $this->clusterSpecificCourseGroup = $getCourseSelectDataService(CourseGroupType::ClusterSpecific, $specialization, $semester);
-        $this->electiveCourseGroup = $getCourseSelectDataService(CourseGroupType::Elective, $specialization, $semester);
-        $this->furtherClusterSpecificCourseGroups = $getCourseSelectDataService(CourseGroupType::ClusterSpecific, $specialization, $semester, true);
-        $this->furtherSpecialisationCourseGroups = $getCourseSelectDataService(CourseGroupType::Specialization, $specialization, $semester, true);
-        $this->nextSemesters = $getUpcomingSemestersService($this->studyModeId === 1 ? 4 : 2 , $semester->start_date)->toArray();
-        $this->specialisationCourseGroup = $getCourseSelectDataService(CourseGroupType::Specialization, $specialization, $semester);
-    }
-
-    public function changeCoreCompetenceCourse(Course $selected): void
+    public function mount(): void
     {
-        $this->coreCompetenceCourse = $selected;
-    }
-
-    public function changeClusterSpecificCourse(Course $selected): void
-    {
-        $this->clusterSpecificCourse = $selected;
-    }
-
-    public function updateSelectedCourse(int $courseId, int|string $semesterId): void
-    {
-        $this->selectedCourses[$courseId] = $semesterId !== 'on' ? $semesterId : null;
-    }
-
-    public function updateLaterCourse(int $courseId): void
-    {
-        $key = array_search($courseId, $this->laterCourses);
-        if($key) {
-            $this->laterCourses[$key] = $courseId;
-        }
-        $this->laterCourses[] = $courseId;
-    }
-
-    public function findAndDeleteUnselectSelectedCourse(int $courseId): void
-    {
-        unset($this->selectedCourses[$courseId]);
-    }
-
-    public function findAndDeleteUnselectLaterCourse(int $courseId): void
-    {
-        $key = array_search($courseId, $this->laterCourses);
-        if ($key !== false) {
-            unset($this->laterCourses[$key]);
-        }
+        $this
+            ->initSerivces()
+            ->getCourseGroups()
+            ->getFurtherCourseGroups()
+            ->getNextSemesters()
+            ->getPageContents();
     }
 
     public function render(): View
     {
         return view('livewire.course-selection');
+    }
+
+    protected function getCourseGroups(): self
+    {
+        foreach (CourseGroupType::cases() AS $case) {
+            $this->{lcfirst($case->name).'CourseGroup'} = ($this->getCourseSelectDataService)($case, $this->specialization, $this->semester);
+        }
+
+        return $this;
+    }
+
+    protected function getFurtherCourseGroups(): self
+    {
+        foreach (CourseGroupType::furtherCases() AS $case) {
+            $this->{'further'.$case->name.'CourseGroups'} = ($this->getCourseSelectDataService)($case, $this->specialization, $this->semester, true);
+        }
+        
+        return $this;
+    }
+
+    protected function getNextSemesters(): self
+    {
+        $this->nextSemesters = ($this->getUpcomingSemestersService)($this->studyModeId === StudyMode::FullTime->value ? 2 : 4 , $this->semester->start_date)->toArray();
+
+        return $this;
+    }
+
+    protected function getPageContents(): self
+    {
+        $pageContents = PageContent::whereIn('name', $this->pageContents)->get();
+
+        foreach ($pageContents AS $pageContent) {
+            $this->{GeneralHelper::snakeToCamelCase($pageContent->name)} = $pageContent->content;
+        }
+
+        return $this;
+    }
+
+    protected function initSerivces(): self
+    {
+        $this->getCourseSelectDataService = App::make(GetCourseSelectDataService::class);
+        $this->getUpcomingSemestersService = App::make(GetUpcomingSemestersService::class);
+
+        return $this->initSerivceData();
+    }
+
+    protected function initSerivceData(): self
+    {
+        $this->semester = Semester::find($this->semesterId);
+        $this->specialization = Specialization::find($this->specializationId);
+
+        return $this;
     }
 }

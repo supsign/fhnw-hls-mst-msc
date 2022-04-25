@@ -7,44 +7,19 @@ use Livewire\Component;
 
 class RadioGroup extends Component
 {
-    public int $courseId;
-    public string $courseName;
     public array $selectableSemesters;
-    public int|string|null $semesterId = null;
-    public int|string|null $selectedSemester = null;
 
-    public function mount(): void
+    public int $courseId;
+    public int $courseGroupId;
+
+    public string $courseName;
+    public $selectedSemester;
+
+    public function updatedSelectedSemester(): void
     {
-        if(!$this->selectedSemester) {
-            $this->semesterId = 'on';
-        } else {
-            $this->semesterId = $this->selectedSemester;
-        }
-
+        $this->emit('courseSelected', $this->courseGroupId, $this->courseId, $this->selectedSemester);
     }
 
-    public function updated(): void {
-        switch ($this->semesterId) {
-
-            case 'on':
-                $this->emit('findAndDeleteUnselectSelectedCourse', $this->courseId);
-                $this->emit('findAndDeleteUnselectLaterCourse', $this->courseId);
-                break;
-
-            case 'later':
-                $this->emit('findAndDeleteUnselectSelectedCourse', $this->courseId);
-                $this->emit('updateLaterCourse', $this->courseId);
-                break;
-
-            default:
-                $this->emit('findAndDeleteUnselectLaterCourse',$this->courseId);
-                $this->emit('updateSelectedCourse', $this->courseId, $this->semesterId);
-                break;
-        }
-
-        $this->selectedSemester = $this->semesterId;
-    }
-    
     public function render(): View
     {
         return view('livewire.radio-group');
