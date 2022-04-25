@@ -8,6 +8,10 @@ use Livewire\Component;
 
 class ModulesOutsideCurriculum extends Component
 {
+
+    public ?array $module  = [];
+    public array $outsideModules = [];
+
     public function __construct()
     {
         $this->getPageContents();
@@ -27,8 +31,9 @@ class ModulesOutsideCurriculum extends Component
         return $this;
     }
 
-    function saveInput() {
-
+    function saveInput($index) {
+        $this->outsideModules[$index] = $this->module;
+        $this->module = [];
     }
     public function render()
     {
