@@ -7,7 +7,7 @@ use App\Models\PageContent;
 
 class HomePageContentService
 {
-    protected array $contentKeys = ['intro_content', 'intro_title', 'blubb'];
+    protected array $contentKeys = ['intro_content', 'intro_title'];
 
     public function __invoke(): array
     {
