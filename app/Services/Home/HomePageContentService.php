@@ -7,7 +7,7 @@ use App\Models\PageContent;
 
 class HomePageContentService
 {
-    protected array $contentKeys = ['intro_title', 'intro_content', 'intro_link'];
+    protected array $contentKeys = ['intro_content', 'intro_title'];
 
     public function __invoke(): array
     {
@@ -16,8 +16,10 @@ class HomePageContentService
 
         $i = 0;
 
+        // dump($this->contentKeys, $contents);
+
         foreach ($this->contentKeys AS $contentKey) {
-            $result[GeneralHelper::snakeToCamelCase($contentKey)] = $contents[$i++]->content ?? null;
+            $result[GeneralHelper::snakeToCamelCase($contents[$i]->name)] = $contents[$i++]->content ?? null;
         }
 
         return $result;

@@ -20,7 +20,6 @@ class HomeController extends Controller
             'specializations' => Specialization::all()->toArray(),
             'studyModes' => StudyMode::asArray(),
             'introContent' => $introContent,
-            'introLink' => $introLink,
             'introTitle' => $introTitle,
         ]);
     }

@@ -10,6 +10,8 @@ class ModulesOutsideCurriculum extends Component
 {
 
     public ?array $module  = [];
+    public ?string $moduleOutsideTitle = null;
+    public ?string $modulesOutsideDescription = null;
     public array $outsideModules = [];
 
     public function __construct()
