@@ -15,12 +15,13 @@
                 :specializationId="$specializationId"
                 :selectedCourses="$selectedCourses"
             />
-        @endif
+
         <livewire:modules-outside-curriculum />
         <x-double-degree />
         <livewire:master-thesis />
         <x-optional-english />
         <x-additional-comments />
         <input type="submit" name="submit" value="Submit" class="button-primary"/>
+        @endif
     </form>
 </x-base.card>
