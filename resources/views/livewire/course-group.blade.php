@@ -1,10 +1,10 @@
 <div class="">
     @if(!$further)
-        <div class="mb-5 text-lg"><b>{{ $title }} - </b><b>(<span class="{{ count($this->selectedCourses) < $this->courseGroup['required_courses_count'] ? 'text-red-500' : 'text-green-500' }}">{{count($this->selectedCourses)}} selected</span>)</b></div>
+        <div class="mb-5 text-lg"><b>{{ $title }}</b></div>
     @endif
 
     @if($description)
-        <div>{!! $description !!}</div>
+        <div class="mb-5">{!! $description !!}</div>
     @endif
     
     <div class="flex">
@@ -24,16 +24,20 @@
     @php
         $courses = $further ? $courseGroup['courses_filtered'] : $courseGroup['courses'];
     @endphp
-
-    @foreach($courses as $course)
-        <livewire:course
-            :courseGroupTypeShortName="$courseGroup['course_group_type_short_name']"
-            :course="$course"
-            :courseGroupId="$courseGroup['id']"
-            :further="$further"
-            :nextSemesters="$nextSemesters"
-            :selectedCourses="$selectedCourses"
-            key="{{ $course['id'] }}"
-        />
-    @endforeach
+    <div class="max-w-min">
+        @foreach($courses as $course)
+            <livewire:course
+                :courseGroupTypeShortName="$courseGroup['course_group_type_short_name']"
+                :course="$course"
+                :courseGroupId="$courseGroup['id']"
+                :further="$further"
+                :nextSemesters="$nextSemesters"
+                :selectedCourses="$selectedCourses"
+                key="{{ $course['id'] }}"
+            />
+        @endforeach
+        @if(!$further)
+            <div class="{{ count($this->selectedCourses) < $this->courseGroup['required_courses_count'] ? 'text-red-500' : 'text-green-500' }} text-right">Selected: {{count($this->selectedCourses)}} / {{$this->courseGroup['required_courses_count']}}</div>
+        @endif
+    </div>
 </div>

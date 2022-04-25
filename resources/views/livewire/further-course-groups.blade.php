@@ -1,6 +1,12 @@
 
 <div class="{{$class}}">
-    <div class="mb-3"><b>{{$title}}</b></div>
+    @if($title)
+        <div class="mb-5 text-lg"><b>{!! $title!!}</b></div>
+    @endif
+
+    @if($description)
+        <div class="mb-5">{!! $description !!}</div>
+    @endif
     <div class="flex">
         <div class="w-[26rem] p-1 border-b"></div>
         <div class="w-10 border-b"></div>

@@ -12,6 +12,7 @@ class FurtherCourseGroups extends Component
 
     public string $class;
     public ?string $title;
+    public ?string $description;
 
     public function mount(): void
     {

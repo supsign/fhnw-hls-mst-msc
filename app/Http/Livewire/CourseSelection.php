@@ -46,7 +46,11 @@ class CourseSelection extends Component
         'core_competences_description',
         'description_before_further',
         'further_cluster_title',
+        'further_cluster_description',
         'further_specialisation_title',
+        'further_specialisation_description',
+        'further_other_cluster_title',
+        'further_other_cluster_description'
     ];
 
     public function mount(): void

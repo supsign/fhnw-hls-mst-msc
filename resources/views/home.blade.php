@@ -6,11 +6,7 @@
         <div class="w-full sm:flex-grow">
             <x-base.card class="mb-4">
                 <div class="text-2xl mb-2">{!! $introTitle !!}</div>
-                <div class="flex flex-col">
-                    <div >
-                        {!! $introContent !!}
-                    </div>
-                </div>
+                <div>{!! $introContent !!}</div>
             </x-base.card>
             <livewire:module-selection-form :semesters="$semesters" :specializations="$specializations" :studyModes="$studyModes"/>
         </div>
