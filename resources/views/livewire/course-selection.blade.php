@@ -1,11 +1,10 @@
-<div class="flex flex-col gap-5">
-
+<div class="flex flex-col gap-10">
     @if($specializationCourseGroup && count($specializationCourseGroup['courses']))
         <livewire:course-group 
             :courseGroup="$specializationCourseGroup"
             :nextSemesters="$nextSemesters"
             :selectedCourses="$selectedCourses[$specializationCourseGroup['id']] ?? []"
-            class="my-5"
+            class="mb-5"
         />
     @endif
 
@@ -14,7 +13,7 @@
             :courseGroup="$electiveCourseGroup" 
             :nextSemesters="$nextSemesters"
             :selectedCourses="$selectedCourses[$electiveCourseGroup['id']] ?? []"
-            class="my-5"
+            class="mb-5"
         />
     @endif
 
@@ -24,7 +23,7 @@
             :nextSemesters="$nextSemesters"  
             :description="$coreCompetencesDescription"
             :selectedCourses="$selectedCourses[$coreCompetencesCourseGroup['id']] ?? []"
-            class="my-5"
+            class="mb-5"
         />
     @endif
 
@@ -33,17 +32,17 @@
             :courseGroup="$clusterSpecificCourseGroup" 
             :nextSemesters="$nextSemesters"
             :selectedCourses="$selectedCourses[$clusterSpecificCourseGroup['id']] ?? []"
-            class="my-5"
+            class="mb-5"
         />
     @endif
-        <div class="sticky top-0 bg-hls p-2 z-10 self-end w-[30rem]">{{ $descriptionBeforeFurther }} - current ECTS: {{ $ects }}/50</div>
+        <div class="sticky top-3 bg-hls p-2 z-10 self-end w-[30rem]">{!! $descriptionBeforeFurther  !!} Current ECTS: {{ $ects }}/50</div>
     @if(count($furtherSpecializationCourseGroups))
         <livewire:further-course-groups 
             :courseGroups="$furtherSpecializationCourseGroups" 
             :nextSemesters="$nextSemesters" 
             :title="$furtherSpecialisationTitle"
             :selectedCourses="$selectedCourses"
-            class="-mt-20"
+            class="-mt-20 mb-5"
         />
     @endif
 
@@ -53,7 +52,7 @@
             :nextSemesters="$nextSemesters" 
             :title="$furtherClusterTitle"
             :selectedCourses="$selectedCourses"
-            class="my-5"
+            class="mb-5"
         />
     @endif
 

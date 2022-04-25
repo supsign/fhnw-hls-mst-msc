@@ -1,10 +1,10 @@
 <div class="">
     @if(!$further)
-        <div class="mb-3"><b>{{ $title }} - </b><b>(<span class="{{ count($this->selectedCourses) < $this->courseGroup['required_courses_count'] ? 'text-red-500' : 'text-green-500' }}">{{count($this->selectedCourses)}} selected</span>)</b></div>
+        <div class="mb-5 text-lg"><b>{{ $title }} - </b><b>(<span class="{{ count($this->selectedCourses) < $this->courseGroup['required_courses_count'] ? 'text-red-500' : 'text-green-500' }}">{{count($this->selectedCourses)}} selected</span>)</b></div>
     @endif
 
     @if($description)
-        <div>{{ $description }}</div>
+        <div>{!! $description !!}</div>
     @endif
     
     <div class="flex">

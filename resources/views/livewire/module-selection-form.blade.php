@@ -16,6 +16,12 @@
                 :selectedCourses="$selectedCourses"
             />
         @endif
+        <livewire:modules-outside-curriculum />
+        <x-double-degree></x-double-degree>
+        <livewire:master-thesis />
+        <x-optional-english />
+
+
         <input type="submit" name="submit" value="Submit" class="button-primary"/>
     </form>
 </x-base.card>
