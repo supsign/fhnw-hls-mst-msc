@@ -1,5 +1,4 @@
 <div class="flex flex-col gap-10 mt-10">
-
     @foreach($this->coursesByCourseGroup AS $courseGroup)
         <livewire:course-group 
             :courseGroup="$courseGroup"
@@ -9,10 +8,12 @@
         />
     @endforeach
 
-
     @foreach ($furtherCoursesBySpecialisationAndCluster AS $furtherCourses)
-
-        <livewire:further-courses :furtherCourses="$furtherCourses" :nextSemesters="$nextSemesters" :selectedCourses="$selectedCourses"/>
+        <livewire:further-courses 
+            :furtherCourses="$furtherCourses" 
+            :nextSemesters="$nextSemesters" 
+            :selectedCourses="$selectedCourses"
+        />
     @endforeach
 
 
