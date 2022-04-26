@@ -69,7 +69,10 @@ class GetCourseSelectDataService
 
     protected function getCourseGroupIds(): array
     {
-        return array_map(fn ($courseGroupType) => $courseGroupType->value, CourseGroupType::withoutClusterSpecific());
+        return array_map(
+            fn ($courseGroupType) => $courseGroupType->value, 
+            CourseGroupType::withoutClusterSpecific()
+        );
     }
 
     protected function getCourseGroups(): Collection
