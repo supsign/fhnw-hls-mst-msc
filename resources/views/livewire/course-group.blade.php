@@ -8,7 +8,7 @@
     @endif
     
     <div class="flex">
-        <div class="w-[26rem] p-1 border-b"><b>{{ 'some name' }}</b></div>
+        <div class="w-[26rem] p-1 border-b"><b>{{ $courseGroup['specializations'][0]['name'] }}</b></div>
         <div class="w-10 border-b"></div>
         <div class="flex gap-5 border-b">
             <div class="w-20 text-center">{{ 'none' }}</div>
