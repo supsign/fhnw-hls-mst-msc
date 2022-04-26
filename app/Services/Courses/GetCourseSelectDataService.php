@@ -25,7 +25,7 @@ class GetCourseSelectDataService
             return [
                 //  toDo: title/description to PageContents
                 ['title' => 'Further Specialisation Modules'] + ['specializations' => $this->getFurtherCoursesBySpecialization()->toArray()],
-                ['title' => 'Further Cluster-specific Modules'] + ['cluster' => $this->getFurtherCoursesByCluster()->toArray()],
+                ['title' => 'Further Cluster-specific Modules'] + ['clusters' => [$this->getFurtherCoursesByCluster()->toArray()]],
                 ['description' => '... text'] + ['clusters' => $this->getFurtherCoursesByCluster(true)->toArray()],
             ];
         }
