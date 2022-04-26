@@ -43,6 +43,7 @@
                 :selectedCourses="$selectedCourses"
                 key="{{ $course['id'] }}"
                 :further="$further"
+                :showType="$showType"
             />
         @endforeach
         

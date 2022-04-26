@@ -15,6 +15,7 @@ class CourseGroup extends Component
 
     public ?string $description = null;
     public ?string $title = null;
+    public bool $showType = false;
 
     public function mount() 
     {

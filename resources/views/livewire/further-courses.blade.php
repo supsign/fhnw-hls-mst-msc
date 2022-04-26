@@ -1,5 +1,4 @@
 <div>
-
         <div class="mb-5 text-lg"><b>{!! $furtherCourses['title'] ?? null !!}</b></div>
         <div class="mb-5">{!! $furtherCourses['description'] ?? null !!}</div>
         <div class="flex">
