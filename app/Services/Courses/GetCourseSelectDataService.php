@@ -3,97 +3,87 @@
 namespace App\Services\Courses;
 
 use App\Enums\CourseGroupType;
-use App\Models\CourseGroup;
+use App\Models\Cluster;
 use App\Models\CourseGroupSpecialization;
-use App\Models\Semester;
 use App\Models\Specialization;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 
 class GetCourseSelectDataService
 {
-    protected CourseGroupType $courseGroupType;
-    protected bool $invertSpecialization;
-    protected ?Semester $semester;
+    protected bool $furtherCourses;
+    protected array $mainCourseIds;
     protected Specialization $specialization;
 
     public function __invoke(
-        CourseGroupType $courseGroupType, 
         Specialization $specialization, 
-        Semester $semester = null, 
-        bool $invertSpecialization = false
+        bool $furtherCourses = false,
     ): array {
-        $this->courseGroupType = $courseGroupType;
-        $this->invertSpecialization = $invertSpecialization;
-        $this->semester = $semester;
+        $this->furtherCourses = $furtherCourses;
         $this->specialization = $specialization;
 
-        if ($this->invertSpecialization) {
-            return $this->getCourseGroups()->toArray() ?? [];
+        if ($this->furtherCourses) {
+            return [
+                //  toDo: title/description to PageContents
+                ['title' => 'Further Specialisation Modules'] + ['specializations' => $this->getFurtherCoursesBySpecialization()->toArray()],
+                ['title' => 'Further Cluster-specific Modules'] + ['cluster' => $this->getFurtherCoursesByCluster()->toArray()],
+                ['description' => '... text'] + ['clusters' => $this->getFurtherCoursesByCluster(true)->toArray()],
+            ];
         }
 
-        return $this->getCourseGroup()?->toArray() ?? [];
+        return $this->getCourseGroups()->toArray();
     }
 
-    protected function getCourseGroup(): ?CourseGroup
+    protected function getFurtherCoursesByCluster($otherClusters = false): Cluster|Collection
     {
-        $courseGroup = $this->getCourseGroupSpecialization()->first()?->courseGroup;
+        $clusterQuery = Cluster::where(function ($query) use ($otherClusters) {
+            if ($otherClusters) {
+                $query->where('id', '<>', $this->specialization->cluster_id);
+            } else {
+                $query->where('id', $this->specialization->cluster_id);
+            }
+            })->with('courses');
 
-        if ($courseGroup && $this->semester) {
-            $courseGroup->courses = $courseGroup->courses->filter(function ($course) {
-                return $course->semesters->contains($this->semester);
-            })->values();
-        }
-
-        return $courseGroup;
+        return $otherClusters ? $clusterQuery->get() : $clusterQuery->first();
     }
 
-    protected function getCourseGroups($ignoreInversion = false): Collection
+    protected function getFurtherCoursesBySpecialization(): Collection
     {
-        $courseGroups = $this
-            ->getCourseGroupSpecialization($ignoreInversion)
+        return Specialization::where('id', '<>', $this->specialization->id)
+            ->with(['courses'])
             ->get()
-            ->pluck('courseGroup')
-            ->filter(function ($courseGroup) {
-                return $courseGroup->courses->count();
-            });
-
-        if (!$ignoreInversion) {
-            $coursesInSpecialization = $this->getCourseGroups(true)->pluck('courses')->flatten()->pluck('id')->toArray();
-
-            foreach ($courseGroups AS $courseGroup) {
-                $courseGroup->courses_filtered = $courseGroup->courses->filter(function ($course) use ($coursesInSpecialization) {
-                    return !in_array($course->id, $coursesInSpecialization);
-                });
-
-                $courseGroup->specialization = $courseGroup->specializations->first()->toArray();
-
-                unset($courseGroup->courses);
-                unset($courseGroup->specializations);
-            }   
-        }
-
-        return $courseGroups->values();
+                ->filter(fn ($specialization) => $specialization->courses->count())
+                ->values();
     }
 
-    protected function getCourseGroupSpecialization($ignoreInversion = false): Builder
+    // $this->mainCourseIds = $this->getCourses()->pluck('id')->toArray();
+    // protected function getCourses(): Collection
+    // {
+    //     return $this->getCourseGroups()->pluck('courses')->flatten();
+    // }
+
+    protected function getCourseGroupIds(): array
+    {
+        return array_map(fn ($courseGroupType) => $courseGroupType->value, CourseGroupType::withoutClusterSpecific());
+    }
+
+    protected function getCourseGroups(): Collection
     {
         return CourseGroupSpecialization::join('course_groups', 'course_group_specialization.course_group_id', '=', 'course_groups.id')
-            ->where(function ($query) use ($ignoreInversion) {
-                if ($this->invertSpecialization && !$ignoreInversion) {
-                    $query->whereNotIn('specialization_id', [$this->specialization->id]);
-                } else {
-                    $query->where('specialization_id', $this->specialization->id);
-                }
-            })->where(function ($query) use ($ignoreInversion) {
-                if (!$ignoreInversion) {
-                    $query->where('type', $this->courseGroupType->value);
-                }
-            })->with([
-                'courseGroup', 
-                'courseGroup.courses', 
-                'courseGroup.courses.semesters', 
+            ->where('specialization_id', $this->specialization->id)
+            ->whereIn('course_groups.type', $this->getCourseGroupIds())
+            ->with([
+                'courseGroup',
+                'courseGroup.courses',
+                'courseGroup.courses.semesters',
                 'courseGroup.specializations'
-            ]);
+            ])
+            ->orderBy('course_groups.type')
+            ->get()
+                ->pluck('courseGroup')
+                ->unique()
+                ->filter(function ($courseGroup) {
+                    return $courseGroup->courses->count();
+                })
+                ->values();
     }
 }

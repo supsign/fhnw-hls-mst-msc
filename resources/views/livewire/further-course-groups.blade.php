@@ -1,7 +1,7 @@
 
-<div class="{{$class}}">
+<div class="{{ $class }}">
     @if($title)
-        <div class="mb-5 text-lg"><b>{!! $title!!}</b></div>
+        <div class="mb-5 text-lg"><b>{!! $title !!}</b></div>
     @endif
 
     @if($description)

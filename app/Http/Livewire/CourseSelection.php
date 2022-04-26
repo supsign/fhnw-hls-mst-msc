@@ -16,8 +16,8 @@ use Livewire\Component;
 
 class CourseSelection extends Component
 {
-    public array $courses;
-    public array $furtherCourses;
+    public array $coursesByCourseGroup;
+    public array $furtherCoursesBySpecialisationAndCluster;
 
     public array $nextSemesters;
     public array $selectedCourses;
@@ -52,9 +52,7 @@ class CourseSelection extends Component
     {
         $this
             ->initSerivces()
-            ->getCourses()
-            ->getFurtherCourses()
-            ->getNextSemesters()
+            ->executeServices()
             ->getPageContents();
     }
 
@@ -63,24 +61,26 @@ class CourseSelection extends Component
         return view('livewire.course-selection');
     }
 
+    protected function executeServices(): self
+    {
+        $this->coursesByCourseGroup = ($this->getCourseSelectDataService)($this->specialization);
+        $this->furtherCoursesBySpecialisationAndCluster = ($this->getCourseSelectDataService)($this->specialization, true);
+        $this->nextSemesters = ($this->getUpcomingSemestersService)($this->studyModeId === StudyMode::FullTime->value ? 2 : 4 , $this->semester->start_date)->toArray();
+
+        return $this;
+    }
+
     protected function getCourses(): self
     {
-        $this->courses = $this->getCourseSelectDataService();
+        
 
         return $this;
     }
 
     protected function getFurtherCourses(): self
     {
-        $this->furtherCourses = $this->getCourseSelectDataService();
         
-        return $this;
-    }
-
-    protected function getNextSemesters(): self
-    {
-        $this->nextSemesters = ($this->getUpcomingSemestersService)($this->studyModeId === StudyMode::FullTime->value ? 2 : 4 , $this->semester->start_date)->toArray();
-
+        
         return $this;
     }
 
