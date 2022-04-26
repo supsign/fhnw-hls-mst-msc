@@ -7,7 +7,7 @@
             :courseGroupTypeShortName="null"
             :course="$course"
             :courseGroupId="4"
-            :nextSemesters="[]"
+            :nextSemesters="$nextSemesters"
             :selectedCourses="[]"
             key="{{ $course['id'] }}"
         />

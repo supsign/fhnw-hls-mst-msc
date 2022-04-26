@@ -18,13 +18,13 @@ class OptionalEnglish extends Component
         'optional_english_description'
     ];
 
-    public function __construct(protected PageContentService $pageContentService)
-    {
+    public function __construct(
+        public array $nextSemesters,
+        protected PageContentService $pageContentService
+    ) {
         foreach (($this->pageContentService)($this->pageContents) AS $key => $value) {
             $this->{$key} = $value;
         }
-
-        // $this->nextSemesters = 
 
         $this->courses = Course::with('semesters')
             ->whereNull('cluster_id')
