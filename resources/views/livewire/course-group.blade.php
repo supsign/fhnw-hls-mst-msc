@@ -20,10 +20,6 @@
             <div class="w-20 text-center {{ $further ? 'border-r': '' }}">{{ !$further ? 'later' : '' }}</div>
         </div>
     </div>
-
-    @php
-        $courses = $further ? $courseGroup['courses_filtered'] : $courseGroup['courses'];
-    @endphp
     <div class="max-w-min">
         @foreach($courses as $course)
             <livewire:course

@@ -10,6 +10,7 @@ class CourseGroup extends Component
     public array $courseGroup;
     public array $nextSemesters;
     public array $selectedCourses;
+    public array $courses = [];
 
     public bool $further = false;
 
@@ -19,6 +20,11 @@ class CourseGroup extends Component
     public function mount() 
     {
         $this->getTitle();
+        if(!$this->further) {
+            $this->getSortCourses();
+        } else {
+            $this->courses = $this->courseGroup['courses_filtered'];
+        }
     }
 
     public function render()
@@ -33,5 +39,13 @@ class CourseGroup extends Component
             [$this->courseGroup['required_courses_count'], $this->courseGroup['name']],
             PageContent::where('name', 'group_title')->first()?->content
         );
+    }
+
+
+    protected function getSortCourses() {
+      usort($this->courseGroup['courses'], function($a, $b) {
+            return $a['semesters'][0]['start_date'] <=> $b['semesters'][0]['start_date'];
+        });
+        $this->courses = $this->courseGroup['courses'];
     }
 }
