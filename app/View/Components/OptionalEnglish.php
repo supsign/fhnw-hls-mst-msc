@@ -6,7 +6,7 @@ use App\Helpers\GeneralHelper;
 use App\Models\PageContent;
 use Illuminate\View\Component;
 
-class optionalEnglish extends Component
+class OptionalEnglish extends Component
 {
     public ?string $optionalEnglishTitle = null;
     public ?string $optionalEnglishDescription = null;
