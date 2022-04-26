@@ -9,6 +9,7 @@ use App\Models\PageContent;
 use App\Models\Semester;
 use App\Models\Specialization;
 use App\Services\Courses\GetCourseSelectDataService;
+use App\Services\PageContents\PageContentService;
 use App\Services\Semesters\GetUpcomingSemestersService;
 use Illuminate\Support\Facades\App;
 use Illuminate\View\View;
@@ -39,6 +40,7 @@ class CourseSelection extends Component
 
     protected GetCourseSelectDataService $getCourseSelectDataService;
     protected GetUpcomingSemestersService $getUpcomingSemestersService;
+    protected PageContentService $pageContentService;
     protected Semester $semester;
     protected Specialization $specialization;
 
@@ -95,10 +97,8 @@ class CourseSelection extends Component
 
     protected function getPageContents(): self
     {
-        $pageContents = PageContent::whereIn('name', $this->pageContents)->get();
-
-        foreach ($pageContents AS $pageContent) {
-            $this->{GeneralHelper::snakeToCamelCase($pageContent->name)} = $pageContent->content;
+        foreach (($this->pageContentService)($this->pageContents) AS $key => $value) {
+            $this->{$key} = $value;
         }
 
         return $this;
@@ -108,6 +108,7 @@ class CourseSelection extends Component
     {
         $this->getCourseSelectDataService = App::make(GetCourseSelectDataService::class);
         $this->getUpcomingSemestersService = App::make(GetUpcomingSemestersService::class);
+        $this->pageContentService = App::make(PageContentService::class);
 
         return $this->initSerivceData();
     }
