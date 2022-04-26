@@ -16,6 +16,16 @@ enum CourseGroupType: int
         return [static::ClusterSpecific, static::Specialization];
     }
 
+    public function tooltip(): string
+    {
+        return match($this) {
+            static::CoreCompetences => static::CoreCompetences->label().' Module (online & Muttenz)',
+            static::Specialization => static::Specialization->label().' Module (Muttenz)',
+            static::Elective => static::Elective->label().' Module',
+            static::ClusterSpecific => static::ClusterSpecific->label().' Module (various locations, partly online)',
+        };
+    }
+
     public function label(): string
     {
         return match($this) {
