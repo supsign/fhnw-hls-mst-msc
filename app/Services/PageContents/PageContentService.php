@@ -1,20 +1,18 @@
 <?php
 
-namespace App\Services\Home;
+namespace App\Services\PageContents;
 
 use App\Helpers\GeneralHelper;
 use App\Models\PageContent;
 
-class HomePageContentService
+class PageContentService
 {
-    protected array $contentKeys = ['intro_content', 'intro_title'];
-
-    public function __invoke(): array
+    public function __invoke(array $contentKeys): array
     {
-        $contents = PageContent::whereIn('name', $this->contentKeys)->get();
+        $contents = PageContent::whereIn('name', $contentKeys)->get();
         $result = [];
 
-        foreach ($this->contentKeys AS $contentKey) {
+        foreach ($contentKeys AS $contentKey) {
             $contentKey = GeneralHelper::snakeToCamelCase($contentKey);
 
             foreach ($contents AS $content) {

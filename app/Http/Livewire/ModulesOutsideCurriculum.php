@@ -2,8 +2,9 @@
 
 namespace App\Http\Livewire;
 
-use App\Helpers\GeneralHelper;
-use App\Models\PageContent;
+use App\Services\PageContents\PageContentService;
+use Illuminate\Support\Facades\App;
+use Illuminate\View\View;
 use Livewire\Component;
 
 class ModulesOutsideCurriculum extends Component
@@ -14,30 +15,35 @@ class ModulesOutsideCurriculum extends Component
     public ?string $modulesOutsideDescription = null;
     public array $outsideModules = [];
 
-    public function __construct()
-    {
-        $this->getPageContents();
-    }
     protected array $pageContents = [
         'modules_outside_title',
         'modules_outside_description'
     ];
+    protected PageContentService $pageContentService;
+
+    public function mount(): void
+    {  
+        $this->getPageContents();
+    }
 
     protected function getPageContents(): self
     {
-        $pageContents = PageContent::whereIn('name', $this->pageContents)->get();
+        $this->pageContentService = App::make(PageContentService::class);
 
-        foreach ($pageContents AS $pageContent) {
-            $this->{GeneralHelper::snakeToCamelCase($pageContent->name)} = $pageContent->content;
+        foreach (($this->pageContentService)($this->pageContents) AS $key => $value) {
+            $this->{$key} = $value;
         }
+
         return $this;
     }
 
-    function saveInput($index) {
+    function saveInput($index): void
+    {
         $this->outsideModules[$index] = $this->module;
         $this->module = [];
     }
-    public function render()
+
+    public function render(): View
     {
         return view('livewire.modules-outside-curriculum');
     }
