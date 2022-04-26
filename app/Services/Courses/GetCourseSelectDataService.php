@@ -41,7 +41,7 @@ class GetCourseSelectDataService
             } else {
                 $query->where('id', $this->specialization->cluster_id);
             }
-            })->with('courses');
+            })->with(['courses', 'courses.semesters']);
 
         return $otherClusters ? $clusterQuery->get() : $clusterQuery->first();
     }
@@ -49,7 +49,7 @@ class GetCourseSelectDataService
     protected function getFurtherCoursesBySpecialization(): Collection
     {
         return Specialization::where('id', '<>', $this->specialization->id)
-            ->with(['courses'])
+            ->with(['courses', 'courses.semesters'])
             ->get()
                 ->filter(fn ($specialization) => $specialization->courses->count())
                 ->values();
