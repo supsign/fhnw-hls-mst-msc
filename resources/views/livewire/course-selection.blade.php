@@ -11,17 +11,8 @@
 
 
     @foreach ($furtherCoursesBySpecialisationAndCluster AS $furtherCourses)
-        @dump($furtherCourses)
 
-
-{{--         <livewire:further-course-groups 
-            :coursesGrouped="$furtherCourses"
-            :nextSemesters="$nextSemesters" 
-            :title="$furtherCourses['title'] ?? null"
-            :description="$furtherClusterDescription['description'] ?? null"
-            :selectedCourses="$selectedCourses"
-            class="mb-5"
-        /> --}}
+        <livewire:further-courses :furtherCourses="$furtherCourses" :nextSemesters="$nextSemesters" :selectedCourses="$selectedCourses"/>
     @endforeach
 
 

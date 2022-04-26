@@ -6,21 +6,18 @@
     @if($description)
         <div class="mb-5">{!! $description !!}</div>
     @endif
-    
+
     <div class="flex">
-        <div class="w-[26rem] p-1 border-b"><b>{{ $courseGroup['specializations'][0]['name'] }}</b></div>
-        <div class="w-10 border-b"></div>
-        <div class="flex gap-5 border-b">
-            <div class="w-20 text-center">{{ 'none' }}</div>
-
+        <div class="w-[26rem] p-1 border-b {{$further ? 'border-x' : ''}}"><b>{{ $further ?  $courseGroup['name'] : $courseGroup['specializations'][0]['name'] }}</b></div>
+       @if(!$further) <div class="w-10 border-b"></div>@endif
+        <div class="flex gap-5 border-b {{$further ? 'border-r' : ''}}">
+            <div class="w-20 text-center">{{ !$further ? 'none' : ''}}</div>
             @foreach($nextSemesters AS $semester)
-                <div class="w-20 text-center ">{{ $semester['short_name'] }}</div>
+                <div class="w-20 text-center ">{{ !$further ? $semester['short_name'] : '' }}</div>
             @endforeach
-
-            <div class="w-20 text-center ">{{ 'later' }}</div>
+            <div class="w-20 text-center ">{{ !$further ? 'later' : '' }}</div>
         </div>
     </div>
-
     @php
         $courses = $courseGroup['courses'];
     @endphp
@@ -33,8 +30,11 @@
                 :nextSemesters="$nextSemesters"
                 :selectedCourses="$selectedCourses"
                 key="{{ $course['id'] }}"
+                :further="$further"
             />
         @endforeach
+        @if(!$further)
         <div class="{{ count($this->selectedCourses) < $this->courseGroup['required_courses_count'] ? 'text-red-500' : 'text-green-500' }} text-right">Selected: {{count($this->selectedCourses)}} / {{$this->courseGroup['required_courses_count']}}</div>
+        @endif
     </div>
 </div>

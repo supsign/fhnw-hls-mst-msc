@@ -13,10 +13,14 @@ class CourseGroup extends Component
 
     public ?string $description = null;
     public ?string $title = null;
+    public bool $further = false;
 
     public function mount() 
     {
-        $this->getTitle();
+        if(!$this->further) {
+            $this->getTitle();
+        }
+
     }
 
     public function render()
