@@ -11,16 +11,16 @@ class CourseGroup extends Component
     public array $nextSemesters;
     public array $selectedCourses;
 
+    public bool $further = false;
+
     public ?string $description = null;
     public ?string $title = null;
-    public bool $further = false;
 
     public function mount() 
     {
         if(!$this->further) {
             $this->getTitle();
         }
-
     }
 
     public function render()
