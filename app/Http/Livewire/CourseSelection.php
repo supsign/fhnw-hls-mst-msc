@@ -4,8 +4,6 @@ namespace App\Http\Livewire;
 
 use App\Enums\CourseGroupType;
 use App\Enums\StudyMode;
-use App\Helpers\GeneralHelper;
-use App\Models\PageContent;
 use App\Models\Semester;
 use App\Models\Specialization;
 use App\Services\Courses\GetCourseSelectDataService;
