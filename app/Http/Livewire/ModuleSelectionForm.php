@@ -21,8 +21,15 @@ class ModuleSelectionForm extends Component
     public ?string $semesterId = null;
     public ?string $specializationPlaceholder = '-- Choose Specialization --';
 
+    public ?string $surname = null;
+    public ?string $givenName = null;
+
     protected $listeners = [
         'courseSelected'
+    ];
+    protected $rules = [
+        'surname' => 'required',
+        'givenName' => 'required',
     ];
 
     public function courseSelected(int $courseGroupId, int $courseId, int|string $semesterId): void
@@ -66,6 +73,12 @@ class ModuleSelectionForm extends Component
         if($this->specializationId > 0) {
             $this->specializationPlaceholder = null;
         }
+    }
+
+    public function submit()
+    {
+        $this->validate();
+
     }
 
     protected function getEcts(): self

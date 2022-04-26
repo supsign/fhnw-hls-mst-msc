@@ -1,8 +1,9 @@
 <x-base.card>
     <form wire:submit.prevent="submit" class="flex flex-col justify-center gap-5">
         @csrf
-        <x-base.input label="Surname" type="text" name="surname" />
-        <x-base.input label="Given Name" type="text" name="givenName"/>
+        @dump($this->getErrorBag())
+        <x-base.input label="Surname" type="text" name="surname" wire:model="$surname" />
+        <x-base.input label="Given Name" type="text" name="givenName" wire:model="$givenName"/>
         <x-base.select wire:model="semesterId" label="Semester" :options="$semesters" />
         <x-base.select wire:model="studyModeId" label="Study Mode" :options="$studyModes" />
         <x-base.select wire:model="specializationId" label="Specialization" :options="$specializations" optionKey="name" placeholder="-- Choose Specialization --"/>
