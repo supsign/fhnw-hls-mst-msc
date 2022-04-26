@@ -11,7 +11,7 @@
 
 
     @foreach ($furtherCoursesBySpecialisationAndCluster AS $furtherCourses)
-        {{-- @dump($furtherCourses) --}}
+        @dump($furtherCourses)
 
 
 {{--         <livewire:further-course-groups 
