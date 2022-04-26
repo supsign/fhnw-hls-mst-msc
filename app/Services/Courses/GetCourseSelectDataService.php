@@ -25,7 +25,7 @@ class GetCourseSelectDataService
             return [
                 //  toDo: title/description to PageContents
                 ['title' => 'Further Specialisation Modules'] + ['specializations' => $this->getFurtherCoursesBySpecialization()->toArray()],
-                ['title' => 'Further Cluster-specific Modules'] + ['clusters' => [$this->getFurtherCoursesByCluster()->toArray()]],
+                ['title' => 'Further Cluster-specific Modules'] + ['clusters' => $this->getFurtherCoursesByCluster()->toArray()],
                 ['description' => '... text'] + ['clusters' => $this->getFurtherCoursesByCluster(true)->toArray()],
             ];
         }
@@ -33,17 +33,17 @@ class GetCourseSelectDataService
         return $this->getCourseGroups()->toArray();
     }
 
-    protected function getFurtherCoursesByCluster($otherClusters = false): Cluster|Collection
+    protected function getFurtherCoursesByCluster($otherClusters = false): Collection
     {
-        $clusterQuery = Cluster::where(function ($query) use ($otherClusters) {
-            if ($otherClusters) {
-                $query->where('id', '<>', $this->specialization->cluster_id);
-            } else {
-                $query->where('id', $this->specialization->cluster_id);
-            }
-            })->with(['courses', 'courses.semesters']);
-
-        return $otherClusters ? $clusterQuery->get() : $clusterQuery->first();
+        return Cluster::where(function ($query) use ($otherClusters) {
+                if ($otherClusters) {
+                    $query->where('id', '<>', $this->specialization->cluster_id);
+                } else {
+                    $query->where('id', $this->specialization->cluster_id);
+                }
+            })
+            ->with(['courses', 'courses.semesters'])
+            ->get();
     }
 
     protected function getFurtherCoursesBySpecialization(): Collection
