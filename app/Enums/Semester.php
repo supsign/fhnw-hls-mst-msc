@@ -36,7 +36,7 @@ enum Semester: string
     public function tooltip(): string
     {
         return match($this) {
-            static::AutumnStart => static::AutumnStart->longName.' (September – January) ',
+            static::AutumnStart => static::AutumnStart->longName().' (September – January) ',
             static::SpringStart => static::SpringStart->longName().' spring semester (February – June)',
         };
     }
