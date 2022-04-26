@@ -5,6 +5,7 @@ namespace App\Services\Courses;
 use App\Enums\CourseGroupType;
 use App\Models\Cluster;
 use App\Models\CourseGroupSpecialization;
+use App\Models\PageContent;
 use App\Models\Specialization;
 use Illuminate\Support\Collection;
 
@@ -24,9 +25,12 @@ class GetCourseSelectDataService
         if ($this->furtherCourses) {
             return [
                 //  toDo: title/description to PageContents
-                ['title' => 'Further Specialisation Modules'] + ['specializations' => $this->getFurtherCoursesBySpecialization()->toArray()],
-                ['title' => 'Further Cluster-specific Modules'] + ['clusters' => $this->getFurtherCoursesByCluster()->toArray()],
-                ['description' => '... text'] + ['clusters' => $this->getFurtherCoursesByCluster(true)->toArray()],
+                ['title' => 'Further Specialisation Modules (Muttenz)'] + ['specializations' => $this->getFurtherCoursesBySpecialization()->toArray()],
+                ['title' => 'Further Cluster-specific Modules from your Cluster'] + ['clusters' => $this->getFurtherCoursesByCluster()->toArray()],
+                [
+                    'title' => 'Further Modules from other Clusters',
+                    'description' => PageContent::where('name', 'other_cluster_modules_description')->first()?->content
+                ] + ['clusters' => $this->getFurtherCoursesByCluster(true)->toArray()],
             ];
         }
 
