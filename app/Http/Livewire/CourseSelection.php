@@ -16,13 +16,8 @@ use Livewire\Component;
 
 class CourseSelection extends Component
 {
-    public array $coreCompetencesCourseGroup;
-    public array $clusterSpecificCourseGroup;
-    public array $electiveCourseGroup;
-    public array $specializationCourseGroup;
-
-    public array $furtherClusterSpecificCourseGroups;
-    public array $furtherSpecializationCourseGroups;
+    public array $courses;
+    public array $furtherCourses;
 
     public array $nextSemesters;
     public array $selectedCourses;
@@ -57,8 +52,8 @@ class CourseSelection extends Component
     {
         $this
             ->initSerivces()
-            ->getCourseGroups()
-            ->getFurtherCourseGroups()
+            ->getCourses()
+            ->getFurtherCourses()
             ->getNextSemesters()
             ->getPageContents();
     }
@@ -68,20 +63,16 @@ class CourseSelection extends Component
         return view('livewire.course-selection');
     }
 
-    protected function getCourseGroups(): self
+    protected function getCourses(): self
     {
-        foreach (CourseGroupType::cases() AS $case) {
-            $this->{lcfirst($case->name).'CourseGroup'} = ($this->getCourseSelectDataService)($case, $this->specialization, $this->semester);
-        }
+        $this->courses = $this->getCourseSelectDataService();
 
         return $this;
     }
 
-    protected function getFurtherCourseGroups(): self
+    protected function getFurtherCourses(): self
     {
-        foreach (CourseGroupType::furtherCases() AS $case) {
-            $this->{'further'.$case->name.'CourseGroups'} = ($this->getCourseSelectDataService)($case, $this->specialization, $this->semester, true);
-        }
+        $this->furtherCourses = $this->getCourseSelectDataService();
         
         return $this;
     }
