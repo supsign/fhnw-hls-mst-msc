@@ -15,16 +15,14 @@ class GetCourseSelectDataService
     protected array $mainCourseIds;
     protected Specialization $specialization;
 
-    public function __invoke(
-        Specialization $specialization, 
-        bool $furtherCourses = false,
-    ): array {
+    public function __invoke(Specialization $specialization, bool $furtherCourses = false): array {
         $this->furtherCourses = $furtherCourses;
         $this->specialization = $specialization;
 
         if ($this->furtherCourses) {
+            $this->mainCourseIds = $this->getCourses()->pluck('id')->toArray();
+
             return [
-                //  toDo: title/description to PageContents
                 ['title' => 'Further Specialisation Modules (Muttenz)'] + ['specializations' => $this->getFurtherCoursesBySpecialization()->toArray()],
                 ['title' => 'Further Cluster-specific Modules from your Cluster'] + ['clusters' => $this->getFurtherCoursesByCluster()->toArray()],
                 [
@@ -39,7 +37,7 @@ class GetCourseSelectDataService
 
     protected function getFurtherCoursesByCluster($otherClusters = false): Collection
     {
-        return Cluster::where(function ($query) use ($otherClusters) {
+        $clusters = Cluster::where(function ($query) use ($otherClusters) {
                 if ($otherClusters) {
                     $query->where('id', '<>', $this->specialization->cluster_id);
                 } else {
@@ -47,25 +45,46 @@ class GetCourseSelectDataService
                 }
             })
             ->with(['courses', 'courses.semesters'])
-            ->get()
-                ->filter(fn ($cluster) => $cluster->courses->count())
-                ->values();
+            ->get();
+
+        foreach ($clusters AS $cluster) {
+            $cluster->setRelation(
+                'courses', 
+                $cluster->courses->filter(
+                    fn ($course) => !in_array($course->id, $this->mainCourseIds)
+                )
+            );
+        }
+
+        return $clusters
+            ->filter(fn ($cluster) => $cluster->courses->count())
+            ->values();
     }
 
     protected function getFurtherCoursesBySpecialization(): Collection
     {
-        return Specialization::where('id', '<>', $this->specialization->id)
+        $specializations = Specialization::where('specializations.id', '<>', $this->specialization->id)
             ->with(['courses', 'courses.semesters'])
-            ->get()
-                ->filter(fn ($specialization) => $specialization->courses->count())
-                ->values();
+            ->get();
+
+        foreach ($specializations AS $specialization) {
+            $specialization->setRelation(
+                'courses', 
+                $specialization->courses->filter(
+                    fn ($course) => !in_array($course->id, $this->mainCourseIds)
+                )
+            );
+        }
+
+        return $specializations
+            ->filter(fn ($specialization) => $specialization->courses->count())
+            ->values();
     }
 
-    // $this->mainCourseIds = $this->getCourses()->pluck('id')->toArray();
-    // protected function getCourses(): Collection
-    // {
-    //     return $this->getCourseGroups()->pluck('courses')->flatten();
-    // }
+    protected function getCourses(): Collection
+    {
+        return $this->getCourseGroups()->pluck('courses')->flatten();
+    }
 
     protected function getCourseGroupIds(): array
     {
