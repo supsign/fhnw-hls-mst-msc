@@ -2,25 +2,22 @@
 
 namespace App\View\Components;
 
-use App\Models\PageContent;
+use App\Services\PageContents\PageContentService;
 use Illuminate\View\Component;
+use Illuminate\View\View;
 
 class AdditionalComments extends Component
 {
-
     public ?string $additionalCommentsTitle = null;
 
-    public function __construct()
+    public function __construct(protected PageContentService $pageContentService)
     {
-        $this->additionalCommentsTitle = PageContent::where('name','additional_comments_title')->first()->content;
+        foreach (($this->pageContentService)(['additional_comments_title']) AS $key => $value) {
+            $this->{$key} = $value;
+        }
     }
 
-    /**
-     * Get the view / contents that represent the component.
-     *
-     * @return \Illuminate\Contracts\View\View|\Closure|string
-     */
-    public function render()
+    public function render(): View
     {
         return view('components.additional-comments');
     }
