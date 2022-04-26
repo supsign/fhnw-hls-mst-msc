@@ -70,20 +70,6 @@ class CourseSelection extends Component
         return $this;
     }
 
-    protected function getCourses(): self
-    {
-        
-
-        return $this;
-    }
-
-    protected function getFurtherCourses(): self
-    {
-        
-        
-        return $this;
-    }
-
     protected function getPageContents(): self
     {
         $pageContents = PageContent::whereIn('name', $this->pageContents)->get();
