@@ -43,7 +43,9 @@ class GetCourseSelectDataService
                 }
             })
             ->with(['courses', 'courses.semesters'])
-            ->get();
+            ->get()
+                ->filter(fn ($cluster) => $cluster->courses->count())
+                ->values();
     }
 
     protected function getFurtherCoursesBySpecialization(): Collection
