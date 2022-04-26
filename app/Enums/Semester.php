@@ -37,7 +37,7 @@ enum Semester: string
     {
         return match($this) {
             static::AutumnStart => static::AutumnStart->longName().' (September – January) ',
-            static::SpringStart => static::SpringStart->longName().' spring semester (February – June)',
+            static::SpringStart => static::SpringStart->longName().' (February – June)',
         };
     }
 }
