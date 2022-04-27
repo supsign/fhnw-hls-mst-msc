@@ -19,7 +19,7 @@ class Course extends BaseModel
 
 	public function semesters(): BelongsToMany
 	{
-		return $this->belongsToMany(Semester::class);
+		return $this->belongsToMany(Semester::class)->orderBy('start_date');
 	}
 
 	public function springSemesterSlot(): BelongsTo
