@@ -63,7 +63,6 @@ class CourseSelection extends Component
 
     protected function executeServices(): self
     {
-        $this->coursesByCourseGroup = ($this->getCourseSelectDataService)($this->specialization);
         $this->furtherCoursesBySpecialisationAndCluster = ($this->getCourseSelectDataService)($this->specialization, true);
         $this->nextSemesters = ($this->getUpcomingSemestersService)($this->studyModeId === StudyMode::FullTime->value ? 2 : 4 , $this->semester->start_date)->toArray();
 

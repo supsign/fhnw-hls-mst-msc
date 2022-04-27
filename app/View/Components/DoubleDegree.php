@@ -9,7 +9,7 @@ use Illuminate\View\Component;
 class DoubleDegree extends Component
 {
     public ?string $doubleDegreeTitle = null;
-    public ?string  $doubleDegreeDescription = null;
+    public ?string $doubleDegreeDescription = null;
 
     /**
      * Create a new component instance.
