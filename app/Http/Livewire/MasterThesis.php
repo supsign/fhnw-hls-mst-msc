@@ -42,7 +42,8 @@ class MasterThesis extends Component
     {
         $this->startOfThesis = ($this->getUpcomingSemestersService)(
             $this->studyModeId === StudyMode::FullTime->value ? 3 : 5,
-            Semester::find($this->semesterId)->start_date
+            Semester::find($this->semesterId)->start_date,
+            
         )->last()->toArray();
 
         return $this;
