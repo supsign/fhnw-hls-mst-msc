@@ -2,44 +2,28 @@
 
 namespace App\View\Components;
 
-use App\Helpers\GeneralHelper;
-use App\Models\PageContent;
+use App\Services\PageContents\PageContentService;
 use Illuminate\View\Component;
+use Illuminate\View\View;
 
 class DoubleDegree extends Component
 {
-    public ?string $doubleDegreeTitle = null;
-    public ?string  $doubleDegreeDescription = null;
+    public ?string $doubleDegreeTitle;
+    public ?string $doubleDegreeDescription;
 
-    /**
-     * Create a new component instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->getPageContents();
-    }
     protected array $pageContents = [
         'double_degree_title',
         'double_degree_description'
     ];
 
-    protected function getPageContents(): self
+    public function __construct(protected PageContentService $pageContentService)
     {
-        $pageContents = PageContent::whereIn('name', $this->pageContents)->get();
-
-        foreach ($pageContents AS $pageContent) {
-            $this->{GeneralHelper::snakeToCamelCase($pageContent->name)} = $pageContent->content;
+        foreach (($this->pageContentService)($this->pageContents) AS $key => $value) {
+            $this->{$key} = $value;
         }
-        return $this;
     }
-    /**
-     * Get the view / contents that represent the component.
-     *
-     * @return \Illuminate\Contracts\View\View|\Closure|string
-     */
-    public function render()
+
+    public function render(): View
     {
         return view('components.double-degree');
     }

@@ -2,18 +2,22 @@
 
 namespace App\Http\Livewire;
 
-use App\Helpers\GeneralHelper;
+use App\Enums\StudyMode;
 use App\Models\Course;
+use App\Models\Semester;
+use App\Services\Semesters\GetUpcomingSemestersService;
+use App\Helpers\GeneralHelper;
 use App\Models\PageContent;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\App;
 use Livewire\Component;
 
 class ModuleSelectionForm extends Component
 {
+    public array $nextSemesters;
     public array $semesters;
     public array $specializations;
     public array $studyModes;
-
 
     public array $selectedCourses = [];
 
@@ -23,6 +27,8 @@ class ModuleSelectionForm extends Component
     public ?string $semesterId = null;
     public ?string $specializationPlaceholder = '-- Choose Specialization --';
     public ?string $studyModeTooltip = 'full-time: 3 semesters including MSc Thesis, part-time: approximately 5 semesters';
+
+    protected GetUpcomingSemestersService $getUpcomingSemestersService;
 
     protected $listeners = [
         'courseSelected'
@@ -50,11 +56,7 @@ class ModuleSelectionForm extends Component
         $this->init();
     }
 
-    public function hydrate(): void {
-
-    }
-
-    public function render(): ?View
+    public function render(): View
     {
         return view('livewire.module-selection-form');
     }
@@ -103,8 +105,14 @@ class ModuleSelectionForm extends Component
 
     protected function init(): self
     {
+        $this->getUpcomingSemestersService = App::make(GetUpcomingSemestersService::class);
+
         $this->semesterId = array_key_first($this->semesters);
         $this->studyModeId = array_key_first($this->studyModes);
+        $this->nextSemesters = ($this->getUpcomingSemestersService)(
+            $this->studyModeId === StudyMode::FullTime->value ? 2 : 4 , 
+            Semester::find($this->semesterId)->start_date)
+        ->toArray();
 
         return $this;
     }

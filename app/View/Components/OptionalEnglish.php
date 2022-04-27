@@ -2,44 +2,38 @@
 
 namespace App\View\Components;
 
-use App\Helpers\GeneralHelper;
-use App\Models\PageContent;
+use App\Models\Course;
+use App\Services\PageContents\PageContentService;
 use Illuminate\View\Component;
+use Illuminate\View\View;
 
-class optionalEnglish extends Component
+class OptionalEnglish extends Component
 {
-    public ?string $optionalEnglishTitle = null;
-    public ?string $optionalEnglishDescription = null;
+    public array $courses;
+    public ?string $optionalEnglishTitle;
+    public ?string $optionalEnglishDescription;
 
-    /**
-     * Create a new component instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->getPageContents();
-    }
     protected array $pageContents = [
         'optional_english_title',
         'optional_english_description'
     ];
 
-    protected function getPageContents(): self
-    {
-        $pageContents = PageContent::whereIn('name', $this->pageContents)->get();
-
-        foreach ($pageContents AS $pageContent) {
-            $this->{GeneralHelper::snakeToCamelCase($pageContent->name)} = $pageContent->content;
+    public function __construct(
+        public array $nextSemesters,
+        protected PageContentService $pageContentService
+    ) {
+        foreach (($this->pageContentService)($this->pageContents) AS $key => $value) {
+            $this->{$key} = $value;
         }
-        return $this;
+
+        $this->courses = Course::with('semesters')
+            ->whereNull('cluster_id')
+            ->whereNull('specialization_id')
+            ->get()
+                ->toArray();
     }
-    /**
-     * Get the view / contents that represent the component.
-     *
-     * @return \Illuminate\Contracts\View\View|\Closure|string
-     */
-    public function render()
+
+    public function render(): View
     {
         return view('components.optional-english');
     }

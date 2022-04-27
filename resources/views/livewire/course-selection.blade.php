@@ -4,6 +4,7 @@
             :courseGroup="$courseGroup"
             :nextSemesters="$nextSemesters"
             :selectedCourses="$selectedCourses[$courseGroup['id']] ?? []"
+            :showType="true"
             class="mb-5"
         />
     @endforeach
