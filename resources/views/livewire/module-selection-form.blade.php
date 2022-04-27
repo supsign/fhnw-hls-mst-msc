@@ -2,6 +2,7 @@
     <form wire:submit.prevent="submit" class="flex flex-col justify-center gap-5">
         @csrf
         @dump($this->getErrorBag())
+        @dump($selectedCourses)
         <x-base.input label="Surname" type="text" name="surname" wire:model="$surname" />
         <x-base.input label="Given Name" type="text" name="givenName" wire:model="$givenName"/>
         <x-base.select wire:model="semesterId" label="Semester" :options="$semesters" />

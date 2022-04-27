@@ -12,7 +12,6 @@ class ModuleSelectionForm extends Component
     public array $specializations;
     public array $studyModes;
 
-
     public array $selectedCourses = [];
 
     public int $ects = 0;
@@ -23,6 +22,10 @@ class ModuleSelectionForm extends Component
 
     public ?string $surname = null;
     public ?string $givenName = null;
+    public int $specializationCourseGroupCount;
+    public int $electiveCourseGroupCount;
+    public int $coreCompetencesCourseGroupCount;
+    public int $clusterSpecificCourseGroupCount;
 
     protected $listeners = [
         'courseSelected'
@@ -30,6 +33,7 @@ class ModuleSelectionForm extends Component
     protected $rules = [
         'surname' => 'required',
         'givenName' => 'required',
+        'ects' => 'integer|min:50'
     ];
 
     public function courseSelected(int $courseGroupId, int $courseId, int|string $semesterId): void
