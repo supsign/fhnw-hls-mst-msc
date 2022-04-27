@@ -16,7 +16,8 @@ class Course extends Component
 
     public int $courseGroupId;
 
-    public ?string $courseGroupTypeShortName;
+    public string $courseGroupTypeShortName;
+    public string $courseGroupTypeTooltip;
 
     public function mount(): void
     {
