@@ -7,7 +7,7 @@
         <x-base.select wire:model="studyModeId" label="Study Mode" :options="$studyModes" :tooltip="$studyModeTooltip"/>
         <x-base.select wire:model="specializationId" label="Specialization" :options="$specializations" optionKey="name" placeholder="-- Choose Specialization --"/>
         @if($specializationId)
-            <livewire:course-selection
+{{--             <livewire:course-selection
                 key="{{ now() }}"
                 :ects="$ects"
                 :semesterId="(int)$semesterId"
@@ -15,13 +15,16 @@
                 :specializationId="$specializationId"
                 :selectedCourses="$selectedCourses"
             />
-
-        <livewire:modules-outside-curriculum />
-        <x-double-degree />
-        <livewire:master-thesis />
-        <x-optional-english />
-        <x-additional-comments />
-        <input type="submit" name="submit" value="Submit" class="button-primary"/>
+            <livewire:modules-outside-curriculum />
+            <x-double-degree /> --}}
+            <livewire:master-thesis
+                :semesterId="(int)$semesterId"
+                :studyModeId="$studyModeId"
+                :specializationId="$specializationId"
+            />
+            <x-optional-english />
+            <x-additional-comments />
+            <input type="submit" name="submit" value="Submit" class="button-primary"/>
         @endif
     </form>
 </x-base.card>
