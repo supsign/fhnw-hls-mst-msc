@@ -1,4 +1,5 @@
 <div>
+    @dump($data)
     <div class="2xl">Your Study Plan MSc in Life Sciences FHWN</div>
     <div>GivenName Surname</div>
     <div>Specialization</div>

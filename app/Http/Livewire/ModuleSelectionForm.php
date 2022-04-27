@@ -28,6 +28,7 @@ class ModuleSelectionForm extends Component
     public ?string $semesterId = null;
     public ?string $specializationPlaceholder = '-- Choose Specialization --';
     public ?string $studyModeTooltip = 'full-time: 3 semesters including MSc Thesis, part-time: approximately 5 semesters';
+    public array $pdfData = [];
 
     protected GetUpcomingSemestersService $getUpcomingSemestersService;
 
@@ -103,10 +104,13 @@ class ModuleSelectionForm extends Component
         }
         return $this;
     }
-
+    public function getPdfData() {
+        $this->pdfData['givenName'] = 'test';
+    }
     public function submit(): Redirector
     {
-        return redirect()->route('home.pdf', ['blubb' => 'blah']);
+        $this->getPdfData();
+        return redirect()->route('home.pdf', $this->pdfData);
     }
 
     protected function init(): self

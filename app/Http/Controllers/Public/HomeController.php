@@ -29,11 +29,8 @@ class HomeController extends Controller
 
     public function pdf(Request $request) 
     {
-        dd($request->all());
-
-
         $pdf = App::make('dompdf.wrapper');
-        $pdf->loadView('pdf');
+        $pdf->loadView('pdf', ['data' => $request->query->all()]);
         return $pdf->stream();
     }
 }
