@@ -2,7 +2,9 @@
 
 namespace App\Http\Livewire;
 
+use App\Helpers\GeneralHelper;
 use App\Models\Course;
+use App\Models\PageContent;
 use Illuminate\Contracts\View\View;
 use Livewire\Component;
 
@@ -20,6 +22,7 @@ class ModuleSelectionForm extends Component
     public ?int $studyModeId = null;
     public ?string $semesterId = null;
     public ?string $specializationPlaceholder = '-- Choose Specialization --';
+    public ?string $studyModeTooltip = 'full-time: 3 semesters including MSc Thesis, part-time: approximately 5 semesters';
 
     protected $listeners = [
         'courseSelected'
@@ -82,6 +85,21 @@ class ModuleSelectionForm extends Component
 
         return $this;
     }
+    protected array $pageContents = [
+        'modules_outside_title',
+        'modules_outside_description'
+    ];
+
+    protected function getPageContents(): self
+    {
+        $pageContents = PageContent::whereIn('name', $this->pageContents)->get();
+
+        foreach ($pageContents AS $pageContent) {
+            $this->{GeneralHelper::snakeToCamelCase($pageContent->name)} = $pageContent->content;
+        }
+        return $this;
+    }
+
 
     protected function init(): self
     {
