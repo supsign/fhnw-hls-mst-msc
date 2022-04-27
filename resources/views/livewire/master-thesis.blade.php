@@ -2,5 +2,16 @@
 	<x-base.select label="Theses:" :options="$theses" optionKey="name" multiple/>
 
 	<br/>
-	Start of MSc Thesis: {{ $startOfThesis['long_name'] }}
+	<strong>Start of MSc Thesis:</strong> {{ $startOfThesis['long_name'] }}
+
+	<br/>
+	{{-- @dump($availibleStarts) --}}
+
+	<x-base.select
+		wire:model="overwriteStartOfThesis"
+		label="later Start"
+		:options="$availibleStarts"
+		optionKey="name"
+		placeholder="-- Choose later thesis --"
+	/>
 </div>

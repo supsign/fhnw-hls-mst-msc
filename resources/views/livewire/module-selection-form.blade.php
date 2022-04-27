@@ -14,8 +14,8 @@
                 :studyModeId="$studyModeId"
                 :specializationId="$specializationId"
                 :selectedCourses="$selectedCourses"
-            />
-            <livewire:modules-outside-curriculum /> --}}
+            /> --}}
+            <livewire:modules-outside-curriculum />
             <x-double-degree wire:model="doubleDegree" />
             <livewire:master-thesis
                 key="{{ now() }}"

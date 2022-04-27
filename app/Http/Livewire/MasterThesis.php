@@ -11,25 +11,31 @@ use Livewire\Component;
 
 class MasterThesis extends Component
 {
+    public array $availibleStarts;
     public array $startOfThesis;
     public array $theses;
 
     public bool $doubleDegree;
 
+    public int $overwriteStartOfThesis = 0;
     public int $semesterId;
     public int $specializationId;
     public int $studyModeId;
 
     protected GetUpcomingSemestersService $getUpcomingSemestersService;
 
-    public function update(): void
+    public function boot(): void
     {
-        dump('test');
+        $this->getUpcomingSemestersService = App::make(GetUpcomingSemestersService::class);
+    }
+
+    public function updated(): void
+    {
+        $this->getStartOfThesis();
     }
 
     public function mount(): void
     {
-        $this->getUpcomingSemestersService = App::make(GetUpcomingSemestersService::class);
         $this->theses = Thesis::where('specialization_id', $this->specializationId)->get()->toArray();
 
         $this->getStartOfThesis();  
@@ -48,11 +54,15 @@ class MasterThesis extends Component
             $offset++;
         }
 
-        $this->startOfThesis = ($this->getUpcomingSemestersService)(
+        $startOfThesis = ($this->getUpcomingSemestersService)(
             $offset,
             Semester::find($this->semesterId)->start_date,
-            
-        )->last()->toArray();
+        )->last();
+
+        $this->availibleStarts = ($this->getUpcomingSemestersService)(4, $startOfThesis->start_date)->toArray();
+        $this->startOfThesis = $this->overwriteStartOfThesis 
+            ? Semester::find($this->overwriteStartOfThesis)->toArray()
+            : $startOfThesis->toArray();        
 
         return $this;
     }
