@@ -31,7 +31,7 @@
     </div>
 
     <div class="max-w-min">
-        @foreach($courseGroup['courses'] as $course)
+        @foreach($courses as $course)
             <livewire:course
                     :courseGroupTypeShortName="!$further ? $courseGroup['course_group_type_short_name']: null"
                     :courseGroupTypeTooltip="!$further ? $courseGroup['course_group_type_tooltip']: null"
