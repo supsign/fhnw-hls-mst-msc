@@ -19,11 +19,11 @@ class CourseGroup extends Component
 
     public function mount() 
     {
-        $this->getTitle();
         if(!$this->further) {
+            $this->getTitle();
             $this->getSortCourses();
         } else {
-            $this->courses = $this->courseGroup['courses_filtered'];
+            $this->courses = $this->courseGroup['courses'];
         }
     }
 

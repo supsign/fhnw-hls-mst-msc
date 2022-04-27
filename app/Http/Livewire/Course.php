@@ -18,7 +18,7 @@ class Course extends Component
 
     public string $courseGroupTypeShortName;
     public string $courseGroupTypeTooltip;
-    
+
     public function mount(): void
     {
         $this->getSelectableSemesters();
