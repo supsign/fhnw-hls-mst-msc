@@ -13,11 +13,12 @@ class Course extends Component
     public array $selectedCourses;
 
     public bool $further = false;
+    public bool $showType = false;
 
     public int $courseGroupId;
 
     public ?string $courseGroupTypeShortName;
-    public bool $showType = false;
+    public ?string $courseGroupTypeTooltip;
 
     public function mount(): void
     {

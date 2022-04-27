@@ -11,12 +11,12 @@
                 <div class="w-20 text-center">later</div>
             </div>
         </div>
-      @foreach($furtherCourses['specializations'] ?? $furtherCourses['clusters'] AS $courses)
-            <livewire:course-group
+    @foreach($furtherCourses['specializations'] ?? $furtherCourses['clusters'] AS $courses)
+        <livewire:course-group
                 :courseGroup="$courses"
                 :nextSemesters="$nextSemesters"
                 :selectedCourses="$selectedCourses"
                 :further="true"
-            />
-        @endforeach
+        />
+    @endforeach
 </div>

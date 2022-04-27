@@ -4,7 +4,7 @@
         <x-base.input label="Surname" type="text" name="surname" />
         <x-base.input label="Given Name" type="text" name="givenName"/>
         <x-base.select wire:model="semesterId" label="Semester" :options="$semesters" />
-        <x-base.select wire:model="studyModeId" label="Study Mode" :options="$studyModes" />
+        <x-base.select wire:model="studyModeId" label="Study Mode" :options="$studyModes" :tooltip="$studyModeTooltip"/>
         <x-base.select wire:model="specializationId" label="Specialization" :options="$specializations" optionKey="name" placeholder="-- Choose Specialization --"/>
         @if($specializationId)
             <livewire:course-selection
