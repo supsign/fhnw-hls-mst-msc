@@ -29,9 +29,6 @@
             <div class="w-20 text-center {{ $further ? 'border-r': '' }}">{{ !$further ? 'later' : '' }}</div>
         </div>
     </div>
-    @php
-        $courses = $courseGroup['courses'];
-    @endphp
 
     <div class="max-w-min">
         @foreach($courses as $course)
