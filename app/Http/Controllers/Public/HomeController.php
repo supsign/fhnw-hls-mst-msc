@@ -7,7 +7,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Specialization;
 use App\Services\PageContents\PageContentService;
 use App\Services\Semesters\GetSemestersForSelectService;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
+
 
 class HomeController extends Controller
 {
@@ -22,5 +24,12 @@ class HomeController extends Controller
             'introContent' => $introContent,
             'introTitle' => $introTitle,
         ]);
+    }
+
+    public function pdf() {
+        dd('test');
+        $pdf = App::make('dompdf.wrapper');
+        $pdf->loadView('pdf');
+        return $pdf->stream();
     }
 }

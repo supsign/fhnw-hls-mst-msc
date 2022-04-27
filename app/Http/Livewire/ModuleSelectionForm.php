@@ -6,6 +6,7 @@ use App\Helpers\GeneralHelper;
 use App\Models\Course;
 use App\Models\PageContent;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Http;
 use Livewire\Component;
 
 class ModuleSelectionForm extends Component
@@ -99,7 +100,9 @@ class ModuleSelectionForm extends Component
         }
         return $this;
     }
-
+    public function submit() {
+        Http::asForm()->post(route('home.pdf'));
+    }
 
     protected function init(): self
     {
