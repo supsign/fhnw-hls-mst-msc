@@ -1,4 +1,4 @@
-<div class="">
+<div>
     @if($title)
         <div class="mb-5 text-lg"><b>{{ $title }}</b></div>
     @endif
@@ -33,14 +33,14 @@
     <div class="max-w-min">
         @foreach($courseGroup['courses'] as $course)
             <livewire:course
-                :courseGroupTypeShortName="$courseGroup['course_group_type_short_name']"
-                :courseGroupTypeTooltip="$courseGroup['course_group_type_tooltip']"
-                :course="$course"
-                :courseGroupId="$courseGroup['id']"
-                :nextSemesters="$nextSemesters"
-                :selectedCourses="$selectedCourses"
-                key="{{ $course['id'] }}"
-                :further="$further"
+                    :courseGroupTypeShortName="!$further ? $courseGroup['course_group_type_short_name']: null"
+                    :courseGroupTypeTooltip="!$further ? $courseGroup['course_group_type_tooltip']: null"
+                    :course="$course"
+                    :courseGroupId="$courseGroup['id']"
+                    :nextSemesters="$nextSemesters"
+                    :selectedCourses="$selectedCourses"
+                    key="{{ $course['id'] }}"
+                    :further="$further"
             />
         @endforeach
 
