@@ -13,7 +13,10 @@
         <div class="flex gap-5 border-b">
             <div class="w-20 text-center">none</div>
             @foreach($nextSemesters AS $nextSemester)
-                <div class="w-20 text-center ">{{ $nextSemester['short_name']}}</div>
+                <div class="relative"  x-data="{ hover: false }">
+                    <div class="w-20 text-center" x-on:mouseover="hover = true" x-on:mouseout="hover = false">{{ $nextSemester['short_name']}}</div>
+                    <x-tooltip x-show="hover" class="w-48">{{ $nextSemester['tooltip'] }}</x-tooltip>
+                </div>
             @endforeach
             <div class="w-20 text-center">later</div>
         </div>

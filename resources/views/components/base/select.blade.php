@@ -1,9 +1,13 @@
-<div {{ $attributes->only('class')->merge(['class' => '']) }} >
+<div {{ $attributes->only('class')->merge(['class' => 'relative']) }} x-data="{ hover: false }" >
     @php
         $optionKey = $attributes->get('optionKey');
-        $placeholder = $attributes->get('placeholder')
+        $placeholder = $attributes->get('placeholder');
+        $tooltip = $attributes->get('tooltip');
     @endphp
-    <label class="select__label">{{  $attributes->get('label') }}</label>
+    <label class="select__label" x-on:mouseover="hover = true" x-on:mouseout="hover = false">{{  $attributes->get('label') }}</label>
+    @if($tooltip)
+    <x-tooltip x-show="hover" class="w-[22rem]">{{ $tooltip}}</x-tooltip>
+    @endif
     <select class="select__field" name="{{ $attributes->get('name') }}" {{ $attributes->only('wire:model') }}>
         @if($placeholder)
             <option value="{{ 0 }}">{{ $placeholder }}</option>

@@ -32,4 +32,12 @@ enum Semester: string
             static::SpringStart => 'SS',
         };
     }
+
+    public function tooltip(): string
+    {
+        return match($this) {
+            static::AutumnStart => static::AutumnStart->longName().' (September – January) ',
+            static::SpringStart => static::SpringStart->longName().' (February – June)',
+        };
+    }
 }
