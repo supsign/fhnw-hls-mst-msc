@@ -9,7 +9,7 @@
         @if($specializationId)
             <livewire:course-selection
                 key="{{ now() }}"
-                :ects="$ects"
+                :nextSemesters="$nextSemesters"
                 :semesterId="(int)$semesterId"
                 :studyModeId="$studyModeId"
                 :specializationId="$specializationId"
@@ -19,7 +19,9 @@
         <livewire:modules-outside-curriculum />
         <x-double-degree />
         <livewire:master-thesis />
-        <x-optional-english />
+        <x-optional-english 
+            :nextSemesters="$nextSemesters"
+        />
         <x-additional-comments />
         <input type="submit" name="submit" value="Submit" class="button-primary"/>
         @endif
