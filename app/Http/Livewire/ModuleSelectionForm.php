@@ -2,9 +2,12 @@
 
 namespace App\Http\Livewire;
 
+use App\Enums\CourseGroupType;
 use App\Helpers\GeneralHelper;
 use App\Models\Course;
+use App\Models\CourseGroup;
 use App\Models\PageContent;
+use App\Models\Specialization;
 use Illuminate\Contracts\View\View;
 use Livewire\Component;
 
@@ -25,20 +28,26 @@ class ModuleSelectionForm extends Component
 
     public ?string $surname = null;
     public ?string $givenName = null;
-    public int $specializationCourseGroupCount;
-    public int $electiveCourseGroupCount;
-    public int $coreCompetencesCourseGroupCount;
-    public int $clusterSpecificCourseGroupCount;
+    public int $specializationSelectedCount = 0;
+    public int $specializationRequiredCount = 0;
+    public int $electiveSelectedCount = 0;
+    public int $electiveRequiredCount = 0;
+    public int $coreCompetencesSelectedCount = 0;
+    public int $coreCompetencesRequiredCount = 0;
 
     protected $listeners = [
         'courseSelected'
     ];
-    protected $rules = [
-        'surname' => 'required',
-        'givenName' => 'required',
-        'ects' => 'integer|min:50'
-    ];
-
+    protected function rules() {
+        return [
+            'surname' => 'required',
+            'givenName' => 'required',
+            'ects' => 'integer|min:50',
+            'specializationSelectedCount' => ['integer', 'min:'.$this->specializationRequiredCount],
+            'electiveSelectedCount' => ['integer', 'min:'.$this->electiveRequiredCount],
+            'coreCompetencesSelectedCount' => ['integer', 'min:'.$this->coreCompetencesRequiredCount],
+        ];
+    }
     public function courseSelected(int $courseGroupId, int $courseId, int|string $semesterId): void
     {
         if ($semesterId !== 'none') {
@@ -59,6 +68,7 @@ class ModuleSelectionForm extends Component
     public function mount(): void
     {
         $this->init();
+
     }
 
     public function hydrate(): void {
@@ -80,10 +90,14 @@ class ModuleSelectionForm extends Component
         if($this->specializationId > 0) {
             $this->specializationPlaceholder = null;
         }
+        if($this->specializationId > 0) {
+            $this->getRequiredCounts();
+        }
     }
 
     public function submit()
     {
+        $this->getModuleCounts();
         $this->validate();
 
     }
@@ -117,6 +131,16 @@ class ModuleSelectionForm extends Component
         return $this;
     }
 
+    protected function getModuleCounts() {
+        foreach ($this->selectedCourses AS $key => $value ) {
+            $group = CourseGroup::find($key);
+            $this->{lcfirst($group->type->name)."SelectedCount"} = count($value);
+            $this->{lcfirst($group->type->name)."RequiredCount"} = $group->required_courses_count;
+        }
+    }
+    protected function getRequiredCounts() {
+
+    }
 
     protected function init(): self
     {
