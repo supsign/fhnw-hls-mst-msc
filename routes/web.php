@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [HomeController::class, 'show'])->name('home');
-Route::post('/', [HomeController::class, 'pdf'])->name('home.pdf');
+Route::get('/pdf', [HomeController::class, 'pdf'])->name('home.pdf');
 
 Route::get('admin/config', [ConfigurationController::class, 'show'])->name('admin.config.show');
 Route::post('admin/config', [ConfigurationController::class, 'post'])->name('admin.config.post');

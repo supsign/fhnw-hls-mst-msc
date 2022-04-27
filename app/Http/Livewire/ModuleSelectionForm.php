@@ -6,15 +6,14 @@ use App\Helpers\GeneralHelper;
 use App\Models\Course;
 use App\Models\PageContent;
 use Illuminate\Contracts\View\View;
-use Illuminate\Support\Facades\Http;
 use Livewire\Component;
+use Livewire\Redirector;
 
 class ModuleSelectionForm extends Component
 {
     public array $semesters;
     public array $specializations;
     public array $studyModes;
-
 
     public array $selectedCourses = [];
 
@@ -27,6 +26,10 @@ class ModuleSelectionForm extends Component
 
     protected $listeners = [
         'courseSelected'
+    ];
+    protected array $pageContents = [
+        'modules_outside_title',
+        'modules_outside_description'
     ];
 
     public function courseSelected(int $courseGroupId, int $courseId, int|string $semesterId): void
@@ -51,11 +54,7 @@ class ModuleSelectionForm extends Component
         $this->init();
     }
 
-    public function hydrate(): void {
-
-    }
-
-    public function render(): ?View
+    public function render(): View
     {
         return view('livewire.module-selection-form');
     }
@@ -66,8 +65,9 @@ class ModuleSelectionForm extends Component
         $this->selectedCourses = [];
 
     }
-    public function updated(): void {
-        if($this->specializationId > 0) {
+    public function updated(): void 
+    {
+        if ($this->specializationId > 0) {
             $this->specializationPlaceholder = null;
         }
     }
@@ -86,10 +86,6 @@ class ModuleSelectionForm extends Component
 
         return $this;
     }
-    protected array $pageContents = [
-        'modules_outside_title',
-        'modules_outside_description'
-    ];
 
     protected function getPageContents(): self
     {
@@ -100,8 +96,10 @@ class ModuleSelectionForm extends Component
         }
         return $this;
     }
-    public function submit() {
-        Http::asForm()->post(route('home.pdf'));
+
+    public function submit(): Redirector
+    {
+        return redirect()->route('home.pdf', ['blubb' => 'blah']);
     }
 
     protected function init(): self
