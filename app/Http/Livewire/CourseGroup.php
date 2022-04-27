@@ -42,10 +42,12 @@ class CourseGroup extends Component
     }
 
 
-    protected function getSortCourses() {
-      usort($this->courseGroup['courses'], function($a, $b) {
+    protected function getSortCourses() 
+    {
+        usort($this->courseGroup['courses'], function($a, $b) {
             return $a['semesters'][0]['start_date'] <=> $b['semesters'][0]['start_date'];
         });
+        
         $this->courses = $this->courseGroup['courses'];
     }
 }
