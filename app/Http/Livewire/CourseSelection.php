@@ -15,13 +15,8 @@ use Livewire\Component;
 
 class CourseSelection extends Component
 {
-    public array $coreCompetencesCourseGroup;
-    public array $clusterSpecificCourseGroup;
-    public array $electiveCourseGroup;
-    public array $specializationCourseGroup;
-
-    public array $furtherClusterSpecificCourseGroups;
-    public array $furtherSpecializationCourseGroups;
+    public array $coursesByCourseGroup;
+    public array $furtherCoursesBySpecialisationAndCluster;
 
     public array $nextSemesters;
     public array $selectedCourses;
@@ -57,9 +52,7 @@ class CourseSelection extends Component
     {
         $this
             ->initSerivces()
-            ->getCourseGroups()
-            ->getFurtherCourseGroups()
-            ->getNextSemesters()
+            ->executeServices()
             ->getPageContents();
     }
 
@@ -68,26 +61,10 @@ class CourseSelection extends Component
         return view('livewire.course-selection');
     }
 
-    protected function getCourseGroups(): self
+    protected function executeServices(): self
     {
-        foreach (CourseGroupType::cases() AS $case) {
-            $this->{lcfirst($case->name).'CourseGroup'} = ($this->getCourseSelectDataService)($case, $this->specialization, $this->semester);
-        }
-
-        return $this;
-    }
-
-    protected function getFurtherCourseGroups(): self
-    {
-        foreach (CourseGroupType::furtherCases() AS $case) {
-            $this->{'further'.$case->name.'CourseGroups'} = ($this->getCourseSelectDataService)($case, $this->specialization, $this->semester, true);
-        }
-        
-        return $this;
-    }
-
-    protected function getNextSemesters(): self
-    {
+        $this->coursesByCourseGroup = ($this->getCourseSelectDataService)($this->specialization);
+        $this->furtherCoursesBySpecialisationAndCluster = ($this->getCourseSelectDataService)($this->specialization, true);
         $this->nextSemesters = ($this->getUpcomingSemestersService)($this->studyModeId === StudyMode::FullTime->value ? 2 : 4 , $this->semester->start_date)->toArray();
 
         return $this;
