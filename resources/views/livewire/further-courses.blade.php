@@ -1,5 +1,4 @@
 <div>
-
         <div class="mb-5 text-lg"><b>{!! $furtherCourses['title'] ?? null !!}</b></div>
         <div class="mb-5">{!! $furtherCourses['description'] ?? null !!}</div>
         <div class="flex">
@@ -12,12 +11,12 @@
                 <div class="w-20 text-center">later</div>
             </div>
         </div>
-      @foreach($furtherCourses['specializations'] ?? $furtherCourses['clusters'] AS $courses)
-            <livewire:course-group
+    @foreach($furtherCourses['specializations'] ?? $furtherCourses['clusters'] AS $courses)
+        <livewire:course-group
                 :courseGroup="$courses"
                 :nextSemesters="$nextSemesters"
                 :selectedCourses="$selectedCourses"
                 :further="true"
-            />
-        @endforeach
+        />
+    @endforeach
 </div>
