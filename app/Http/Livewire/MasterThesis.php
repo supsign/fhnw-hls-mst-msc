@@ -42,7 +42,7 @@ class MasterThesis extends Component
 
     protected function getStartOfThesis(): self
     {
-        $offset = $this->studyModeId === StudyMode::FullTime->value ? 3 : 5;
+        $offset = $this->studyModeId === StudyMode::FullTime->value ? 3 : 6;
 
         if ($this->doubleDegree) {
             $offset++;
