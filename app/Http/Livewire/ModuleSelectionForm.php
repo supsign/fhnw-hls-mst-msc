@@ -28,7 +28,7 @@ class ModuleSelectionForm extends Component
 
     public ?string $surname = null;
     public ?string $givenName = null;
-    
+
     public int $specializationSelectedCount = 0;
     public int $specializationRequiredCount = 0;
     public int $electiveSelectedCount = 0;
@@ -39,16 +39,11 @@ class ModuleSelectionForm extends Component
     protected $listeners = [
         'courseSelected'
     ];
-    protected function rules() {
-        return [
-            'surname' => 'required',
-            'givenName' => 'required',
-            'ects' => 'integer|min:50',
-            'specializationSelectedCount' => ['integer', 'min:'.$this->specializationRequiredCount],
-            'electiveSelectedCount' => ['integer', 'min:'.$this->electiveRequiredCount],
-            'coreCompetencesSelectedCount' => ['integer', 'min:'.$this->coreCompetencesRequiredCount],
-        ];
-    }
+    protected array $pageContents = [
+        'modules_outside_title',
+        'modules_outside_description'
+    ];
+
     public function courseSelected(int $courseGroupId, int $courseId, int|string $semesterId): void
     {
         if ($semesterId !== 'none') {
@@ -69,11 +64,6 @@ class ModuleSelectionForm extends Component
     public function mount(): void
     {
         $this->init();
-
-    }
-
-    public function hydrate(): void {
-
     }
 
     public function render(): ?View
@@ -87,20 +77,14 @@ class ModuleSelectionForm extends Component
         $this->selectedCourses = [];
 
     }
-    public function updated(): void {
+    public function updated(): void
+    {
         if($this->specializationId > 0) {
             $this->specializationPlaceholder = null;
         }
         if($this->specializationId > 0) {
             $this->getRequiredCounts();
         }
-    }
-
-    public function submit()
-    {
-        $this->getModuleCounts();
-        $this->validate();
-
     }
 
     protected function getEcts(): self
@@ -117,10 +101,6 @@ class ModuleSelectionForm extends Component
 
         return $this;
     }
-    protected array $pageContents = [
-        'modules_outside_title',
-        'modules_outside_description'
-    ];
 
     protected function getPageContents(): self
     {
@@ -132,16 +112,19 @@ class ModuleSelectionForm extends Component
         return $this;
     }
 
-    protected function getModuleCounts()
+    protected function getModuleCounts(): self
     {
         foreach ($this->selectedCourses AS $key => $value ) {
             $group = CourseGroup::find($key);
             $this->{lcfirst($group->type->name)."SelectedCount"} = count($value);
             $this->{lcfirst($group->type->name)."RequiredCount"} = $group->required_courses_count;
         }
+
+        return $this;
     }
 
-    protected function getRequiredCounts() {
+    protected function getRequiredCounts() 
+    {
 
     }
 
@@ -151,5 +134,23 @@ class ModuleSelectionForm extends Component
         $this->studyModeId = array_key_first($this->studyModes);
 
         return $this;
+    }
+
+    protected function rules(): array
+    {
+        return [
+            'surname' => 'required',
+            'givenName' => 'required',
+            'ects' => 'integer|min:50',
+            'specializationSelectedCount' => ['integer', 'min:'.$this->specializationRequiredCount],
+            'electiveSelectedCount' => ['integer', 'min:'.$this->electiveRequiredCount],
+            'coreCompetencesSelectedCount' => ['integer', 'min:'.$this->coreCompetencesRequiredCount],
+        ];
+    }
+
+    public function submit(): void
+    {
+        $this->getModuleCounts();
+        $this->validate();
     }
 }
