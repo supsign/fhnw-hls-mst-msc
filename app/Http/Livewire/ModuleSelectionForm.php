@@ -28,6 +28,7 @@ class ModuleSelectionForm extends Component
 
     public ?string $surname = null;
     public ?string $givenName = null;
+    
     public int $specializationSelectedCount = 0;
     public int $specializationRequiredCount = 0;
     public int $electiveSelectedCount = 0;
@@ -131,13 +132,15 @@ class ModuleSelectionForm extends Component
         return $this;
     }
 
-    protected function getModuleCounts() {
+    protected function getModuleCounts()
+    {
         foreach ($this->selectedCourses AS $key => $value ) {
             $group = CourseGroup::find($key);
             $this->{lcfirst($group->type->name)."SelectedCount"} = count($value);
             $this->{lcfirst($group->type->name)."RequiredCount"} = $group->required_courses_count;
         }
     }
+
     protected function getRequiredCounts() {
 
     }
