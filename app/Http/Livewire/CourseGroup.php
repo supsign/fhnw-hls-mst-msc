@@ -18,7 +18,9 @@ class CourseGroup extends Component
 
     public function mount() 
     {
-        $this->getTitle();
+        if(!$this->further) {
+            $this->getTitle();
+        }
     }
 
     public function render()
