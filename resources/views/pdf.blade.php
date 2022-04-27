@@ -1,7 +1,7 @@
 <div>
     @dump($data)
     <div class="2xl">Your Study Plan MSc in Life Sciences FHWN</div>
-    <div>GivenName Surname</div>
+    <div>{{$data['givenName']}} {{$data['surname']}}</div>
     <div>Specialization</div>
     <div>
         <div>Semester 1</div>

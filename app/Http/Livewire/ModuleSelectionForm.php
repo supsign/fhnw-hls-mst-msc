@@ -149,12 +149,8 @@ class ModuleSelectionForm extends Component
         }
     }
     public function getPdfData() {
-        $this->pdfData['givenName'] = 'test';
-    }
-    public function submit(): Redirector
-    {
-        $this->getPdfData();
-        return redirect()->route('home.pdf', $this->pdfData);
+        $this->pdfData['givenName'] = $this->givenName;
+        $this->pdfData['surname'] = $this->surname;
     }
 
     protected function init(): self
@@ -199,9 +195,12 @@ class ModuleSelectionForm extends Component
        return $groups;
     }
 
-    public function submit(): void
+    public function submit(): Redirector
     {
         $this->getModuleCounts();
-        $this->validate();
+        //$this->validate();
+        $this->getPdfData();
+        return redirect()->route('home.pdf', $this->pdfData);
     }
+
 }
