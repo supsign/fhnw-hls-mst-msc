@@ -16,6 +16,8 @@ class ModuleSelectionForm extends Component
 
     public array $selectedCourses = [];
 
+    public bool $doubleDegree = false;
+
     public int $ects = 0;
     public ?int $specializationId = null;
     public ?int $studyModeId = null;

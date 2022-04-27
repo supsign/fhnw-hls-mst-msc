@@ -14,6 +14,8 @@ class MasterThesis extends Component
     public array $startOfThesis;
     public array $theses;
 
+    public bool $doubleDegree;
+
     public int $semesterId;
     public int $specializationId;
     public int $studyModeId;
@@ -40,8 +42,14 @@ class MasterThesis extends Component
 
     protected function getStartOfThesis(): self
     {
+        $offset = $this->studyModeId === StudyMode::FullTime->value ? 3 : 5;
+
+        if ($this->doubleDegree) {
+            $offset++;
+        }
+
         $this->startOfThesis = ($this->getUpcomingSemestersService)(
-            $this->studyModeId === StudyMode::FullTime->value ? 3 : 5,
+            $offset,
             Semester::find($this->semesterId)->start_date,
             
         )->last()->toArray();
