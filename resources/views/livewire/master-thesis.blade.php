@@ -9,7 +9,7 @@
 
 	<x-base.select
 		wire:model="overwriteStartOfThesis"
-		label="later Start"
+		{{-- label="later Start" --}}
 		:options="$availibleStarts"
 		optionKey="name"
 		placeholder="-- Choose later thesis --"
