@@ -58,7 +58,6 @@ class CourseSelection extends Component
 
     protected function executeServices(): self
     {
-        $this->coursesByCourseGroup = ($this->getCourseSelectDataService)($this->specialization);
         $this->furtherCoursesBySpecialisationAndCluster = ($this->getCourseSelectDataService)($this->specialization, true);
 
         return $this;
