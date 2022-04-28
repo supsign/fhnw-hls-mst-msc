@@ -13,10 +13,10 @@
         </div>
     @foreach($furtherCourses['specializations'] ?? $furtherCourses['clusters'] AS $courses)
         <livewire:course-group
-                :courseGroup="$courses"
-                :nextSemesters="$nextSemesters"
-                :selectedCourses="$selectedCourses"
-                :further="true"
+            :courseGroup="$courses"
+            :nextSemesters="$nextSemesters"
+            :selectedCourses="$selectedCourses"
+            :further="true"
         />
     @endforeach
 </div>
