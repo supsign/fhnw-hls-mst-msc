@@ -20,7 +20,7 @@ class CourseGroup extends Component
 
     public function mount() 
     {
-        if(!$this->further) {
+        if (!$this->further) {
             $this->getTitle();
             $this->getSortCourses();
         } else {
@@ -33,16 +33,6 @@ class CourseGroup extends Component
         return view('livewire.course-group');
     }
 
-    protected function getTitle()
-    {
-        $this->title = str_replace(
-            ['#requiredCoursesCount', '#groupName'], 
-            [$this->courseGroup['required_courses_count'], $this->courseGroup['name']],
-            PageContent::where('name', 'group_title')->first()?->content
-        );
-    }
-
-
     protected function getSortCourses() 
     {
         usort($this->courseGroup['courses'], function($a, $b) {
@@ -50,5 +40,14 @@ class CourseGroup extends Component
         });
         
         $this->courses = $this->courseGroup['courses'];
+    }
+
+    protected function getTitle()
+    {
+        $this->title = str_replace(
+            ['#requiredCoursesCount', '#groupName'], 
+            [$this->courseGroup['required_courses_count'], $this->courseGroup['name']],
+            PageContent::where('name', 'group_title')->first()?->content
+        );
     }
 }

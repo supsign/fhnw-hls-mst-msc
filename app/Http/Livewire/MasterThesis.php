@@ -7,6 +7,7 @@ use App\Models\Semester;
 use App\Models\Thesis;
 use App\Services\Semesters\GetUpcomingSemestersService;
 use Illuminate\Support\Facades\App;
+use Illuminate\View\View;
 use Livewire\Component;
 
 class MasterThesis extends Component
@@ -29,11 +30,6 @@ class MasterThesis extends Component
         $this->getUpcomingSemestersService = App::make(GetUpcomingSemestersService::class);
     }
 
-    public function updated(): void
-    {
-        $this->getStartOfThesis();
-    }
-
     public function mount(): void
     {
         $this->theses = Thesis::where('specialization_id', $this->specializationId)->get()->toArray();
@@ -41,9 +37,14 @@ class MasterThesis extends Component
         $this->getStartOfThesis();  
     }
 
-    public function render()
+    public function render(): View
     {
         return view('livewire.master-thesis');
+    }
+
+    public function updated(): void
+    {
+        $this->getStartOfThesis();
     }
 
     protected function getStartOfThesis(): self

@@ -17,13 +17,13 @@ use Livewire\Component;
 
 class ModuleSelectionForm extends Component
 {
+    public array $selectedCourses = [];
+
     public array $coursesByCourseGroup;
     public array $nextSemesters;
     public array $semesters;
     public array $specializations;
     public array $studyModes;
-
-    public array $selectedCourses = [];
 
     public bool $doubleDegree = false;
 
@@ -49,6 +49,12 @@ class ModuleSelectionForm extends Component
 
     protected $listeners = [
         'courseSelected'
+    ];
+    protected array $messages = [
+        'ects.min' => 'You have selected modules worth fewer than 50 ECTS.',
+        'specializationSelectedCount.min' => 'You have not selected enough modules in :attribute. Please correct.',
+        'electiveSelectedCount.min' => 'You have not selected enough modules in :attribute. Please correct.',
+        'coreCompetencesSelectedCount.min' => 'You have not selected enough modules in :attribute. Please correct.',
     ];
     protected array $pageContents = [
         'modules_outside_title',
@@ -175,21 +181,16 @@ class ModuleSelectionForm extends Component
             'coreCompetencesSelectedCount' => ['integer', 'min:'.$this->coreCompetencesRequiredCount],
         ];
     }
-    protected array $messages = [
-        'ects.min' => 'You have selected modules worth fewer than 50 ECTS.',
-        'specializationSelectedCount.min' => 'You have not selected enough modules in :attribute. Please correct.',
-        'electiveSelectedCount.min' => 'You have not selected enough modules in :attribute. Please correct.',
-        'coreCompetencesSelectedCount.min' => 'You have not selected enough modules in :attribute. Please correct.',
-    ];
+
     protected function validationAttributes(): array
     {
         $groups = [];
-        foreach ($this->coursesByCourseGroup AS $courseGroup) {
-            $group = CourseGroup::find($courseGroup['id']);
 
-            $groups[lcfirst($group->type->name)."SelectedCount"] = $courseGroup['name'];
+        foreach ($this->coursesByCourseGroup AS $courseGroup) {
+            $groups[lcfirst(CourseGroup::find($courseGroup['id'])->type->name).'SelectedCount'] = $courseGroup['name'];
         }
-       return $groups;
+
+        return $groups;
     }
 
     public function submit(): void
