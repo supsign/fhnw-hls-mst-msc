@@ -159,7 +159,24 @@ class ModuleSelectionForm extends Component
     public function getPdfData() {
         $this->pdfData['givenName'] = $this->givenName;
         $this->pdfData['surname'] = $this->surname;
+        $this->pdfData['specialization'] = Specialization::find($this->specializationId)['name'];
+        $this->pdfData['semesters'] = $this->getFormatCoursesForPdf();
+        dd($this->getFormatCoursesForPdf());
     }
+
+    public function getFormatCoursesForPdf(): array
+    {
+        $courses = [];
+        foreach($this->selectedCourses AS $selected) {
+            $courses += $selected;
+        }
+        $groupBySemester = [];
+        foreach($courses AS $key => $value) {
+            $groupBySemester[$value][] = Course::find($key);
+        }
+        return $groupBySemester;
+    }
+
 
     protected function init(): self
     {
