@@ -5,8 +5,6 @@
 	<strong>Start of MSc Thesis:</strong> {{ $startOfThesis['long_name'] }}
 
 	<br/>
-	{{-- @dump($availibleStarts) --}}
-
 	<x-base.select
 		wire:model="overwriteStartOfThesis"
 		{{-- label="later Start" --}}
