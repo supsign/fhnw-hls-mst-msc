@@ -7,14 +7,14 @@
         <x-base.select wire:model="studyModeId" label="Study Mode" :options="$studyModes" :tooltip="$studyModeTooltip"/>
         <x-base.select wire:model="specializationId" label="Specialization" :options="$specializations" optionKey="name" placeholder="-- Choose Specialization --"/>
         @if($specializationId)
-{{--             <livewire:course-selection
+            <livewire:course-selection
                 key="{{ now() }}"
                 :ects="$ects"
                 :semesterId="(int)$semesterId"
                 :studyModeId="$studyModeId"
                 :specializationId="$specializationId"
                 :selectedCourses="$selectedCourses"
-            /> --}}
+            />
             <livewire:modules-outside-curriculum />
             <x-double-degree wire:model="doubleDegree" />
             <livewire:master-thesis
