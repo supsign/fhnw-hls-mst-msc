@@ -13,6 +13,7 @@ class Course extends Component
     public array $selectedCourses;
 
     public bool $further = false;
+    public bool $showType = false;
 
     public int $courseGroupId;
 

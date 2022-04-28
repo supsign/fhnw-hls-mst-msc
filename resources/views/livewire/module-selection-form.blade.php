@@ -9,7 +9,7 @@
         @if($specializationId)
             <livewire:course-selection
                 key="{{ now() }}"
-                :ects="$ects"
+                :nextSemesters="$nextSemesters"
                 :semesterId="(int)$semesterId"
                 :studyModeId="$studyModeId"
                 :specializationId="$specializationId"
