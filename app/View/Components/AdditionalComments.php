@@ -8,11 +8,15 @@ use Illuminate\View\View;
 
 class AdditionalComments extends Component
 {
-    public ?string $additionalCommentsTitle = null;
+    public ?string $additionalCommentsTitle;
+
+    protected array $pageContents = [
+        'additional_comments_title',
+    ];
 
     public function __construct(protected PageContentService $pageContentService)
     {
-        foreach (($this->pageContentService)(['additional_comments_title']) AS $key => $value) {
+        foreach (($this->pageContentService)($this->pageContents) AS $key => $value) {
             $this->{$key} = $value;
         }
     }

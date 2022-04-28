@@ -2,13 +2,10 @@
 
 namespace App\Http\Livewire;
 
-use App\Enums\CourseGroupType;
-use App\Enums\StudyMode;
 use App\Models\Semester;
 use App\Models\Specialization;
 use App\Services\Courses\GetCourseSelectDataService;
 use App\Services\PageContents\PageContentService;
-use App\Services\Semesters\GetUpcomingSemestersService;
 use Illuminate\Support\Facades\App;
 use Illuminate\View\View;
 use Livewire\Component;
@@ -21,7 +18,6 @@ class CourseSelection extends Component
     public array $nextSemesters;
     public array $selectedCourses;
 
-    public int $ects;
     public int $semesterId;
     public int $specializationId;
     public int $studyModeId;
@@ -32,7 +28,6 @@ class CourseSelection extends Component
     public ?string $furtherSpecialisationTitle = null;
 
     protected GetCourseSelectDataService $getCourseSelectDataService;
-    protected GetUpcomingSemestersService $getUpcomingSemestersService;
     protected PageContentService $pageContentService;
     protected Semester $semester;
     protected Specialization $specialization;
@@ -64,7 +59,6 @@ class CourseSelection extends Component
     protected function executeServices(): self
     {
         $this->furtherCoursesBySpecialisationAndCluster = ($this->getCourseSelectDataService)($this->specialization, true);
-        $this->nextSemesters = ($this->getUpcomingSemestersService)($this->studyModeId === StudyMode::FullTime->value ? 2 : 4 , $this->semester->start_date)->toArray();
 
         return $this;
     }
@@ -81,7 +75,6 @@ class CourseSelection extends Component
     protected function initSerivces(): self
     {
         $this->getCourseSelectDataService = App::make(GetCourseSelectDataService::class);
-        $this->getUpcomingSemestersService = App::make(GetUpcomingSemestersService::class);
         $this->pageContentService = App::make(PageContentService::class);
 
         return $this->initSerivceData();

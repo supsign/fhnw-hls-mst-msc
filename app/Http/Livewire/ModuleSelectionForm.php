@@ -2,24 +2,26 @@
 
 namespace App\Http\Livewire;
 
-use App\Helpers\GeneralHelper;
+use App\Enums\StudyMode;
 use App\Models\Course;
 use App\Models\CourseGroup;
+use App\Models\Semester;
+use App\Services\Semesters\GetUpcomingSemestersService;
+use App\Helpers\GeneralHelper;
 use App\Models\PageContent;
 use App\Models\Specialization;
 use App\Services\Courses\GetCourseSelectDataService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\App;
-use Illuminate\Validation\ValidationException;
 use Livewire\Component;
-use Illuminate\Support\Facades\Validator;
 
 class ModuleSelectionForm extends Component
 {
+    public array $coursesByCourseGroup;
+    public array $nextSemesters;
     public array $semesters;
     public array $specializations;
     public array $studyModes;
-    public array $coursesByCourseGroup;
 
     public array $selectedCourses = [];
 
@@ -41,6 +43,7 @@ class ModuleSelectionForm extends Component
     public int $coreCompetencesRequiredCount = 0;
 
     protected GetCourseSelectDataService $getCourseSelectDataService;
+    protected GetUpcomingSemestersService $getUpcomingSemestersService;
 
     protected $listeners = [
         'courseSelected'
@@ -70,11 +73,9 @@ class ModuleSelectionForm extends Component
     public function mount(): void
     {
         $this->init();
-
-
     }
 
-    public function render(): ?View
+    public function render(): View
     {
         return view('livewire.module-selection-form');
     }
@@ -90,6 +91,7 @@ class ModuleSelectionForm extends Component
         if($this->specializationId > 0) {
             $this->specializationPlaceholder = null;
         }
+
         if($this->specializationId > 0) {
             $this->getCoursesByCourseGroup();
             $this->getRequiredCounts();
@@ -147,8 +149,14 @@ class ModuleSelectionForm extends Component
 
     protected function init(): self
     {
+        $this->getUpcomingSemestersService = App::make(GetUpcomingSemestersService::class);
+
         $this->semesterId = array_key_first($this->semesters);
         $this->studyModeId = array_key_first($this->studyModes);
+        $this->nextSemesters = ($this->getUpcomingSemestersService)(
+            $this->studyModeId === StudyMode::FullTime->value ? 2 : 4 , 
+            Semester::find($this->semesterId)->start_date)
+        ->toArray();
 
         return $this;
     }

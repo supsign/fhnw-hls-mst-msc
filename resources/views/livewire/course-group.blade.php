@@ -29,21 +29,18 @@
             <div class="w-20 text-center {{ $further ? 'border-r': '' }}">{{ !$further ? 'later' : '' }}</div>
         </div>
     </div>
-    @php
-        $courses = $courseGroup['courses'];
-    @endphp
 
     <div class="max-w-min">
         @foreach($courses as $course)
             <livewire:course
-                    :courseGroupTypeShortName="!$further ? $courseGroup['course_group_type_short_name']: null"
-                    :courseGroupTypeTooltip="!$further ? $courseGroup['course_group_type_tooltip']: null"
-                    :course="$course"
-                    :courseGroupId="$courseGroup['id']"
-                    :nextSemesters="$nextSemesters"
-                    :selectedCourses="$selectedCourses"
-                    key="{{ $course['id'] }}"
-                    :further="$further"
+                :courseGroupTypeShortName="$courseGroup['course_group_type_short_name'] ?? null"
+                :course="$course"
+                :courseGroupId="$courseGroup['id']"
+                :nextSemesters="$nextSemesters"
+                :selectedCourses="$selectedCourses"
+                key="{{ $course['id'] }}"
+                :further="$further"
+                :showType="$showType"
             />
         @endforeach
 
