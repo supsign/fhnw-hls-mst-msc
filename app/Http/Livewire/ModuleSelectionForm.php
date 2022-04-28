@@ -18,14 +18,15 @@ use Livewire\Redirector;
 
 class ModuleSelectionForm extends Component
 {
+    public array $selectedCourses = [];
+
+    public array $coursesByCourseGroup;
     public array $nextSemesters;
     public array $semesters;
     public array $specializations;
     public array $studyModes;
 
-    public array $coursesByCourseGroup;
-
-    public array $selectedCourses = [];
+    public bool $doubleDegree = false;
 
     public int $ects = 0;
     public ?int $specializationId = null;
@@ -48,9 +49,16 @@ class ModuleSelectionForm extends Component
     public int $coreCompetencesRequiredCount = 0;
 
     protected GetCourseSelectDataService $getCourseSelectDataService;
+    protected GetUpcomingSemestersService $getUpcomingSemestersService;
 
     protected $listeners = [
         'courseSelected'
+    ];
+    protected array $messages = [
+        'ects.min' => 'You have selected modules worth fewer than 50 ECTS.',
+        'specializationSelectedCount.min' => 'You have not selected enough modules in :attribute. Please correct.',
+        'electiveSelectedCount.min' => 'You have not selected enough modules in :attribute. Please correct.',
+        'coreCompetencesSelectedCount.min' => 'You have not selected enough modules in :attribute. Please correct.',
     ];
     protected array $pageContents = [
         'modules_outside_title',
@@ -88,13 +96,14 @@ class ModuleSelectionForm extends Component
     {
         $this->ects = 0;
         $this->selectedCourses = [];
-
     }
+
     public function updated(): void
     {
         if($this->specializationId > 0) {
             $this->specializationPlaceholder = null;
         }
+
         if($this->specializationId > 0) {
             $this->getCoursesByCourseGroup();
             $this->getRequiredCounts();
@@ -129,6 +138,7 @@ class ModuleSelectionForm extends Component
         foreach ($pageContents AS $pageContent) {
             $this->{GeneralHelper::snakeToCamelCase($pageContent->name)} = $pageContent->content;
         }
+
         return $this;
     }
     protected function getModuleCounts(): self
@@ -178,21 +188,16 @@ class ModuleSelectionForm extends Component
             'coreCompetencesSelectedCount' => ['integer', 'min:'.$this->coreCompetencesRequiredCount],
         ];
     }
-    protected array $messages = [
-        'ects.min' => 'You have selected modules worth fewer than 50 ECTS.',
-        'specializationSelectedCount.min' => 'You have not selected enough modules in :attribute. Please correct.',
-        'electiveSelectedCount.min' => 'You have not selected enough modules in :attribute. Please correct.',
-        'coreCompetencesSelectedCount.min' => 'You have not selected enough modules in :attribute. Please correct.',
-    ];
+
     protected function validationAttributes(): array
     {
         $groups = [];
-        foreach ($this->coursesByCourseGroup AS $courseGroup) {
-            $group = CourseGroup::find($courseGroup['id']);
 
-            $groups[lcfirst($group->type->name)."SelectedCount"] = $courseGroup['name'];
+        foreach ($this->coursesByCourseGroup AS $courseGroup) {
+            $groups[lcfirst(CourseGroup::find($courseGroup['id'])->type->name).'SelectedCount'] = $courseGroup['name'];
         }
-       return $groups;
+
+        return $groups;
     }
 
     public function submit(): Redirector

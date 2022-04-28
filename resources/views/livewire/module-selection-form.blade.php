@@ -19,15 +19,20 @@
                 :selectedCourses="$selectedCourses"
                 :coursesByCourseGroup="$coursesByCourseGroup"
             />
-
-        <livewire:modules-outside-curriculum />
-        <x-double-degree />
-        <livewire:master-thesis />
-        <x-optional-english 
-            :nextSemesters="$nextSemesters"
-        />
-        <x-additional-comments />
-        <input type="submit" name="submit" value="Submit" class="button-primary" x-data x-on:click="window.scrollTo(0, 0)"/>
+            <livewire:modules-outside-curriculum />
+            <x-double-degree wire:model="doubleDegree" />
+            <livewire:master-thesis
+                key="{{ now() }}"
+                :doubleDegree="$doubleDegree"
+                :semesterId="(int)$semesterId"
+                :studyModeId="$studyModeId"
+                :specializationId="$specializationId"
+            />
+            <x-optional-english 
+                :nextSemesters="$nextSemesters"
+            />
+            <x-additional-comments />
+            <input type="submit" name="submit" value="Submit" class="button-primary"/>
         @endif
     </form>
 </x-base.card>

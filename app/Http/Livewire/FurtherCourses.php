@@ -14,5 +14,4 @@ class FurtherCourses extends Component
     {
         return view('livewire.further-courses');
     }
-
 }
