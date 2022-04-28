@@ -36,8 +36,6 @@ class ModuleSelectionForm extends Component
     public ?string $studyModeTooltip = 'full-time: 3 semesters including MSc Thesis, part-time: approximately 5 semesters';
     public array $pdfData = [];
 
-    protected GetUpcomingSemestersService $getUpcomingSemestersService;
-
     public ?string $surname = null;
     public ?string $givenName = null;
 
