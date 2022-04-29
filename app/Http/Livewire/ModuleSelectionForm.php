@@ -28,6 +28,7 @@ class ModuleSelectionForm extends Component
     public array $studyModes;
 
     public bool $doubleDegree = false;
+    public $masterThesis;
 
     public int $ects = 0;
     public ?int $specializationId = null;
@@ -156,27 +157,39 @@ class ModuleSelectionForm extends Component
             $this->{lcfirst($group->type->name) . "RequiredCount"} = $group->required_courses_count;
         }
     }
+
     public function getPdfData() {
         $this->pdfData['givenName'] = $this->givenName;
         $this->pdfData['surname'] = $this->surname;
         $this->pdfData['specialization'] = Specialization::find($this->specializationId)['name'];
         $this->pdfData['semesters'] = $this->getFormatCoursesForPdf();
-        dd($this->getFormatCoursesForPdf());
+        $this->pdfData['specialization_count'] = $this->getCoursesCount();
+        $this->pdfData['ects'] = $this->ects;
+        // dd($this->getFormatCoursesForPdf());
     }
 
     public function getFormatCoursesForPdf(): array
     {
+
         $courses = [];
         foreach($this->selectedCourses AS $selected) {
             $courses += $selected;
         }
         $groupBySemester = [];
         foreach($courses AS $key => $value) {
-            $groupBySemester[$value][] = Course::find($key);
+            $groupBySemester[Semester::find($value)['long_name']][] = Course::find($key)->toArray();
         }
         return $groupBySemester;
     }
 
+    public function getCoursesCount() {
+        $count = 0;
+        foreach ($this->selectedCourses AS $key => $value ) {
+            $group = CourseGroup::find($key);
+            $count +=  $this->{lcfirst($group->type->name)."SelectedCount"};
+        }
+        return $count;
+    }
 
     protected function init(): self
     {
