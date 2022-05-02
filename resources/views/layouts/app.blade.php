@@ -19,6 +19,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('vendors/fontawesome-pro/css/all.min.css') }}">
     @livewireStyles
 
+
 </head>
 
 <body class="font-body">

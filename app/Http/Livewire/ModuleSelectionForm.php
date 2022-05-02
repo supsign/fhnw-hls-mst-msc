@@ -14,9 +14,11 @@ use App\Services\Courses\GetCourseSelectDataService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\App;
 use Livewire\Component;
+use Livewire\Redirector;
 
 class ModuleSelectionForm extends Component
 {
+    public array $pdfData = [];
     public array $selectedCourses = [];
 
     public array $coursesByCourseGroup;
@@ -26,6 +28,7 @@ class ModuleSelectionForm extends Component
     public array $studyModes;
 
     public bool $doubleDegree = false;
+    public $masterThesis;
 
     public int $ects = 0;
     public ?int $specializationId = null;
@@ -137,7 +140,6 @@ class ModuleSelectionForm extends Component
 
         return $this;
     }
-
     protected function getModuleCounts(): self
     {
         foreach ($this->selectedCourses AS $key => $value ) {
@@ -148,12 +150,45 @@ class ModuleSelectionForm extends Component
         return $this;
     }
 
-    protected function getRequiredCounts() 
+    protected function getRequiredCounts()
     {
         foreach ($this->coursesByCourseGroup AS $courseGroup) {
             $group = CourseGroup::find($courseGroup['id']);
             $this->{lcfirst($group->type->name) . "RequiredCount"} = $group->required_courses_count;
         }
+    }
+
+    public function getPdfData() {
+        $this->pdfData['givenName'] = $this->givenName;
+        $this->pdfData['surname'] = $this->surname;
+        $this->pdfData['specialization'] = Specialization::find($this->specializationId)['name'];
+        $this->pdfData['semesters'] = $this->getFormatCoursesForPdf();
+        $this->pdfData['specialization_count'] = $this->getCoursesCount();
+        $this->pdfData['ects'] = $this->ects;
+        // dd($this->getFormatCoursesForPdf());
+    }
+
+    public function getFormatCoursesForPdf(): array
+    {
+
+        $courses = [];
+        foreach($this->selectedCourses AS $selected) {
+            $courses += $selected;
+        }
+        $groupBySemester = [];
+        foreach($courses AS $key => $value) {
+            $groupBySemester[Semester::find($value)['long_name']][] = Course::find($key)->toArray();
+        }
+        return $groupBySemester;
+    }
+
+    public function getCoursesCount() {
+        $count = 0;
+        foreach ($this->selectedCourses AS $key => $value ) {
+            $group = CourseGroup::find($key);
+            $count +=  $this->{lcfirst($group->type->name)."SelectedCount"};
+        }
+        return $count;
     }
 
     protected function init(): self
@@ -163,7 +198,7 @@ class ModuleSelectionForm extends Component
         $this->semesterId = array_key_first($this->semesters);
         $this->studyModeId = array_key_first($this->studyModes);
         $this->nextSemesters = ($this->getUpcomingSemestersService)(
-            $this->studyModeId === StudyMode::FullTime->value ? 2 : 4 , 
+            $this->studyModeId === StudyMode::FullTime->value ? 2 : 4 ,
             Semester::find($this->semesterId)->start_date)
         ->toArray();
 
@@ -193,9 +228,12 @@ class ModuleSelectionForm extends Component
         return $groups;
     }
 
-    public function submit(): void
+    public function submit(): Redirector
     {
         $this->getModuleCounts();
-        $this->validate();
+        //$this->validate();
+        $this->getPdfData();
+        return redirect()->route('home.pdf', $this->pdfData);
     }
+
 }
