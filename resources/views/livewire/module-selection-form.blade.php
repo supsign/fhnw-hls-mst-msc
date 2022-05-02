@@ -27,6 +27,7 @@
                 :semesterId="(int)$semesterId"
                 :studyModeId="$studyModeId"
                 :specializationId="$specializationId"
+                :overwrite-start-of-thesis="$masterThesis['start']['id'] ?? 0 "
             />
             <x-optional-english 
                 :nextSemesters="$nextSemesters"

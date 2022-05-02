@@ -6,6 +6,7 @@ use App\Enums\StudyMode;
 use App\Models\Course;
 use App\Models\CourseGroup;
 use App\Models\Semester;
+use App\Models\Thesis;
 use App\Services\Semesters\GetUpcomingSemestersService;
 use App\Helpers\GeneralHelper;
 use App\Models\PageContent;
@@ -28,7 +29,6 @@ class ModuleSelectionForm extends Component
     public array $studyModes;
 
     public bool $doubleDegree = false;
-    public $masterThesis;
 
     public int $ects = 0;
     public ?int $specializationId = null;
@@ -39,6 +39,7 @@ class ModuleSelectionForm extends Component
 
     public ?string $surname = null;
     public ?string $givenName = null;
+    public array $masterThesis = [];
 
     public int $specializationSelectedCount = 0;
     public int $specializationRequiredCount = 0;
@@ -51,7 +52,8 @@ class ModuleSelectionForm extends Component
     protected GetUpcomingSemestersService $getUpcomingSemestersService;
 
     protected $listeners = [
-        'courseSelected'
+        'courseSelected',
+        'updateMasterThesis'
     ];
     protected array $messages = [
         'ects.min' => 'You have selected modules worth fewer than 50 ECTS.',
@@ -81,9 +83,11 @@ class ModuleSelectionForm extends Component
         $this->getEcts();
     }
 
+
     public function mount(): void
     {
         $this->init();
+        $this->broadSubjectArea = Thesis::where('specialization_id', $this->specializationId)->get()->toArray();
     }
 
     public function render(): View
@@ -113,6 +117,12 @@ class ModuleSelectionForm extends Component
         $this->getCourseSelectDataService = App::make(GetCourseSelectDataService::class);
         $specialization = Specialization::find($this->specializationId);
         $this->coursesByCourseGroup = ($this->getCourseSelectDataService)($specialization);
+    }
+
+    public function updateMasterThesis(array $start, array $theses) {
+
+        $this->masterThesis['start'] = $start ?? null;
+        $this->masterThesis['theses'] = $theses  ?? null;
     }
 
     protected function getEcts(): self
@@ -165,6 +175,9 @@ class ModuleSelectionForm extends Component
         $this->pdfData['semesters'] = $this->getFormatCoursesForPdf();
         $this->pdfData['specialization_count'] = $this->getCoursesCount();
         $this->pdfData['ects'] = $this->ects;
+        $this->pdfData['start'] = $this->masterThesis['start'];
+        $this->pdfData['theses'] = $this->masterThesis['theses'];
+
         // dd($this->getFormatCoursesForPdf());
     }
 

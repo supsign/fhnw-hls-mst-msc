@@ -16,6 +16,8 @@ class MasterThesis extends Component
     public array $startOfThesis;
     public array $theses;
 
+    public array $masterThesis;
+
     public bool $doubleDegree;
 
     public int $overwriteStartOfThesis = 0;
@@ -33,8 +35,7 @@ class MasterThesis extends Component
     public function mount(): void
     {
         $this->theses = Thesis::where('specialization_id', $this->specializationId)->get()->toArray();
-
-        $this->getStartOfThesis();  
+        $this->getStartOfThesis();
     }
 
     public function render(): View
@@ -45,6 +46,7 @@ class MasterThesis extends Component
     public function updated(): void
     {
         $this->getStartOfThesis();
+        $this->emit('updateMasterThesis', $this->startOfThesis, $this->theses);
     }
 
     protected function getStartOfThesis(): self
@@ -61,7 +63,7 @@ class MasterThesis extends Component
         )->last();
 
         $this->availibleStarts = ($this->getUpcomingSemestersService)(4, $startOfThesis->start_date)->toArray();
-        $this->startOfThesis = $this->overwriteStartOfThesis 
+        $this->startOfThesis = $this->overwriteStartOfThesis
             ? Semester::find($this->overwriteStartOfThesis)->toArray()
             : $startOfThesis->toArray();        
 
