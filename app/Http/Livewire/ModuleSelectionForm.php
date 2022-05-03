@@ -9,6 +9,7 @@ use App\Models\Semester;
 use App\Models\Thesis;
 use App\Services\Semesters\GetUpcomingSemestersService;
 use App\Helpers\GeneralHelper;
+use App\Models\CourseCourseGroup;
 use App\Models\PageContent;
 use App\Models\Specialization;
 use App\Services\Courses\GetCourseSelectDataService;
@@ -40,6 +41,7 @@ class ModuleSelectionForm extends Component
     public ?string $surname = null;
     public ?string $givenName = null;
     public array $masterThesis = [];
+    public array $statistics = [];
 
     public int $specializationSelectedCount = 0;
     public int $specializationRequiredCount = 0;
@@ -60,7 +62,8 @@ class ModuleSelectionForm extends Component
         'specializationSelectedCount.min' => 'You have not selected enough modules in :attribute. Please correct.',
         'electiveSelectedCount.min' => 'You have not selected enough modules in :attribute. Please correct.',
         'coreCompetencesSelectedCount.min' => 'You have not selected enough modules in :attribute. Please correct.',
-        'masterThesis.theses.required' => 'Please select a broad topic for your MSc Thesis.'
+        'masterThesis.theses.required' => 'Please select a broad topic for your MSc Thesis.',
+        'statistics.cluster_specific_count.min' => 'You need to select at least three cluster-specific modules. Please correct.'
 
     ];
     protected array $pageContents = [
@@ -162,11 +165,12 @@ class ModuleSelectionForm extends Component
         if(count($this->selectedCourses) === 0) {
             return null;
         }
-        foreach ($this->selectedCourses['main'] AS $key => $value) {
-            $group = CourseGroup::find($key);
-            $this->{lcfirst($group->type->name).'SelectedCount'} = count($value);
+        if(isset($this->selectedCourses['main'])) {
+            foreach($this->selectedCourses['main'] AS $key => $value) {
+                $group = CourseGroup::find($key);
+                $this->{lcfirst($group->type->name).'SelectedCount'} = count($value);
+            }
         }
-
         return $this;
     }
 
@@ -207,8 +211,9 @@ class ModuleSelectionForm extends Component
         $this->pdfData['ects'] = $this->ects;
         $this->pdfData['start_thesis'] = $this->masterThesis['start'];
         $this->pdfData['broad_subject_area'] = $this->getBroadSubjectArea();
+        $this->pdfData['counts'] = $this->getCoursesCountByCourseGroup();
 
-        //dd($this->getBroadSubjectArea());
+        //dd($this->pdfData['counts'] );
     }
 
     protected function getFormatCoursesForPdf(): array
@@ -240,6 +245,21 @@ class ModuleSelectionForm extends Component
         return $count;
     }
 
+    public function getCoursesCountByCourseGroup()
+    {
+        $courseIds = [];
+
+        foreach (collect($this->selectedCourses)->flatten(1)->toArray() AS $courses) {
+            $courseIds = array_merge($courseIds, array_keys($courses));
+        }
+
+        return [
+            'specialization_count' => Course::whereIn('id', $courseIds)->whereNotNull('specialization_id')->count(),
+            'cluster_specific_count' => Course::whereIn('id', $courseIds)->whereNotNull('cluster_id')->count(),
+            'core_compentences_count' => CourseCourseGroup::whereIn('course_id', $courseIds)->where('course_group_id', 4)->count(),
+        ];
+    }
+
     protected function init(): self
     {
         $this->semesterId = array_key_first($this->semesters);
@@ -257,7 +277,8 @@ class ModuleSelectionForm extends Component
             'specializationSelectedCount' => ['integer', 'min:'.$this->specializationRequiredCount],
             'electiveSelectedCount' => ['integer', 'min:'.$this->electiveRequiredCount],
             'coreCompetencesSelectedCount' => ['integer', 'min:'.$this->coreCompetencesRequiredCount],
-            'masterThesis.theses' => 'required'
+            'masterThesis.theses' => 'required',
+            'statistics.cluster_specific_count' => 'integer|min:3'
         ];
     }
 
@@ -275,6 +296,7 @@ class ModuleSelectionForm extends Component
     public function submit(): Redirector
     {
         $this->getModuleCounts();
+        $this->statistics = $this->getCoursesCountByCourseGroup();
         $this->validate();
         $this->getPdfData();
 
