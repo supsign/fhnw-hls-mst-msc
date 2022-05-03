@@ -1,6 +1,7 @@
 <div class="flex flex-col gap-10 mt-10">
     @foreach($this->coursesByCourseGroup AS $courseGroup)
         <livewire:course-group
+            :description="$courseGroup['id'] === 4 ? $coreCompetencesDescription : null"
             :courseGroup="$courseGroup"
             :nextSemesters="$nextSemesters"
             :selectedCourses="$selectedCourses['main'][$courseGroup['id']] ?? []"
