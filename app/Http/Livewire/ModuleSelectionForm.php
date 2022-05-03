@@ -78,11 +78,15 @@ class ModuleSelectionForm extends Component
         if ($semesterId !== 'none') {
             $this->selectedCourses[$type][$courseGroupId][$courseId] = $semesterId;
         } else {
-            foreach ($this->selectedCourses AS $key => $value) {
-                unset($this->selectedCourses[$key][$courseId]);
+            foreach ($this->selectedCourses[$type] AS $key => $value) {
+                unset($this->selectedCourses[$type][$key][$courseId]);
 
-                if (empty($this->selectedCourses[$key])) {
-                    unset($this->selectedCourses[$key]);
+                if (empty($this->selectedCourses[$type][$key])) {
+                    unset($this->selectedCourses[$type][$key]);
+                }
+
+                if (empty($this->selectedCourses[$type])) {
+                    unset($this->selectedCourses[$type]);
                 }
             }
         }
