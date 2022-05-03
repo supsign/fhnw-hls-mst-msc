@@ -9,6 +9,7 @@ use App\Models\Semester;
 use App\Models\Thesis;
 use App\Services\Semesters\GetUpcomingSemestersService;
 use App\Helpers\GeneralHelper;
+use App\Models\CourseCourseGroup;
 use App\Models\PageContent;
 use App\Models\Specialization;
 use App\Services\Courses\GetCourseSelectDataService;
@@ -198,8 +199,9 @@ class ModuleSelectionForm extends Component
         $this->pdfData['ects'] = $this->ects;
         $this->pdfData['start_thesis'] = $this->masterThesis['start'];
         $this->pdfData['broad_subject_area'] = $this->getBroadSubjectArea();
+        $this->pdfData['counts'] = $this->getCoursesCountByCourseGroup();
 
-        //dd($this->getBroadSubjectArea());
+        //dd($this->pdfData['counts'] );
     }
 
     protected function getFormatCoursesForPdf(): array
@@ -229,6 +231,21 @@ class ModuleSelectionForm extends Component
         }
 
         return $count;
+    }
+
+    public function getCoursesCountByCourseGroup()
+    {
+        $courseIds = [];
+
+        foreach (collect($this->selectedCourses)->flatten(1)->toArray() AS $courses) {
+            $courseIds = array_merge($courseIds, array_keys($courses));
+        }
+
+        return [
+            'specialization_count' => Course::whereIn('id', $courseIds)->whereNotNull('specialization_id')->count(),
+            'cluster_specific_count' => Course::whereIn('id', $courseIds)->whereNotNull('cluster_id')->count(),
+            'core_compentences_count' => CourseCourseGroup::whereIn('course_id', $courseIds)->where('course_group_id', 4)->count(),
+        ];
     }
 
     protected function init(): self

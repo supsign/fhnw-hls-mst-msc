@@ -7,7 +7,9 @@
 </head>
 <body>
 <div>
-    <div class="text-2xl">Your Study Plan MSc in Life Sciences FHWN</div>
+    <div>
+        <div class="text-2xl float-left mr-10">Your Study Plan MSc in Life Sciences FHWN</div><img class="h-8" src="{{ asset('img/logos/fhnw-logo-klein.png') }}" alt="Logo FHNW">
+    </div>
     <br />
     <div>{{$data['givenName']}} {{$data['surname']}}</div>
     <div>Specialization: {{$data['specialization']}}</div>
@@ -35,8 +37,7 @@
     <br />
     <div>
         <div>Master Thesis planned for {{date('d.m.Y', strtotime($data['start_thesis']['start_date']))}} to EndDate</div>
-        <br />
-        <div>Broad Subject Area</div>
+        <div>   Broad Subject Area</div>
         <ul class="list-disc list-inside">
         @foreach($data['broad_subject_area'] AS $value)
             <li>{{$value['name']}}</li>
@@ -47,9 +48,9 @@
     </div>
     <div>
         <div>Summary Statistics</div>
-        <div>{{$data['specialization_count']}} of Specialization Modules</div>
-        <div># of Cluster-specific Modules</div>
-        <div># Core Competence Modules</div>
+        <div>{{$data['counts']['specialization_count']}} of Specialization Modules</div>
+        <div>{{$data['counts']['cluster_specific_count']}} of Cluster-specific Modules</div>
+        <div>{{$data['counts']['core_compentences_count']}} Core Competence Modules</div>
         <div>{{$data['ects']}} Total number of ECTS</div>
     </div>
     <br />
