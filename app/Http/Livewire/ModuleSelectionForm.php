@@ -99,21 +99,20 @@ class ModuleSelectionForm extends Component
         return view('livewire.module-selection-form');
     }
 
-    public function updating(): void
+    public function updating($name): void
     {
-        $this->ects = 0;
-        $this->selectedCourses = [];
+        if (!in_array($name, ['givenName', 'surname'])) {
+            $this->ects = 0;
+            $this->selectedCourses = [];
+        }
     }
 
     public function updated(): void
     {
         if ($this->specializationId > 0) {
-            $this->specializationPlaceholder = null;
-        }
-
-        if ($this->specializationId > 0) {
             $this->getCoursesByCourseGroup();
             $this->getRequiredCounts();
+            $this->getNextSemesters();
         }
     }
 
@@ -167,6 +166,16 @@ class ModuleSelectionForm extends Component
             $group = CourseGroup::find($key);
             $this->{lcfirst($group->type->name).'SelectedCount'} = count($value);
         }
+
+        return $this;
+    }
+
+    protected function getNextSemesters(): self
+    {
+        $this->nextSemesters = App::make(GetUpcomingSemestersService::class)(
+            $this->studyModeId === StudyMode::FullTime->value ? 2 : 4 ,
+            Semester::find($this->semesterId)->start_date
+        )->toArray();
 
         return $this;
     }
@@ -233,16 +242,10 @@ class ModuleSelectionForm extends Component
 
     protected function init(): self
     {
-        $this->getUpcomingSemestersService = App::make(GetUpcomingSemestersService::class);
-
         $this->semesterId = array_key_first($this->semesters);
         $this->studyModeId = array_key_first($this->studyModes);
-        $this->nextSemesters = ($this->getUpcomingSemestersService)(
-            $this->studyModeId === StudyMode::FullTime->value ? 2 : 4 ,
-            Semester::find($this->semesterId)->start_date
-        )->toArray();
 
-        return $this;
+        return $this->getNextSemesters();
     }
 
     protected function rules(): array
@@ -274,6 +277,7 @@ class ModuleSelectionForm extends Component
         $this->getModuleCounts();
         $this->validate();
         $this->getPdfData();
+
         return redirect()->route('home.pdf', $this->pdfData);
     }
 
