@@ -101,17 +101,18 @@ class ModuleSelectionForm extends Component
 
     public function updated(): void
     {
-        if($this->specializationId > 0) {
+        if ($this->specializationId > 0) {
             $this->specializationPlaceholder = null;
         }
 
-        if($this->specializationId > 0) {
+        if ($this->specializationId > 0) {
             $this->getCoursesByCourseGroup();
             $this->getRequiredCounts();
         }
     }
-    protected function getCoursesByCourseGroup() {
 
+    protected function getCoursesByCourseGroup(): void
+    {
         $this->getCourseSelectDataService = App::make(GetCourseSelectDataService::class);
         $specialization = Specialization::find($this->specializationId);
         $this->coursesByCourseGroup = ($this->getCourseSelectDataService)($specialization);
@@ -155,7 +156,7 @@ class ModuleSelectionForm extends Component
         return $this;
     }
 
-    protected function getRequiredCounts()
+    protected function getRequiredCounts(): void
     {
         foreach ($this->coursesByCourseGroup AS $courseGroup) {
             $group = CourseGroup::find($courseGroup['id']);
@@ -163,7 +164,8 @@ class ModuleSelectionForm extends Component
         }
     }
 
-    public function getPdfData() {
+    protected function getPdfData(): void
+    {
         $this->pdfData['givenName'] = $this->givenName;
         $this->pdfData['surname'] = $this->surname;
         $this->pdfData['specialization'] = Specialization::find($this->specializationId)['name'];
@@ -173,9 +175,8 @@ class ModuleSelectionForm extends Component
         // dd($this->getFormatCoursesForPdf());
     }
 
-    public function getFormatCoursesForPdf(): array
+    protected function getFormatCoursesForPdf(): array
     {
-
         $courses = [];
         foreach($this->selectedCourses AS $selected) {
             $courses += $selected;
@@ -187,7 +188,8 @@ class ModuleSelectionForm extends Component
         return $groupBySemester;
     }
 
-    public function getCoursesCount() {
+    protected function getCoursesCount(): int
+    {
         $count = 0;
 
         foreach ($this->selectedCourses AS $key => $value) {
