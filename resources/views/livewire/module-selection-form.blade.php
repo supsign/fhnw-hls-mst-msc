@@ -32,6 +32,7 @@
             />
             <x-optional-english 
                 :nextSemesters="$nextSemesters"
+                :selectedCourses="$selectedCourses['main'] ?? []"
             />
             <x-additional-comments />
             <input type="submit" name="submit" value="Submit" class="button-primary"/>
