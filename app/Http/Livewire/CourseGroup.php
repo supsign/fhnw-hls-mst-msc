@@ -22,10 +22,9 @@ class CourseGroup extends Component
     {
         if (!$this->further) {
             $this->getTitle();
-            $this->getSortCourses();
-        } else {
-            $this->courses = $this->courseGroup['courses'];
         }
+
+        $this->getSortCourses();
     }
 
     public function render()

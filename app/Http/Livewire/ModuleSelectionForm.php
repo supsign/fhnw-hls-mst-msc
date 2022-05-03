@@ -66,10 +66,12 @@ class ModuleSelectionForm extends Component
         'modules_outside_description'
     ];
 
-    public function courseSelected(int $courseGroupId, int $courseId, int|string $semesterId): void
+    public function courseSelected(int $courseGroupId, int $courseId, int|string $semesterId, bool $further): void
     {
+        $type = $further ? 'further' : 'main';
+
         if ($semesterId !== 'none') {
-            $this->selectedCourses[$courseGroupId][$courseId] = $semesterId;
+            $this->selectedCourses[$type][$courseGroupId][$courseId] = $semesterId;
         } else {
             foreach ($this->selectedCourses AS $key => $value) {
                 unset($this->selectedCourses[$key][$courseId]);
@@ -103,17 +105,18 @@ class ModuleSelectionForm extends Component
 
     public function updated(): void
     {
-        if($this->specializationId > 0) {
+        if ($this->specializationId > 0) {
             $this->specializationPlaceholder = null;
         }
 
-        if($this->specializationId > 0) {
+        if ($this->specializationId > 0) {
             $this->getCoursesByCourseGroup();
             $this->getRequiredCounts();
         }
     }
-    protected function getCoursesByCourseGroup() {
 
+    protected function getCoursesByCourseGroup(): void
+    {
         $this->getCourseSelectDataService = App::make(GetCourseSelectDataService::class);
         $specialization = Specialization::find($this->specializationId);
         $this->coursesByCourseGroup = ($this->getCourseSelectDataService)($specialization);
@@ -133,8 +136,10 @@ class ModuleSelectionForm extends Component
             return $this;
         }
 
-        foreach (Course::find(array_keys(array_replace_recursive(...$this->selectedCourses))) AS $course) {
-            $this->ects += $course->ects;
+        foreach ($this->selectedCourses AS $type) {
+            foreach (Course::find(array_keys(array_replace_recursive(...$type))) AS $course) {
+                $this->ects += $course->ects;
+            }
         }
 
         return $this;
@@ -150,21 +155,22 @@ class ModuleSelectionForm extends Component
 
         return $this;
     }
+
     protected function getModuleCounts(): self
     {
-        foreach ($this->selectedCourses AS $key => $value ) {
+        foreach ($this->selectedCourses['main'] AS $key => $value) {
             $group = CourseGroup::find($key);
-            $this->{lcfirst($group->type->name)."SelectedCount"} = count($value);
+            $this->{lcfirst($group->type->name).'SelectedCount'} = count($value);
         }
 
         return $this;
     }
 
-    protected function getRequiredCounts()
+    protected function getRequiredCounts(): void
     {
         foreach ($this->coursesByCourseGroup AS $courseGroup) {
             $group = CourseGroup::find($courseGroup['id']);
-            $this->{lcfirst($group->type->name) . "RequiredCount"} = $group->required_courses_count;
+            $this->{lcfirst($group->type->name).'RequiredCount'} = $group->required_courses_count;
         }
     }
 
@@ -177,7 +183,8 @@ class ModuleSelectionForm extends Component
         return $broadSubjectArea;
     }
 
-    public function getPdfData() {
+    protected function getPdfData(): void
+    {
         $this->pdfData['givenName'] = $this->givenName;
         $this->pdfData['surname'] = $this->surname;
         $this->pdfData['specialization'] = Specialization::find($this->specializationId)['name'];
@@ -190,9 +197,8 @@ class ModuleSelectionForm extends Component
         //dd($this->getBroadSubjectArea());
     }
 
-    public function getFormatCoursesForPdf(): array
+    protected function getFormatCoursesForPdf(): array
     {
-
         $courses = [];
         foreach($this->selectedCourses AS $selected) {
             $courses += $selected;
@@ -204,12 +210,17 @@ class ModuleSelectionForm extends Component
         return $groupBySemester;
     }
 
-    public function getCoursesCount() {
+    protected function getCoursesCount(): int
+    {
         $count = 0;
-        foreach ($this->selectedCourses AS $key => $value ) {
+
+        foreach ($this->selectedCourses AS $key => $value) {
+            dump($key);
+
             $group = CourseGroup::find($key);
-            $count +=  $this->{lcfirst($group->type->name)."SelectedCount"};
+            $count +=  $this->{lcfirst($group->type->name).'SelectedCount'};
         }
+
         return $count;
     }
 
@@ -221,8 +232,8 @@ class ModuleSelectionForm extends Component
         $this->studyModeId = array_key_first($this->studyModes);
         $this->nextSemesters = ($this->getUpcomingSemestersService)(
             $this->studyModeId === StudyMode::FullTime->value ? 2 : 4 ,
-            Semester::find($this->semesterId)->start_date)
-        ->toArray();
+            Semester::find($this->semesterId)->start_date
+        )->toArray();
 
         return $this;
     }
