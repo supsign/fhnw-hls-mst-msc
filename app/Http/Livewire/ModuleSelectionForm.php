@@ -160,17 +160,13 @@ class ModuleSelectionForm extends Component
         return $this;
     }
 
-    protected function getModuleCounts(): self |null
+    protected function getModuleCounts(): self
     {
-        if(count($this->selectedCourses) === 0) {
-            return null;
+        foreach ($this->selectedCourses['main'] ?? [] AS $key => $value) {
+            $group = CourseGroup::find($key);
+            $this->{lcfirst($group->type->name).'SelectedCount'} = count($value);
         }
-        if(isset($this->selectedCourses['main'])) {
-            foreach($this->selectedCourses['main'] AS $key => $value) {
-                $group = CourseGroup::find($key);
-                $this->{lcfirst($group->type->name).'SelectedCount'} = count($value);
-            }
-        }
+
         return $this;
     }
 
@@ -192,52 +188,24 @@ class ModuleSelectionForm extends Component
         }
     }
 
-    protected function getBroadSubjectArea(): array
-    {
-        $broadSubjectArea = [];
-        foreach($this->masterThesis['theses'] AS $thesisId) {
-            $broadSubjectArea[] = Thesis::find($thesisId)->toArray();
-        }
-        return $broadSubjectArea;
-    }
-
     protected function getPdfData(): void
     {
         $this->pdfData['givenName'] = $this->givenName;
         $this->pdfData['surname'] = $this->surname;
-        $this->pdfData['specialization'] = Specialization::find($this->specializationId)['name'];
-        $this->pdfData['semesters'] = $this->getFormatCoursesForPdf();
+        $this->pdfData['specialization'] = $this->specializationId;
+        $this->pdfData['selected_courses'] = $this->selectedCourses;
         $this->pdfData['specialization_count'] = $this->getCoursesCount();
         $this->pdfData['ects'] = $this->ects;
-        $this->pdfData['start_thesis'] = $this->masterThesis['start'];
-        $this->pdfData['broad_subject_area'] = $this->getBroadSubjectArea();
+        $this->pdfData['thesis_start'] = $this->masterThesis['start']['id'];
+        $this->pdfData['thesis_subject'] = $this->masterThesis['theses'];
         $this->pdfData['counts'] = $this->getCoursesCountByCourseGroup();
-
-        //dd($this->pdfData['counts'] );
     }
 
-    protected function getFormatCoursesForPdf(): array
-    {
-        $courses = [];
-        foreach($this->selectedCourses AS $selected) {
-            $courses += $selected;
-        }
-        $groupBySemester = [];
-        foreach($courses AS $course) {
-            foreach($course AS $key => $value) {
-            $groupBySemester[Semester::find($value)['long_name']][] = Course::find($key)->toArray();
-        }
-        }
-        return $groupBySemester;
-    }
-
-    protected function getCoursesCount(): int |null
+    protected function getCoursesCount(): int
     {
         $count = 0;
-        if(count($this->selectedCourses) === 0) {
-            return null;
-        }
-        foreach ($this->selectedCourses['main'] AS $key => $value) {
+
+        foreach ($this->selectedCourses['main'] ?? [] AS $key => $value) {
             $group = CourseGroup::find($key);
             $count +=  $this->{lcfirst($group->type->name).'SelectedCount'};
         }
@@ -245,7 +213,7 @@ class ModuleSelectionForm extends Component
         return $count;
     }
 
-    public function getCoursesCountByCourseGroup()
+    protected function getCoursesCountByCourseGroup()
     {
         $courseIds = [];
 
@@ -254,9 +222,9 @@ class ModuleSelectionForm extends Component
         }
 
         return [
-            'specialization_count' => Course::whereIn('id', $courseIds)->whereNotNull('specialization_id')->count(),
-            'cluster_specific_count' => Course::whereIn('id', $courseIds)->whereNotNull('cluster_id')->count(),
-            'core_compentences_count' => CourseCourseGroup::whereIn('course_id', $courseIds)->where('course_group_id', 4)->count(),
+            'specialization' => Course::whereIn('id', $courseIds)->whereNotNull('specialization_id')->count(),
+            'cluster_specific' => Course::whereIn('id', $courseIds)->whereNotNull('cluster_id')->count(),
+            'core_compentences' => CourseCourseGroup::whereIn('course_id', $courseIds)->where('course_group_id', 4)->count(),
         ];
     }
 
@@ -278,7 +246,7 @@ class ModuleSelectionForm extends Component
             'electiveSelectedCount' => ['integer', 'min:'.$this->electiveRequiredCount],
             'coreCompetencesSelectedCount' => ['integer', 'min:'.$this->coreCompetencesRequiredCount],
             'masterThesis.theses' => 'required',
-            'statistics.cluster_specific_count' => 'integer|min:3'
+            'statistics.cluster_specific_count' => 'integer|min:3',
         ];
     }
 

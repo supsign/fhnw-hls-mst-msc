@@ -6,6 +6,7 @@ use App\Enums\StudyMode;
 use App\Http\Controllers\Controller;
 use App\Models\Specialization;
 use App\Services\PageContents\PageContentService;
+use App\Services\GetPdfDataService;
 use App\Services\Semesters\GetSemestersForSelectService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -27,11 +28,12 @@ class HomeController extends Controller
         ]);
     }
 
-    public function pdf(Request $request) 
+    public function pdf(Request $request, GetPdfDataService $getPdfDataService) 
     {
         $pdf = App::make('dompdf.wrapper');
         $pdf->getDomPDF()->set_option('enable_php', true);
-        $pdf->loadView('pdf', ['data' => $request->query->all()]);
+        $pdf->loadView('pdf', $getPdfDataService($request));
+
         return $pdf->stream();
     }
 }
