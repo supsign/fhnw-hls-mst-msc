@@ -21,7 +21,7 @@ class CourseSelection extends Component
     public int $semesterId;
     public int $specializationId;
     public int $studyModeId;
-
+    public int $ects;
     public ?string $coreCompetencesDescription = null;
     public ?string $descriptionBeforeFurther = null;
     public ?string $furtherClusterTitle = null;
