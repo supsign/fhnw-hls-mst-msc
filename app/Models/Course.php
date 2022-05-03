@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
@@ -15,6 +16,14 @@ class Course extends BaseModel
 	public function autumnSemesterSlot(): BelongsTo
 	{
 		return $this->belongsTo(Slot::class, 'as_slot_id');
+	}
+
+	public function selectedSemester(): Attribute
+	{
+		return Attribute::make(
+			get: fn () => $this->attributes['selected_semester'],
+			set: fn (Semester $semester) => $this->attributes['selected_semester'] = $semester,
+		);
 	}
 
 	public function semesters(): BelongsToMany

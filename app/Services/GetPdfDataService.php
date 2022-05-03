@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Semester;
 use App\Models\Specialization;
+use App\Models\Thesis;
 use Illuminate\Http\Request;
 
 class GetPdfDataService
@@ -19,21 +20,23 @@ class GetPdfDataService
         foreach ($request->all() AS $key => $value) {
             switch ($key) {
                 case 'specialization':
-                    $this->data[$key] = Specialization::find($value);
+                    $value = Specialization::find($value);
                     break;
 
                 case 'thesis_start':
-                    $this->data[$key] = Semester::find($value);
+                    $value = Semester::find($value);
+                    break;
+
+                case 'thesis_subject':
+                    $value = Thesis::find($value);
                     break;
 
                 case 'selected_courses':
-                    $this->data[$key] = $this->getSelectedCourses($value);
-                    break;
-
-                default:
-                    $this->data[$key] = $value;
+                    $value = $this->getSelectedCourses($value);
                     break;
             }
+
+            $this->data[$key] = $value;
         }
 
         return $this->data;
@@ -41,10 +44,8 @@ class GetPdfDataService
 
     protected function getSelectedCourses(array $selectedCourseData)
     {
-
         dump(
             $selectedCourseData
         );
-
     }
 }

@@ -220,9 +220,9 @@ class ModuleSelectionForm extends Component
         }
 
         return [
-            'specialization_count' => Course::whereIn('id', $courseIds)->whereNotNull('specialization_id')->count(),
-            'cluster_specific_count' => Course::whereIn('id', $courseIds)->whereNotNull('cluster_id')->count(),
-            'core_compentences_count' => CourseCourseGroup::whereIn('course_id', $courseIds)->where('course_group_id', 4)->count(),
+            'specialization' => Course::whereIn('id', $courseIds)->whereNotNull('specialization_id')->count(),
+            'cluster_specific' => Course::whereIn('id', $courseIds)->whereNotNull('cluster_id')->count(),
+            'core_compentences' => CourseCourseGroup::whereIn('course_id', $courseIds)->where('course_group_id', 4)->count(),
         ];
     }
 
