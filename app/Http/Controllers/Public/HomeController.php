@@ -30,7 +30,6 @@ class HomeController extends Controller
 
     public function pdf(Request $request, GetPdfDataService $getPdfDataService) 
     {
-
         dd(
             $getPdfDataService($request)
         );

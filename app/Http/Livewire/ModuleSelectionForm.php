@@ -188,51 +188,23 @@ class ModuleSelectionForm extends Component
         }
     }
 
-    protected function getBroadSubjectArea(): array
-    {
-        $broadSubjectArea = [];
-        foreach($this->masterThesis['theses'] AS $thesisId) {
-            $broadSubjectArea[] = Thesis::find($thesisId)->toArray();
-        }
-        return $broadSubjectArea;
-    }
-
     protected function getPdfData(): void
     {
         $this->pdfData['givenName'] = $this->givenName;
         $this->pdfData['surname'] = $this->surname;
-        $this->pdfData['specialization'] = Specialization::find($this->specializationId)['name'];
-        $this->pdfData['semesters'] = $this->getFormatCoursesForPdf();
+        $this->pdfData['specialization'] = $this->specializationId;
+        $this->pdfData['selected_courses'] = $this->selectedCourses;
         $this->pdfData['specialization_count'] = $this->getCoursesCount();
         $this->pdfData['ects'] = $this->ects;
-        $this->pdfData['start_thesis'] = $this->masterThesis['start'];
-        $this->pdfData['broad_subject_area'] = $this->getBroadSubjectArea();
-
-        //dd($this->getBroadSubjectArea());
+        $this->pdfData['thesis_start'] = $this->masterThesis['start']['id'];
+        $this->pdfData['thesis_subject'] = $this->masterThesis['theses'];
     }
 
-    protected function getFormatCoursesForPdf(): array
-    {
-        $courses = [];
-        foreach($this->selectedCourses AS $selected) {
-            $courses += $selected;
-        }
-        $groupBySemester = [];
-        foreach($courses AS $course) {
-            foreach($course AS $key => $value) {
-            $groupBySemester[Semester::find($value)['long_name']][] = Course::find($key)->toArray();
-        }
-        }
-        return $groupBySemester;
-    }
-
-    protected function getCoursesCount(): int |null
+    protected function getCoursesCount(): int
     {
         $count = 0;
-        if(count($this->selectedCourses) === 0) {
-            return null;
-        }
-        foreach ($this->selectedCourses['main'] AS $key => $value) {
+
+        foreach ($this->selectedCourses['main'] ?? [] AS $key => $value) {
             $group = CourseGroup::find($key);
             $count +=  $this->{lcfirst($group->type->name).'SelectedCount'};
         }
@@ -275,7 +247,7 @@ class ModuleSelectionForm extends Component
     public function submit(): Redirector
     {
         $this->getModuleCounts();
-        $this->validate();
+        // $this->validate();
         $this->getPdfData();
 
         return redirect()->route('home.pdf', $this->pdfData);
