@@ -60,6 +60,8 @@ class ModuleSelectionForm extends Component
         'specializationSelectedCount.min' => 'You have not selected enough modules in :attribute. Please correct.',
         'electiveSelectedCount.min' => 'You have not selected enough modules in :attribute. Please correct.',
         'coreCompetencesSelectedCount.min' => 'You have not selected enough modules in :attribute. Please correct.',
+        'masterThesis.theses.required' => 'Please select a broad topic for your MSc Thesis.'
+
     ];
     protected array $pageContents = [
         'modules_outside_title',
@@ -156,8 +158,11 @@ class ModuleSelectionForm extends Component
         return $this;
     }
 
-    protected function getModuleCounts(): self
+    protected function getModuleCounts(): self |null
     {
+        if(count($this->selectedCourses) === 0) {
+            return null;
+        }
         foreach ($this->selectedCourses['main'] AS $key => $value) {
             $group = CourseGroup::find($key);
             $this->{lcfirst($group->type->name).'SelectedCount'} = count($value);
@@ -212,10 +217,12 @@ class ModuleSelectionForm extends Component
         return $groupBySemester;
     }
 
-    protected function getCoursesCount(): int
+    protected function getCoursesCount(): int |null
     {
         $count = 0;
-
+        if(count($this->selectedCourses) === 0) {
+            return null;
+        }
         foreach ($this->selectedCourses['main'] AS $key => $value) {
             $group = CourseGroup::find($key);
             $count +=  $this->{lcfirst($group->type->name).'SelectedCount'};
@@ -247,6 +254,7 @@ class ModuleSelectionForm extends Component
             'specializationSelectedCount' => ['integer', 'min:'.$this->specializationRequiredCount],
             'electiveSelectedCount' => ['integer', 'min:'.$this->electiveRequiredCount],
             'coreCompetencesSelectedCount' => ['integer', 'min:'.$this->coreCompetencesRequiredCount],
+            'masterThesis.theses' => 'required'
         ];
     }
 
@@ -264,7 +272,7 @@ class ModuleSelectionForm extends Component
     public function submit(): Redirector
     {
         $this->getModuleCounts();
-        //$this->validate();
+        $this->validate();
         $this->getPdfData();
         return redirect()->route('home.pdf', $this->pdfData);
     }
