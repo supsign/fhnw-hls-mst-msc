@@ -158,7 +158,7 @@ class ModuleSelectionForm extends Component
 
     protected function getModuleCounts(): self
     {
-        foreach ($this->selectedCourses['main'] AS $key => $value) {
+        foreach ($this->selectedCourses['main'] ?? [] AS $key => $value) {
             $group = CourseGroup::find($key);
             $this->{lcfirst($group->type->name).'SelectedCount'} = count($value);
         }
