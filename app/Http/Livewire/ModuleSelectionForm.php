@@ -204,8 +204,10 @@ class ModuleSelectionForm extends Component
             $courses += $selected;
         }
         $groupBySemester = [];
-        foreach($courses AS $key => $value) {
+        foreach($courses AS $course) {
+            foreach($course AS $key => $value) {
             $groupBySemester[Semester::find($value)['long_name']][] = Course::find($key)->toArray();
+        }
         }
         return $groupBySemester;
     }
@@ -214,9 +216,7 @@ class ModuleSelectionForm extends Component
     {
         $count = 0;
 
-        foreach ($this->selectedCourses AS $key => $value) {
-            dump($key);
-
+        foreach ($this->selectedCourses['main'] AS $key => $value) {
             $group = CourseGroup::find($key);
             $count +=  $this->{lcfirst($group->type->name).'SelectedCount'};
         }
