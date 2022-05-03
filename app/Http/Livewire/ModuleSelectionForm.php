@@ -168,6 +168,15 @@ class ModuleSelectionForm extends Component
         }
     }
 
+    protected function getBroadSubjectArea(): array
+    {
+        $broadSubjectArea = [];
+        foreach($this->masterThesis['theses'] AS $thesisId) {
+            $broadSubjectArea[] = Thesis::find($thesisId)->toArray();
+        }
+        return $broadSubjectArea;
+    }
+
     public function getPdfData() {
         $this->pdfData['givenName'] = $this->givenName;
         $this->pdfData['surname'] = $this->surname;
@@ -175,10 +184,10 @@ class ModuleSelectionForm extends Component
         $this->pdfData['semesters'] = $this->getFormatCoursesForPdf();
         $this->pdfData['specialization_count'] = $this->getCoursesCount();
         $this->pdfData['ects'] = $this->ects;
-        $this->pdfData['start'] = $this->masterThesis['start'];
-        $this->pdfData['theses'] = $this->masterThesis['theses'];
+        $this->pdfData['start_thesis'] = $this->masterThesis['start'];
+        $this->pdfData['broad_subject_area'] = $this->getBroadSubjectArea();
 
-        // dd($this->getFormatCoursesForPdf());
+        //dd($this->getBroadSubjectArea());
     }
 
     public function getFormatCoursesForPdf(): array

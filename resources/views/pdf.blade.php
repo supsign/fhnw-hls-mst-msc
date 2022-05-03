@@ -7,12 +7,14 @@
 </head>
 <body>
 <div>
-    <div class="2xl">Your Study Plan MSc in Life Sciences FHWN</div>
+    <div class="text-2xl">Your Study Plan MSc in Life Sciences FHWN</div>
+    <br />
     <div>{{$data['givenName']}} {{$data['surname']}}</div>
     <div>Specialization: {{$data['specialization']}}</div>
+    <br />
     <div>
         @foreach($data['semesters'] AS $key => $value)
-            <div>{{$key}}</div>
+            <div class="text-lg mb-1"><b>{{$key}}</b></div>
                 <table class='border'>
                     <tr class='border-b p-1'>
                         <th class='border-r p-1'>Module Title</th>
@@ -27,11 +29,20 @@
                     </tr>
                     @endforeach
                 </table>
+        <br />
         @endforeach
     </div>
+    <br />
     <div>
-        <div>Master Thesis planned for StartDate to EndDate</div>
-        <div>BroadSubjectArea</div>
+        <div>Master Thesis planned for {{date('d.m.Y', strtotime($data['start_thesis']['start_date']))}} to EndDate</div>
+        <br />
+        <div>Broad Subject Area</div>
+        <ul class="list-disc list-inside">
+        @foreach($data['broad_subject_area'] AS $value)
+            <li>{{$value['name']}}</li>
+        @endforeach
+        </ul>
+        <br />
         <div>FurtherDetailsOnMscTopic</div>
     </div>
     <div>
@@ -41,8 +52,20 @@
         <div># Core Competence Modules</div>
         <div>{{$data['ects']}} Total number of ECTS</div>
     </div>
+    <br />
     <div>Please note that the module offer and the timing of the modules may change in the future.</div>
-    <div><div>Agreed, Date</div><div>Signature Student</div><div>Signature Director of Study Programme</div></div>
+    <br />
+    <div >
+        <div class="float-left mr-5">
+            <div>Agreed, Date</div><div>___________</div>
+        </div>
+        <div class="float-left mr-5">
+            <div>Signature Student</div><div>___________</div>
+        </div>
+        <div class="float-left mr-5">
+            <div>Signature Director of Study Programme</div><div>___________</div>
+        </div>
+    </div>
 </div>
 </body>
 </html>

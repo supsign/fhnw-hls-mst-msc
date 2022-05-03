@@ -15,6 +15,7 @@ class MasterThesis extends Component
     public array $availibleStarts;
     public array $startOfThesis;
     public array $theses;
+    public array $selectedTheses = [];
 
     public array $masterThesis;
 
@@ -46,7 +47,7 @@ class MasterThesis extends Component
     public function updated(): void
     {
         $this->getStartOfThesis();
-        $this->emit('updateMasterThesis', $this->startOfThesis, $this->theses);
+        $this->emit('updateMasterThesis', $this->startOfThesis, $this->selectedTheses);
     }
 
     protected function getStartOfThesis(): self
