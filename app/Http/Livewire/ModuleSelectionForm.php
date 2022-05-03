@@ -194,8 +194,9 @@ class ModuleSelectionForm extends Component
         $this->pdfData['ects'] = $this->ects;
         $this->pdfData['start_thesis'] = $this->masterThesis['start'];
         $this->pdfData['broad_subject_area'] = $this->getBroadSubjectArea();
+        $this->pdfData['counts'] = $this->getCoursesCountByCourseGroup();
 
-        //dd($this->getBroadSubjectArea());
+        //dd($this->pdfData['counts'] );
     }
 
     protected function getFormatCoursesForPdf(): array
