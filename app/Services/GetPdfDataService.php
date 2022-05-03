@@ -45,8 +45,6 @@ class GetPdfDataService
         $semesters = Semester::find(collect($selectedCourseData)->flatten(2)->unique());
         $coursesGrouped = collect($selectedCourseData)->flatten(1);
 
-        dd($selectedCourseData['main']);
-
         foreach ($semesters AS $semester) {
             foreach ($coursesGrouped AS $courseGroup) {
                 foreach ($courseGroup AS $courseId => $semesterId) {
