@@ -12,10 +12,11 @@
     @endif
 
     <livewire:radio-group
+        :courseGroupId="$courseGroupId"
         :courseId="$course['id']" 
         :courseName="$course['name']" 
+        :further="$further"
         :selectableSemesters="$selectableSemesters"
-        :courseGroupId="$courseGroupId"
         :selectedSemester="$further ? ($selectedCourses[$courseGroupId][$course['id']] ?? 'none') : ($selectedCourses[$course['id']] ?? 'none')"
     />
 </div>

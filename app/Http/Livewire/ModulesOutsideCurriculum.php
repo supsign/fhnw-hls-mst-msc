@@ -10,10 +10,11 @@ use Livewire\Component;
 class ModulesOutsideCurriculum extends Component
 {
 
-    public ?array $module  = [];
-    public ?string $moduleOutsideTitle = null;
-    public ?string $modulesOutsideDescription = null;
+    public array $module  = [];
     public array $outsideModules = [];
+
+    public ?string $moduleOutsideTitle;
+    public ?string $modulesOutsideDescription;
 
     protected array $pageContents = [
         'modules_outside_title',
@@ -35,12 +36,6 @@ class ModulesOutsideCurriculum extends Component
         }
 
         return $this;
-    }
-
-    function saveInput($index): void
-    {
-        $this->outsideModules[$index] = $this->module;
-        $this->module = [];
     }
 
     public function render(): View
