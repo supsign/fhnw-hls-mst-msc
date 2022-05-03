@@ -166,7 +166,7 @@ class ModuleSelectionForm extends Component
             $group = CourseGroup::find($key);
             $this->{lcfirst($group->type->name).'SelectedCount'} = count($value);
         }
-        
+
         return $this;
     }
 
@@ -246,7 +246,7 @@ class ModuleSelectionForm extends Component
             'electiveSelectedCount' => ['integer', 'min:'.$this->electiveRequiredCount],
             'coreCompetencesSelectedCount' => ['integer', 'min:'.$this->coreCompetencesRequiredCount],
             'masterThesis.theses' => 'required',
-            'statistics.cluster_specific_count' => 'integer|min:3'
+            'statistics.cluster_specific_count' => 'integer|min:3',
         ];
     }
 

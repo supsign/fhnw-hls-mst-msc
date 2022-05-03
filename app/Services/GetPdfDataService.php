@@ -2,10 +2,12 @@
 
 namespace App\Services;
 
+use App\Models\Course;
 use App\Models\Semester;
 use App\Models\Specialization;
 use App\Models\Thesis;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 
 class GetPdfDataService
 {
@@ -13,10 +15,6 @@ class GetPdfDataService
 
     public function __invoke(Request $request): array
     {
-        dump(
-            $request->all()
-        );
-
         foreach ($request->all() AS $key => $value) {
             switch ($key) {
                 case 'specialization':
@@ -42,10 +40,22 @@ class GetPdfDataService
         return $this->data;
     }
 
-    protected function getSelectedCourses(array $selectedCourseData)
+    protected function getSelectedCourses(array $selectedCourseData): Collection
     {
-        dump(
-            $selectedCourseData
-        );
+        $semesters = Semester::find(collect($selectedCourseData)->flatten(2)->unique());
+        $coursesGrouped = collect($selectedCourseData)->flatten(1);
+
+        foreach ($semesters AS $semester) {
+            foreach ($coursesGrouped AS $courseGroup) {
+                foreach ($courseGroup AS $courseId => $semesterId) {
+                    if ((int)$semesterId === $semester->id) {
+                        $semester->selectedCourses->push(Course::find($courseId));
+                    }
+                    // dump($key, $value);
+                }
+            }
+        }
+
+        return $semesters;
     }
 }
