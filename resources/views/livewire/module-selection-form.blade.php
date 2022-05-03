@@ -18,6 +18,7 @@
                 :specializationId="$specializationId"
                 :selectedCourses="$selectedCourses"
                 :coursesByCourseGroup="$coursesByCourseGroup"
+                :ects="$ects"
             />
             <livewire:modules-outside-curriculum />
             <x-double-degree wire:model="doubleDegree" />
