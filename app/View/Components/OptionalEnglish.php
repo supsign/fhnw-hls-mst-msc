@@ -20,6 +20,7 @@ class OptionalEnglish extends Component
 
     public function __construct(
         public array $nextSemesters,
+        public array $selectedCourses,
         protected PageContentService $pageContentService
     ) {
         foreach (($this->pageContentService)($this->pageContents) AS $key => $value) {
