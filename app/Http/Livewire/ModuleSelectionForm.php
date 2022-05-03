@@ -9,6 +9,7 @@ use App\Models\Semester;
 use App\Models\Thesis;
 use App\Services\Semesters\GetUpcomingSemestersService;
 use App\Helpers\GeneralHelper;
+use App\Models\CourseCourseGroup;
 use App\Models\PageContent;
 use App\Models\Specialization;
 use App\Services\Courses\GetCourseSelectDataService;
@@ -157,12 +158,9 @@ class ModuleSelectionForm extends Component
         return $this;
     }
 
-    protected function getModuleCounts(): self |null
+    protected function getModuleCounts(): self
     {
-        if(count($this->selectedCourses) === 0) {
-            return null;
-        }
-        foreach ($this->selectedCourses['main'] AS $key => $value) {
+        foreach ($this->selectedCourses['main'] ?? [] AS $key => $value) {
             $group = CourseGroup::find($key);
             $this->{lcfirst($group->type->name).'SelectedCount'} = count($value);
         }
@@ -198,6 +196,7 @@ class ModuleSelectionForm extends Component
         $this->pdfData['ects'] = $this->ects;
         $this->pdfData['thesis_start'] = $this->masterThesis['start']['id'];
         $this->pdfData['thesis_subject'] = $this->masterThesis['theses'];
+        $this->pdfData['counts'] = $this->getCoursesCountByCourseGroup();
     }
 
     protected function getCoursesCount(): int
@@ -210,6 +209,21 @@ class ModuleSelectionForm extends Component
         }
 
         return $count;
+    }
+
+    protected function getCoursesCountByCourseGroup()
+    {
+        $courseIds = [];
+
+        foreach (collect($this->selectedCourses)->flatten(1)->toArray() AS $courses) {
+            $courseIds = array_merge($courseIds, array_keys($courses));
+        }
+
+        return [
+            'specialization_count' => Course::whereIn('id', $courseIds)->whereNotNull('specialization_id')->count(),
+            'cluster_specific_count' => Course::whereIn('id', $courseIds)->whereNotNull('cluster_id')->count(),
+            'core_compentences_count' => CourseCourseGroup::whereIn('course_id', $courseIds)->where('course_group_id', 4)->count(),
+        ];
     }
 
     protected function init(): self
@@ -247,7 +261,7 @@ class ModuleSelectionForm extends Component
     public function submit(): Redirector
     {
         $this->getModuleCounts();
-        // $this->validate();
+        $this->validate();
         $this->getPdfData();
 
         return redirect()->route('home.pdf', $this->pdfData);
