@@ -16,7 +16,7 @@ class MasterThesis extends Component
     public array $startOfThesis;
     public array $theses;
     public array $selectedTheses = [];
-    public string $furtherDetails;
+    public ?string $furtherDetails = null;
 
     public array $masterThesis;
 
