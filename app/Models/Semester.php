@@ -28,6 +28,13 @@ class Semester extends BaseModel
 		return $this->belongsToMany(Course::class);
 	}
 
+	public function id(): Attribute
+	{
+		return Attribute::make(
+			set: fn () => !empty($this->attributes['id']) ? $this->attributes['id'] : 'later',
+		);
+	}
+
 	public function isAutumnSemester(): Attribute
 	{
 		return Attribute::make(
@@ -45,7 +52,8 @@ class Semester extends BaseModel
 	public function name(): Attribute
 	{
 		return Attribute::make(
-			get: fn () => $this->year.' '.$this->semesterTypeShortName
+			get: fn () => !empty($this->attributes['name']) ? $this->attributes['name'] : $this->year.' '.$this->semesterTypeShortName,
+			set: fn (string $name) => $this->attributes['name'] = $name
 		);
 	}
 

@@ -41,14 +41,24 @@ class GetPdfDataService
     }
 
     protected function getSelectedCourses(array $selectedCourseData): Collection
-    {
-        $semesters = Semester::find(collect($selectedCourseData)->flatten(2)->unique());
+    {   
+        $semesterIds = collect($selectedCourseData)->flatten(2)->unique();
+        $semesters = Semester::find($semesterIds)->sortBy('start_date');
         $coursesGrouped = collect($selectedCourseData)->flatten(1);
+
+        if ($semesterIds->count() > $semesters->count()) {
+            $semesters->push(Semester::new(['name' => 'later']));
+        }
 
         foreach ($semesters AS $semester) {
             foreach ($coursesGrouped AS $courseGroup) {
                 foreach ($courseGroup AS $courseId => $semesterId) {
-                    if ((int)$semesterId === $semester->id) {
+                    if ($semester->name === $semesterId) {
+                        $semester->selectedCourses->push(Course::find($courseId));
+                        continue;
+                    }
+
+                    if ($semesterId == $semester->id) {
                         $semester->selectedCourses->push(Course::find($courseId));
                     }
                 }
