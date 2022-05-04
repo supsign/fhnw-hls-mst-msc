@@ -6,6 +6,7 @@ use App\Models\Course;
 use App\Models\Semester;
 use App\Models\Specialization;
 use App\Models\Thesis;
+use App\Services\Courses\GetCourseSelectDataService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 
@@ -13,12 +14,20 @@ class GetPdfDataService
 {
     protected array $data = [];
 
+    protected Specialization $specialization;
+
+    public function __construct(protected GetCourseSelectDataService $getCourseSelectDataService)
+    {}
+
     public function __invoke(Request $request): array
     {
-        foreach ($request->all() AS $key => $value) {
+        $requestData = $request->all();
+        krsort($requestData);
+
+        foreach ($requestData AS $key => $value) {
             switch ($key) {
                 case 'specialization':
-                    $value = Specialization::find($value);
+                    $this->specialization = $value = Specialization::find($value);
                     break;
 
                 case 'thesis_start':
@@ -37,7 +46,19 @@ class GetPdfDataService
             $this->data[$key] = $value;
         }
 
+        dd($this->data['selected_courses']);
+
         return $this->data;
+    }
+
+    protected function getCourse(int $id): Course
+    {
+
+
+
+
+
+        return Course::find($id);
     }
 
     protected function getSelectedCourses(array $selectedCourseData): Collection
@@ -54,12 +75,12 @@ class GetPdfDataService
             foreach ($coursesGrouped AS $courseGroup) {
                 foreach ($courseGroup AS $courseId => $semesterId) {
                     if ($semester->name === $semesterId) {
-                        $semester->selectedCourses->push(Course::find($courseId));
+                        $semester->selectedCourses->push($this->getCourse($courseId));
                         continue;
                     }
 
                     if ($semesterId == $semester->id) {
-                        $semester->selectedCourses->push(Course::find($courseId));
+                        $semester->selectedCourses->push($this->getCourse($courseId));
                     }
                 }
             }
