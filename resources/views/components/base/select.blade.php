@@ -6,7 +6,7 @@
     @endphp
 
     <label class="select__label" x-on:mouseover="hover = true" x-on:mouseout="hover = false">
-        {{ $attributes->get('label') }}
+        @if($attributes->get('bold'))<b>{{ $attributes->get('label') }}</b>@else{{ $attributes->get('label') }}@endif
     </label>
 
     @if($tooltip)

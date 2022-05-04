@@ -108,7 +108,15 @@ class CourseSheetImport implements ToCollection, WithHeadingRow
             }
 
             $startSemester = $getSemesterService($row['start'], $row['semshort'] === 'AS');
-            $endSemester = !empty($row['end']) ? $getSemesterService($row['end'], $row['semshort'] === 'AS') : false;
+
+            if (!empty($row['end'])) {
+                $endSemester = $row['semshort'] === 'SS' 
+                    ? $getSemesterService($row['end'] + 1, false)
+                    : $getSemesterService($row['end'], true);
+            } else {
+                $endSemester = false;
+            }
+
             $upcomingSemesters = $getUpcomingSemestersService(startDate: $startSemester->start_date);
 
             foreach ($upcomingSemesters AS $upcomingSemester) {

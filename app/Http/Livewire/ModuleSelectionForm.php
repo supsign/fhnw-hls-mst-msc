@@ -91,7 +91,7 @@ class ModuleSelectionForm extends Component
                 }
             }
         }
-
+        $this->statistics = $this->getCoursesCountByCourseGroup();
         $this->getEcts();
     }
 
@@ -131,10 +131,11 @@ class ModuleSelectionForm extends Component
         $this->coursesByCourseGroup = ($this->getCourseSelectDataService)($specialization);
     }
 
-    public function updateMasterThesis(array $start, array $theses) {
-
+    public function updateMasterThesis(array $start, array $theses, ?string $furtherDetails) 
+    {
         $this->masterThesis['start'] = $start ?? null;
         $this->masterThesis['theses'] = $theses  ?? null;
+        $this->masterThesis['furtherDetails'] = $furtherDetails;
     }
 
     protected function getEcts(): self
@@ -271,7 +272,7 @@ class ModuleSelectionForm extends Component
     {
         $this->getModuleCounts();
         $this->statistics = $this->getCoursesCountByCourseGroup();
-        //$this->validate();
+        $this->validate();
         $this->getPdfData();
 
         return redirect()->route('home.pdf', $this->pdfData);

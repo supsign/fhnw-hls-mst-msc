@@ -12,7 +12,7 @@
         <x-base.select wire:model="specializationId" label="Specialization" :options="$specializations" optionKey="name" placeholder="-- Choose Specialization --"/>
         @if($specializationId)
             <livewire:course-selection
-                key="{{ now() }}"
+                key="{{ microtime() }}"
                 :nextSemesters="$nextSemesters"
                 :semesterId="(int)$semesterId"
                 :studyModeId="$studyModeId"
@@ -24,7 +24,7 @@
             <livewire:modules-outside-curriculum />
             <x-double-degree wire:model="doubleDegree" />
             <livewire:master-thesis
-                key="{{ now() }}"
+                key="{{ microtime() }}"
                 :doubleDegree="$doubleDegree"
                 :semesterId="(int)$semesterId"
                 :studyModeId="$studyModeId"
@@ -37,6 +37,7 @@
                 :selectedCourses="$selectedCourses['main'] ?? []"
             />
             <x-additional-comments wire:model='additionalComments'/>
+            <livewire:summary-statistics  key="{{ microtime() }}" :statistics='$statistics' :ects='$ects'/>
             <div x-data>
                 <input type="submit" name="submit" value="Submit" class="button-primary" @click='window.scrollTo(0,0)'/>
             </div>
