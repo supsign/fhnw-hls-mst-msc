@@ -11,6 +11,8 @@
 	/>
 	<x-base.select label="Broad Subject Area" :options="$theses" optionKey="name" multiple wire:model="selectedTheses"/>
 	<br/>
-	<div class="mb-5 text-lg"><b>Further Details on MSc Topic (optional)</b></div>
-	<textarea class="input__field" name="furtherDetails" wire:model="furtherDetails"></textarea>
+	<div>
+		<div><b>Further Details on MSc Topic (optional)</b></div>
+		<textarea class="input__field" name="furtherDetails" wire:model="furtherDetails"></textarea>
+	</div>
 </div>
