@@ -38,6 +38,11 @@
             />
             <x-additional-comments wire:model='additionalComments'/>
             <input type="submit" name="submit" value="Submit" class="button-primary"/>
+            <x-additional-comments />
+            <div x-data>
+                <input type="submit" name="submit" value="Submit" class="button-primary" @click='window.scrollTo(0,0)'/>
+            </div>
+        </div>
         @endif
     </form>
 </x-base.card>
