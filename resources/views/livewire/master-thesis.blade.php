@@ -10,6 +10,6 @@
 
 	/>
 	<br />
-	<x-base.select label="Broad Subject Area" :options="$theses" optionKey="name" multiple wire:model="selectedTheses" size='10' />
+	<x-base.select label="Broad Subject Area" :options="$theses" optionKey="name" multiple wire:model="selectedTheses" :size='count($theses)' />
 	<br/>
 </div>

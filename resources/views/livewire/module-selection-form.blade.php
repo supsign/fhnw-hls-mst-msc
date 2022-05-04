@@ -32,7 +32,7 @@
                 :overwrite-start-of-thesis="$masterThesis['start']['id'] ?? 0 "
                 :selected-theses="$masterThesis['theses'] ?? []"
             />
-            <x-optional-english 
+            <x-optional-english
                 :nextSemesters="$nextSemesters"
                 :selectedCourses="$selectedCourses['main'] ?? []"
             />
