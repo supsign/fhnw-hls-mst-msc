@@ -121,7 +121,6 @@ class ModuleSelectionForm extends Component
             $this->getCoursesByCourseGroup();
             $this->getRequiredCounts();
             $this->getNextSemesters();
-
         }
     }
 
@@ -132,11 +131,11 @@ class ModuleSelectionForm extends Component
         $this->coursesByCourseGroup = ($this->getCourseSelectDataService)($specialization);
     }
 
-    public function updateMasterThesis(array $start, array $theses, string $furtherDetails) {
-
+    public function updateMasterThesis(array $start, array $theses, ?string $furtherDetails) 
+    {
         $this->masterThesis['start'] = $start ?? null;
         $this->masterThesis['theses'] = $theses  ?? null;
-        $this->masterThesis['furtherDetails'] = $furtherDetails ?? null;
+        $this->masterThesis['furtherDetails'] = $furtherDetails;
     }
 
     protected function getEcts(): self
@@ -224,6 +223,7 @@ class ModuleSelectionForm extends Component
     protected function getCoursesCountByCourseGroup()
     {
         $courseIds = [];
+
         foreach (collect($this->selectedCourses)->flatten(1)->toArray() AS $courses) {
             $courseIds = array_merge($courseIds, array_keys($courses));
         }
