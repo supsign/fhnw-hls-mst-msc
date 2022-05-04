@@ -21,7 +21,7 @@ class CourseSelection extends Component
     public int $semesterId;
     public int $specializationId;
     public int $studyModeId;
-
+    public int $ects;
     public ?string $coreCompetencesDescription = null;
     public ?string $descriptionBeforeFurther = null;
     public ?string $furtherClusterTitle = null;
@@ -58,7 +58,6 @@ class CourseSelection extends Component
 
     protected function executeServices(): self
     {
-        $this->coursesByCourseGroup = ($this->getCourseSelectDataService)($this->specialization);
         $this->furtherCoursesBySpecialisationAndCluster = ($this->getCourseSelectDataService)($this->specialization, true);
 
         return $this;

@@ -23,12 +23,22 @@ class GetCourseSelectDataService
             $this->mainCourseIds = $this->getCourses()->pluck('id')->toArray();
 
             return [
-                ['title' => 'Further Specialisation Modules (Muttenz)'] + ['specializations' => $this->getFurtherCoursesBySpecialization()->toArray()],
-                ['title' => 'Further Cluster-specific Modules from your Cluster'] + ['clusters' => $this->getFurtherCoursesByCluster()->toArray()],
+                [
+                    'title' => 'Further Specialisation Modules (Muttenz)',
+                    'type' => CourseGroupType::Specialization,
+                    'specializations' => $this->getFurtherCoursesBySpecialization()->toArray()
+                ],
+                [
+                    'title' => 'Further Cluster-specific Modules from your Cluster',
+                    'type' => CourseGroupType::ClusterSpecific,
+                    'clusters' => $this->getFurtherCoursesByCluster()->toArray(),
+                ],
                 [
                     'title' => 'Further Modules from other Clusters',
-                    'description' => PageContent::where('name', 'other_cluster_modules_description')->first()?->content
-                ] + ['clusters' => $this->getFurtherCoursesByCluster(true)->toArray()],
+                    'type' => CourseGroupType::ClusterSpecific,
+                    'description' => PageContent::where('name', 'other_cluster_modules_description')->first()?->content,
+                    'clusters' => $this->getFurtherCoursesByCluster(true)->toArray(),
+                ]
             ];
         }
 

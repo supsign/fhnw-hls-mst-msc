@@ -9,15 +9,17 @@ class RadioGroup extends Component
 {
     public array $selectableSemesters;
 
+    public bool $further = false;
+
     public int $courseId;
-    public int $courseGroupId;
+    public int | null $courseGroupId;
 
     public string $courseName;
     public $selectedSemester;
 
     public function updatedSelectedSemester(): void
     {
-        $this->emit('courseSelected', $this->courseGroupId, $this->courseId, $this->selectedSemester);
+        $this->emit('courseSelected', $this->courseGroupId, $this->courseId, $this->selectedSemester, $this->further);
     }
 
     public function render(): View

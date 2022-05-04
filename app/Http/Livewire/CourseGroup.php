@@ -20,17 +20,29 @@ class CourseGroup extends Component
 
     public function mount() 
     {
-        if(!$this->further) {
+        if (!$this->further) {
             $this->getTitle();
-            $this->getSortCourses();
-        } else {
-            $this->courses = $this->courseGroup['courses'];
         }
+
+        $this->getSortCourses();
     }
 
     public function render()
     {
         return view('livewire.course-group');
+    }
+
+    protected function getSortCourses() 
+    {
+        usort($this->courseGroup['courses'], function($a, $b) {
+            return $a['name'] <=> $b['name'];
+        });
+
+        usort($this->courseGroup['courses'], function($a, $b) {
+            return $b['semesters'][0]['start_date'] <=> $a['semesters'][0]['start_date'];
+        });
+        
+        $this->courses = $this->courseGroup['courses'];
     }
 
     protected function getTitle()
@@ -40,15 +52,5 @@ class CourseGroup extends Component
             [$this->courseGroup['required_courses_count'], $this->courseGroup['name']],
             PageContent::where('name', 'group_title')->first()?->content
         );
-    }
-
-
-    protected function getSortCourses() 
-    {
-        usort($this->courseGroup['courses'], function($a, $b) {
-            return $b['semesters'][0]['start_date'] <=> $a['semesters'][0]['start_date'];
-        });
-        
-        $this->courses = $this->courseGroup['courses'];
     }
 }

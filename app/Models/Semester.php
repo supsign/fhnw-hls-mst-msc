@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\Semester as EnumsSemester;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Collection;
 
 class Semester extends BaseModel
 {
@@ -44,7 +45,8 @@ class Semester extends BaseModel
 	public function name(): Attribute
 	{
 		return Attribute::make(
-			get: fn () => $this->year.' '.$this->semesterTypeShortName
+			get: fn () => !empty($this->attributes['name']) ? $this->attributes['name'] : $this->year.' '.$this->semesterTypeShortName,
+			set: fn (string $name) => $this->attributes['name'] = $name,
 		);
 	}
 
@@ -52,6 +54,14 @@ class Semester extends BaseModel
 	{
 		return Attribute::make(
 			get: fn () => $this->year.' '.$this->semesterTypeLongName
+		);
+	}
+
+	public function selectedCourses(): Attribute
+	{
+		return Attribute::make(
+			get: fn () => $this->attributes['selected_courses'] ?? collect(),
+			set: fn (Collection $courses) => $this->attributes['selected_courses'] = $courses,
 		);
 	}
 
