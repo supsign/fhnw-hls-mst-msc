@@ -131,10 +131,11 @@ class ModuleSelectionForm extends Component
         $this->coursesByCourseGroup = ($this->getCourseSelectDataService)($specialization);
     }
 
-    public function updateMasterThesis(array $start, array $theses) {
+    public function updateMasterThesis(array $start, array $theses, string $furtherDetails) {
 
         $this->masterThesis['start'] = $start ?? null;
         $this->masterThesis['theses'] = $theses  ?? null;
+        $this->masterThesis['furtherDetails'] = $furtherDetails ?? null;
     }
 
     protected function getEcts(): self
