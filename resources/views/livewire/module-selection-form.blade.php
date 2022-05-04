@@ -37,7 +37,7 @@
                 :selectedCourses="$selectedCourses['main'] ?? []"
             />
             <x-additional-comments />
-            <livewire:summary-statistics  key="{{ now() }}" :statistics='$statistics'/>
+            <livewire:summary-statistics  key="{{ now() }}" :statistics='$statistics' :ects='$ects'/>
             <div x-data>
                 <input type="submit" name="submit" value="Submit" class="button-primary" @click='window.scrollTo(0,0)'/>
             </div>
