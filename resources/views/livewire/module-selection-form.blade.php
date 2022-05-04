@@ -4,8 +4,9 @@
         @if(count($this->getErrorBag()->messages()) > 0)
             <x-module-selection-form-errors :errors="$this->getErrorBag()->messages()"/>
         @endif
-        <x-base.input label="Given Name" type="text" name="givenName" wire:model="givenName"/>
+        <div><b>Personal Data</b></div>
         <x-base.input label="Surname" type="text" name="surname" wire:model="surname" />
+        <x-base.input label="Given Name" type="text" name="givenName" wire:model="givenName"/>
         <x-base.select wire:model="semesterId" label="Semester" :options="$semesters" />
         <x-base.select wire:model="studyModeId" label="Study Mode" :options="$studyModes" :tooltip="$studyModeTooltip"/>
         <x-base.select wire:model="specializationId" label="Specialization" :options="$specializations" optionKey="name" placeholder="-- Choose Specialization --"/>
@@ -18,6 +19,7 @@
                 :specializationId="$specializationId"
                 :selectedCourses="$selectedCourses"
                 :coursesByCourseGroup="$coursesByCourseGroup"
+                :ects="$ects"
             />
             <livewire:modules-outside-curriculum />
             <x-double-degree wire:model="doubleDegree" />
@@ -35,7 +37,10 @@
                 :selectedCourses="$selectedCourses['main'] ?? []"
             />
             <x-additional-comments />
-            <input type="submit" name="submit" value="Submit" class="button-primary"/>
+            <div x-data>
+                <input type="submit" name="submit" value="Submit" class="button-primary" @click='window.scrollTo(0,0)'/>
+            </div>
+        </div>
         @endif
     </form>
 </x-base.card>

@@ -41,6 +41,7 @@ class ModuleSelectionForm extends Component
     public ?string $surname = null;
     public ?string $givenName = null;
     public array $masterThesis = [];
+    public array $statistics = [];
 
     public int $specializationSelectedCount = 0;
     public int $specializationRequiredCount = 0;
@@ -61,6 +62,9 @@ class ModuleSelectionForm extends Component
         'specializationSelectedCount.min' => 'You have not selected enough modules in :attribute. Please correct.',
         'electiveSelectedCount.min' => 'You have not selected enough modules in :attribute. Please correct.',
         'coreCompetencesSelectedCount.min' => 'You have not selected enough modules in :attribute. Please correct.',
+        'masterThesis.theses.required' => 'Please select a broad topic for your MSc Thesis.',
+        'statistics.cluster_specific.min' => 'You need to select at least three cluster-specific modules. Please correct.'
+
     ];
     protected array $pageContents = [
         'modules_outside_title',
@@ -74,11 +78,15 @@ class ModuleSelectionForm extends Component
         if ($semesterId !== 'none') {
             $this->selectedCourses[$type][$courseGroupId][$courseId] = $semesterId;
         } else {
-            foreach ($this->selectedCourses AS $key => $value) {
-                unset($this->selectedCourses[$key][$courseId]);
+            foreach ($this->selectedCourses[$type] AS $key => $value) {
+                unset($this->selectedCourses[$type][$key][$courseId]);
 
-                if (empty($this->selectedCourses[$key])) {
-                    unset($this->selectedCourses[$key]);
+                if (empty($this->selectedCourses[$type][$key])) {
+                    unset($this->selectedCourses[$type][$key]);
+                }
+
+                if (empty($this->selectedCourses[$type])) {
+                    unset($this->selectedCourses[$type]);
                 }
             }
         }
@@ -98,21 +106,20 @@ class ModuleSelectionForm extends Component
         return view('livewire.module-selection-form');
     }
 
-    public function updating(): void
+    public function updating($name): void
     {
-        $this->ects = 0;
-        $this->selectedCourses = [];
+        if (!in_array($name, ['givenName', 'surname'])) {
+            $this->ects = 0;
+            $this->selectedCourses = [];
+        }
     }
 
     public function updated(): void
     {
         if ($this->specializationId > 0) {
-            $this->specializationPlaceholder = null;
-        }
-
-        if ($this->specializationId > 0) {
             $this->getCoursesByCourseGroup();
             $this->getRequiredCounts();
+            $this->getNextSemesters();
         }
     }
 
@@ -167,6 +174,16 @@ class ModuleSelectionForm extends Component
         return $this;
     }
 
+    protected function getNextSemesters(): self
+    {
+        $this->nextSemesters = App::make(GetUpcomingSemestersService::class)(
+            $this->studyModeId === StudyMode::FullTime->value ? 2 : 4 ,
+            Semester::find($this->semesterId)->start_date
+        )->toArray();
+
+        return $this;
+    }
+
     protected function getRequiredCounts(): void
     {
         foreach ($this->coursesByCourseGroup AS $courseGroup) {
@@ -175,50 +192,24 @@ class ModuleSelectionForm extends Component
         }
     }
 
-    protected function getBroadSubjectArea(): array
-    {
-        $broadSubjectArea = [];
-        foreach($this->masterThesis['theses'] AS $thesisId) {
-            $broadSubjectArea[] = Thesis::find($thesisId)->toArray();
-        }
-        return $broadSubjectArea;
-    }
-
     protected function getPdfData(): void
     {
         $this->pdfData['givenName'] = $this->givenName;
         $this->pdfData['surname'] = $this->surname;
-        $this->pdfData['specialization'] = Specialization::find($this->specializationId)['name'];
-        $this->pdfData['semesters'] = $this->getFormatCoursesForPdf();
+        $this->pdfData['specialization'] = $this->specializationId;
+        $this->pdfData['selected_courses'] = $this->selectedCourses;
         $this->pdfData['specialization_count'] = $this->getCoursesCount();
         $this->pdfData['ects'] = $this->ects;
-        $this->pdfData['start_thesis'] = $this->masterThesis['start'];
-        $this->pdfData['broad_subject_area'] = $this->getBroadSubjectArea();
+        $this->pdfData['thesis_start'] = $this->masterThesis['start']['id'];
+        $this->pdfData['thesis_subject'] = $this->masterThesis['theses'];
         $this->pdfData['counts'] = $this->getCoursesCountByCourseGroup();
-
-        //dd($this->pdfData['counts'] );
-    }
-
-    protected function getFormatCoursesForPdf(): array
-    {
-        $courses = [];
-        foreach($this->selectedCourses AS $selected) {
-            $courses += $selected;
-        }
-        $groupBySemester = [];
-        foreach($courses AS $course) {
-            foreach($course AS $key => $value) {
-            $groupBySemester[Semester::find($value)['long_name']][] = Course::find($key)->toArray();
-        }
-        }
-        return $groupBySemester;
     }
 
     protected function getCoursesCount(): int
     {
         $count = 0;
 
-        foreach ($this->selectedCourses['main'] AS $key => $value) {
+        foreach ($this->selectedCourses['main'] ?? [] AS $key => $value) {
             $group = CourseGroup::find($key);
             $count +=  $this->{lcfirst($group->type->name).'SelectedCount'};
         }
@@ -226,7 +217,7 @@ class ModuleSelectionForm extends Component
         return $count;
     }
 
-    public function getCoursesCountByCourseGroup()
+    protected function getCoursesCountByCourseGroup()
     {
         $courseIds = [];
 
@@ -235,24 +226,18 @@ class ModuleSelectionForm extends Component
         }
 
         return [
-            'specialization_count' => Course::whereIn('id', $courseIds)->whereNotNull('specialization_id')->count(),
-            'cluster_specific_count' => Course::whereIn('id', $courseIds)->whereNotNull('cluster_id')->count(),
-            'core_compentences_count' => CourseCourseGroup::whereIn('course_id', $courseIds)->where('course_group_id', 4)->count(),
+            'specialization' => Course::whereIn('id', $courseIds)->whereNotNull('specialization_id')->count(),
+            'cluster_specific' => Course::whereIn('id', $courseIds)->whereNotNull('cluster_id')->count(),
+            'core_compentences' => CourseCourseGroup::whereIn('course_id', $courseIds)->where('course_group_id', 4)->count(),
         ];
     }
 
     protected function init(): self
     {
-        $this->getUpcomingSemestersService = App::make(GetUpcomingSemestersService::class);
-
         $this->semesterId = array_key_first($this->semesters);
         $this->studyModeId = array_key_first($this->studyModes);
-        $this->nextSemesters = ($this->getUpcomingSemestersService)(
-            $this->studyModeId === StudyMode::FullTime->value ? 2 : 4 ,
-            Semester::find($this->semesterId)->start_date
-        )->toArray();
 
-        return $this;
+        return $this->getNextSemesters();
     }
 
     protected function rules(): array
@@ -264,6 +249,8 @@ class ModuleSelectionForm extends Component
             'specializationSelectedCount' => ['integer', 'min:'.$this->specializationRequiredCount],
             'electiveSelectedCount' => ['integer', 'min:'.$this->electiveRequiredCount],
             'coreCompetencesSelectedCount' => ['integer', 'min:'.$this->coreCompetencesRequiredCount],
+            'masterThesis.theses' => 'required',
+            'statistics.cluster_specific' => 'integer|min:3',
         ];
     }
 
@@ -281,8 +268,10 @@ class ModuleSelectionForm extends Component
     public function submit(): Redirector
     {
         $this->getModuleCounts();
-        //$this->validate();
+        $this->statistics = $this->getCoursesCountByCourseGroup();
+        $this->validate();
         $this->getPdfData();
+
         return redirect()->route('home.pdf', $this->pdfData);
     }
 
