@@ -8,6 +8,7 @@ use App\Models\Semester;
 use App\Models\Specialization;
 use App\Models\Thesis;
 use App\Services\Courses\GetCourseSelectDataService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 
@@ -35,6 +36,7 @@ class GetPdfDataService
 
                 case 'thesis_start':
                     $value = Semester::find($value);
+                    $value->end_date = $this->getThesisEndDate($value);
                     break;
 
                 case 'thesis_subject':
@@ -48,7 +50,6 @@ class GetPdfDataService
 
             $this->data[$key] = $value;
         }
-
         return $this->data;
     }
 
@@ -133,5 +134,17 @@ class GetPdfDataService
         }
 
         return $semesters;
+    }
+
+    protected function getThesisEndDate($semester) {
+        $start = Carbon::parse($semester['start_date']);
+        
+        switch ($start->month) {
+            case 2:
+                return $start->addMonth(8)->toDateTimeString();
+
+            case 6:
+                return $start->addMonth(9)->toDateTimeString();
+        }
     }
 }

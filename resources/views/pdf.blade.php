@@ -36,7 +36,7 @@
     </div>
     <br />
     <div>
-        <div>Master Thesis planned for {{ $thesis_start->start_date->format('d.m.Y') }} to EndDate</div>
+        <div>Master Thesis planned for {{ $thesis_start->start_date->format('d.m.Y') }} to {{ $thesis_start->end_date }}</div>
         <div>Broad Subject Area</div>
         <ul class="list-disc list-inside">
             @foreach($thesis_subject AS $value)
