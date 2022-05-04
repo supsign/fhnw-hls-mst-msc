@@ -13,7 +13,7 @@
         <x-tooltip x-show="hover" class="w-[22rem]">{{ $tooltip}}</x-tooltip>
     @endif
 
-    <select class="select__field" name="{{ $attributes->get('name') }}" {{ $attributes->only(['wire:model', 'multiple']) }}>
+    <select class="select__field" name="{{ $attributes->get('name') }}" {{ $attributes->only(['wire:model', 'multiple', 'size']) }}>
         @if($placeholder)
             <option value="{{ 0 }}">{{ $placeholder }}</option>
         @endif
