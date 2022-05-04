@@ -7,11 +7,10 @@
 			optionKey="name"
 			placeholder="-- Choose later thesis --"
 		/>
-	</div>
 	<x-base.select label="Broad Subject Area" :options="$theses" optionKey="name" multiple wire:model="selectedTheses" :size='count($theses)' />
 	<br/>
 	<div>
-		<div><b>Further Details on MSc Topic (optional)</b></div>
+		<div>Further Details on MSc Topic (optional)</div>
 		<textarea class="input__field" name="furtherDetails" wire:model="furtherDetails"></textarea>
 	</div>
 </div>

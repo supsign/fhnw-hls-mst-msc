@@ -38,10 +38,9 @@
             />
             <x-additional-comments wire:model='additionalComments'/>
             <livewire:summary-statistics  key="{{ microtime() }}" :statistics='$statistics' :ects='$ects'/>
-            <div x-data>
+            <div x-data class='w-60'>
                 <input type="submit" name="submit" value="Submit" class="button-primary" @click='window.scrollTo(0,0)'/>
             </div>
-        </div>
         @endif
     </form>
 </x-base.card>
