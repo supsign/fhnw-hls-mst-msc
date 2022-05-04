@@ -63,7 +63,7 @@ class ModuleSelectionForm extends Component
         'electiveSelectedCount.min' => 'You have not selected enough modules in :attribute. Please correct.',
         'coreCompetencesSelectedCount.min' => 'You have not selected enough modules in :attribute. Please correct.',
         'masterThesis.theses.required' => 'Please select a broad topic for your MSc Thesis.',
-        'statistics.cluster_specific_count.min' => 'You need to select at least three cluster-specific modules. Please correct.'
+        'statistics.cluster_specific.min' => 'You need to select at least three cluster-specific modules. Please correct.'
 
     ];
     protected array $pageContents = [
@@ -250,7 +250,7 @@ class ModuleSelectionForm extends Component
             'electiveSelectedCount' => ['integer', 'min:'.$this->electiveRequiredCount],
             'coreCompetencesSelectedCount' => ['integer', 'min:'.$this->coreCompetencesRequiredCount],
             'masterThesis.theses' => 'required',
-            'statistics.cluster_specific_count' => 'integer|min:3',
+            'statistics.cluster_specific' => 'integer|min:3',
         ];
     }
 
