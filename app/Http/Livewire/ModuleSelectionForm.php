@@ -271,7 +271,7 @@ class ModuleSelectionForm extends Component
     {
         $this->getModuleCounts();
         $this->statistics = $this->getCoursesCountByCourseGroup();
-        //$this->validate();
+        $this->validate();
         $this->getPdfData();
 
         return redirect()->route('home.pdf', $this->pdfData);
