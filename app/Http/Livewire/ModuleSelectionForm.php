@@ -90,7 +90,7 @@ class ModuleSelectionForm extends Component
                 }
             }
         }
-
+        $this->statistics = $this->getCoursesCountByCourseGroup();
         $this->getEcts();
     }
 
@@ -120,6 +120,7 @@ class ModuleSelectionForm extends Component
             $this->getCoursesByCourseGroup();
             $this->getRequiredCounts();
             $this->getNextSemesters();
+
         }
     }
 
@@ -220,7 +221,6 @@ class ModuleSelectionForm extends Component
     protected function getCoursesCountByCourseGroup()
     {
         $courseIds = [];
-
         foreach (collect($this->selectedCourses)->flatten(1)->toArray() AS $courses) {
             $courseIds = array_merge($courseIds, array_keys($courses));
         }
