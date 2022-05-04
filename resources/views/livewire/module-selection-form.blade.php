@@ -10,6 +10,7 @@
         <x-base.select wire:model="semesterId" label="Semester" :options="$semesters" />
         <x-base.select wire:model="studyModeId" label="Study Mode" :options="$studyModes" :tooltip="$studyModeTooltip"/>
         <x-base.select wire:model="specializationId" label="Specialization" :options="$specializations" optionKey="name" placeholder="-- Choose Specialization --"/>
+        @dump($selectedCourses)
         @if($specializationId)
             <livewire:course-selection
                 key="{{ now() }}"
@@ -31,6 +32,7 @@
                 :specializationId="$specializationId"
                 :overwrite-start-of-thesis="$masterThesis['start']['id'] ?? 0 "
                 :selected-theses="$masterThesis['theses'] ?? []"
+                :further-details="$masterThesis['furtherDetails'] ?? ''"
             />
             <x-optional-english 
                 :nextSemesters="$nextSemesters"

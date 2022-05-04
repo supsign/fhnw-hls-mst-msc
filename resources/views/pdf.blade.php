@@ -44,7 +44,10 @@
             @endforeach
         </ul>
         <br />
-        <div>FurtherDetailsOnMscTopic</div>
+        @if($thesis_further_details)
+            <div><b>Further Details on Thesis (Optional)</b></div>
+        <div>{{$thesis_further_details}}</div>
+            @endif
     </div>
     <br />
     @if($additional_comments)
@@ -65,14 +68,14 @@
     <div>Please note that the module offer and the timing of the modules may change in the future.</div>
     <br />
     <div >
-        <div class="float-left mr-5">
-            <div>Agreed, Date</div><div>___________</div>
+        <div class="float-left mr-10">
+            <div class='border-b border-black pb-10'>Agreed, Date</div>
         </div>
-        <div class="float-left mr-5">
-            <div>Signature Student</div><div>___________</div>
+        <div class="float-left mr-10">
+            <div class='border-b border-black pb-10'>Signature Student</div>
         </div>
-        <div class="float-left mr-5">
-            <div>Signature Director of Study Programme</div><div>___________</div>
+        <div class="float-left mr-10">
+            <div class='border-b border-black pb-10'>Signature Director of Study Programme</div>
         </div>
     </div>
 </div>

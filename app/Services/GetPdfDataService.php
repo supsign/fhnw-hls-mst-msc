@@ -41,7 +41,7 @@ class GetPdfDataService
     }
 
     protected function getSelectedCourses(array $selectedCourseData): Collection
-    {   
+    {
         $semesterIds = collect($selectedCourseData)->flatten(2)->unique();
         $semesters = Semester::find($semesterIds)->sortBy('start_date');
         $coursesGrouped = collect($selectedCourseData)->flatten(1);
