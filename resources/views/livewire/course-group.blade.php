@@ -23,7 +23,6 @@
             @foreach($nextSemesters AS $semester)
                 <div class="relative"  x-data="{ hover: false }">
                     <div class="w-20 text-center" x-on:mouseover="hover = true" x-on:mouseout="hover = false">{{ !$further ? $semester['short_name'] : '' }}</div>
-
                     <x-tooltip x-show="hover" class="w-80">{{ $semester['tooltip'] }}</x-tooltip>
                 </div>
             @endforeach
@@ -34,13 +33,14 @@
     <div class="max-w-min">
         @foreach($courses as $course)
             <livewire:course
+                :courseGroupTypeShortName="$courseGroup['course_group_type_short_name'] ?? null"
                 :course="$course"
+                :courseGroupId="$courseGroup['id']"
                 :nextSemesters="$nextSemesters"
                 :selectedCourses="$selectedCourses"
                 key="{{ $course['id'] }}"
                 :further="$further"
                 :showType="$showType"
-                :course-group="$courseGroup"
             />
         @endforeach
 
