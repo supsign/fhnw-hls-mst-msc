@@ -36,7 +36,7 @@
                 :nextSemesters="$nextSemesters"
                 :selectedCourses="$selectedCourses['main'] ?? []"
             />
-            <x-additional-comments />
+            <x-additional-comments wire:model='additionalComments'/>
             <input type="submit" name="submit" value="Submit" class="button-primary"/>
         @endif
     </form>

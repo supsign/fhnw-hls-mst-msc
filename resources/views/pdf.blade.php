@@ -46,6 +46,14 @@
         <br />
         <div>FurtherDetailsOnMscTopic</div>
     </div>
+    <br />
+    @if($additional_comments)
+    <div>
+        <div><b>Additional Comments</b></div>
+        <div>{{ $additional_comments}}</div>
+    </div>
+        <br />
+    @endif
     <div>
         <div>Summary Statistics</div>
         <div>{{ $counts['specialization'] }} of Specialization Modules</div>

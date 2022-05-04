@@ -42,6 +42,7 @@ class ModuleSelectionForm extends Component
     public ?string $givenName = null;
     public array $masterThesis = [];
     public array $statistics = [];
+    public ?string $additionalComments = null;
 
     public int $specializationSelectedCount = 0;
     public int $specializationRequiredCount = 0;
@@ -203,6 +204,7 @@ class ModuleSelectionForm extends Component
         $this->pdfData['thesis_start'] = $this->masterThesis['start']['id'];
         $this->pdfData['thesis_subject'] = $this->masterThesis['theses'];
         $this->pdfData['counts'] = $this->getCoursesCountByCourseGroup();
+        $this->pdfData['additional_comments'] = $this->additionalComments;
     }
 
     protected function getCoursesCount(): int
@@ -269,7 +271,7 @@ class ModuleSelectionForm extends Component
     {
         $this->getModuleCounts();
         $this->statistics = $this->getCoursesCountByCourseGroup();
-        $this->validate();
+        //$this->validate();
         $this->getPdfData();
 
         return redirect()->route('home.pdf', $this->pdfData);
