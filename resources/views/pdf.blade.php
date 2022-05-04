@@ -26,7 +26,7 @@
                 @foreach($semester->selectedCourses AS $course)
                     <tr class='border-b'>
                         <td class='border-r p-1'>{{ $course->name }}</td>
-                        <td class='border-r p-1'>Type</td>
+                        <td class='border-r p-1'>{{ $course->courseGroup?->courseGroupTypeShortName }}</td>
                         <td class='p-1'>{{ $course->ects }}</td>
                     </tr>
                 @endforeach

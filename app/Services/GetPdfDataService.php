@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Course;
+use App\Models\CourseGroup;
 use App\Models\Semester;
 use App\Models\Specialization;
 use App\Models\Thesis;
@@ -12,7 +13,9 @@ use Illuminate\Support\Collection;
 
 class GetPdfDataService
 {
+    protected array $courseGroupData;
     protected array $data = [];
+    protected array $furthercourseData;
 
     protected Specialization $specialization;
 
@@ -46,19 +49,62 @@ class GetPdfDataService
             $this->data[$key] = $value;
         }
 
-        dd($this->data['selected_courses']);
-
         return $this->data;
     }
 
     protected function getCourse(int $id): Course
     {
+        $course = Course::find($id);
 
+        foreach ($this->getCourseGroupData() AS $courseGroup) {
+            if (in_array($id, array_column($courseGroup['courses'], 'id'))) {
+                $course->courseGroup = CourseGroup::find($courseGroup['id']);
 
+                return $course;
+            }
+        }
 
+        foreach ($this->getFurtherCourseData() AS $furtherCourseData) {
+            $courseIds = [];
 
+            foreach (['clusters', 'specializations'] AS $key) {
+                if (isset($furtherCourseData[$key])) {
+                    foreach ($furtherCourseData[$key] AS $$key) {
+                        $courseIds = array_merge($courseIds, array_column($$key['courses'], 'id'));
+                    }
 
-        return Course::find($id);
+                    break;
+                }
+            }
+
+            if (in_array($id, $courseIds)) {
+                $course->courseGroup = CourseGroup::new([
+                    'type' => $furtherCourseData['type']
+                ]);
+
+                return $course;
+            }
+        }
+
+        return $course;
+    }
+
+    protected function getCourseGroupData(): array
+    {
+        if (!empty($this->courseGroupData)) {
+            return $this->courseGroupData;
+        }
+
+        return $this->courseGroupData = ($this->getCourseSelectDataService)($this->specialization);
+    }
+
+    protected function getFurtherCourseData(): array
+    {
+        if (!empty($this->furthercourseData)) {
+            return $this->furthercourseData;
+        }
+
+        return $this->furthercourseData = ($this->getCourseSelectDataService)($this->specialization, true);
     }
 
     protected function getSelectedCourses(array $selectedCourseData): Collection
