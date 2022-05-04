@@ -13,6 +13,7 @@ use App\Models\CourseCourseGroup;
 use App\Models\PageContent;
 use App\Models\Specialization;
 use App\Services\Courses\GetCourseSelectDataService;
+use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
@@ -135,9 +136,10 @@ class ModuleSelectionForm extends Component
         $this->coursesByCourseGroup = ($this->getCourseSelectDataService)($specialization);
     }
 
-    public function updateMasterThesis(array $start, array $theses) {
+    public function updateMasterThesis(array $start, string $end, array $theses) {
 
         $this->masterThesis['start'] = $start ?? null;
+        $this->masterThesis['end'] = $end ?? null;
         $this->masterThesis['theses'] = $theses  ?? null;
     }
 
@@ -272,6 +274,8 @@ class ModuleSelectionForm extends Component
 
         return $semesters;
     }
+
+
 
     protected function init(): self
     {

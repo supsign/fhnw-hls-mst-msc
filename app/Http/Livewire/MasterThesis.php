@@ -6,6 +6,7 @@ use App\Enums\StudyMode;
 use App\Models\Semester;
 use App\Models\Thesis;
 use App\Services\Semesters\GetUpcomingSemestersService;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\App;
 use Illuminate\View\View;
 use Livewire\Component;
@@ -14,6 +15,7 @@ class MasterThesis extends Component
 {
     public array $availibleStarts;
     public array $startOfThesis;
+    public string $endOfThesis;
     public array $theses;
     public array $selectedTheses = [];
 
@@ -47,7 +49,9 @@ class MasterThesis extends Component
     public function updated(): void
     {
         $this->getStartOfThesis();
-        $this->emit('updateMasterThesis', $this->startOfThesis, $this->selectedTheses);
+
+        $this->endOfThesis = $this->getThesisEndDate($this->startOfThesis);
+        $this->emit('updateMasterThesis', $this->startOfThesis, $this->endOfThesis, $this->selectedTheses);
     }
 
     protected function getStartOfThesis(): self
@@ -69,5 +73,18 @@ class MasterThesis extends Component
             : $startOfThesis->toArray();        
 
         return $this;
+    }
+
+    protected function getThesisEndDate($semester) {
+
+        $start = Carbon::parse($semester['start_date']);
+        switch ($start->month) {
+            case 2:
+                return $start->addMonth(8)->toDateTimeString();
+            case 6:
+                return $start->addMonth(9)->toDateTimeString();
+
+        }
+        return $semester['start_date'];
     }
 }

@@ -8,6 +8,7 @@ class SummaryStatistics extends Component
 {
     public array $statistics = [];
     public array $semestersWithEcts = [];
+    public array $masterThesis = [];
     public int $ects = 0;
 
 

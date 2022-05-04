@@ -21,4 +21,7 @@
         </div>
     </div>
     @endif
+   @if($masterThesis)
+        <div>Possible timeframe of Thesis: {{\Carbon\Carbon::parse($masterThesis['start']['start_date'])->format('d.m.Y')}} - {{\Carbon\Carbon::parse($masterThesis['end'])->format('d.m.Y')}}</div>
+    @endif
 </div>
