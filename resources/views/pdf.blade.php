@@ -26,7 +26,7 @@
                 @foreach($semester->selectedCourses AS $course)
                     <tr class='border-b'>
                         <td class='border-r p-1'>{{ $course->name }}</td>
-                        <td class='border-r p-1'>Type</td>
+                        <td class='border-r p-1'>{{ $course->courseGroup?->courseGroupTypeShortName }}</td>
                         <td class='p-1'>{{ $course->ects }}</td>
                     </tr>
                 @endforeach
@@ -36,7 +36,7 @@
     </div>
     <br />
     <div>
-        <div>Master Thesis planned for {{ $thesis_start->start_date->format('d.m.Y') }} to EndDate</div>
+        <div>Master Thesis planned for {{ $thesis_start->start_date->format('d.m.Y') }} to {{ $thesis_start->end_date }}</div>
         <div>Broad Subject Area</div>
         <ul class="list-disc list-inside">
             @foreach($thesis_subject AS $value)
@@ -46,6 +46,14 @@
         <br />
         <div>FurtherDetailsOnMscTopic</div>
     </div>
+    <br />
+    @if($additional_comments)
+    <div>
+        <div><b>Additional Comments</b></div>
+        <div>{{ $additional_comments}}</div>
+    </div>
+        <br />
+    @endif
     <div>
         <div>Summary Statistics</div>
         <div>{{ $counts['specialization'] }} of Specialization Modules</div>

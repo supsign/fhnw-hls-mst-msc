@@ -44,6 +44,7 @@ class ModuleSelectionForm extends Component
     public ?string $givenName = null;
     public array $masterThesis = [];
     public array $statistics = [];
+    public ?string $additionalComments = null;
 
     public int $specializationSelectedCount = 0;
     public int $specializationRequiredCount = 0;
@@ -125,7 +126,6 @@ class ModuleSelectionForm extends Component
             $this->getCoursesByCourseGroup();
             $this->getRequiredCounts();
             $this->getNextSemesters();
-
         }
     }
 
@@ -136,8 +136,8 @@ class ModuleSelectionForm extends Component
         $this->coursesByCourseGroup = ($this->getCourseSelectDataService)($specialization);
     }
 
-    public function updateMasterThesis(array $start, string $end, array $theses) {
-
+    protected function updateMasterThesis(array $start, string $end, array $theses): void
+    {
         $this->masterThesis['start'] = $start ?? null;
         $this->masterThesis['end'] = $end ?? null;
         $this->masterThesis['theses'] = $theses  ?? null;
@@ -210,6 +210,7 @@ class ModuleSelectionForm extends Component
         $this->pdfData['thesis_start'] = $this->masterThesis['start']['id'];
         $this->pdfData['thesis_subject'] = $this->masterThesis['theses'];
         $this->pdfData['counts'] = $this->getCoursesCountByCourseGroup();
+        $this->pdfData['additional_comments'] = $this->additionalComments;
     }
 
     protected function getCoursesCount(): int
@@ -227,6 +228,7 @@ class ModuleSelectionForm extends Component
     protected function getCoursesCountByCourseGroup()
     {
         $courseIds = [];
+
         foreach (collect($this->selectedCourses)->flatten(1)->toArray() AS $courses) {
             $courseIds = array_merge($courseIds, array_keys($courses));
         }

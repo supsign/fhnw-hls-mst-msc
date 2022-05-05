@@ -18,6 +18,7 @@ class MasterThesis extends Component
     public string $endOfThesis;
     public array $theses;
     public array $selectedTheses = [];
+    public ?string $furtherDetails = null;
 
     public array $masterThesis;
 
@@ -49,8 +50,8 @@ class MasterThesis extends Component
     public function updated(): void
     {
         $this->getStartOfThesis();
-
         $this->endOfThesis = $this->getThesisEndDate($this->startOfThesis);
+
         $this->emit('updateMasterThesis', $this->startOfThesis, $this->endOfThesis, $this->selectedTheses);
     }
 
@@ -75,16 +76,17 @@ class MasterThesis extends Component
         return $this;
     }
 
-    protected function getThesisEndDate($semester) {
-
+    protected function getThesisEndDate($semester) 
+    {
         $start = Carbon::parse($semester['start_date']);
+
         switch ($start->month) {
             case 2:
                 return $start->addMonth(8)->toDateTimeString();
             case 6:
                 return $start->addMonth(9)->toDateTimeString();
-
         }
+
         return $semester['start_date'];
     }
 }
