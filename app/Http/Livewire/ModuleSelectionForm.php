@@ -183,7 +183,7 @@ class ModuleSelectionForm extends Component
         return $this;
     }
 
-    protected function getPdfData(): void
+    protected function getPdfData(): array
     {
         $pdfData['givenName'] = $this->givenName;
         $pdfData['surname'] = $this->surname;
