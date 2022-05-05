@@ -15,7 +15,8 @@ class GetCourseSelectDataService
     protected array $mainCourseIds;
     protected Specialization $specialization;
 
-    public function __invoke(Specialization $specialization, bool $furtherCourses = false): array {
+    public function __invoke(Specialization $specialization, bool $furtherCourses = false): array 
+    {
         $this->furtherCourses = $furtherCourses;
         $this->specialization = $specialization;
 

@@ -4,7 +4,7 @@
             :description="$courseGroup['id'] === 4 ? $coreCompetencesDescription : null"
             :courseGroup="$courseGroup"
             :nextSemesters="$nextSemesters"
-            :selectedCourses="$selectedCourses['main'][$courseGroup['id']] ?? []"
+            :selectedCourses="$selectedCourses['main'][$courseGroup['id']]"
             :showType="true"
             class="mb-5"
         />
@@ -16,7 +16,7 @@
         <livewire:further-courses
             :furtherCourses="$furtherCourses"
             :nextSemesters="$nextSemesters"
-            :selectedCourses="$selectedCourses['further'] ?? []"
+            :selectedCourses="$selectedCourses['further']"
         />
     @endforeach
 </div>

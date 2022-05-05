@@ -17,6 +17,6 @@
         :courseName="$course['name']" 
         :further="$further"
         :selectableSemesters="$selectableSemesters"
-        :selectedSemester="$further ? ($selectedCourses[$courseGroupId][$course['id']] ?? 'none') : ($selectedCourses[$course['id']] ?? 'none')"
+        :selectedSemester="$selectedSemester"
     />
 </div>

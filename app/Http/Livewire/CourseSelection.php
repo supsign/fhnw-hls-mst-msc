@@ -2,8 +2,10 @@
 
 namespace App\Http\Livewire;
 
+use App\Models\Course;
 use App\Models\Semester;
 use App\Models\Specialization;
+use App\Services\Courses\GetCourseIdsFromSelectedCourses;
 use App\Services\Courses\GetCourseSelectDataService;
 use App\Services\PageContents\PageContentService;
 use Illuminate\Support\Facades\App;
@@ -48,6 +50,7 @@ class CourseSelection extends Component
         $this
             ->initSerivces()
             ->executeServices()
+            ->getEcts()
             ->getPageContents();
     }
 
@@ -59,6 +62,17 @@ class CourseSelection extends Component
     protected function executeServices(): self
     {
         $this->furtherCoursesBySpecialisationAndCluster = ($this->getCourseSelectDataService)($this->specialization, true);
+
+        return $this;
+    }
+
+    protected function getEcts(): self
+    {
+        $this->ects = 0;
+
+        foreach (Course::whereIn('id', App::make(GetCourseIdsFromSelectedCourses::class)($this->selectedCourses))->get() AS $course) {
+            $this->ects += $course->ects;
+        }
 
         return $this;
     }

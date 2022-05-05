@@ -4,12 +4,8 @@ namespace App\Services\Semesters;
 
 class GetSemestersForSelectService
 {
-	public function __construct(
-		protected GetCurrentSemesterService $getCurrentSemesterService, 
-		protected GetUpcomingSemestersService $getUpcomingSemestersService
-	) {
-		
-	}
+	public function __construct(protected GetUpcomingSemestersService $getUpcomingSemestersService) 
+	{}
 
 	public function __invoke(int $numberOfSemesters = 8): array
 	{

@@ -10,12 +10,13 @@ class Course extends Component
     public array $course;
     public array $nextSemesters;
     public array $selectableSemesters;
-    public array $selectedCourses;
 
     public bool $further = false;
     public bool $showType = false;
 
-    public int $courseGroupId;
+    public ?int $courseGroupId = null;
+    
+    public int|string $selectedSemester;
 
     public ?string $courseGroupTypeShortName;
     public ?string $courseGroupTypeTooltip;

@@ -37,7 +37,7 @@
                 :course="$course"
                 :courseGroupId="$courseGroup['id']"
                 :nextSemesters="$nextSemesters"
-                :selectedCourses="$selectedCourses"
+                :selectedSemester="$selectedCourses[$course['id']]"
                 key="{{ $course['id'] }}"
                 :further="$further"
                 :showType="$showType"
@@ -45,8 +45,8 @@
         @endforeach
 
         @if(!$further)
-            <div class="{{ count($this->selectedCourses) < $this->courseGroup['required_courses_count'] ? 'text-red-500' : 'text-green-500' }} text-right">
-                Selected: {{count($this->selectedCourses)}} / {{$this->courseGroup['required_courses_count']}}
+            <div class="{{ $selectedCoursesCount < $this->courseGroup['required_courses_count'] ? 'text-red-500' : 'text-green-500' }} text-right">
+                Selected: {{ $selectedCoursesCount }} / {{$this->courseGroup['required_courses_count']}}
             </div>
         @endif
     </div>

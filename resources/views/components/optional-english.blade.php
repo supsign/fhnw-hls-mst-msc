@@ -16,9 +16,9 @@
         <livewire:course
             :courseGroupTypeShortName="null"
             :course="$course"
-            :courseGroupId="4"
+            :further="true"
             :nextSemesters="$nextSemesters"
-            :selectedCourses="$selectedCourses[4] ?? []"
+            :selectedSemester="$selectedCourses[$course['id']]"
             key="{{ $course['id'] }}"
         />
     @endforeach

@@ -12,8 +12,9 @@ use App\Helpers\GeneralHelper;
 use App\Models\CourseCourseGroup;
 use App\Models\PageContent;
 use App\Models\Specialization;
+use App\Services\Courses\GetCourseIdsFromSelectedCourses;
 use App\Services\Courses\GetCourseSelectDataService;
-use Carbon\Carbon;
+use App\Services\Courses\PrepareCourseDataForWireModelService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
@@ -57,6 +58,7 @@ class ModuleSelectionForm extends Component
 
     protected GetCourseSelectDataService $getCourseSelectDataService;
     protected GetUpcomingSemestersService $getUpcomingSemestersService;
+    protected Specialization $specialization;
 
     protected $listeners = [
         'courseSelected',
@@ -76,30 +78,14 @@ class ModuleSelectionForm extends Component
         'modules_outside_description'
     ];
 
-    public function courseSelected(int $courseGroupId, int $courseId, int|string $semesterId, bool $further): void
+    public function courseSelected(int $courseId, int|string $semesterId, ?int $courseGroupId = null, bool $further = false): void
     {
-        $type = $further ? 'further' : 'main';
-
-        if ($semesterId !== 'none') {
-            $this->selectedCourses[$type][$courseGroupId][$courseId] = $semesterId;
+        if ($further) {
+            $this->selectedCourses['further'][$courseId] = $semesterId;
         } else {
-            foreach ($this->selectedCourses[$type] AS $key => $value) {
-                unset($this->selectedCourses[$type][$key][$courseId]);
-
-                if (empty($this->selectedCourses[$type][$key])) {
-                    unset($this->selectedCourses[$type][$key]);
-                }
-
-                if (empty($this->selectedCourses[$type])) {
-                    unset($this->selectedCourses[$type]);
-                }
-            }
+            $this->selectedCourses['main'][$courseGroupId][$courseId] = $semesterId;
         }
-        $this->statistics = $this->getCoursesCountByCourseGroup();
-        $this->semestersWithEcts = $this->getSelectedCoursesCount();
-        $this->getEcts();
     }
-
 
     public function mount(): void
     {
@@ -120,13 +106,26 @@ class ModuleSelectionForm extends Component
         }
     }
 
-    public function updated(): void
+    public function updated($name): void
     {
         if ($this->specializationId > 0) {
+            $this->specialization = Specialization::find($this->specializationId);
+
             $this->getCoursesByCourseGroup();
             $this->getRequiredCounts();
             $this->getNextSemesters();
+
+            if ($name === 'specializationId') {
+                $this->selectedCourses = App::make(PrepareCourseDataForWireModelService::class)($this->specialization);
+            }
         }
+    }
+
+    public function updateMasterThesis(array $start, string $end, array $theses): void
+    {
+        $this->masterThesis['start'] = $start ?? null;
+        $this->masterThesis['end'] = $end ?? null;
+        $this->masterThesis['theses'] = $theses  ?? null;
     }
 
     protected function getCoursesByCourseGroup(): void
@@ -134,30 +133,6 @@ class ModuleSelectionForm extends Component
         $this->getCourseSelectDataService = App::make(GetCourseSelectDataService::class);
         $specialization = Specialization::find($this->specializationId);
         $this->coursesByCourseGroup = ($this->getCourseSelectDataService)($specialization);
-    }
-
-    protected function updateMasterThesis(array $start, string $end, array $theses): void
-    {
-        $this->masterThesis['start'] = $start ?? null;
-        $this->masterThesis['end'] = $end ?? null;
-        $this->masterThesis['theses'] = $theses  ?? null;
-    }
-
-    protected function getEcts(): self
-    {
-        $this->ects = 0;
-
-        if (empty($this->selectedCourses)) {
-            return $this;
-        }
-
-        foreach ($this->selectedCourses AS $type) {
-            foreach (Course::find(array_keys(array_replace_recursive(...$type))) AS $course) {
-                $this->ects += $course->ects;
-            }
-        }
-
-        return $this;
     }
 
     protected function getPageContents(): self
@@ -201,17 +176,17 @@ class ModuleSelectionForm extends Component
 
     protected function getPdfData(): void
     {
-        $this->pdfData['givenName'] = $this->givenName;
-        $this->pdfData['surname'] = $this->surname;
-        $this->pdfData['specialization'] = $this->specializationId;
-        $this->pdfData['selected_courses'] = $this->selectedCourses;
-        $this->pdfData['specialization_count'] = $this->getCoursesCount();
-        $this->pdfData['ects'] = $this->ects;
-        $this->pdfData['thesis_start'] = $this->masterThesis['start']['id'];
-        $this->pdfData['thesis_subject'] = $this->masterThesis['theses'];
-        $this->pdfData['thesis_further_details'] = $this->masterThesis['furtherDetails'];
-        $this->pdfData['counts'] = $this->getCoursesCountByCourseGroup();
-        $this->pdfData['additional_comments'] = $this->additionalComments;
+        $pdfData['givenName'] = $this->givenName;
+        $pdfData['surname'] = $this->surname;
+        $pdfData['specialization'] = $this->specializationId;
+        $pdfData['selected_courses'] = $this->selectedCourses;
+        $pdfData['specialization_count'] = $this->getCoursesCount();
+        $pdfData['ects'] = $this->ects;
+        $pdfData['thesis_start'] = $this->masterThesis['start']['id'];
+        $pdfData['thesis_subject'] = $this->masterThesis['theses'];
+        $pdfData['thesis_further_details'] = $this->masterThesis['furtherDetails'];
+        $pdfData['counts'] = $this->getCoursesCountByCourseGroup();
+        $pdfData['additional_comments'] = $this->additionalComments;
     }
 
     protected function getCoursesCount(): int
@@ -228,11 +203,7 @@ class ModuleSelectionForm extends Component
 
     protected function getCoursesCountByCourseGroup()
     {
-        $courseIds = [];
-
-        foreach (collect($this->selectedCourses)->flatten(1)->toArray() AS $courses) {
-            $courseIds = array_merge($courseIds, array_keys($courses));
-        }
+        $courseIds = App::make(GetCourseIdsFromSelectedCourses::class)($this->selectedCourses);
 
         return [
             'specialization' => Course::whereIn('id', $courseIds)->whereNotNull('specialization_id')->count(),
@@ -240,45 +211,6 @@ class ModuleSelectionForm extends Component
             'core_compentences' => CourseCourseGroup::whereIn('course_id', $courseIds)->where('course_group_id', 4)->count(),
         ];
     }
-    protected function getSelectedCoursesCount() {
-      $courses = $this->getSelectedCourses($this->selectedCourses);
-      $semestersWithCount =  [];
-      foreach($courses AS $semester)
-      {
-          $semestersWithCount[$semester->short_name] = count($semester->selectedCourses->toArray()) *3;
-      }
-        return $semestersWithCount;
-    }
-
-    protected function getSelectedCourses(array $selectedCourseData): Collection
-    {
-        $semesterIds = collect($selectedCourseData)->flatten(2)->unique();
-        $semesters = Semester::find($semesterIds)->sortBy('start_date');
-        $coursesGrouped = collect($selectedCourseData)->flatten(1);
-
-        if ($semesterIds->count() > $semesters->count()) {
-            $semesters->push(Semester::new(['name' => 'later']));
-        }
-
-        foreach ($semesters AS $semester) {
-            foreach ($coursesGrouped AS $courseGroup) {
-                foreach ($courseGroup AS $courseId => $semesterId) {
-                    if ($semester->name === $semesterId) {
-                        $semester->selectedCourses->push(Course::find($courseId));
-                        continue;
-                    }
-
-                    if ($semesterId == $semester->id) {
-                        $semester->selectedCourses->push(Course::find($courseId));
-                    }
-                }
-            }
-        }
-
-        return $semesters;
-    }
-
-
 
     protected function init(): self
     {
@@ -315,12 +247,9 @@ class ModuleSelectionForm extends Component
 
     public function submit(): Redirector
     {
-        $this->getModuleCounts();
-        $this->statistics = $this->getCoursesCountByCourseGroup();
         $this->validate();
-        $this->getPdfData();
 
-        return redirect()->route('home.pdf', $this->pdfData);
+        return redirect()->route('home.pdf', $this->getPdfData());
     }
 
 }

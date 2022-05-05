@@ -123,11 +123,12 @@ class GetPdfDataService
                 foreach ($courseGroup AS $courseId => $semesterId) {
                     if ($semester->name === $semesterId) {
                         $semester->selectedCourses->push($this->getCourse($courseId));
-                        continue;
+                        break;
                     }
 
                     if ($semesterId == $semester->id) {
                         $semester->selectedCourses->push($this->getCourse($courseId));
+                        break;
                     }
                 }
             }
