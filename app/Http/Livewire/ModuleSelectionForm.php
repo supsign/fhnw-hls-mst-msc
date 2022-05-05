@@ -100,7 +100,6 @@ class ModuleSelectionForm extends Component
             $this->specialization = Specialization::find($this->specializationId);
 
             $this->getCoursesByCourseGroup();
-            $this->getRequiredCounts();
             $this->getNextSemesters();
 
             if (!in_array($name, ['additionalComments', 'doubleDegree', 'givenName', 'surname'])) {
@@ -124,6 +123,24 @@ class ModuleSelectionForm extends Component
         foreach (Course::whereIn('id', App::make(GetCourseIdsFromSelectedCourses::class)($this->selectedCourses))->get() AS $course) {
             $this->ects += $course->ects;
         }
+
+        return $this;
+    }
+
+    protected function getCounts(): self
+    {
+        foreach ($this->coursesByCourseGroup AS $courseGroup) {
+            $group = CourseGroup::find($courseGroup['id']);
+
+            $this->{lcfirst($group->type->name).'RequiredCount'} = $group->required_courses_count;
+
+            $counts = array_count_values($this->selectedCourses['main'][$courseGroup['id']]);
+            unset($counts['none']);
+
+            $this->{lcfirst($group->type->name).'SelectedCount'} = array_sum($counts);
+        }
+
+
 
         return $this;
     }
@@ -166,14 +183,6 @@ class ModuleSelectionForm extends Component
         return $this;
     }
 
-    protected function getRequiredCounts(): void
-    {
-        foreach ($this->coursesByCourseGroup AS $courseGroup) {
-            $group = CourseGroup::find($courseGroup['id']);
-            $this->{lcfirst($group->type->name).'RequiredCount'} = $group->required_courses_count;
-        }
-    }
-
     protected function getPdfData(): void
     {
         $pdfData['givenName'] = $this->givenName;
@@ -183,7 +192,7 @@ class ModuleSelectionForm extends Component
         $pdfData['specialization_count'] = $this->getCoursesCount();
         $pdfData['thesis_start'] = $this->masterThesis['start']['id'];
         $pdfData['thesis_subject'] = $this->masterThesis['theses'];
-        $pdfData['thesis_further_details'] = $this->masterThesis['furtherDetails'];
+        $pdfData['thesis_further_details'] = $this->masterThesis['furtherDetails'] ?? null;
         $pdfData['counts'] = $this->getCoursesCountByCourseGroup();
         $pdfData['additional_comments'] = $this->additionalComments;
     }
@@ -246,7 +255,10 @@ class ModuleSelectionForm extends Component
 
     public function submit(): Redirector
     {
-        $this->getEcts()->validate();
+        $this
+            ->getCounts()
+            ->getEcts()
+            ->validate();
 
         return redirect()->route('home.pdf', $this->getPdfData());
     }
