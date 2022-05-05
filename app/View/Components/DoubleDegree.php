@@ -10,10 +10,13 @@ class DoubleDegree extends Component
 {
     public ?string $doubleDegreeTitle;
     public ?string $doubleDegreeDescription;
+    public ?string $doubleDegreeCheckboxText;
 
     protected array $pageContents = [
         'double_degree_title',
-        'double_degree_description'
+        'double_degree_description',
+        'double_degree_checkbox_text'
+
     ];
 
     public function __construct(protected PageContentService $pageContentService)
