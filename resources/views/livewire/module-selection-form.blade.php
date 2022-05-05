@@ -43,9 +43,7 @@
             <x-additional-comments wire:model='additionalComments'/>
             <livewire:summary-statistics
                 key="{{ microtime() }}" 
-                :statistics='$statistics' 
-                :ects='$ects'
-                :semestersWithEcts='$semestersWithEcts' 
+                :selectedCourses="$selectedCourses"
                 :masterThesis='$masterThesis'
             />
             <div x-data class='w-80'>

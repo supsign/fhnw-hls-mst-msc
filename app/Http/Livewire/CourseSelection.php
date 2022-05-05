@@ -5,6 +5,7 @@ namespace App\Http\Livewire;
 use App\Models\Course;
 use App\Models\Semester;
 use App\Models\Specialization;
+use App\Services\Courses\GetCourseIdsFromSelectedCourses;
 use App\Services\Courses\GetCourseSelectDataService;
 use App\Services\PageContents\PageContentService;
 use Illuminate\Support\Facades\App;
@@ -69,16 +70,7 @@ class CourseSelection extends Component
     {
         $this->ects = 0;
 
-        $selectedCourseIds = array_keys(
-            array_filter(
-                array_merge(
-                    $this->selectedCourses['further'], ...$this->selectedCourses['main']
-                ), 
-                fn ($value) => $value !== 'none'
-            )
-        );
-        
-        foreach (Course::whereIn('id', $selectedCourseIds)->get() AS $course) {
+        foreach (Course::whereIn('id', App::make(GetCourseIdsFromSelectedCourses::class)($this->selectedCourses))->get() AS $course) {
             $this->ects += $course->ects;
         }
 

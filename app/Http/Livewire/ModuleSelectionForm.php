@@ -12,6 +12,7 @@ use App\Helpers\GeneralHelper;
 use App\Models\CourseCourseGroup;
 use App\Models\PageContent;
 use App\Models\Specialization;
+use App\Services\Courses\GetCourseIdsFromSelectedCourses;
 use App\Services\Courses\GetCourseSelectDataService;
 use App\Services\Courses\PrepareCourseDataForWireModelService;
 use Illuminate\Contracts\View\View;
@@ -175,17 +176,17 @@ class ModuleSelectionForm extends Component
 
     protected function getPdfData(): void
     {
-        $this->pdfData['givenName'] = $this->givenName;
-        $this->pdfData['surname'] = $this->surname;
-        $this->pdfData['specialization'] = $this->specializationId;
-        $this->pdfData['selected_courses'] = $this->selectedCourses;
-        $this->pdfData['specialization_count'] = $this->getCoursesCount();
-        $this->pdfData['ects'] = $this->ects;
-        $this->pdfData['thesis_start'] = $this->masterThesis['start']['id'];
-        $this->pdfData['thesis_subject'] = $this->masterThesis['theses'];
-        $this->pdfData['thesis_further_details'] = $this->masterThesis['furtherDetails'];
-        $this->pdfData['counts'] = $this->getCoursesCountByCourseGroup();
-        $this->pdfData['additional_comments'] = $this->additionalComments;
+        $pdfData['givenName'] = $this->givenName;
+        $pdfData['surname'] = $this->surname;
+        $pdfData['specialization'] = $this->specializationId;
+        $pdfData['selected_courses'] = $this->selectedCourses;
+        $pdfData['specialization_count'] = $this->getCoursesCount();
+        $pdfData['ects'] = $this->ects;
+        $pdfData['thesis_start'] = $this->masterThesis['start']['id'];
+        $pdfData['thesis_subject'] = $this->masterThesis['theses'];
+        $pdfData['thesis_further_details'] = $this->masterThesis['furtherDetails'];
+        $pdfData['counts'] = $this->getCoursesCountByCourseGroup();
+        $pdfData['additional_comments'] = $this->additionalComments;
     }
 
     protected function getCoursesCount(): int
@@ -202,11 +203,7 @@ class ModuleSelectionForm extends Component
 
     protected function getCoursesCountByCourseGroup()
     {
-        $courseIds = [];
-
-        foreach (collect($this->selectedCourses)->flatten(1)->toArray() AS $courses) {
-            $courseIds = array_merge($courseIds, array_keys($courses));
-        }
+        $courseIds = App::make(GetCourseIdsFromSelectedCourses::class)($this->selectedCourses);
 
         return [
             'specialization' => Course::whereIn('id', $courseIds)->whereNotNull('specialization_id')->count(),
@@ -291,12 +288,9 @@ class ModuleSelectionForm extends Component
 
     public function submit(): Redirector
     {
-        $this->getModuleCounts();
-        $this->statistics = $this->getCoursesCountByCourseGroup();
         $this->validate();
-        $this->getPdfData();
 
-        return redirect()->route('home.pdf', $this->pdfData);
+        return redirect()->route('home.pdf', $this->getPdfData());
     }
 
 }
