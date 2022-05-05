@@ -105,7 +105,7 @@ class ModuleSelectionForm extends Component
             $this->getRequiredCounts();
             $this->getNextSemesters();
 
-            if (!in_array($name, ['givenName', 'surname'])) {
+            if (!in_array($name, ['additionalComments', 'doubleDegree', 'givenName', 'surname'])) {
                 $this->selectedCourses = App::make(PrepareCourseDataForWireModelService::class)($this->specialization);
             }
         }
