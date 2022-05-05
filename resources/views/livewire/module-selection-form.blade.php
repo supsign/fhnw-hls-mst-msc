@@ -10,6 +10,9 @@
         <x-base.select wire:model="semesterId" label="Semester" :options="$semesters" />
         <x-base.select wire:model="studyModeId" label="Study Mode" :options="$studyModes" :tooltip="$studyModeTooltip"/>
         <x-base.select wire:model="specializationId" label="Specialization" :options="$specializations" optionKey="name" placeholder="-- Choose Specialization --"/>
+
+        {{-- @dump($selectedCourses) --}}
+
         @if($specializationId)
             <livewire:course-selection
                 key="{{ microtime() }}"
@@ -35,7 +38,7 @@
             />
             <x-optional-english
                 :nextSemesters="$nextSemesters"
-                :selectedCourses="$selectedCourses['main'] ?? []"
+                :selectedCourses="$selectedCourses['additional']"
             />
             <x-additional-comments wire:model='additionalComments'/>
             <livewire:summary-statistics

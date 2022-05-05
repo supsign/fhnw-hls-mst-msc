@@ -37,7 +37,7 @@
                 :course="$course"
                 :courseGroupId="$courseGroup['id']"
                 :nextSemesters="$nextSemesters"
-                :selectedCourses="$selectedCourses"
+                :selectedSemester="$selectedCourses[$course['id']]"
                 key="{{ $course['id'] }}"
                 :further="$further"
                 :showType="$showType"

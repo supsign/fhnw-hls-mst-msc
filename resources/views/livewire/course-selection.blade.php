@@ -4,7 +4,7 @@
             :description="$courseGroup['id'] === 4 ? $coreCompetencesDescription : null"
             :courseGroup="$courseGroup"
             :nextSemesters="$nextSemesters"
-            :selectedCourses="$selectedCourses['main'][$courseGroup['id']] ?? []"
+            :selectedCourses="$selectedCourses['main'][$courseGroup['id']]"
             :showType="true"
             class="mb-5"
         />
@@ -12,11 +12,11 @@
 
     <div class="sticky top-0 bg-hls p-2 z-10 self-start">{!! $descriptionBeforeFurther  !!} Current ECTS: {{ $ects }}/50</div>
     
-    @foreach ($furtherCoursesBySpecialisationAndCluster AS $furtherCourses)
+{{--     @foreach ($furtherCoursesBySpecialisationAndCluster AS $furtherCourses)
         <livewire:further-courses
             :furtherCourses="$furtherCourses"
             :nextSemesters="$nextSemesters"
-            :selectedCourses="$selectedCourses['further'] ?? []"
+            :selectedCourses="$selectedCourses['further']"
         />
-    @endforeach
+    @endforeach --}}
 </div>

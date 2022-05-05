@@ -13,7 +13,7 @@ use App\Models\CourseCourseGroup;
 use App\Models\PageContent;
 use App\Models\Specialization;
 use App\Services\Courses\GetCourseSelectDataService;
-use Carbon\Carbon;
+use App\Services\Courses\PrepareCourseDataForWireModelService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
@@ -57,6 +57,7 @@ class ModuleSelectionForm extends Component
 
     protected GetCourseSelectDataService $getCourseSelectDataService;
     protected GetUpcomingSemestersService $getUpcomingSemestersService;
+    protected Specialization $specialization;
 
     protected $listeners = [
         'courseSelected',
@@ -76,30 +77,14 @@ class ModuleSelectionForm extends Component
         'modules_outside_description'
     ];
 
-    public function courseSelected(int $courseGroupId, int $courseId, int|string $semesterId, bool $further): void
+    public function courseSelected(int $courseId, int|string $semesterId, ?int $courseGroupId = null, bool $further = false): void
     {
-        $type = $further ? 'further' : 'main';
-
-        if ($semesterId !== 'none') {
-            $this->selectedCourses[$type][$courseGroupId][$courseId] = $semesterId;
+        if ($further) {
+            $this->selectedCourses['further'][$courseId] = $semesterId;
         } else {
-            foreach ($this->selectedCourses[$type] AS $key => $value) {
-                unset($this->selectedCourses[$type][$key][$courseId]);
-
-                if (empty($this->selectedCourses[$type][$key])) {
-                    unset($this->selectedCourses[$type][$key]);
-                }
-
-                if (empty($this->selectedCourses[$type])) {
-                    unset($this->selectedCourses[$type]);
-                }
-            }
+            $this->selectedCourses['main'][$courseGroupId][$courseId] = $semesterId;
         }
-        $this->statistics = $this->getCoursesCountByCourseGroup();
-        $this->semestersWithEcts = $this->getSelectedCoursesCount();
-        $this->getEcts();
     }
-
 
     public function mount(): void
     {
@@ -120,12 +105,18 @@ class ModuleSelectionForm extends Component
         }
     }
 
-    public function updated(): void
+    public function updated($name): void
     {
         if ($this->specializationId > 0) {
+            $this->specialization = Specialization::find($this->specializationId);
+
             $this->getCoursesByCourseGroup();
             $this->getRequiredCounts();
             $this->getNextSemesters();
+
+            if ($name === 'specializationId') {
+                $this->selectedCourses = App::make(PrepareCourseDataForWireModelService::class)($this->specialization);
+            }
         }
     }
 
