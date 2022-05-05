@@ -51,8 +51,7 @@ class MasterThesis extends Component
     {
         $this->getStartOfThesis();
         $this->endOfThesis = $this->getThesisEndDate($this->startOfThesis);
-
-        $this->emit('updateMasterThesis', $this->startOfThesis, $this->endOfThesis, $this->selectedTheses);
+        $this->emit('updateMasterThesis', $this->startOfThesis, $this->endOfThesis, $this->selectedTheses , $this->furtherDetails);
     }
 
     protected function getStartOfThesis(): self
