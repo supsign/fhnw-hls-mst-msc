@@ -109,11 +109,12 @@ class ModuleSelectionForm extends Component
         }
     }
 
-    public function updateMasterThesis(array $start, string $end, array $theses): void
+    public function updateMasterThesis(array $start, string $end, array $theses, string $furtherDetails): void
     {
         $this->masterThesis['start'] = $start ?? null;
         $this->masterThesis['end'] = $end ?? null;
         $this->masterThesis['theses'] = $theses  ?? null;
+        $this->masterThesis['furtherDetails'] = $furtherDetails ?? null;
     }
 
     protected function getEcts(): self
