@@ -194,6 +194,8 @@ class ModuleSelectionForm extends Component
         $pdfData['thesis_further_details'] = $this->masterThesis['furtherDetails'] ?? null;
         $pdfData['counts'] = $this->getCoursesCountByCourseGroup();
         $pdfData['additional_comments'] = $this->additionalComments;
+
+        return $pdfData;
     }
 
     protected function getCoursesCount(): int

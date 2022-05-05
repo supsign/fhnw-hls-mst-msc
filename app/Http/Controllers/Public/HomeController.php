@@ -30,6 +30,8 @@ class HomeController extends Controller
 
     public function pdf(Request $request, GetPdfDataService $getPdfDataService) 
     {
+        dd($getPdfDataService($request));
+
         $pdf = App::make('dompdf.wrapper');
         $pdf->getDomPDF()->set_option('enable_php', true);
         $pdf->loadView('pdf', $getPdfDataService($request));

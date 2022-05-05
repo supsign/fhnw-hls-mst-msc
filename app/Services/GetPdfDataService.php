@@ -50,6 +50,7 @@ class GetPdfDataService
 
             $this->data[$key] = $value;
         }
+        
         return $this->data;
     }
 
