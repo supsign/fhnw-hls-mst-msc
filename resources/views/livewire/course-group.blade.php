@@ -45,8 +45,8 @@
         @endforeach
 
         @if(!$further)
-            <div class="{{ count($this->selectedCourses) < $this->courseGroup['required_courses_count'] ? 'text-red-500' : 'text-green-500' }} text-right">
-                Selected: {{count($this->selectedCourses)}} / {{$this->courseGroup['required_courses_count']}}
+            <div class="{{ $selectedCoursesCount < $this->courseGroup['required_courses_count'] ? 'text-red-500' : 'text-green-500' }} text-right">
+                Selected: {{ $selectedCoursesCount }} / {{$this->courseGroup['required_courses_count']}}
             </div>
         @endif
     </div>

@@ -13,10 +13,12 @@ class CourseGroup extends Component
     public array $courses = [];
 
     public bool $further = false;
+    public bool $showType = false;
 
     public ?string $description = null;
     public ?string $title = null;
-    public bool $showType = false;
+
+    public int $selectedCoursesCount;
 
     public function mount() 
     {
@@ -24,6 +26,7 @@ class CourseGroup extends Component
             $this->getTitle();
         }
 
+        $this->getCourseCount();
         $this->getSortCourses();
     }
 
@@ -32,7 +35,16 @@ class CourseGroup extends Component
         return view('livewire.course-group');
     }
 
-    protected function getSortCourses() 
+    protected function getCourseCount(): void
+    {
+        $var = array_count_values($this->selectedCourses);
+
+        unset($var['none']);
+
+        $this->selectedCoursesCount = array_sum($var);
+    }
+
+    protected function getSortCourses(): void
     {
         usort($this->courseGroup['courses'], function($a, $b) {
             return $a['name'] <=> $b['name'];
@@ -45,7 +57,7 @@ class CourseGroup extends Component
         $this->courses = $this->courseGroup['courses'];
     }
 
-    protected function getTitle()
+    protected function getTitle(): void
     {
         $this->title = str_replace(
             ['#requiredCoursesCount', '#groupName'], 
