@@ -22,17 +22,19 @@ use Livewire\Redirector;
 
 class ModuleSelectionForm extends Component
 {
+    public array $coursesByCourseGroup;
+    public array $masterThesis = [];
+    public array $nextSemesters;
     public array $pdfData = [];
     public array $selectedCourses = [];
-
-    public array $coursesByCourseGroup;
-    public array $nextSemesters;
     public array $semesters;
     public array $specializations;
+    public array $statistics = [];
     public array $studyModes;
 
     public bool $doubleDegree = false;
 
+    public int $etcs = 0;
     public ?int $specializationId = null;
     public ?int $studyModeId = null;
     public ?string $semesterId = null;
@@ -41,8 +43,6 @@ class ModuleSelectionForm extends Component
 
     public ?string $surname = null;
     public ?string $givenName = null;
-    public array $masterThesis = [];
-    public array $statistics = [];
     public ?string $additionalComments = null;
 
     public int $specializationSelectedCount = 0;
@@ -51,8 +51,6 @@ class ModuleSelectionForm extends Component
     public int $electiveRequiredCount = 0;
     public int $coreCompetencesSelectedCount = 0;
     public int $coreCompetencesRequiredCount = 0;
-
-    public array $semestersWithEcts = [];
 
     protected GetCourseSelectDataService $getCourseSelectDataService;
     protected GetUpcomingSemestersService $getUpcomingSemestersService;
@@ -116,6 +114,17 @@ class ModuleSelectionForm extends Component
         $this->masterThesis['start'] = $start ?? null;
         $this->masterThesis['end'] = $end ?? null;
         $this->masterThesis['theses'] = $theses  ?? null;
+    }
+
+    protected function getEcts(): self
+    {
+        $this->ects = 0;
+
+        foreach (Course::whereIn('id', App::make(GetCourseIdsFromSelectedCourses::class)($this->selectedCourses))->get() AS $course) {
+            $this->ects += $course->ects;
+        }
+
+        return $this;
     }
 
     protected function getCoursesByCourseGroup(): void
@@ -236,7 +245,7 @@ class ModuleSelectionForm extends Component
 
     public function submit(): Redirector
     {
-        $this->validate();
+        $this->getEcts()->validate();
 
         return redirect()->route('home.pdf', $this->getPdfData());
     }
