@@ -114,7 +114,7 @@ class ModuleSelectionForm extends Component
 
     public function updating($name): void
     {
-        if (!in_array($name, ['givenName', 'surname'])) {
+        if (!in_array($name, ['additionalComments', 'doubleDegree', 'givenName', 'surname'])) {
             $this->ects = 0;
             $this->selectedCourses = [];
         }
