@@ -209,6 +209,7 @@ class ModuleSelectionForm extends Component
         $this->pdfData['ects'] = $this->ects;
         $this->pdfData['thesis_start'] = $this->masterThesis['start']['id'];
         $this->pdfData['thesis_subject'] = $this->masterThesis['theses'];
+        $this->pdfData['thesis_further_details'] = $this->masterThesis['furtherDetails'];
         $this->pdfData['counts'] = $this->getCoursesCountByCourseGroup();
         $this->pdfData['additional_comments'] = $this->additionalComments;
     }
