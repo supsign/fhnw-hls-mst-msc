@@ -16,7 +16,6 @@ use App\Services\Courses\GetCourseIdsFromSelectedCourses;
 use App\Services\Courses\GetCourseSelectDataService;
 use App\Services\Courses\PrepareCourseDataForWireModelService;
 use Illuminate\Contracts\View\View;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 use Livewire\Component;
 use Livewire\Redirector;
@@ -34,7 +33,6 @@ class ModuleSelectionForm extends Component
 
     public bool $doubleDegree = false;
 
-    public int $ects = 0;
     public ?int $specializationId = null;
     public ?int $studyModeId = null;
     public ?string $semesterId = null;
@@ -101,8 +99,9 @@ class ModuleSelectionForm extends Component
     public function updating($name): void
     {
         if (!in_array($name, ['givenName', 'surname'])) {
-            $this->ects = 0;
-            $this->selectedCourses = [];
+            if (!empty($this->specialization)) {
+                $this->selectedCourses = App::make(PrepareCourseDataForWireModelService::class)($this->specialization);
+            }
         }
     }
 
@@ -181,7 +180,6 @@ class ModuleSelectionForm extends Component
         $pdfData['specialization'] = $this->specializationId;
         $pdfData['selected_courses'] = $this->selectedCourses;
         $pdfData['specialization_count'] = $this->getCoursesCount();
-        $pdfData['ects'] = $this->ects;
         $pdfData['thesis_start'] = $this->masterThesis['start']['id'];
         $pdfData['thesis_subject'] = $this->masterThesis['theses'];
         $pdfData['thesis_further_details'] = $this->masterThesis['furtherDetails'];

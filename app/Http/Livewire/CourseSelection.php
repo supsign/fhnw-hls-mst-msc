@@ -24,6 +24,7 @@ class CourseSelection extends Component
     public int $specializationId;
     public int $studyModeId;
     public int $ects;
+    
     public ?string $coreCompetencesDescription = null;
     public ?string $descriptionBeforeFurther = null;
     public ?string $furtherClusterTitle = null;
@@ -50,13 +51,17 @@ class CourseSelection extends Component
         $this
             ->initSerivces()
             ->executeServices()
-            ->getEcts()
             ->getPageContents();
     }
 
     public function render(): View
     {
         return view('livewire.course-selection');
+    }
+
+    public function updated()
+    {
+        $this->getEcts();
     }
 
     protected function executeServices(): self
