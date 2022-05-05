@@ -109,7 +109,7 @@ class GetPdfDataService
     }
 
     protected function getSelectedCourses(array $selectedCourseData): Collection
-    {   
+    {
         $semesterIds = collect($selectedCourseData)->flatten(2)->unique();
         $semesters = Semester::find($semesterIds)->sortBy('start_date');
         $coursesGrouped = collect($selectedCourseData)->flatten(1);
@@ -136,7 +136,8 @@ class GetPdfDataService
         return $semesters;
     }
 
-    protected function getThesisEndDate($semester) {
+    protected function getThesisEndDate($semester) 
+    {
         $start = Carbon::parse($semester['start_date']);
         
         switch ($start->month) {
