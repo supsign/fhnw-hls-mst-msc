@@ -8,9 +8,7 @@ class GetCourseIdsFromSelectedCourses
     {
         return array_keys(
             array_filter(
-                array_merge(
-                    $selectedCourses['further'], ...$selectedCourses['main']
-                ), 
+                array_replace_recursive($selectedCourses['further'], ...$selectedCourses['main']),
                 fn ($value) => $value !== 'none'
             )
         );

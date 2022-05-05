@@ -212,47 +212,6 @@ class ModuleSelectionForm extends Component
         ];
     }
 
-    protected function getSelectedCoursesCount() {
-      $courses = $this->getSelectedCourses($this->selectedCourses);
-      $semestersWithCount =  [];
-      
-      foreach($courses AS $semester)
-      {
-          $semestersWithCount[$semester->name] = count($semester->selectedCourses->toArray()) *3;
-      }
-        return $semestersWithCount;
-    }
-
-    protected function getSelectedCourses(array $selectedCourseData): Collection
-    {
-        $semesterIds = collect($selectedCourseData)->flatten(2)->unique();
-        $semesters = Semester::find($semesterIds)->sortBy('start_date');
-        $coursesGrouped = collect($selectedCourseData)->flatten(1);
-
-        if ($semesterIds->count() > $semesters->count()) {
-            $semesters->push(Semester::new(['name' => 'later']));
-        }
-
-        foreach ($semesters AS $semester) {
-            foreach ($coursesGrouped AS $courseGroup) {
-                foreach ($courseGroup AS $courseId => $semesterId) {
-                    if ($semester->name === $semesterId) {
-                        $semester->selectedCourses->push(Course::find($courseId));
-                        continue;
-                    }
-
-                    if ($semesterId == $semester->id) {
-                        $semester->selectedCourses->push(Course::find($courseId));
-                    }
-                }
-            }
-        }
-
-        return $semesters;
-    }
-
-
-
     protected function init(): self
     {
         $this->semesterId = array_key_first($this->semesters);
