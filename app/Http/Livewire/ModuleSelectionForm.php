@@ -236,7 +236,7 @@ class ModuleSelectionForm extends Component
       $semestersWithCount =  [];
       foreach($courses AS $semester)
       {
-          $semestersWithCount[$semester->short_name] = count($semester->selectedCourses->toArray()) *3;
+          $semestersWithCount[$semester->name] = count($semester->selectedCourses->toArray()) *3;
       }
         return $semestersWithCount;
     }
