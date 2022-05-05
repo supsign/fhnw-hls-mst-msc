@@ -96,15 +96,6 @@ class ModuleSelectionForm extends Component
         return view('livewire.module-selection-form');
     }
 
-    public function updating($name): void
-    {
-        if (!in_array($name, ['givenName', 'surname'])) {
-            if (!empty($this->specialization)) {
-                $this->selectedCourses = App::make(PrepareCourseDataForWireModelService::class)($this->specialization);
-            }
-        }
-    }
-
     public function updated($name): void
     {
         if ($this->specializationId > 0) {
@@ -114,7 +105,7 @@ class ModuleSelectionForm extends Component
             $this->getRequiredCounts();
             $this->getNextSemesters();
 
-            if ($name === 'specializationId') {
+            if (!in_array($name, ['givenName', 'surname'])) {
                 $this->selectedCourses = App::make(PrepareCourseDataForWireModelService::class)($this->specialization);
             }
         }
