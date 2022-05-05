@@ -51,17 +51,13 @@ class CourseSelection extends Component
         $this
             ->initSerivces()
             ->executeServices()
+            ->getEcts()
             ->getPageContents();
     }
 
     public function render(): View
     {
         return view('livewire.course-selection');
-    }
-
-    public function updated()
-    {
-        $this->getEcts();
     }
 
     protected function executeServices(): self
