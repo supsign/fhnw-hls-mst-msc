@@ -134,23 +134,6 @@ class ModuleSelectionForm extends Component
         $this->coursesByCourseGroup = ($this->getCourseSelectDataService)($specialization);
     }
 
-    protected function getEcts(): self
-    {
-        $this->ects = 0;
-
-        if (empty($this->selectedCourses)) {
-            return $this;
-        }
-
-        foreach ($this->selectedCourses AS $type) {
-            foreach (Course::find(array_keys(array_replace_recursive(...$type))) AS $course) {
-                $this->ects += $course->ects;
-            }
-        }
-
-        return $this;
-    }
-
     protected function getPageContents(): self
     {
         $pageContents = PageContent::whereIn('name', $this->pageContents)->get();
@@ -231,9 +214,11 @@ class ModuleSelectionForm extends Component
             'core_compentences' => CourseCourseGroup::whereIn('course_id', $courseIds)->where('course_group_id', 4)->count(),
         ];
     }
+
     protected function getSelectedCoursesCount() {
       $courses = $this->getSelectedCourses($this->selectedCourses);
       $semestersWithCount =  [];
+      
       foreach($courses AS $semester)
       {
           $semestersWithCount[$semester->name] = count($semester->selectedCourses->toArray()) *3;
