@@ -50,7 +50,7 @@
             @endif
     </div>
     <br />
-    @if($additional_comments)
+    @if(isset($additional_comments))
     <div>
         <div><b>Additional Comments</b></div>
         <div>{{ $additional_comments}}</div>
