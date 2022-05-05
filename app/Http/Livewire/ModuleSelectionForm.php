@@ -13,7 +13,9 @@ use App\Models\CourseCourseGroup;
 use App\Models\PageContent;
 use App\Models\Specialization;
 use App\Services\Courses\GetCourseSelectDataService;
+use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 use Livewire\Component;
 use Livewire\Redirector;
@@ -50,6 +52,8 @@ class ModuleSelectionForm extends Component
     public int $electiveRequiredCount = 0;
     public int $coreCompetencesSelectedCount = 0;
     public int $coreCompetencesRequiredCount = 0;
+
+    public array $semestersWithEcts = [];
 
     protected GetCourseSelectDataService $getCourseSelectDataService;
     protected GetUpcomingSemestersService $getUpcomingSemestersService;
@@ -92,6 +96,7 @@ class ModuleSelectionForm extends Component
             }
         }
         $this->statistics = $this->getCoursesCountByCourseGroup();
+        $this->semestersWithEcts = $this->getSelectedCoursesCount();
         $this->getEcts();
     }
 
@@ -131,11 +136,11 @@ class ModuleSelectionForm extends Component
         $this->coursesByCourseGroup = ($this->getCourseSelectDataService)($specialization);
     }
 
-    public function updateMasterThesis(array $start, array $theses, ?string $furtherDetails) 
+    protected function updateMasterThesis(array $start, string $end, array $theses): void
     {
         $this->masterThesis['start'] = $start ?? null;
+        $this->masterThesis['end'] = $end ?? null;
         $this->masterThesis['theses'] = $theses  ?? null;
-        $this->masterThesis['furtherDetails'] = $furtherDetails;
     }
 
     protected function getEcts(): self
@@ -234,6 +239,45 @@ class ModuleSelectionForm extends Component
             'core_compentences' => CourseCourseGroup::whereIn('course_id', $courseIds)->where('course_group_id', 4)->count(),
         ];
     }
+    protected function getSelectedCoursesCount() {
+      $courses = $this->getSelectedCourses($this->selectedCourses);
+      $semestersWithCount =  [];
+      foreach($courses AS $semester)
+      {
+          $semestersWithCount[$semester->short_name] = count($semester->selectedCourses->toArray()) *3;
+      }
+        return $semestersWithCount;
+    }
+
+    protected function getSelectedCourses(array $selectedCourseData): Collection
+    {
+        $semesterIds = collect($selectedCourseData)->flatten(2)->unique();
+        $semesters = Semester::find($semesterIds)->sortBy('start_date');
+        $coursesGrouped = collect($selectedCourseData)->flatten(1);
+
+        if ($semesterIds->count() > $semesters->count()) {
+            $semesters->push(Semester::new(['name' => 'later']));
+        }
+
+        foreach ($semesters AS $semester) {
+            foreach ($coursesGrouped AS $courseGroup) {
+                foreach ($courseGroup AS $courseId => $semesterId) {
+                    if ($semester->name === $semesterId) {
+                        $semester->selectedCourses->push(Course::find($courseId));
+                        continue;
+                    }
+
+                    if ($semesterId == $semester->id) {
+                        $semester->selectedCourses->push(Course::find($courseId));
+                    }
+                }
+            }
+        }
+
+        return $semesters;
+    }
+
+
 
     protected function init(): self
     {

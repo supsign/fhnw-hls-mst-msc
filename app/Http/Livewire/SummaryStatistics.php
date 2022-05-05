@@ -7,7 +7,10 @@ use Livewire\Component;
 class SummaryStatistics extends Component
 {
     public array $statistics = [];
+    public array $semestersWithEcts = [];
+    public array $masterThesis = [];
     public int $ects = 0;
+
 
     public function render()
     {

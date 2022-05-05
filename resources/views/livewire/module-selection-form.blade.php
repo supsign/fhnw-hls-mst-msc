@@ -41,6 +41,8 @@
                 key="{{ microtime() }}" 
                 :statistics='$statistics' 
                 :ects='$ects'
+                :semestersWithEcts='$semestersWithEcts' 
+                :masterThesis='$masterThesis'
             />
             <div x-data>
                 <input type="submit" name="submit" value="Submit" class="button-primary" @click='window.scrollTo(0,0)'/>
