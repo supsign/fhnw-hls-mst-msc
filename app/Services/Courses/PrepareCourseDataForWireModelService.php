@@ -24,7 +24,6 @@ class PrepareCourseDataForWireModelService
         $result = [
             self::MAIN => [],
             self::FURTHER => [],
-            self::ADDITIONAL => [],
         ];
 
         foreach ($mainCourseData AS $mainCourseDate) {
@@ -34,19 +33,23 @@ class PrepareCourseDataForWireModelService
         }
 
         foreach ($furtherCourseData AS $furtherCourseDate) {
-            foreach ($furtherCourseDate['clusters'] ?? [] AS $course) {
-                $result[self::FURTHER][$course['id']] = 'none';
+            foreach ($furtherCourseDate['clusters'] ?? [] AS $cluster) {
+                foreach ($cluster['courses'] AS $course) {
+                    $result[self::FURTHER][$course['id']] = 'none';
+                }
             }
 
-            foreach ($furtherCourseDate['specializations'] ?? [] AS $course) {
-                $result[self::FURTHER][$course['id']] = 'none';
+            foreach ($furtherCourseDate['specializations'] ?? [] AS $specializations) {
+                foreach ($specializations['courses'] AS $course) {
+                    $result[self::FURTHER][$course['id']] = 'none';
+                }
             }
         }
 
         Course::whereNull('cluster_id')->whereNull('specialization_id')->get();
 
         foreach (Course::whereNull('cluster_id')->whereNull('specialization_id')->get() AS $course) {
-            $result[self::ADDITIONAL][$course->id] = 'none';
+            $result[self::FURTHER][$course->id] = 'none';
         }
 
         return $result;

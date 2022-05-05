@@ -11,8 +11,8 @@ class RadioGroup extends Component
 
     public bool $further = false;
 
-    public ?int $courseId = null;
-    public int $courseGroupId;
+    public int $courseId;
+    public ?int $courseGroupId = null;
 
     public string $courseName;
     public $selectedSemester;

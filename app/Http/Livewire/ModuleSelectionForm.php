@@ -120,18 +120,18 @@ class ModuleSelectionForm extends Component
         }
     }
 
+    public function updateMasterThesis(array $start, string $end, array $theses): void
+    {
+        $this->masterThesis['start'] = $start ?? null;
+        $this->masterThesis['end'] = $end ?? null;
+        $this->masterThesis['theses'] = $theses  ?? null;
+    }
+
     protected function getCoursesByCourseGroup(): void
     {
         $this->getCourseSelectDataService = App::make(GetCourseSelectDataService::class);
         $specialization = Specialization::find($this->specializationId);
         $this->coursesByCourseGroup = ($this->getCourseSelectDataService)($specialization);
-    }
-
-    protected function updateMasterThesis(array $start, string $end, array $theses): void
-    {
-        $this->masterThesis['start'] = $start ?? null;
-        $this->masterThesis['end'] = $end ?? null;
-        $this->masterThesis['theses'] = $theses  ?? null;
     }
 
     protected function getEcts(): self

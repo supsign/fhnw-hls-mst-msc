@@ -14,7 +14,7 @@ class Course extends Component
     public bool $further = false;
     public bool $showType = false;
 
-    public int $courseGroupId;
+    public ?int $courseGroupId = null;
     
     public int|string $selectedSemester;
 

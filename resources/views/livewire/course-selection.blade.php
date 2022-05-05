@@ -12,11 +12,11 @@
 
     <div class="sticky top-0 bg-hls p-2 z-10 self-start">{!! $descriptionBeforeFurther  !!} Current ECTS: {{ $ects }}/50</div>
     
-{{--     @foreach ($furtherCoursesBySpecialisationAndCluster AS $furtherCourses)
+    @foreach ($furtherCoursesBySpecialisationAndCluster AS $furtherCourses)
         <livewire:further-courses
             :furtherCourses="$furtherCourses"
             :nextSemesters="$nextSemesters"
             :selectedCourses="$selectedCourses['further']"
         />
-    @endforeach --}}
+    @endforeach
 </div>

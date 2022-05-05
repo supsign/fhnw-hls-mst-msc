@@ -11,7 +11,7 @@
         <x-base.select wire:model="studyModeId" label="Study Mode" :options="$studyModes" :tooltip="$studyModeTooltip"/>
         <x-base.select wire:model="specializationId" label="Specialization" :options="$specializations" optionKey="name" placeholder="-- Choose Specialization --"/>
 
-        {{-- @dump($selectedCourses) --}}
+        @dump($selectedCourses)
 
         @if($specializationId)
             <livewire:course-selection
@@ -38,7 +38,7 @@
             />
             <x-optional-english
                 :nextSemesters="$nextSemesters"
-                :selectedCourses="$selectedCourses['additional']"
+                :selectedCourses="$selectedCourses['further']"
             />
             <x-additional-comments wire:model='additionalComments'/>
             <livewire:summary-statistics
