@@ -130,6 +130,7 @@ class ModuleSelectionForm extends Component
     {
         foreach ($this->coursesByCourseGroup AS $courseGroup) {
             $group = CourseGroup::find($courseGroup['id']);
+
             $this->{lcfirst($group->type->name).'RequiredCount'} = $group->required_courses_count;
 
             $counts = array_count_values($this->selectedCourses['main'][$courseGroup['id']]);
@@ -137,6 +138,8 @@ class ModuleSelectionForm extends Component
 
             $this->{lcfirst($group->type->name).'SelectedCount'} = array_sum($counts);
         }
+
+
 
         return $this;
     }
@@ -188,7 +191,7 @@ class ModuleSelectionForm extends Component
         $pdfData['specialization_count'] = $this->getCoursesCount();
         $pdfData['thesis_start'] = $this->masterThesis['start']['id'];
         $pdfData['thesis_subject'] = $this->masterThesis['theses'];
-        $pdfData['thesis_further_details'] = $this->masterThesis['furtherDetails'];
+        $pdfData['thesis_further_details'] = $this->masterThesis['furtherDetails'] ?? null;
         $pdfData['counts'] = $this->getCoursesCountByCourseGroup();
         $pdfData['additional_comments'] = $this->additionalComments;
     }
