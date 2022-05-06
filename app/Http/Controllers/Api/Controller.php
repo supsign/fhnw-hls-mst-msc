@@ -32,19 +32,13 @@ class Controller extends BaseController
         return $getPersonalData();
     }
 
-    public function getThesisData(Specialization $specialization, GetThesisDataRequest $request, GetThesisData $getThesisData)//   :stdClass
+    public function getThesisData(Specialization $specialization, GetThesisDataRequest $request, GetThesisData $getThesisData): stdClass
     {
-        // dump(
-        //     $getThesisData(
-        //         $specialization
-        //     )
-        // );
-
-        // return 1;
-
         return $getThesisData(
             $specialization,
             $request->double_degree,
+            $request->semester ? Semester::find($request->semester) : null,
+            $request->study_mode ? StudyMode::getByValue($request->study_mode) : null,
         );
     }
 }

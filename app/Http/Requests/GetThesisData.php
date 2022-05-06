@@ -24,8 +24,9 @@ class GetThesisData extends FormRequest
     public function rules()
     {
         return [
-            'double_degree' => 'bool',
-            'semester' => 'int',
+            'double_degree' => 'bool|required',
+            'semester' => 'int|required',
+            'study_mode' => 'int|required',
         ];
     }
 }

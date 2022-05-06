@@ -23,20 +23,26 @@ class GetCourseData
         protected GetThesisData $getThesesData
     ) {}
 
-    public function __invoke(Specialization $specialization, Semester $semester = null, ?StudyMode $studyMode = StudyMode::FullTime): stdClass 
+    public function __invoke(Specialization $specialization, Semester $semester = null, StudyMode $studyMode = null): stdClass 
     {
         $this->specialization = $specialization;
         $this->mainCourseIds = $this->getCourses()->pluck('id')->toArray();
+
+        if (!$studyMode) {
+            $studyMode = StudyMode::FullTime;
+        }
+
+        $semesters = ($this->getUpcomingSemestersService)(
+            $studyMode === StudyMode::FullTime ? 4 : 2,
+            $semester?->start_date
+        );
 
         return (object)[
             'courses' => array_merge(
                 [$this->getCourseGroups()], 
                 $this->getFurtherCourses()
             ),
-            'semesters' => ($this->getUpcomingSemestersService)(
-                $studyMode === StudyMode::FullTime ? 4 : 2,
-                $semester?->start_date
-            ),
+            'semesters' => $semesters,
             'texts' => PageContent::findByName([
                 'additional_comments_title',
                 'description_before_further',
@@ -47,7 +53,7 @@ class GetCourseData
                 'optional_english_title',
                 'optional_english_description',
             ]),
-            'theses' => ($this->getThesesData)($specialization),
+            'theses' => ($this->getThesesData)($specialization, false, $semesters->first(), $studyMode),
         ];
     }
 
