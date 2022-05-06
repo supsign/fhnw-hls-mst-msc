@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Courses;
+namespace App\Services;
 
 use App\Enums\CourseGroupType;
 use App\Enums\StudyMode;
@@ -9,7 +9,7 @@ use App\Models\CourseGroupSpecialization;
 use App\Models\PageContent;
 use App\Models\Semester;
 use App\Models\Specialization;
-use App\Services\Semesters\GetUpcomingSemestersService;
+use App\Services\GetUpcomingSemesters;
 use Illuminate\Support\Collection;
 
 class GetCourseData
@@ -17,7 +17,7 @@ class GetCourseData
     protected array $mainCourseIds;
     protected Specialization $specialization;
 
-    public function __construct(protected GetUpcomingSemestersService $getUpcomingSemestersService)
+    public function __construct(protected GetUpcomingSemesters $getUpcomingSemestersService)
     {}
 
     public function __invoke(Specialization $specialization, Semester $semester = null, ?StudyMode $studyMode = StudyMode::FullTime): array 

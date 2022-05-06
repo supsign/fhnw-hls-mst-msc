@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Services\Semesters;
+namespace App\Services;
 
 use App\Enums\Semester as EnumsSemester;
 use App\Models\Semester;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 
-class GetUpcomingSemestersService
+class GetUpcomingSemesters
 {
     protected Carbon $currentDate;
     protected int $numberOfSemesters;

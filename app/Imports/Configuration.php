@@ -11,7 +11,7 @@ use App\Imports\ConfigurationSheets\SpecialisationSheetImport;
 use App\Imports\ConfigurationSheets\ThesisSheetImport;
 use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 
-class ConfigurationImport implements WithMultipleSheets
+class Configuration implements WithMultipleSheets
 {
 	protected array $clusters;
 

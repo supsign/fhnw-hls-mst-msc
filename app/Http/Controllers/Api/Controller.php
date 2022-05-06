@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller as BaseController;
 use App\Http\Requests\GetCourseData as GetCourseDataRequest;
 use App\Models\Semester;
 use App\Models\Specialization;
-use App\Services\Courses\GetCourseData as GetCourseDataService;
+use App\Services\GetCourseData as GetCourseDataService;
 
 class Controller extends BaseController
 {

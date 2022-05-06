@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Services\Imports;
+namespace App\Services;
 
-use App\Imports\ConfigurationImport;
+use App\Imports\Configuration AS ConfigurationImporter;
 use App\Models\Cluster;
 use App\Models\Course;
 use App\Models\CourseCourseGroup;
@@ -19,7 +19,7 @@ use Maatwebsite\Excel\Excel;
 use Illuminate\Support\Facades\Storage;
 use Spatie\FlareClient\Http\Exceptions\InvalidData;
 
-class ConfigurationImportService
+class ConfigurationImport
 {
     protected array $tablesToTruncate = [
         Cluster::class,
@@ -34,10 +34,8 @@ class ConfigurationImportService
         Thesis::class,
     ];
 
-    public function __construct(protected ConfigurationImport $configurationImport, protected Excel $excel)
-    {
-        
-    }
+    public function __construct(protected ConfigurationImporter $configurationImporter, protected Excel $excel)
+    {}
 
     public function __invoke(string $file): array
     {
@@ -51,7 +49,7 @@ class ConfigurationImportService
             $this
                 ->truncateTables()
                 ->excel
-                    ->import($this->configurationImport, $file);
+                    ->import($this->configurationImporter, $file);
         } catch (InvalidData $e) {
             DB::rollBack();
 
