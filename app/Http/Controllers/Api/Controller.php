@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Enums\StudyMode;
 use App\Http\Controllers\Controller as BaseController;
-use App\Http\Requests\GetCourseData as GetCourseDataRequest;
-use App\Http\Requests\GetThesisData as GetThesisDataRequest;
+use App\Http\Requests\PostCourseData as PostCourseDataRequest;
+use App\Http\Requests\PostThesisData as PostThesisDataRequest;
 use App\Models\Semester;
 use App\Models\Specialization;
 use App\Services\GetCourseData as GetCourseDataService;
@@ -15,9 +15,14 @@ use stdClass;
 
 class Controller extends BaseController
 {
-    public function getCourseData(
+    public function getPersonalData(GetPersonalData $getPersonalData): stdClass
+    {   
+        return $getPersonalData();
+    }
+
+    public function postCourseData(
         Specialization $specialization, 
-        GetCourseDataRequest $request, 
+        PostCourseDataRequest $request, 
         GetCourseDataService $getCourseData
     ): stdClass {
         return $getCourseData(
@@ -27,12 +32,7 @@ class Controller extends BaseController
         );
     }
 
-    public function getPersonalData(GetPersonalData $getPersonalData): stdClass
-    {   
-        return $getPersonalData();
-    }
-
-    public function getThesisData(Specialization $specialization, GetThesisDataRequest $request, GetThesisData $getThesisData): stdClass
+    public function postThesisData(Specialization $specialization, PostThesisDataRequest $request, GetThesisData $getThesisData): stdClass
     {
         return $getThesisData(
             $specialization,

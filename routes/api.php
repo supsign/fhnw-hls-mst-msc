@@ -20,5 +20,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('personaldata', [Controller::class, 'getPersonalData'])->name('get.personalData');
-Route::get('coursedata/{specialization}', [Controller::class, 'getCourseData'])->name('get.courseData');
-Route::get('thesisdata/{specialization}', [Controller::class, 'getThesisData'])->name('get.thesisData');
+
+Route::post('coursedata/{specialization}', [Controller::class, 'postCourseData'])->name('post.courseData');
+Route::post('thesisdata/{specialization}', [Controller::class, 'postThesisData'])->name('post.thesisData');
