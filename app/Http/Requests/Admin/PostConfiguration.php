@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\Admin;
 
-use App\Services\Auth\PasswordService;
+use App\Services\PasswordService;
 use Illuminate\Foundation\Http\FormRequest;
 
 class PostConfiguration extends FormRequest

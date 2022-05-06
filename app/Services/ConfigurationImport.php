@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Excel;
 use Illuminate\Support\Facades\Storage;
 use Spatie\FlareClient\Http\Exceptions\InvalidData;
+use stdClass;
 
 class ConfigurationImport
 {
@@ -39,7 +40,7 @@ class ConfigurationImport
         protected Excel $excel
     ) {}
 
-    public function __invoke(string $file): array
+    public function __invoke(string $file): stdClass
     {
         if (!Storage::exists($file)) {
             throw new Exception('"'.$file.'" not found');
@@ -55,7 +56,7 @@ class ConfigurationImport
         } catch (InvalidData $e) {
             DB::rollBack();
 
-            return [
+            return (object)[
                 'status' => 'error',
                 'error' => $e->getMessage(),
             ];
@@ -63,7 +64,7 @@ class ConfigurationImport
 
         DB::commit();
 
-        return [
+        return (object)[
             'status' => 'success',
         ];
     }

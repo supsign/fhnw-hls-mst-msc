@@ -1,7 +1,7 @@
 <?php
 
+use App\Http\Controllers\Api\AdminController;
 use App\Http\Controllers\Api\Controller;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,11 +15,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::controller(Controller::class)->group(function () {
+    Route::get('personaldata', 'getPersonalData')->name('get.personalData');
+    Route::post('coursedata/{specialization}', 'postCourseData')->name('post.courseData');
+    Route::post('thesisdata/{specialization}', 'postThesisData')->name('post.thesisData');
 });
 
-Route::get('personaldata', [Controller::class, 'getPersonalData'])->name('get.personalData');
+Route::controller(AdminController::class)->group(function () {
+    Route::post('admin/configuration', 'postConfiguration')->name('admin.post.configuration');
+});
 
-Route::post('coursedata/{specialization}', [Controller::class, 'postCourseData'])->name('post.courseData');
-Route::post('thesisdata/{specialization}', [Controller::class, 'postThesisData'])->name('post.thesisData');
+
+
+
