@@ -8,8 +8,8 @@ use App\Models\CourseCourseGroup;
 use App\Models\CourseSemester;
 use App\Models\Slot;
 use App\Models\Venue;
-use App\Services\Semesters\GetSemesterService;
-use App\Services\Semesters\GetUpcomingSemestersService;
+use App\Services\GetSemester;
+use App\Services\GetUpcomingSemesters;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
@@ -23,8 +23,8 @@ class CourseSheetImport implements ToCollection, WithHeadingRow
 
     public function collection(Collection $rows): void
     {
-        $getSemesterService = App::make(GetSemesterService::class);
-        $getUpcomingSemestersService = App::make(GetUpcomingSemestersService::class);
+        $getSemesterService = App::make(GetSemester::class);
+        $getUpcomingSemestersService = App::make(GetUpcomingSemesters::class);
 
         foreach ($rows as $row) {
             $row = $row->ToArray();
