@@ -17,7 +17,7 @@ class Controller extends BaseController
         Specialization $specialization, 
         GetCourseDataRequest $request, 
         GetCourseDataService $getCourseData
-    ): array {
+    ): stdClass {
         return $getCourseData(
             $specialization,
             $request->semester ? Semester::find($request->semester) : null,

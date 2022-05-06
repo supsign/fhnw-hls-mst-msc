@@ -11,6 +11,7 @@ use App\Models\Semester;
 use App\Models\Specialization;
 use App\Services\GetUpcomingSemesters;
 use Illuminate\Support\Collection;
+use stdClass;
 
 class GetCourseData
 {
@@ -20,12 +21,12 @@ class GetCourseData
     public function __construct(protected GetUpcomingSemesters $getUpcomingSemestersService)
     {}
 
-    public function __invoke(Specialization $specialization, Semester $semester = null, ?StudyMode $studyMode = StudyMode::FullTime): array 
+    public function __invoke(Specialization $specialization, Semester $semester = null, ?StudyMode $studyMode = StudyMode::FullTime): stdClass 
     {
         $this->specialization = $specialization;
         $this->mainCourseIds = $this->getCourses()->pluck('id')->toArray();
 
-        return [
+        return (object)[
             'courses' => array_merge(
                 [$this->getCourseGroups()], 
                 $this->getFurtherCourses()
