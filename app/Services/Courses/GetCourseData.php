@@ -3,47 +3,63 @@
 namespace App\Services\Courses;
 
 use App\Enums\CourseGroupType;
+use App\Enums\StudyMode;
 use App\Models\Cluster;
 use App\Models\CourseGroupSpecialization;
 use App\Models\PageContent;
+use App\Models\Semester;
 use App\Models\Specialization;
+use App\Services\Semesters\GetUpcomingSemestersService;
 use Illuminate\Support\Collection;
 
-class GetCourseSelectDataService
+class GetCourseData
 {
-    protected bool $furtherCourses;
     protected array $mainCourseIds;
     protected Specialization $specialization;
 
-    public function __invoke(Specialization $specialization, bool $furtherCourses = false): array 
+    public function __construct(protected GetUpcomingSemestersService $getUpcomingSemestersService)
+    {}
+
+    public function __invoke(Specialization $specialization, Semester $semester = null, StudyMode $studyMode = StudyMode::FullTime): array 
     {
-        $this->furtherCourses = $furtherCourses;
         $this->specialization = $specialization;
+        $this->mainCourseIds = $this->getCourses()->pluck('id')->toArray();
 
-        if ($this->furtherCourses) {
-            $this->mainCourseIds = $this->getCourses()->pluck('id')->toArray();
+        return [
+            'courses' => array_merge(
+                [$this->getCourseGroups()], 
+                $this->getFurtherCourses()
+            ),
+            'semesters' => ($this->getUpcomingSemestersService)(
+                $studyMode === StudyMode::FullTime ? 4 : 2,
+                $semester
+            ),
+            'texts' => []
+        ];
+    }
 
-            return [
-                [
-                    'title' => 'Further Specialisation Modules (Muttenz)',
+    protected function getFurtherCourses(): array
+    {
+        return [
+            (object)[
+                    'title' => PageContent::findByName('further_specialisation_title')?->content,
+                    'description' => PageContent::findByName('further_specialisation_description')?->content,
                     'type' => CourseGroupType::Specialization,
-                    'specializations' => $this->getFurtherCoursesBySpecialization()->toArray()
+                    'specializations' => $this->getFurtherCoursesBySpecialization()
                 ],
-                [
-                    'title' => 'Further Cluster-specific Modules from your Cluster',
+                (object)[
+                    'title' => PageContent::findByName('further_cluster_title')?->content,
+                    'description' => PageContent::findByName('further_cluster_description')?->content,
                     'type' => CourseGroupType::ClusterSpecific,
-                    'clusters' => $this->getFurtherCoursesByCluster()->toArray(),
+                    'clusters' => $this->getFurtherCoursesByCluster(),
                 ],
-                [
-                    'title' => 'Further Modules from other Clusters',
+                (object)[
+                    'title' => PageContent::findByName('further_other_cluster_title')?->content,
+                    'description' => PageContent::findByName('further_other_cluster_description')?->content,
                     'type' => CourseGroupType::ClusterSpecific,
-                    'description' => PageContent::where('name', 'other_cluster_modules_description')->first()?->content,
-                    'clusters' => $this->getFurtherCoursesByCluster(true)->toArray(),
+                    'clusters' => $this->getFurtherCoursesByCluster(true),
                 ]
             ];
-        }
-
-        return $this->getCourseGroups()->toArray();
     }
 
     protected function getFurtherCoursesByCluster($otherClusters = false): Collection
@@ -55,7 +71,7 @@ class GetCourseSelectDataService
                     $query->where('id', $this->specialization->cluster_id);
                 }
             })
-            ->with(['courses', 'courses.semesters'])
+            ->with(['courses'])
             ->get();
 
         foreach ($clusters AS $cluster) {
@@ -75,7 +91,7 @@ class GetCourseSelectDataService
     protected function getFurtherCoursesBySpecialization(): Collection
     {
         $specializations = Specialization::where('specializations.id', '<>', $this->specialization->id)
-            ->with(['courses', 'courses.semesters'])
+            ->with(['courses'])
             ->get();
 
         foreach ($specializations AS $specialization) {
@@ -113,7 +129,6 @@ class GetCourseSelectDataService
             ->with([
                 'courseGroup',
                 'courseGroup.courses',
-                'courseGroup.courses.semesters',
                 'courseGroup.specializations'
             ])
             ->orderBy('course_groups.type')

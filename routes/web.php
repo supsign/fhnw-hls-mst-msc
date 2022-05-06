@@ -15,11 +15,3 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-Route::get('/', [HomeController::class, 'show'])->name('home');
-Route::get('/pdf', [HomeController::class, 'pdf'])->name('home.pdf');
-
-Route::get('admin/config', [ConfigurationController::class, 'show'])->name('admin.config.show');
-Route::post('admin/config', [ConfigurationController::class, 'post'])->name('admin.config.post');
-
-Route::get('/test', [TestController::class, 'test'])->name('test');
