@@ -10,6 +10,11 @@ class BaseModel extends Model
     use HasFactory;
 
     protected $guarded = [];
+    protected $hidden = [
+        'created_at',
+        'pivot',
+        'updated_at',
+    ];
 
     public static function new(array $attributes = []): self
     {

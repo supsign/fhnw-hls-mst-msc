@@ -8,6 +8,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Course extends BaseModel
 {
+	protected $appends = [
+		'end_semester'
+	];
+
 	public function autumnSemesterSlot(): BelongsTo
 	{
 		return $this->belongsTo(Slot::class, 'as_slot_id');
@@ -29,7 +33,7 @@ class Course extends BaseModel
 	public function endSemester(): Attribute
 	{
 		return Attribute::make(
-			get: fn () => $this->semesters()->last(),
+			get: fn () => $this->semesters()->get()->last(),
 		);
 	}
 

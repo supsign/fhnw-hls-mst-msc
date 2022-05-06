@@ -20,7 +20,7 @@ class GetCourseData
     public function __construct(protected GetUpcomingSemestersService $getUpcomingSemestersService)
     {}
 
-    public function __invoke(Specialization $specialization, Semester $semester = null, StudyMode $studyMode = StudyMode::FullTime): array 
+    public function __invoke(Specialization $specialization, Semester $semester = null, ?StudyMode $studyMode = StudyMode::FullTime): array 
     {
         $this->specialization = $specialization;
         $this->mainCourseIds = $this->getCourses()->pluck('id')->toArray();
@@ -32,7 +32,7 @@ class GetCourseData
             ),
             'semesters' => ($this->getUpcomingSemestersService)(
                 $studyMode === StudyMode::FullTime ? 4 : 2,
-                $semester
+                $semester?->start_date
             ),
             'texts' => PageContent::findByName([
                 'additional_comments_title',
@@ -80,7 +80,7 @@ class GetCourseData
                     $query->where('id', $this->specialization->cluster_id);
                 }
             })
-            ->with(['courses'])
+            ->with(['courses', 'courses.semesters'])
             ->get();
 
         foreach ($clusters AS $cluster) {
@@ -100,7 +100,7 @@ class GetCourseData
     protected function getFurtherCoursesBySpecialization(): Collection
     {
         $specializations = Specialization::where('specializations.id', '<>', $this->specialization->id)
-            ->with(['courses'])
+            ->with(['courses', 'courses.semesters'])
             ->get();
 
         foreach ($specializations AS $specialization) {
@@ -138,7 +138,7 @@ class GetCourseData
             ->with([
                 'courseGroup',
                 'courseGroup.courses',
-                'courseGroup.specializations'
+                // 'courseGroup.specializations'
             ])
             ->orderBy('course_groups.type')
             ->get()
@@ -147,7 +147,8 @@ class GetCourseData
                 ->filter(function ($courseGroup) {
                     return $courseGroup->courses->count();
                 })
-                ->values();
+                ->values()
+                ;
 
         foreach ($courseGroups AS $courseGroup) {
             switch ($courseGroup->type->name) {
