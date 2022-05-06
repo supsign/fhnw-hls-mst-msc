@@ -8,6 +8,8 @@ use App\Http\Requests\GetCourseData as GetCourseDataRequest;
 use App\Models\Semester;
 use App\Models\Specialization;
 use App\Services\GetCourseData as GetCourseDataService;
+use App\Services\GetPersonalData;
+use stdClass;
 
 class Controller extends BaseController
 {
@@ -23,9 +25,16 @@ class Controller extends BaseController
         );
     }
 
-    public function getPersonalData()
-    {
-        
+    public function getPersonalData(GetPersonalData $getPersonalData): stdClass|int
+    {   
+        // dump(
+        //     $getPersonalData()
+        // );
+
+        // return 1;
+
+
+        return $getPersonalData();   
     }
 
     public function getThesisData(Specialization $specialization)
