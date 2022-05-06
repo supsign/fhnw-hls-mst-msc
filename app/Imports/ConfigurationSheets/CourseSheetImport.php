@@ -39,7 +39,7 @@ class CourseSheetImport implements ToCollection, WithHeadingRow
                         ? $getSemesterService($row['end'] + 1, false)
                         : $getSemesterService($row['end'], true);
                 } else {
-                    $endSemester = false;
+                    $endSemester = null;
                 }
 
                 Course::create([

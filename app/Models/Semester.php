@@ -10,8 +10,6 @@ use Illuminate\Support\Collection;
 class Semester extends BaseModel
 {
 	protected $appends = [
-	    'is_autumn_semester',
-	    'is_spring_semester',
 	    'name',
 	    'long_name',
 	    'short_name',
@@ -27,20 +25,6 @@ class Semester extends BaseModel
 	public function courses(): BelongsToMany
 	{
 		return $this->belongsToMany(Course::class);
-	}
-
-	public function isAutumnSemester(): Attribute
-	{
-		return Attribute::make(
-			get: fn () => $this->type->monthName === SemesterType::SpringStart
-		);
-	}
-
-	public function isSpringSemester(): Attribute
-	{
-		return Attribute::make(
-			get: fn () => $this->type->monthName === SemesterType::SpringStart
-		);
 	}
 
 	public function name(): Attribute
@@ -83,7 +67,7 @@ class Semester extends BaseModel
 	public function shortName(): Attribute
 	{
 		return Attribute::make(
-			get: fn () => $this->semesterTypeShortName().substr($this->year, 2, 2),
+			get: fn () => $this->semesterTypeShortName.substr($this->year, 2, 2),
 		);
 	}
 
