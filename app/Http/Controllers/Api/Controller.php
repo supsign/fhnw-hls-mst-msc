@@ -26,12 +26,12 @@ class Controller extends BaseController
         );
     }
 
-    public function getPersonalData(GetPersonalData $getPersonalData): stdClass|int
+    public function getPersonalData(GetPersonalData $getPersonalData): stdClass
     {   
-        return $getPersonalData();   
+        return $getPersonalData();
     }
 
-    public function getThesisData(Specialization $specialization, GetThesisData $getThesisData)
+    public function getThesisData(Specialization $specialization, GetThesisData $getThesisData)//   :stdClass
     {
         // dump(
         //     $getThesisData(
