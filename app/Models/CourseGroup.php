@@ -28,7 +28,7 @@ class CourseGroup extends BaseModel
 	{
 		return Attribute::make(
 			get: fn () => $this->attributes['description'] ?? null,
-			set: fn (string $description) => $this->attributes['description'] = $description
+			set: fn (?string $description) => $this->attributes['description'] = $description
 		);
 	}
 
@@ -54,18 +54,8 @@ class CourseGroup extends BaseModel
 	public function title(): Attribute
 	{
 		return Attribute::make(
-			get: fn () => $this->attributes['title'] ?? $this->getDefaultTitle(),
-			set: fn (string $title) => $this->attributes['title'] = $title
+			get: fn () => $this->attributes['title'] ?? null,
+			set: fn (?string $title) => $this->attributes['title'] = $title
 		);
-	}
-
-	protected function getDefaultDescription(): ?string
-	{
-		return '';
-	}
-
-	protected function getDefaultTitle(): string
-	{
-		return 'Please select at least '.$this->required_courses_count.' Modules from the Module Group '.$this->name;
 	}
 }

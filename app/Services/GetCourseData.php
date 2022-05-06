@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Enums\CourseGroupType;
 use App\Enums\StudyMode;
 use App\Models\Cluster;
+use App\Models\CourseGroup;
 use App\Models\CourseGroupSpecialization;
 use App\Models\PageContent;
 use App\Models\Semester;
@@ -15,16 +16,20 @@ use stdClass;
 
 class GetCourseData
 {
+    protected ?string $courseGroupTitle;
     protected array $mainCourseIds;
     protected Specialization $specialization;
 
     public function __construct(
         protected GetUpcomingSemesters $getUpcomingSemestersService,
         protected GetThesisData $getThesesData
-    ) {}
+    ) {
+        $this->courseGroupTitle = PageContent::getContentByName('group_titleadsf');
+    }
 
     public function __invoke(Specialization $specialization, Semester $semester = null, StudyMode $studyMode = null): stdClass 
     {
+
         $this->specialization = $specialization;
         $this->mainCourseIds = $this->getCourses()->pluck('id')->toArray();
 
@@ -33,7 +38,7 @@ class GetCourseData
         }
 
         $semesters = ($this->getUpcomingSemestersService)(
-            $studyMode === StudyMode::FullTime ? 4 : 2,
+            $studyMode === StudyMode::FullTime ? 2 : 4,
             $semester?->start_date
         );
 
@@ -48,7 +53,6 @@ class GetCourseData
                 'description_before_further',
                 'double_degree_title',
                 'double_degree_description',
-                'group_title',
                 'modules_outside_description',
                 'optional_english_title',
                 'optional_english_description',
@@ -159,6 +163,8 @@ class GetCourseData
                 ->values();
 
         foreach ($courseGroups AS $courseGroup) {
+            $courseGroup->title = $this->getCourseGroupTitle($courseGroup);
+
             switch ($courseGroup->type->name) {
                 case CourseGroupType::CoreCompetences->name:
                     $courseGroup->description = PageContent::getContentByName('core_competences_description');
@@ -170,5 +176,23 @@ class GetCourseData
         }
 
         return $courseGroups;
+    }
+
+    protected function getCourseGroupTitle(CourseGroup $courseGroup): ?string
+    {
+        if (!$this->courseGroupTitle) {
+            return $this->courseGroupTitle;
+        }
+
+        return str_replace(
+            [
+                '#requiredCoursesCount',
+                '#groupName',
+            ], [
+                $courseGroup->required_courses_count,
+                $courseGroup->name,
+            ], 
+            $this->courseGroupTitle
+        );
     }
 }
