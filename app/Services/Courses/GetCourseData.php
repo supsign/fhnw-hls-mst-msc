@@ -34,7 +34,16 @@ class GetCourseData
                 $studyMode === StudyMode::FullTime ? 4 : 2,
                 $semester
             ),
-            'texts' => []
+            'texts' => PageContent::findByName([
+                'additional_comments_title',
+                'description_before_further',
+                'double_degree_title',
+                'double_degree_description',
+                'group_title',
+                'modules_outside_description',
+                'optional_english_title',
+                'optional_english_description',
+            ]),
         ];
     }
 
@@ -42,20 +51,20 @@ class GetCourseData
     {
         return [
             (object)[
-                    'title' => PageContent::findByName('further_specialisation_title')?->content,
-                    'description' => PageContent::findByName('further_specialisation_description')?->content,
+                    'title' => PageContent::getContentByName('further_specialisation_title'),
+                    'description' => PageContent::getContentByName('further_specialisation_description'),
                     'type' => CourseGroupType::Specialization,
                     'specializations' => $this->getFurtherCoursesBySpecialization()
                 ],
                 (object)[
-                    'title' => PageContent::findByName('further_cluster_title')?->content,
-                    'description' => PageContent::findByName('further_cluster_description')?->content,
+                    'title' => PageContent::getContentByName('further_cluster_title'),
+                    'description' => PageContent::getContentByName('further_cluster_description'),
                     'type' => CourseGroupType::ClusterSpecific,
                     'clusters' => $this->getFurtherCoursesByCluster(),
                 ],
                 (object)[
-                    'title' => PageContent::findByName('further_other_cluster_title')?->content,
-                    'description' => PageContent::findByName('further_other_cluster_description')?->content,
+                    'title' => PageContent::getContentByName('further_other_cluster_title'),
+                    'description' => PageContent::getContentByName('further_other_cluster_description'),
                     'type' => CourseGroupType::ClusterSpecific,
                     'clusters' => $this->getFurtherCoursesByCluster(true),
                 ]
@@ -123,7 +132,7 @@ class GetCourseData
 
     protected function getCourseGroups(): Collection
     {
-        return CourseGroupSpecialization::join('course_groups', 'course_group_specialization.course_group_id', '=', 'course_groups.id')
+        $courseGroups = CourseGroupSpecialization::join('course_groups', 'course_group_specialization.course_group_id', '=', 'course_groups.id')
             ->where('specialization_id', $this->specialization->id)
             ->whereIn('course_groups.type', $this->getCourseGroupIds())
             ->with([
@@ -139,5 +148,49 @@ class GetCourseData
                     return $courseGroup->courses->count();
                 })
                 ->values();
+
+        foreach ($courseGroups AS $courseGroup) {
+            switch ($courseGroup->type->name) {
+                case CourseGroupType::CoreCompetences->name:
+                    $courseGroup->description = PageContent::getContentByName('core_competences_description');
+                    break;
+
+                default:
+                    continue 2;
+            }
+        }
+
+        return $courseGroups;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -8,7 +8,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class CourseGroup extends BaseModel
 {
-	protected $appends = ['course_group_type_short_name', 'course_group_type_tooltip', 'description', 'title'];
+	protected $appends = [
+		'course_group_type_short_name', 
+		'course_group_type_tooltip', 
+		'description', 
+		'title'
+	];
 
 	protected $casts = [
 	    'type' => CourseGroupType::class,

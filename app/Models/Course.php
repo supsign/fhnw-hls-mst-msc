@@ -26,6 +26,13 @@ class Course extends BaseModel
 		);
 	}
 
+	public function endSemester(): Attribute
+	{
+		return Attribute::make(
+			get: fn () => $this->semesters()->last(),
+		);
+	}
+
 	public function semesters(): BelongsToMany
 	{
 		return $this->belongsToMany(Semester::class)->orderBy('start_date');
