@@ -2,21 +2,19 @@
 
 namespace App\Services;
 
-use App\Enums\StudyMode;
 use App\Models\Specialization;
 use stdClass;
 
-class GetThesislData
+class GetThesisData
 {
     public function __construct(protected GetUpcomingSemesters $getUpcomingSemesters)
     {}
 
-    public function __invoke(): stdClass 
+    public function __invoke(Specialization $specialization): stdClass 
     {
         return (object)[
-
-
-
+            'theses' => $specialization->theses,
+            'starts' => collect(),
         ];
     } 
 }

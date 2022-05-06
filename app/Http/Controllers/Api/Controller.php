@@ -9,6 +9,7 @@ use App\Models\Semester;
 use App\Models\Specialization;
 use App\Services\GetCourseData as GetCourseDataService;
 use App\Services\GetPersonalData;
+use App\Services\GetThesisData;
 use stdClass;
 
 class Controller extends BaseController
@@ -27,18 +28,21 @@ class Controller extends BaseController
 
     public function getPersonalData(GetPersonalData $getPersonalData): stdClass|int
     {   
+        return $getPersonalData();   
+    }
+
+    public function getThesisData(Specialization $specialization, GetThesisData $getThesisData)
+    {
         // dump(
-        //     $getPersonalData()
+        //     $getThesisData(
+        //         $specialization
+        //     )
         // );
 
         // return 1;
 
-
-        return $getPersonalData();   
-    }
-
-    public function getThesisData(Specialization $specialization)
-    {
-        
+        return $getThesisData(
+            $specialization
+        );
     }
 }

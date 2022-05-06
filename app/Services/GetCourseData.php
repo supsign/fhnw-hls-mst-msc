@@ -18,8 +18,10 @@ class GetCourseData
     protected array $mainCourseIds;
     protected Specialization $specialization;
 
-    public function __construct(protected GetUpcomingSemesters $getUpcomingSemestersService)
-    {}
+    public function __construct(
+        protected GetUpcomingSemesters $getUpcomingSemestersService,
+        protected GetThesisData $getThesesData
+    ) {}
 
     public function __invoke(Specialization $specialization, Semester $semester = null, ?StudyMode $studyMode = StudyMode::FullTime): stdClass 
     {
@@ -45,6 +47,7 @@ class GetCourseData
                 'optional_english_title',
                 'optional_english_description',
             ]),
+            'theses' => ($this->getThesesData)($specialization),
         ];
     }
 
