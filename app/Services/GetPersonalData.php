@@ -21,6 +21,10 @@ class GetPersonalData
                 'studyModes' => StudyMode::asArray(),
             ],
             'specializations' => Specialization::all(),
+            'texts' => PageContent::findByName([
+                'intro_title',
+                'intro_content',
+            ]),
         ];
     } 
 }

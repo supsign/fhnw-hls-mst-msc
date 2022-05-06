@@ -51,8 +51,9 @@ class GetCourseData
             'texts' => PageContent::findByName([
                 'additional_comments_title',
                 'description_before_further',
-                'double_degree_title',
+                'double_degree_checkbox_text',
                 'double_degree_description',
+                'double_degree_title',
                 'modules_outside_description',
                 'optional_english_title',
                 'optional_english_description',
@@ -65,11 +66,11 @@ class GetCourseData
     {
         return [
             (object)[
-                    'title' => PageContent::getContentByName('further_specialisation_title'),
-                    'description' => PageContent::getContentByName('further_specialisation_description'),
-                    'type' => CourseGroupType::Specialization,
-                    'specializations' => $this->getFurtherCoursesBySpecialization()
-                ],
+                'title' => PageContent::getContentByName('further_specialisation_title'),
+                'description' => PageContent::getContentByName('further_specialisation_description'),
+                'type' => CourseGroupType::Specialization,
+                'specializations' => $this->getFurtherCoursesBySpecialization()
+            ],
             (object)[
                 'title' => PageContent::getContentByName('further_cluster_title'),
                 'description' => PageContent::getContentByName('further_cluster_description'),
