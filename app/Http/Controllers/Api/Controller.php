@@ -6,17 +6,25 @@ use App\Enums\StudyMode;
 use App\Http\Controllers\Controller as BaseController;
 use App\Http\Requests\PostCourseData;
 use App\Http\Requests\PostThesisData;
+use App\Models\Course;
 use App\Models\Semester;
 use App\Models\Specialization;
 use App\Services\GetCourseData;
+use App\Services\GetOverlappingCourses;
 use App\Services\GetPersonalData;
 use App\Services\GetThesisData;
 use stdClass;
 
 class Controller extends BaseController
 {
-    public function getPersonalData(GetPersonalData $getPersonalData): stdClass
+    public function getPersonalData(GetPersonalData $getPersonalData, GetOverlappingCourses $getOverlappingCourses): stdClass
     {   
+
+        dd(
+            $getOverlappingCourses(Course::inRandomOrder()->limit(25)->get())
+        );
+
+
         return $getPersonalData();
     }
 

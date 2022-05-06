@@ -27,7 +27,7 @@ class Course extends BaseModel
 
 	public function autumnSemesterSlot(): BelongsTo
 	{
-		return $this->belongsTo(Slot::class, 'as_slot_id');
+		return $this->belongsTo(Slot::class, 'slot_as_id');
 	}
 
 	public function cluster(): BelongsTo
@@ -55,7 +55,7 @@ class Course extends BaseModel
 
 	public function springSemesterSlot(): BelongsTo
 	{
-		return $this->belongsTo(Slot::class, 'ss_slot_id');
+		return $this->belongsTo(Slot::class, 'slot_ss_id');
 	}
 
 	public function	specialization(): BelongsTo
