@@ -12,6 +12,18 @@ class Course extends BaseModel
 		'end_semester'
 	];
 
+	protected $hidden = [
+		'block',
+		'cluster_id',
+        'created_at',
+        'slot_as_id',
+        'slot_ss_id',
+        'specialization_id',
+        'pivot',
+        'updated_at',
+        'venue_id',
+	];
+
 	public function autumnSemesterSlot(): BelongsTo
 	{
 		return $this->belongsTo(Slot::class, 'as_slot_id');

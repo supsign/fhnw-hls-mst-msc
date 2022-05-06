@@ -17,10 +17,10 @@ class GetThesisData
 
     public function __invoke(
         Specialization $specialization, 
-        bool $doubleDegree = false, 
+        bool $doubleDegree = null,
         Semester $semester = null
     ): stdClass {
-        $this->doubleDegree = $doubleDegree;
+        $this->doubleDegree = (bool)$doubleDegree;
         $this->semester = $semester;
 
         return (object)[
@@ -35,34 +35,3 @@ class GetThesisData
         return collect();
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

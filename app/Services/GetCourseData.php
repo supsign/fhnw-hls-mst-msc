@@ -142,7 +142,6 @@ class GetCourseData
             ->with([
                 'courseGroup',
                 'courseGroup.courses',
-                // 'courseGroup.specializations'
             ])
             ->orderBy('course_groups.type')
             ->get()
@@ -151,8 +150,7 @@ class GetCourseData
                 ->filter(function ($courseGroup) {
                     return $courseGroup->courses->count();
                 })
-                ->values()
-                ;
+                ->values();
 
         foreach ($courseGroups AS $courseGroup) {
             switch ($courseGroup->type->name) {
@@ -168,34 +166,3 @@ class GetCourseData
         return $courseGroups;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
