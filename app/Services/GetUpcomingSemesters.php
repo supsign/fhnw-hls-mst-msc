@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Enums\Semester as EnumsSemester;
+use App\Enums\SemesterType;
 use App\Models\Semester;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
@@ -38,8 +38,15 @@ class GetUpcomingSemesters
             $i >= $this->currentDate->year;
             $i--
         ) {
-            Semester::firstOrCreate(['start_date' => Carbon::parse($i.'-'.EnumsSemester::AutumnStart->value)]);
-            Semester::firstOrCreate(['start_date' => Carbon::parse($i.'-'.EnumsSemester::SpringStart->value)]);
+            Semester::firstOrCreate([
+                'start_date' => Carbon::parse($i.'-'.SemesterType::AutumnStart->startDate()),
+                'type' => SemesterType::AutumnStart->value
+            ]);
+            
+            Semester::firstOrCreate([
+                'start_date' => Carbon::parse($i.'-'.SemesterType::SpringStart->startDate()),
+                'type' => SemesterType::SpringStart->value
+            ]);
         }
 
         return $this;

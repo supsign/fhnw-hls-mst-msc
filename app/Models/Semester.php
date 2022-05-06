@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Enums\Semester as EnumsSemester;
+use App\Enums\SemesterType;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Collection;
@@ -21,6 +21,7 @@ class Semester extends BaseModel
 
 	protected $casts = [
 	    'start_date' => 'date',
+	    'type' => SemesterType::class,
 	];
 
 	public function courses(): BelongsToMany
@@ -31,14 +32,14 @@ class Semester extends BaseModel
 	public function isAutumnSemester(): Attribute
 	{
 		return Attribute::make(
-			get: fn () => $this->start_date->monthName === EnumsSemester::AutumnStart->month()
+			get: fn () => $this->type->monthName === SemesterType::SpringStart
 		);
 	}
 
 	public function isSpringSemester(): Attribute
 	{
 		return Attribute::make(
-			get: fn () => $this->start_date->monthName === EnumsSemester::SpringStart->month()
+			get: fn () => $this->type->monthName === SemesterType::SpringStart
 		);
 	}
 
@@ -68,37 +69,28 @@ class Semester extends BaseModel
 	public function semesterTypeShortName(): Attribute
 	{
 		return Attribute::make(
-			get: fn () => $this->isAutumnSemester 
-				? EnumsSemester::AutumnStart->shortName() 
-				: EnumsSemester::SpringStart->shortName(),
+			get: fn () => $this->type->shortName()
 		);
 	}
 
 	public function semesterTypeLongName(): Attribute
 	{
 		return Attribute::make(
-			get: fn () => $this->isAutumnSemester 
-				? EnumsSemester::AutumnStart->longName() 
-				: EnumsSemester::SpringStart->longName(),
+			get: fn () => $this->type->longName()
 		);
 	}
 
 	public function shortName(): Attribute
 	{
 		return Attribute::make(
-			get: fn () => ($this->isAutumnSemester 
-				? EnumsSemester::AutumnStart->shortName() 
-				: EnumsSemester::SpringStart->shortName()
-			).substr($this->year, 2, 2),
+			get: fn () => $this->semesterTypeShortName().substr($this->year, 2, 2),
 		);
 	}
 
 	public function tooltip(): Attribute
 	{
 		return Attribute::make(
-			get: fn () => $this->isAutumnSemester 
-				? EnumsSemester::AutumnStart->tooltip() 
-				: EnumsSemester::SpringStart->tooltip(),
+			get: fn () => $this->type->tooltip()
 		);
 	}
 

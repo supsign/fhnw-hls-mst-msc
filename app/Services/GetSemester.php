@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Enums\Semester as EnumsSemester;
+use App\Enums\SemesterType;
 use App\Models\Semester;
 use Carbon\Carbon;
 use Exception;
@@ -21,8 +21,11 @@ class GetSemester
             throw new Exception('https://en.wikipedia.org/wiki/Year_2038_problem');
         }
 
+        $type = $autumnSemester ? SemesterType::AutumnStart : SemesterType::SpringStart;
+
         return Semester::firstOrCreate([
-            'start_date' => Carbon::parse($year.'-'.($autumnSemester ? EnumsSemester::AutumnStart->value : EnumsSemester::SpringStart->value)),
+            'start_date' => Carbon::parse($year.'-'.($type->startDate())),
+            'type' => $type->value,
         ]);
     }
 }

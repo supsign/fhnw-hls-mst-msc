@@ -4,16 +4,16 @@ namespace App\Enums;
 
 use Carbon\Carbon;
 
-enum Semester: string
+enum SemesterType: int
 {
-    case AutumnStart = '09-01';
-    case SpringStart = '02-01';
+    case AutumnStart = 1;
+    case SpringStart = 2;
 
     public function month(): string
     {
         return match($this) {
-            static::AutumnStart => Carbon::parse('1987-'.static::AutumnStart->value)->monthName,
-            static::SpringStart => Carbon::parse('1992-'.static::SpringStart->value)->monthName,
+            static::AutumnStart => Carbon::parse('1987-'.static::AutumnStart->startDate())->monthName,
+            static::SpringStart => Carbon::parse('1992-'.static::SpringStart->startDate())->monthName,
         };
     }
 
@@ -30,6 +30,14 @@ enum Semester: string
         return match($this) {
             static::AutumnStart => 'AS',
             static::SpringStart => 'SS',
+        };
+    }
+
+    public function startDate(): string
+    {
+        return match($this) {
+            static::AutumnStart => '09-01',
+            static::SpringStart => '02-01',
         };
     }
 

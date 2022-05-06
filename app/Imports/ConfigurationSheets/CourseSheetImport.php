@@ -34,13 +34,23 @@ class CourseSheetImport implements ToCollection, WithHeadingRow
             }
 
             try {
+                if (!empty($row['end'])) {
+                    $endSemester = $row['semshort'] === 'SS' 
+                        ? $getSemesterService($row['end'] + 1, false)
+                        : $getSemesterService($row['end'], true);
+                } else {
+                    $endSemester = false;
+                }
+
                 Course::create([
                     'id' => $row['id'],
                     'cluster_id' => $row['clustercore'],
+                    'end_semester_id' => $endSemester?->id,
                     'slot_as_id' => !empty($row['slotas']) ? Slot::firstOrCreate(['name' => $row['slotas']])->id : null,
                     'slot_ss_id' => !empty($row['slotss']) ? Slot::firstOrCreate(['name' => $row['slotss']])->id : null,
                     'specialization_id' => $row['specialisation'],
                     'venue_id' => !empty($row['venue']) ? Venue::firstOrCreate(['name' => $row['venue']])->id : null,
+                    'semester_type' => $row['semshort'] === 'SS' ? 2 : 1,
                     'name' => $row['modulename'],
                     'internal_name' => $row['internalcode'],
                     'short_name' => $row['short'],
@@ -105,33 +115,6 @@ class CourseSheetImport implements ToCollection, WithHeadingRow
                 }
 
                 throw new InvalidData($error);
-            }
-
-            $startSemester = $getSemesterService($row['start'], $row['semshort'] === 'AS');
-
-            if (!empty($row['end'])) {
-                $endSemester = $row['semshort'] === 'SS' 
-                    ? $getSemesterService($row['end'] + 1, false)
-                    : $getSemesterService($row['end'], true);
-            } else {
-                $endSemester = false;
-            }
-
-            $upcomingSemesters = $getUpcomingSemestersService(startDate: $startSemester->start_date);
-
-            foreach ($upcomingSemesters AS $upcomingSemester) {
-                if ($upcomingSemester->semesterTypeShortName !== $row['semshort']) {
-                    continue;
-                }
-
-                CourseSemester::create([
-                    'course_id' => $row['id'],
-                    'semester_id' => $upcomingSemester->id,
-                ]);
-
-                if ($endSemester && $upcomingSemester->id === $endSemester->id) {
-                    break;
-                }
             }
         }
     }

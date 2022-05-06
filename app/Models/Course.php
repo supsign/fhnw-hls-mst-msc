@@ -2,16 +2,13 @@
 
 namespace App\Models;
 
+use App\Enums\SemesterType;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Course extends BaseModel
 {
-	protected $appends = [
-		'end_semester'
-	];
-
 	protected $hidden = [
 		'block',
 		'cluster_id',
@@ -22,6 +19,10 @@ class Course extends BaseModel
         'pivot',
         'updated_at',
         'venue_id',
+	];
+
+	protected $casts = [
+	    'semester_type' => SemesterType::class,
 	];
 
 	public function autumnSemesterSlot(): BelongsTo
@@ -42,11 +43,9 @@ class Course extends BaseModel
 		);
 	}
 
-	public function endSemester(): Attribute
+	public function endSemester(): BelongsTo
 	{
-		return Attribute::make(
-			get: fn () => $this->semesters()->get()->last(),
-		);
+		return $this->belongsTo(Semester::class, 'end_semester_id');
 	}
 
 	public function semesters(): BelongsToMany
