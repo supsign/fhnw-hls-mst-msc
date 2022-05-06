@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Enums\StudyMode;
+use App\Models\PageContent;
 use App\Models\Specialization;
 use stdClass;
 
@@ -15,8 +16,11 @@ class GetPersonalData
     {
         return (object)[
             'semesters' => ($this->getUpcomingSemesters)(8),
-            'studyModes' => StudyMode::asArray(),
-            'specialization' => Specialization::all(),
+            'studyMode' => (object)[
+                'tooltip' => PageContent::getContentByName('study_mode_tooptip'),
+                'studyModes' => StudyMode::asArray(),
+            ],
+            'specializations' => Specialization::all(),
         ];
     } 
 }
