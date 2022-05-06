@@ -63,6 +63,11 @@ class Course extends BaseModel
 		return $this->belongsTo(Specialization::class);
 	}
 
+	public function startSemester(): BelongsTo
+	{
+		return $this->belongsTo(Semester::class, 'start_semester_id');
+	}
+
 	public function venue(): BelongsTo
 	{
 		return $this->belongsTo(Venue::class);

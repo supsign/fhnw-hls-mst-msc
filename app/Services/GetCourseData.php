@@ -45,7 +45,7 @@ class GetCourseData
         return (object)[
             'courses' => array_merge(
                 [$this->getCourseGroups()], 
-                $this->getFurtherCourses()
+                [$this->getFurtherCourses()],
             ),
             'semesters' => $semesters,
             'texts' => PageContent::findByName([

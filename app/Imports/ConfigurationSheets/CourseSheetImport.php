@@ -5,11 +5,9 @@ namespace App\Imports\ConfigurationSheets;
 use App\Enums\Error;
 use App\Models\Course;
 use App\Models\CourseCourseGroup;
-use App\Models\CourseSemester;
 use App\Models\Slot;
 use App\Models\Venue;
 use App\Services\GetSemester;
-use App\Services\GetUpcomingSemesters;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
@@ -24,7 +22,6 @@ class CourseSheetImport implements ToCollection, WithHeadingRow
     public function collection(Collection $rows): void
     {
         $getSemesterService = App::make(GetSemester::class);
-        $getUpcomingSemestersService = App::make(GetUpcomingSemesters::class);
 
         foreach ($rows as $row) {
             $row = $row->ToArray();
@@ -49,6 +46,7 @@ class CourseSheetImport implements ToCollection, WithHeadingRow
                     'slot_as_id' => !empty($row['slotas']) ? Slot::firstOrCreate(['name' => $row['slotas']])->id : null,
                     'slot_ss_id' => !empty($row['slotss']) ? Slot::firstOrCreate(['name' => $row['slotss']])->id : null,
                     'specialization_id' => $row['specialisation'],
+                    'start_semester_id' => $getSemesterService($row['start'], $row['semshort'] === 'AS')->id,
                     'venue_id' => !empty($row['venue']) ? Venue::firstOrCreate(['name' => $row['venue']])->id : null,
                     'semester_type' => $row['semshort'] === 'SS' ? 2 : 1,
                     'name' => $row['modulename'],
@@ -85,6 +83,7 @@ class CourseSheetImport implements ToCollection, WithHeadingRow
                         break;
 
                     default:
+                        dump($e->getMessage());
                         $error = Error::Unknown->label();
                         break;
                 }
