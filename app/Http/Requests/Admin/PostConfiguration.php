@@ -5,7 +5,7 @@ namespace App\Http\Requests\Admin;
 use App\Services\Auth\PasswordService;
 use Illuminate\Foundation\Http\FormRequest;
 
-class PostConfigurationRequest extends FormRequest
+class PostConfiguration extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

@@ -60,19 +60,19 @@ class GetCourseData
                     'type' => CourseGroupType::Specialization,
                     'specializations' => $this->getFurtherCoursesBySpecialization()
                 ],
-                (object)[
-                    'title' => PageContent::getContentByName('further_cluster_title'),
-                    'description' => PageContent::getContentByName('further_cluster_description'),
-                    'type' => CourseGroupType::ClusterSpecific,
-                    'clusters' => $this->getFurtherCoursesByCluster(),
-                ],
-                (object)[
-                    'title' => PageContent::getContentByName('further_other_cluster_title'),
-                    'description' => PageContent::getContentByName('further_other_cluster_description'),
-                    'type' => CourseGroupType::ClusterSpecific,
-                    'clusters' => $this->getFurtherCoursesByCluster(true),
-                ]
-            ];
+            (object)[
+                'title' => PageContent::getContentByName('further_cluster_title'),
+                'description' => PageContent::getContentByName('further_cluster_description'),
+                'type' => CourseGroupType::ClusterSpecific,
+                'clusters' => $this->getFurtherCoursesByCluster(),
+            ],
+            (object)[
+                'title' => PageContent::getContentByName('further_other_cluster_title'),
+                'description' => PageContent::getContentByName('further_other_cluster_description'),
+                'type' => CourseGroupType::ClusterSpecific,
+                'clusters' => $this->getFurtherCoursesByCluster(true),
+            ]
+        ];
     }
 
     protected function getFurtherCoursesByCluster($otherClusters = false): Collection

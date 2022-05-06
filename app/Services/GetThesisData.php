@@ -2,21 +2,38 @@
 
 namespace App\Services;
 
+use App\Models\Semester;
 use App\Models\Specialization;
+use Illuminate\Support\Collection;
 use stdClass;
 
 class GetThesisData
 {
+    protected bool $doubleDegree;
+    protected ?Semester $semester;
+
     public function __construct(protected GetUpcomingSemesters $getUpcomingSemesters)
     {}
 
-    public function __invoke(Specialization $specialization): stdClass 
-    {
+    public function __invoke(
+        Specialization $specialization, 
+        bool $doubleDegree = false, 
+        Semester $semester = null
+    ): stdClass {
+        $this->doubleDegree = $doubleDegree;
+        $this->semester = $semester;
+
         return (object)[
             'theses' => $specialization->theses,
-            'starts' => collect(),
+            'starts' => $this->getStarts(),
         ];
-    } 
+    }
+
+    protected function getStarts(): Collection
+    {
+
+        return collect();
+    }
 }
 
 

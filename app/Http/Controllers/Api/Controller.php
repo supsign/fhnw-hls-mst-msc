@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Enums\StudyMode;
 use App\Http\Controllers\Controller as BaseController;
 use App\Http\Requests\GetCourseData as GetCourseDataRequest;
+use App\Http\Requests\GetThesisData as GetThesisDataRequest;
 use App\Models\Semester;
 use App\Models\Specialization;
 use App\Services\GetCourseData as GetCourseDataService;
@@ -31,7 +32,7 @@ class Controller extends BaseController
         return $getPersonalData();
     }
 
-    public function getThesisData(Specialization $specialization, GetThesisData $getThesisData)//   :stdClass
+    public function getThesisData(Specialization $specialization, GetThesisDataRequest $request, GetThesisData $getThesisData)//   :stdClass
     {
         // dump(
         //     $getThesisData(
@@ -42,7 +43,8 @@ class Controller extends BaseController
         // return 1;
 
         return $getThesisData(
-            $specialization
+            $specialization,
+            $request->double_degree,
         );
     }
 }
