@@ -24,7 +24,7 @@ class GetCourseData
         protected GetUpcomingSemesters $getUpcomingSemestersService,
         protected GetThesisData $getThesesData
     ) {
-        $this->courseGroupTitle = PageContent::getContentByName('group_titleadsf');
+        $this->courseGroupTitle = PageContent::getContentByName('group_title');
     }
 
     public function __invoke(Specialization $specialization, Semester $semester = null, StudyMode $studyMode = null): stdClass 

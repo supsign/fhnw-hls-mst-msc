@@ -34,8 +34,10 @@ class ConfigurationImport
         Thesis::class,
     ];
 
-    public function __construct(protected ConfigurationImporter $configurationImporter, protected Excel $excel)
-    {}
+    public function __construct(
+        protected ConfigurationImporter $configurationImporter, 
+        protected Excel $excel
+    ) {}
 
     public function __invoke(string $file): array
     {
