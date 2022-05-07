@@ -33,7 +33,7 @@ class Course extends BaseModel
 	{
 		return Attribute::make(
 			get: fn () => $this->attributes['course_group'] ?? null,
-			set: fn (CourseGroup $courseGroup) => $this->attributes['course_group'] = $courseGroup,
+			set: fn (?CourseGroup $courseGroup) => $this->attributes['course_group'] = $courseGroup,
 		);
 	}
 

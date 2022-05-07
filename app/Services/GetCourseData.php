@@ -132,7 +132,7 @@ class GetCourseData
                 'courses', 
                 $specialization->courses->filter(
                     fn ($course) => !in_array($course->id, $this->mainCourseIds)
-                )
+                )->values()
             );
         }
 

@@ -6,6 +6,9 @@
 </head>
 <body>
 <div>
+
+    @dump($overlappingCourses)
+
     <div>
         <div class="text-2xl float-left mr-10">Your Study Plan MSc in Life Sciences FHWN</div>
         <img class="h-8" src="{{ asset('img/logos/fhnw-logo-klein.png') }}" alt="Logo FHNW">
@@ -36,6 +39,30 @@
             <br />
         @endforeach
     </div>
+
+    <div>
+        <div> {{ '!! optional courses title !!' }} </div>
+
+        @foreach($optionalEnglish AS $semester)
+            <div class="text-lg mb-1"><b>{{ $semester->name }}</b></div>
+            <table class='border'>
+                <tr class='border-b p-1'>
+                    <th class='border-r p-1'>Module Title</th>
+                    <th class='border-r p-1'>ECTS</th>
+                    <th class='p-1'>Venue</th>
+                </tr>
+                @foreach($semester->selectedCourses AS $course)
+                    <tr class='border-b'>
+                        <td class='border-r p-1'>{{ $course->name }}</td>
+                        <td class='border-r p-1'>{{ $course->ects }}</td>
+                        <td class='p-1'>{{ $course->venue->name }}</td>
+                    </tr>
+                @endforeach
+            </table>
+            <br />
+        @endforeach
+    </div>
+
     <br />
     <div>
         <div class="text-lg mb-1"><b>{{ '!! outsideModules title !!' }}</b></div>
@@ -46,10 +73,10 @@
                 <th class='p-1'>University</th>
             </t>
 
-            @foreach($outsideModules AS $outsideModule)
+            @foreach($modulesOutside AS $outsideModule)
                 <tr class='border-b'>
                     <td class='border-r p-1'>{{ $outsideModule['title'] }}</td>
-                    <td class='border-r p-1'>{{ $course['ects'] }}</td>
+                    <td class='border-r p-1'>{{ $outsideModule['ects'] }}</td>
                     <td class='p-1'>{{ $outsideModule['university'] }}</td>
                 </tr>
             @endforeach
@@ -71,13 +98,13 @@
             @endif
     </div> --}}
     <br />
-    @if($additionalComments)
+    @isset($additionalComments)
         <div>
             <div><b>Additional Comments</b></div>
             <div>{{ $additionalComments}}</div>
         </div>
         <br />
-    @endif
+    @endisset
 {{--     <div>
         <div>Summary Statistics</div>
         <div>{{ $counts['specialization'] }} of Specialization Modules</div>

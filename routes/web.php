@@ -25,7 +25,7 @@ Route::get('/test', function () {
 
 
 	dump(
-		$service(Specialization::find(2))
+		$service(Specialization::find(1))
 	);
 
 

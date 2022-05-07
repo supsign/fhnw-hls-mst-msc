@@ -9,37 +9,47 @@ use App\Models\Course;
 use App\Models\CourseGroup;
 use App\Models\Semester;
 use App\Models\Specialization;
+use Illuminate\Support\Collection;
 use stdClass;
 
 class GetPdfData
 {
     protected stdClass $courseData;
+    protected Collection $overlappingCoursesData;
     protected array $pdfData = [];
     protected Semester $semester;
     protected Specialization $specialization;
 
-    public function __construct(protected GetCourseData $getCourseData)
-    {}
+    public function __construct(
+        protected GetCourseData $getCourseData, 
+        protected GetOverlappingCourses $getOverlappingCourses
+    ) {
+        $this->overlappingCoursesData = collect();
+    }
 
     public function __invoke(PostPdfData $request): array
     {
-        $this->addToPdfData(
-            $request->only([
-                'additional_comments',
-                'double_degree',
-                'given_name',
-                'surname',
-            ])
-        )->addToPdfData([
-            'studyMode' => StudyMode::getByValue($request->study_mode),
-            'outsideModules' => $request->modules_outside,
-        ])->addModels(
+        $this->addModels(
             $request->only([
                 'semester', 
                 'specialization',
             ])
         )->addSelectedCourses(
-            $request->selected_courses
+            $request->only([
+                'optional_english',
+                'selected_courses',
+            ])
+        )->addToPdfData(
+            $request->only([
+                'additional_comments',
+                'double_degree',
+                'given_name',
+                'modules_outside',
+                'surname',
+            ]) + [
+                'studyMode' => StudyMode::getByValue($request->study_mode),
+                'overlappingCourses' => $this->overlappingCoursesData,
+            ]
         );
 
         var_dump(
@@ -53,6 +63,7 @@ class GetPdfData
                 'specialization',
                 'selected_courses',
                 'modules_outside',
+                'optional_english',
             ])
         );
 
@@ -69,34 +80,44 @@ class GetPdfData
         return $this->addToPdfData($data);
     }
 
-    protected function addSelectedCourses(array $selectedCourses): self
+    protected function addSelectedCourses(array $selectedCoursesData): self
     {
-        $semesterIds = array_column($selectedCourses, 'semesterId');
-        $semesters = Semester::find($semesterIds);
+        $data = [];
 
-        if (count($semesterIds) > $semesters->count()) {
-            $semesters->push(Semester::new(['name' => 'later']));
-        }
+        foreach ($selectedCoursesData AS $key => $selectedCourses) {
+            $semesterIds = array_column($selectedCourses, 'semesterId');
+            $semesters = Semester::find($semesterIds);
 
-        foreach ($semesters AS $semester) {
-            foreach ($selectedCourses AS $value) {
-                if ($value['semesterId'] === $semester->id) {
-                    $semester->selectedCourses = Course::find($value['courses'])->load('venue');
-                    break;
+            if (count($semesterIds) > $semesters->count()) {
+                $semesters->push(Semester::new(['name' => 'later']));
+            }
+
+            foreach ($semesters AS $semester) {
+                foreach ($selectedCourses AS $value) {
+                    if ($value['semesterId'] === $semester->id) {
+                        $semester->selectedCourses = Course::find($value['courses'])->load('venue');
+                        break;
+                    }
+
+                    if ($value['semesterId'] === $semester->name) {
+                        $semester->selectedCourses = Course::find($value['courses'])->load('venue');
+                        break;
+                    }
                 }
 
-                if ($value['semesterId'] === $semester->name) {
-                    $semester->selectedCourses = Course::find($value['courses'])->load('venue');
-                    break;
+                $this->overlappingCoursesData->push(
+                    ($this->getOverlappingCourses)($semester->selectedCourses)
+                );
+
+                foreach ($semester->selectedCourses AS $course) {
+                    $course->courseGroup = $this->getCourseGroupForCourse($course);
                 }
             }
 
-            foreach ($semester->selectedCourses AS $course) {
-                $course->courseGroup = $this->getCourseGroupForCourse($course);
-            }
+            $data[$key] = $semesters;
         }
 
-        return $this->addToPdfData(['selectedCourses' => $semesters]);
+        return $this->addToPdfData($data);
     }
 
     protected function addToPdfData(array $data): self
@@ -131,7 +152,7 @@ class GetPdfData
         return $this->courseData;
     }
 
-    protected function getCourseGroupForCourse(Course $course): CourseGroup
+    protected function getCourseGroupForCourse(Course $course): ?CourseGroup
     {
         foreach ($this->getCourseData()->courses[0] AS $courseGroup) {
             if ($courseGroup->courses->contains($course)) {
@@ -150,5 +171,7 @@ class GetPdfData
                 }
             }
         }
+
+        return null;
     }
 }
