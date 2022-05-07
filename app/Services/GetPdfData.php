@@ -52,20 +52,20 @@ class GetPdfData
             ]
         );
 
-        var_dump(
-            $request->except([
-                'additional_comments',
-                'double_degree',
-                'given_name', 
-                'surname',
-                'study_mode',
-                'semester', 
-                'specialization',
-                'selected_courses',
-                'modules_outside',
-                'optional_english',
-            ])
-        );
+        // var_dump(
+        //     $request->except([
+        //         'additional_comments',
+        //         'double_degree',
+        //         'given_name', 
+        //         'surname',
+        //         'study_mode',
+        //         'semester', 
+        //         'specialization',
+        //         'selected_courses',
+        //         // 'modules_outside',
+        //         'optional_english',
+        //     ])
+        // );
 
         return $this->pdfData;
     }
@@ -105,9 +105,17 @@ class GetPdfData
                     }
                 }
 
-                $this->overlappingCoursesData->push(
-                    ($this->getOverlappingCourses)($semester->selectedCourses)
-                );
+                // $semesterCopy = $semester;
+                // $semesterCopy->selectedCourses = null;
+
+                $overlappingCourses = ($this->getOverlappingCourses)($semester->selectedCourses);
+
+                if ($overlappingCourses->count()) {
+                    $this->overlappingCoursesData->push((object)[
+                        'semester' => $semester,
+                        'slots' => ($this->getOverlappingCourses)($semester->selectedCourses)
+                    ]);     
+                }
 
                 foreach ($semester->selectedCourses AS $course) {
                     $course->courseGroup = $this->getCourseGroupForCourse($course);

@@ -6,9 +6,6 @@
 </head>
 <body>
 <div>
-
-    {{-- @dump($overlappingCourses) --}}
-
     <div>
         <div class="text-2xl float-left mr-10">Your Study Plan MSc in Life Sciences FHWN</div>
         <img class="h-8" src="{{ asset('img/logos/fhnw-logo-klein.png') }}" alt="Logo FHNW">
@@ -65,7 +62,7 @@
 
     <br />
     <div>
-        <div class="text-lg mb-1"><b>{{ '!! outsideModules title !!' }}</b></div>
+        <div> {{ '!! outsideModules title !!' }} </div>
         <table class='border'>
             <tr class='border-b p-1'>
                 <th class='border-r p-1'>Module Title</th>
@@ -82,6 +79,29 @@
             @endforeach
         </table>
     </div>
+    <br />
+
+
+    @if($overlappingCourses->count())
+        <div> {{ '!! overlapping courses title !!' }} </div>
+
+        @foreach ($overlappingCourses AS $semesterSlots)
+            @if(!$semesterSlots->slots->count())
+                @continue
+            @endif
+
+            <div class="text-lg mb-1"><b>{{ $semesterSlots->semester->name }}</b></div>
+            @foreach ($semesterSlots->slots AS $slot)
+                <div class="text-lg mb-1"><b>{{ $slot->name }}</b></div>
+
+                @foreach ($slot->courses AS $course)
+                    <div class="text-lg mb-1"><b>{{ $course->name }}</b></div>
+                @endforeach
+            @endforeach
+        @endforeach
+    @endif
+
+    <br />
 
 {{--     <div>
         <div>Master Thesis planned for {{ $thesis_start->start_date->format('d.m.Y') }} to {{ $thesis_start->end_date }}</div>

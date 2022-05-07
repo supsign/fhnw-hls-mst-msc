@@ -10,6 +10,10 @@ class GetOverlappingCourses
     {
         $overlappingCourses = collect();
 
+        if (!$courses->count()) {
+            return $overlappingCourses;
+        }
+
         foreach ($courses->load(['slot'])->groupBy('semester_type.name') AS $coursesBySemesterType) {
             foreach ($coursesBySemesterType->groupBy('slot.name') AS $slotName => $coursesBySlot) {
                 if ($coursesBySlot->count() === 1) {
@@ -17,8 +21,8 @@ class GetOverlappingCourses
                 }
 
                 $overlappingCourses->push((object)[
-                    'slot' => $slotName,
-                    'clourses' => $coursesBySlot
+                    'name' => $slotName,
+                    'courses' => $coursesBySlot
                 ]);
             }
         }

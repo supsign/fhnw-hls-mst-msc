@@ -37,9 +37,12 @@ class Controller extends BaseController
 
     public function postPdf(PostPdfData $request, GetPdfData $getPdfData)
     {
-        // $getPdfData($request);
+        // var_dump(
+        //     $getPdfData($request)['overlappingCourses']
+        // );
+
         // return 1;
-        
+
         $filename = 'test'.'.pdf';
         $pdf = App::make('dompdf.wrapper');
         $pdf->getDomPDF()->set_option('enable_php', true);

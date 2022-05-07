@@ -22,11 +22,6 @@ class Semester extends BaseModel
 	    'type' => SemesterType::class,
 	];
 
-	public function courses(): BelongsToMany
-	{
-		return $this->belongsToMany(Course::class);
-	}
-
 	public function name(): Attribute
 	{
 		return Attribute::make(
@@ -46,7 +41,7 @@ class Semester extends BaseModel
 	{
 		return Attribute::make(
 			get: fn () => $this->attributes['selected_courses'] ?? collect(),
-			set: fn (Collection $courses) => $this->attributes['selected_courses'] = $courses,
+			set: fn (?Collection $courses) => $this->attributes['selected_courses'] = $courses,
 		);
 	}
 
