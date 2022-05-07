@@ -82,7 +82,6 @@ class CourseSheetImport implements ToCollection, WithHeadingRow
                         break;
 
                     default:
-                        dump($e->getMessage());
                         $error = Error::Unknown->label();
                         break;
                 }

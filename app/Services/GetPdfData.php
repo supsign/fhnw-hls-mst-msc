@@ -51,24 +51,26 @@ class GetPdfData
             ]) + [
                 'overlapping_courses' => $this->overlappingCoursesData,
                 'study_mode' => StudyMode::getByValue($request->study_mode),
+                'thesis_further_details' => $request->master_thesis['further_details'],
                 'thesis_start' => Semester::find($request->master_thesis['start']),
             ]
         );
 
-        // var_dump(
-        //     $request->except([
-        //         'additional_comments',
-        //         'double_degree',
-        //         'given_name', 
-        //         'surname',
-        //         'study_mode',
-        //         'semester', 
-        //         'specialization',
-        //         'selected_courses',
-        //         'modules_outside',
-        //         'optional_english',
-        //     ])
-        // );
+        var_dump(
+            $request->except([
+                'additional_comments',
+                'double_degree',
+                'given_name', 
+                'surname',
+                'study_mode',
+                'semester', 
+                'specialization',
+                'selected_courses',
+                'modules_outside',
+                'optional_english',
+                'master_thesis'
+            ])
+        );
 
         return $this->pdfData;
     }

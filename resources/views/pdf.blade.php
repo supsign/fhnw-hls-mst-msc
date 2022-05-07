@@ -81,7 +81,6 @@
     </div>
     <br />
 
-
     @if($overlappingCourses->count())
         <div> {{ '<overlapping courses title>' }} </div>
 
@@ -109,7 +108,6 @@
             </table>
         @endforeach
     @endif
-
     <br />
 
     <div>
@@ -121,9 +119,9 @@
             @endforeach
         </ul>
         <br />
-        @isset($thesis_further_details)
+        @isset($thesisFurtherDetails)
             <div><b>Further Details on Thesis (Optional)</b></div>
-            <div>{{$thesis_further_details}}</div>
+            <div>{{$thesisFurtherDetails}}</div>
         @endisset
     </div>
     <br />
