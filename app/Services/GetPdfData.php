@@ -33,7 +33,9 @@ class GetPdfData
             $request->only([
                 'semester', 
                 'specialization',
-            ])
+            ]) + [
+                'thesis' => $request->master_thesis['theses']
+            ]
         )->addSelectedCourses(
             $request->only([
                 'optional_english',
@@ -47,8 +49,9 @@ class GetPdfData
                 'modules_outside',
                 'surname',
             ]) + [
-                'studyMode' => StudyMode::getByValue($request->study_mode),
-                'overlappingCourses' => $this->overlappingCoursesData,
+                'overlapping_courses' => $this->overlappingCoursesData,
+                'study_mode' => StudyMode::getByValue($request->study_mode),
+                'thesis_start' => Semester::find($request->master_thesis['start']),
             ]
         );
 
@@ -62,7 +65,7 @@ class GetPdfData
         //         'semester', 
         //         'specialization',
         //         'selected_courses',
-        //         // 'modules_outside',
+        //         'modules_outside',
         //         'optional_english',
         //     ])
         // );

@@ -38,7 +38,7 @@
     </div>
 
     <div>
-        <div> {{ '!! optional courses title !!' }} </div>
+        <div> {{ '<optional courses title>' }} </div>
 
         @foreach($optionalEnglish AS $semester)
             <div class="text-lg mb-1"><b>{{ $semester->name }}</b></div>
@@ -62,7 +62,7 @@
 
     <br />
     <div>
-        <div> {{ '!! outsideModules title !!' }} </div>
+        <div> {{ '<outsideModules title>' }} </div>
         <table class='border'>
             <tr class='border-b p-1'>
                 <th class='border-r p-1'>Module Title</th>
@@ -83,7 +83,7 @@
 
 
     @if($overlappingCourses->count())
-        <div> {{ '!! overlapping courses title !!' }} </div>
+        <div> {{ '<overlapping courses title>' }} </div>
 
         @foreach ($overlappingCourses AS $semesterSlots)
             @if(!$semesterSlots->slots->count())
@@ -91,32 +91,41 @@
             @endif
 
             <div class="text-lg mb-1"><b>{{ $semesterSlots->semester->name }}</b></div>
+
+            <table>
+
             @foreach ($semesterSlots->slots AS $slot)
-                <div class="text-lg mb-1"><b>{{ $slot->name }}</b></div>
+                <tr class='border-b p-1'>
+                    <th class='border-r p-1'>Slot {{ $slot->name }}</th>
+                </t>
 
                 @foreach ($slot->courses AS $course)
-                    <div class="text-lg mb-1"><b>{{ $course->name }}</b></div>
+                    <tr class='border-b'>
+                        <td class='border-r p-1'>{{ $course->name }}</td>
+                    </tr>
                 @endforeach
             @endforeach
+
+            </table>
         @endforeach
     @endif
 
     <br />
 
-{{--     <div>
-        <div>Master Thesis planned for {{ $thesis_start->start_date->format('d.m.Y') }} to {{ $thesis_start->end_date }}</div>
+    <div>
+        <div>Master Thesis planned for {{ $thesisStart->start_date->format('d.m.Y') }} to {{ '<thesis end>' }}</div>
         <div>Broad Subject Area</div>
         <ul class="list-disc list-inside">
-            @foreach($thesis_subject AS $value)
+            @foreach($thesis AS $value)
                 <li>{{ $value->name }}</li>
             @endforeach
         </ul>
         <br />
-        @if($thesis_further_details)
+        @isset($thesis_further_details)
             <div><b>Further Details on Thesis (Optional)</b></div>
-        <div>{{$thesis_further_details}}</div>
-            @endif
-    </div> --}}
+            <div>{{$thesis_further_details}}</div>
+        @endisset
+    </div>
     <br />
     @isset($additionalComments)
         <div>

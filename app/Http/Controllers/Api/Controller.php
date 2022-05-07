@@ -38,7 +38,7 @@ class Controller extends BaseController
     public function postPdf(PostPdfData $request, GetPdfData $getPdfData)
     {
         // var_dump(
-        //     $getPdfData($request)['overlappingCourses']
+        //     $getPdfData($request)['thesis']
         // );
 
         // return 1;
