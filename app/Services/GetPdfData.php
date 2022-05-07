@@ -125,7 +125,7 @@ class GetPdfData
                 if (isset($furtherCourseData->{$key})) {
                     foreach ($furtherCourseData->{$key} AS $$key) {
                         if ($$key->courses->contains($course)) {
-                            return CourseGroup::new(['type' => $furtherCourseData['type']]);
+                            return CourseGroup::new(['type' => $furtherCourseData->type]);
                         }
                     }
                 }
