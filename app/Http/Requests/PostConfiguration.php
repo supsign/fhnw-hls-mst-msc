@@ -25,14 +25,8 @@ class PostConfiguration extends FormRequest
     public function rules()
     {
         return [
-            'password' => [
-                'required',
-                'string',
-            ],
-            'config_file' => [
-                'required',
-                'mimes:xlsx',
-            ]
+            'password' => ['required', 'string'],
+            'config_file' => ['required', 'mimes:xlsx']
         ];
     }
 }

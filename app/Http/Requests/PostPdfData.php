@@ -24,7 +24,12 @@ class PostPdfData extends FormRequest
     public function rules()
     {
         return [
-            
+            'given_name' => ['required', 'string'],
+            'surname' => ['required', 'string'],
+            'semester' => ['required', 'int'],
+            'specialization' => ['required', 'int'],
+            'study_mode' => ['required', 'int'],
+            'selected_courses' => ['required', 'array'],
         ];
     }
 }

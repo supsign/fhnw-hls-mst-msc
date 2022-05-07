@@ -24,9 +24,9 @@ class PostThesisData extends FormRequest
     public function rules()
     {
         return [
-            'double_degree' => 'bool|required',
-            'semester' => 'int|required',
-            'study_mode' => 'int|required',
+            'double_degree' => ['required', 'bool'],
+            'semester' => ['required', 'int'],
+            'study_mode' => ['required', 'int'],
         ];
     }
 }

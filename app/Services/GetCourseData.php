@@ -29,7 +29,6 @@ class GetCourseData
 
     public function __invoke(Specialization $specialization, Semester $semester = null, StudyMode $studyMode = null): stdClass 
     {
-
         $this->specialization = $specialization;
         $this->mainCourseIds = $this->getCourses()->pluck('id')->toArray();
 

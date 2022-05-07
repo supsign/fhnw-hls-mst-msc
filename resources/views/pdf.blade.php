@@ -15,7 +15,10 @@
     <div>Specialization: {{ $specialization->name }}</div>
     <br />
     <div>
-        @foreach($selected_courses AS $semester)
+
+        @dump($selectedCourses)
+
+{{--         @foreach($selected_courses AS $semester)
             <div class="text-lg mb-1"><b>{{ $semester->name }}</b></div>
             <table class='border'>
                 <tr class='border-b p-1'>
@@ -32,10 +35,10 @@
                 @endforeach
             </table>
             <br />
-        @endforeach
+        @endforeach --}}
     </div>
     <br />
-    <div>
+{{--     <div>
         <div>Master Thesis planned for {{ $thesis_start->start_date->format('d.m.Y') }} to {{ $thesis_start->end_date }}</div>
         <div>Broad Subject Area</div>
         <ul class="list-disc list-inside">
@@ -51,10 +54,10 @@
     </div>
     <br />
     @if($additional_comments)
-    <div>
-        <div><b>Additional Comments</b></div>
-        <div>{{ $additional_comments}}</div>
-    </div>
+        <div>
+            <div><b>Additional Comments</b></div>
+            <div>{{ $additional_comments}}</div>
+        </div>
         <br />
     @endif
     <div>
@@ -77,7 +80,7 @@
         <div class="float-left mr-10">
             <div class='border-b border-black pb-10'>Signature Director of Study Programme</div>
         </div>
-    </div>
+    </div> --}}
 </div>
 </body>
 </html>

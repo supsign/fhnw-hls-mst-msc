@@ -10,8 +10,10 @@ use App\Http\Requests\PostThesisData;
 use App\Models\Semester;
 use App\Models\Specialization;
 use App\Services\GetCourseData;
+use App\Services\GetPdfData;
 use App\Services\GetPersonalData;
 use App\Services\GetThesisData;
+use Illuminate\Support\Facades\App;
 use stdClass;
 
 class Controller extends BaseController
@@ -33,9 +35,16 @@ class Controller extends BaseController
         );
     }
 
-    public function postPdf(PostPdfData $request)
+    public function postPdf(PostPdfData $request, GetPdfData $getPdfData)
     {
-        dump($request->all());
+        // $getPdfData($request);
+        // return 1;
+
+        $pdf = App::make('dompdf.wrapper');
+        $pdf->getDomPDF()->set_option('enable_php', true);
+        $pdf->loadView('pdf', $getPdfData($request));
+
+        $pdf->save('test.pdf');
 
         return 1;
     }
