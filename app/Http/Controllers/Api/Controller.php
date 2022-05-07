@@ -5,13 +5,13 @@ namespace App\Http\Controllers\Api;
 use App\Enums\StudyMode;
 use App\Http\Controllers\Controller as BaseController;
 use App\Http\Requests\PostCourseData;
+use App\Http\Requests\PostPdfData;
 use App\Http\Requests\PostThesisData;
 use App\Models\Semester;
 use App\Models\Specialization;
 use App\Services\GetCourseData;
 use App\Services\GetPersonalData;
 use App\Services\GetThesisData;
-use Illuminate\Http\Request;
 use stdClass;
 
 class Controller extends BaseController
@@ -33,7 +33,7 @@ class Controller extends BaseController
         );
     }
 
-    public function postPdf(Request $request)
+    public function postPdf(PostPdfData $request)
     {
         dump($request->all());
 

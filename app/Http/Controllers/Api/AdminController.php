@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\PostConfiguration;
+use App\Http\Requests\PostConfiguration;
 use App\Services\ConfigurationImport;
 use stdClass;
 
