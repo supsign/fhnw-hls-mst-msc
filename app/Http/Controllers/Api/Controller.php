@@ -52,8 +52,11 @@ class Controller extends BaseController
         return $filename;
     }
 
-    public function postThesisData(Specialization $specialization, PostThesisData $request, GetThesisData $getThesisData): stdClass
-    {
+    public function postThesisData(
+        Specialization $specialization, 
+        PostThesisData $request, 
+        GetThesisData $getThesisData
+    ): stdClass {
         return $getThesisData(
             $specialization,
             $request->double_degree,
