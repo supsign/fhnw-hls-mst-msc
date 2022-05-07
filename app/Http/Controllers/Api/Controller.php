@@ -39,14 +39,14 @@ class Controller extends BaseController
     {
         // $getPdfData($request);
         // return 1;
-
+        
+        $filename = 'test'.'.pdf';
         $pdf = App::make('dompdf.wrapper');
         $pdf->getDomPDF()->set_option('enable_php', true);
         $pdf->loadView('pdf', $getPdfData($request));
+        $pdf->save($filename);
 
-        $pdf->save('test.pdf');
-
-        return 1;
+        return $filename;
     }
 
     public function postThesisData(Specialization $specialization, PostThesisData $request, GetThesisData $getThesisData): stdClass

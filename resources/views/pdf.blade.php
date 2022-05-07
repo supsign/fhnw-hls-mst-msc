@@ -21,13 +21,15 @@
                 <tr class='border-b p-1'>
                     <th class='border-r p-1'>Module Title</th>
                     <th class='border-r p-1'>Type</th>
-                    <th class='p-1'>ECTS Venue</th>
+                    <th class='border-r p-1'>ECTS</th>
+                    <th class='p-1'>Venue</th>
                 </tr>
                 @foreach($semester->selectedCourses AS $course)
                     <tr class='border-b'>
                         <td class='border-r p-1'>{{ $course->name }}</td>
                         <td class='border-r p-1'>{{ $course->courseGroup?->courseGroupTypeShortName }}</td>
-                        <td class='p-1'>{{ $course->ects }}</td>
+                        <td class='border-r p-1'>{{ $course->ects }}</td>
+                        <td class='p-1'>{{ $course->venue->name }}</td>
                     </tr>
                 @endforeach
             </table>
@@ -35,6 +37,24 @@
         @endforeach
     </div>
     <br />
+    <div>
+        <div class="text-lg mb-1"><b>{{ '!! outsideModules title !!' }}</b></div>
+        <table class='border'>
+            <tr class='border-b p-1'>
+                <th class='border-r p-1'>Module Title</th>
+                <th class='border-r p-1'>ECTS</th>
+                <th class='p-1'>University</th>
+            </t>
+
+            @foreach($outsideModules AS $outsideModule)
+                <tr class='border-b'>
+                    <td class='border-r p-1'>{{ $outsideModule['title'] }}</td>
+                    <td class='border-r p-1'>{{ $course['ects'] }}</td>
+                    <td class='p-1'>{{ $outsideModule['university'] }}</td>
+                </tr>
+            @endforeach
+        </table>
+    </div>
 
 {{--     <div>
         <div>Master Thesis planned for {{ $thesis_start->start_date->format('d.m.Y') }} to {{ $thesis_start->end_date }}</div>
@@ -49,22 +69,22 @@
             <div><b>Further Details on Thesis (Optional)</b></div>
         <div>{{$thesis_further_details}}</div>
             @endif
-    </div>
+    </div> --}}
     <br />
-    @if($additional_comments)
+    @if($additionalComments)
         <div>
             <div><b>Additional Comments</b></div>
-            <div>{{ $additional_comments}}</div>
+            <div>{{ $additionalComments}}</div>
         </div>
         <br />
     @endif
-    <div>
+{{--     <div>
         <div>Summary Statistics</div>
         <div>{{ $counts['specialization'] }} of Specialization Modules</div>
         <div>{{ $counts['cluster_specific'] }} of Cluster-specific Modules</div>
         <div>{{ $counts['core_compentences'] }} Core Competence Modules</div>
         <div>{{ $ects }} Total number of ECTS</div>
-    </div>
+    </div> --}}
     <br />
     <div>Please note that the module offer and the timing of the modules may change in the future.</div>
     <br />
@@ -78,7 +98,7 @@
         <div class="float-left mr-10">
             <div class='border-b border-black pb-10'>Signature Director of Study Programme</div>
         </div>
-    </div> --}}
+    </div>
 </div>
 </body>
 </html>
