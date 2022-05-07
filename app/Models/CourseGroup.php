@@ -12,7 +12,8 @@ class CourseGroup extends BaseModel
 		'course_group_type_short_name', 
 		'course_group_type_tooltip', 
 		'description', 
-		'title'
+		'title',
+		'tooltip',
 	];
 
 	protected $casts = [

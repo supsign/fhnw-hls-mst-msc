@@ -16,6 +16,7 @@ class Course extends BaseModel
         'slot_id',
         'specialization_id',
         'pivot',
+        'tooltip',
         'updated_at',
         'venue_id',
 	];
