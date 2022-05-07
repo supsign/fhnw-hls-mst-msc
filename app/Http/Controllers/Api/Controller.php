@@ -9,9 +9,9 @@ use App\Http\Requests\PostThesisData;
 use App\Models\Semester;
 use App\Models\Specialization;
 use App\Services\GetCourseData;
-use App\Services\GetOverlappingCourses;
 use App\Services\GetPersonalData;
 use App\Services\GetThesisData;
+use Illuminate\Http\Request;
 use stdClass;
 
 class Controller extends BaseController
@@ -31,6 +31,13 @@ class Controller extends BaseController
             $request->semester ? Semester::find($request->semester) : null,
             $request->study_mode ? StudyMode::getByValue($request->study_mode) : null,
         );
+    }
+
+    public function postPdf(Request $request)
+    {
+        dump($request->all());
+
+        return 1;
     }
 
     public function postThesisData(Specialization $specialization, PostThesisData $request, GetThesisData $getThesisData): stdClass

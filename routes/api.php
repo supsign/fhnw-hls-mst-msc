@@ -17,7 +17,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::controller(Controller::class)->group(function () {
     Route::get('personaldata', 'getPersonalData')->name('get.personalData');
+    
     Route::post('coursedata/{specialization}', 'postCourseData')->name('post.courseData');
+    Route::post('pdf', 'postPdf')->name('post.pdf');
     Route::post('thesisdata/{specialization}', 'postThesisData')->name('post.thesisData');
 });
 
