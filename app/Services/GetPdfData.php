@@ -114,9 +114,6 @@ class GetPdfData
                     }
                 }
 
-                // $semesterCopy = $semester;
-                // $semesterCopy->selectedCourses = null;
-
                 $overlappingCourses = ($this->getOverlappingCourses)($semester->selectedCourses);
 
                 if ($overlappingCourses->count()) {

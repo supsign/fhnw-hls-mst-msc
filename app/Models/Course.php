@@ -16,7 +16,7 @@ class Course extends BaseModel
         'slot_id',
         'specialization_id',
         'pivot',
-        'tooltip',
+        // 'tooltip',
         'updated_at',
         'venue_id',
 	];
@@ -63,12 +63,12 @@ class Course extends BaseModel
 		return $this->belongsTo(Semester::class, 'start_semester_id');
 	}
 
-	public function tooltip(): Attribute
-	{
-		return Attribute::make(
-			get: fn () => $this->courseGroup?->type->tooltip()
-		);
-	}
+	// public function tooltip(): Attribute
+	// {
+	// 	return Attribute::make(
+	// 		get: fn () => $this->courseGroup?->type->tooltip()
+	// 	);
+	// }
 
 	public function venue(): BelongsTo
 	{
