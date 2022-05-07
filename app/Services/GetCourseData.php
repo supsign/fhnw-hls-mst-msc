@@ -52,9 +52,7 @@ class GetCourseData
                     'optional_english_title',
                     'optional_english_description',
                 ]),
-                'courses' => Course::whereNull('cluster_id')
-                    ->whereNull('specialization_id')
-                    ->get(),
+                'courses' => Course::whereNull(['cluster_id', 'specialization_id'])->get(),
             ],
             'semesters' => $semesters,
             'texts' => PageContent::findByName([
@@ -64,8 +62,6 @@ class GetCourseData
                 'double_degree_description',
                 'double_degree_title',
                 'modules_outside_description',
-                'optional_english_title',
-                'optional_english_description',
             ]),
             'theses' => ($this->getThesesData)($specialization, false, $semesters->first(), $studyMode),
         ];

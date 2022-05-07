@@ -7,7 +7,7 @@
 <body>
 <div>
 
-    @dump($overlappingCourses)
+    {{-- @dump($overlappingCourses) --}}
 
     <div>
         <div class="text-2xl float-left mr-10">Your Study Plan MSc in Life Sciences FHWN</div>
