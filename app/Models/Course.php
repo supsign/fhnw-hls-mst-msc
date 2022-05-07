@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Enums\SemesterType;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
@@ -13,8 +12,7 @@ class Course extends BaseModel
 		'block',
 		'cluster_id',
         'created_at',
-        'slot_as_id',
-        'slot_ss_id',
+        'slot_id',
         'specialization_id',
         'pivot',
         'updated_at',
@@ -25,22 +23,9 @@ class Course extends BaseModel
 	    'semester_type' => SemesterType::class,
 	];
 
-	public function autumnSemesterSlot(): BelongsTo
-	{
-		return $this->belongsTo(Slot::class, 'slot_as_id');
-	}
-
 	public function cluster(): BelongsTo
 	{
 		return $this->belongsTo(Cluster::class);
-	}
-
-	public function courseGroup(): Attribute
-	{
-		return Attribute::make(
-			get: fn () => $this->attributes['course_group'] ?? null,
-			set: fn (CourseGroup $courseGroup) => $this->attributes['course_group'] = $courseGroup,
-		);
 	}
 
 	public function endSemester(): BelongsTo
@@ -53,9 +38,9 @@ class Course extends BaseModel
 		return $this->belongsToMany(Semester::class)->orderBy('start_date');
 	}
 
-	public function springSemesterSlot(): BelongsTo
+	public function slot(): BelongsTo
 	{
-		return $this->belongsTo(Slot::class, 'slot_ss_id');
+		return $this->belongsTo(Slot::class);
 	}
 
 	public function	specialization(): BelongsTo
@@ -72,9 +57,4 @@ class Course extends BaseModel
 	{
 		return $this->belongsTo(Venue::class);
 	}
-
-    public function newCollection(array $models = []): CourseCollection
-    {
-        return new CourseCollection($models);
-    }
 }

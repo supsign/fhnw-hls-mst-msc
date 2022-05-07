@@ -6,16 +6,23 @@ use Illuminate\Support\Collection;
 
 class GetOverlappingCourses
 {
-    public function __invoke(Collection $courses) 
+    public function __invoke(Collection $courses): Collection
     {
-        $courses->load(['autumnSemesterSlot', 'springSemesterSlot']);
+        $overlappingCourses = collect();
 
-        dump($courses);
+        foreach ($courses->load(['slot'])->groupBy('semester_type.name') AS $coursesBySemesterType) {
+            foreach ($coursesBySemesterType->groupBy('slot.name') AS $slotName => $coursesBySlot) {
+                if ($coursesBySlot->count() === 1) {
+                    continue;
+                }
 
-        foreach ($courses AS $course) {
-
+                $overlappingCourses->push((object)[
+                    'slot' => $slotName,
+                    'clourses' => $coursesBySlot
+                ]);
+            }
         }
 
-
+        return $overlappingCourses;
     }
 }

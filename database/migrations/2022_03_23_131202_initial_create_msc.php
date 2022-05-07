@@ -76,8 +76,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('cluster_id')->nullable()->constrained();
             $table->foreignId('end_semester_id')->nullable()->constrained('semesters');
-            $table->foreignId('slot_as_id')->nullable()->constrained('slots');
-            $table->foreignId('slot_ss_id')->nullable()->constrained('slots');
+            $table->foreignId('slot_id')->nullable()->constrained();
             $table->foreignId('specialization_id')->nullable()->constrained();
             $table->foreignId('start_semester_id')->nullable()->constrained('semesters');
             $table->foreignId('venue_id')->nullable()->constrained();
