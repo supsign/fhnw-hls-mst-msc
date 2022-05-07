@@ -47,9 +47,15 @@ class GetCourseData
                 [$this->getCourseGroups()], 
                 [$this->getFurtherCourses()],
             ),
-            'optional_courses' => Course::whereNull('cluster_id')
-                ->whereNull('specialization_id')
-                ->get(),
+            'optional_courses' => (object)[
+                'texts' => PageContent::findByName([
+                    'optional_english_title',
+                    'optional_english_description',
+                ]),
+                'courses' => Course::whereNull('cluster_id')
+                    ->whereNull('specialization_id')
+                    ->get(),
+            ],
             'semesters' => $semesters,
             'texts' => PageContent::findByName([
                 'additional_comments_title',
