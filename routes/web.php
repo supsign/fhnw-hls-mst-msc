@@ -1,5 +1,10 @@
 <?php
 
+use App\Models\Course;
+use App\Models\Specialization;
+use App\Services\GetCourseData;
+use App\Services\GetOverlappingCourses;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,3 +19,16 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', fn () => view('config'))->name('config');
+
+Route::get('/test', function () {
+	$service = App::make(GetCourseData::class);
+
+
+	dump(
+		$service(Specialization::find(2))
+	);
+
+
+
+
+})->name('test');

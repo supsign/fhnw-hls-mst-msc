@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Enums\CourseGroupType;
 use App\Enums\StudyMode;
 use App\Models\Cluster;
+use App\Models\Course;
 use App\Models\CourseGroup;
 use App\Models\CourseGroupSpecialization;
 use App\Models\PageContent;
@@ -46,6 +47,9 @@ class GetCourseData
                 [$this->getCourseGroups()], 
                 [$this->getFurtherCourses()],
             ),
+            'optional_courses' => Course::whereNull('cluster_id')
+                ->whereNull('specialization_id')
+                ->get(),
             'semesters' => $semesters,
             'texts' => PageContent::findByName([
                 'additional_comments_title',

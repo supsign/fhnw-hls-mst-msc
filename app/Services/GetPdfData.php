@@ -119,5 +119,17 @@ class GetPdfData
                 return $courseGroup;
             }
         }
+
+        foreach ($this->getCourseData()->courses[1] AS $furtherCourseData) {
+            foreach (['clusters', 'specializations'] AS $key) {
+                if (isset($furtherCourseData->{$key})) {
+                    foreach ($furtherCourseData->{$key} AS $$key) {
+                        if ($$key->courses->contains($course)) {
+                            return CourseGroup::new(['type' => $furtherCourseData['type']]);
+                        }
+                    }
+                }
+            }
+        }
     }
 }
