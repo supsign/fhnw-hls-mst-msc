@@ -15,10 +15,7 @@
     <div>Specialization: {{ $specialization->name }}</div>
     <br />
     <div>
-
-        @dump($selectedCourses)
-
-{{--         @foreach($selected_courses AS $semester)
+        @foreach($selectedCourses AS $semester)
             <div class="text-lg mb-1"><b>{{ $semester->name }}</b></div>
             <table class='border'>
                 <tr class='border-b p-1'>
@@ -35,9 +32,10 @@
                 @endforeach
             </table>
             <br />
-        @endforeach --}}
+        @endforeach
     </div>
     <br />
+
 {{--     <div>
         <div>Master Thesis planned for {{ $thesis_start->start_date->format('d.m.Y') }} to {{ $thesis_start->end_date }}</div>
         <div>Broad Subject Area</div>

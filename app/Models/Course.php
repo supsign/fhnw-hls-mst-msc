@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\SemesterType;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
@@ -26,6 +27,14 @@ class Course extends BaseModel
 	public function cluster(): BelongsTo
 	{
 		return $this->belongsTo(Cluster::class);
+	}
+
+	public function courseGroup(): Attribute
+	{
+		return Attribute::make(
+			get: fn () => $this->attributes['course_group'] ?? null,
+			set: fn (CourseGroup $courseGroup) => $this->attributes['course_group'] = $courseGroup,
+		);
 	}
 
 	public function endSemester(): BelongsTo
@@ -58,3 +67,4 @@ class Course extends BaseModel
 		return $this->belongsTo(Venue::class);
 	}
 }
+
