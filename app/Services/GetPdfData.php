@@ -9,6 +9,7 @@ use App\Models\Course;
 use App\Models\CourseGroup;
 use App\Models\Semester;
 use App\Models\Specialization;
+use App\Models\Thesis;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use stdClass;
@@ -20,6 +21,7 @@ class GetPdfData
     protected array $pdfData = [];
     protected Semester $semester;
     protected Specialization $specialization;
+    protected Semester $thesisStart;
 
     public function __construct(
         protected GetCourseData $getCourseData, 
@@ -53,8 +55,8 @@ class GetPdfData
                 'overlapping_courses' => $this->overlappingCoursesData,
                 'study_mode' => StudyMode::getByValue($request->study_mode),
                 'thesis_further_details' => $request->master_thesis['further_details'],
-                'thesis_end' => $this->getThesisEndDate(),
-                'thesis_start' => Semester::find($request->master_thesis['start']),
+                'thesis_end' => null,
+                'thesis_start' => Semester::find($request->master_thesis['start'])
             ]
         );
 
@@ -188,14 +190,5 @@ class GetPdfData
         }
 
         return null;
-    }
-
-    protected function getThesisEndDate(): Carbon
-    {
-
-
-
-
-        return Carbon::now();
     }
 }

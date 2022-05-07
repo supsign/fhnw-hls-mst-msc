@@ -62,9 +62,17 @@ class Course extends BaseModel
 		return $this->belongsTo(Semester::class, 'start_semester_id');
 	}
 
+	public function tooltip(): Attribute
+	{
+		return Attribute::make(
+			get: fn () => $this->courseGroup?->type->tooltip()
+		);
+	}
+
 	public function venue(): BelongsTo
 	{
 		return $this->belongsTo(Venue::class);
 	}
 }
+
 

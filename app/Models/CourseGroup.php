@@ -58,4 +58,11 @@ class CourseGroup extends BaseModel
 			set: fn (?string $title) => $this->attributes['title'] = $title
 		);
 	}
+
+	public function tooltip(): Attribute
+	{
+		return Attribute::make(
+			get: fn () => $this->type->tooltip()
+		);
+	}
 }
