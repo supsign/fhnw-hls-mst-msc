@@ -37,6 +37,7 @@
         @endforeach
     </div>
 
+    @isset($optionalEnglish)
     <div>
         <div> {{ '<optional courses title>' }} </div>
 
@@ -59,8 +60,10 @@
             <br />
         @endforeach
     </div>
+    @endisset
 
     <br />
+    @isset($modulesOutside)
     <div>
         <div> {{ '<outsideModules title>' }} </div>
         <table class='border'>
@@ -79,6 +82,7 @@
             @endforeach
         </table>
     </div>
+    @endisset
     <br />
 
     @if($overlappingCourses->count())
@@ -111,7 +115,7 @@
     <br />
 
     <div>
-        <div>Master Thesis planned for {{ $thesisStart->start_date->format('d.m.Y') }} to {{ $thesisEnd->format('d.m.Y') }}</div>
+        <div>Master Thesis planned for {{ $thesisStart->start_date->format('d.m.Y') }} to {{ $thesisEnd?->format('d.m.Y') }}</div>
         <div>Broad Subject Area</div>
         <ul class="list-disc list-inside">
             @foreach($thesis AS $value)
