@@ -5,7 +5,6 @@ namespace App\Services;
 use App\Enums\StudyMode;
 use App\Models\Semester;
 use App\Models\Specialization;
-use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use stdClass;
 
@@ -42,12 +41,18 @@ class GetThesisData
 
     protected function getStarts(): Collection
     {
+        $startSemester = ($this->getUpcomingSemesters)(
+            $this->studyMode === StudyMode::FullTime ? 2 : 4,
+            $this->semester->start_date
+        )->last();
+
         $count = $this->studyMode === StudyMode::FullTime ? 3 : 6;
 
         if ($this->doubleDegree) {
             $count++;
+            $startSemester = $startSemester->nextSemester;
         }
 
-        return ($this->getUpcomingSemesters)($count, $this->semester?->start_date);
+        return ($this->getUpcomingSemesters)($count, $startSemester->start_date);
     }
 }

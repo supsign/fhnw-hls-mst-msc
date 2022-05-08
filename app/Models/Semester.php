@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Enums\SemesterType;
 use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Collection;
 
 class Semester extends BaseModel
@@ -27,6 +26,16 @@ class Semester extends BaseModel
 		return Attribute::make(
 			get: fn () => !empty($this->attributes['name']) ? $this->attributes['name'] : $this->year.' '.$this->semesterTypeShortName,
 			set: fn (string $name) => $this->attributes['name'] = $name,
+		);
+	}
+
+	public function nextSemester(): Attribute
+	{
+		return Attribute::make(
+			get: fn () => Semester::where('start_date', '>', $this->start_date)
+				->where('type', '<>', $this->type->value)
+				->orderBy('start_date')
+				->first(),
 		);
 	}
 
