@@ -112,7 +112,7 @@
             </table>
         @endforeach
     @else
-        <div> The modules you have selected will probably not take place at the same time.</div>
+        <div>The modules you have selected will probably not take place at the same time.</div>
     @endif
     <br />
 
