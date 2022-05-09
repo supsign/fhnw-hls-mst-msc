@@ -9,10 +9,16 @@ use stdClass;
 
 class AdminController extends Controller
 {
-    public function postConfiguration(PostConfiguration $request, ConfigurationImport $configurationImport): stdClass
+    public function postConfiguration(PostConfiguration $request, ConfigurationImport $configurationImport) //: stdClass
     {
-        return $configurationImport(
+        $response = $configurationImport(
             $request->config_file->storeAs('config', $request->config_file->getClientOriginalName())
         );
+
+        if ($response->status !== 'success') {
+            abort(500);
+        }
+
+        return redirect('http://localhost:3000/admin/config');
     }
 }
