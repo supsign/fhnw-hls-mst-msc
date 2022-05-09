@@ -49,6 +49,7 @@ class GetPdfData
                 'given_name',
                 'modules_outside',
                 'surname',
+                'statistics',
             ]) + [
                 'overlapping_courses' => $this->overlappingCoursesData,
                 'study_mode' => StudyMode::getByValue($request->study_mode),
@@ -58,7 +59,7 @@ class GetPdfData
             ]
         );
 
-        // var_dump(
+        // dump(
         //     $request->except([
         //         'additional_comments',
         //         'double_degree',

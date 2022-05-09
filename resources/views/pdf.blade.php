@@ -136,13 +136,13 @@
         </div>
         <br />
     @endisset
-{{--     <div>
+    <div>
         <div>Summary Statistics</div>
-        <div>{{ $counts['specialization'] }} of Specialization Modules</div>
-        <div>{{ $counts['cluster_specific'] }} of Cluster-specific Modules</div>
-        <div>{{ $counts['core_compentences'] }} Core Competence Modules</div>
-        <div>{{ $ects }} Total number of ECTS</div>
-    </div> --}}
+        <div>Number of Specialization Modules: {{ $statistics['specialization'] }}</div>
+        <div>Number of Cluster-specific Modules: {{ $statistics['cluster'] }} </div>
+        <div>Number Core Competence Modules: {{ $statistics['core'] }}</div>
+        <div>Total number of ECTS: {{ $statistics['ects'] }}</div>
+    </div>
     <br />
     <div>Please note that the module offer and the timing of the modules may change in the future.</div>
     <br />

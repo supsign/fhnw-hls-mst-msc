@@ -37,8 +37,8 @@ class Controller extends BaseController
 
     public function postPdf(PostPdfData $request, GetPdfData $getPdfData)
     {
-        // var_dump(
-        //     $getPdfData($request)['thesisFurtherDetails']
+        // dump(
+        //     $getPdfData($request)['statistics']
         // );
 
         // return 1;
