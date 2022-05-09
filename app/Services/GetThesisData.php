@@ -5,7 +5,6 @@ namespace App\Services;
 use App\Enums\StudyMode;
 use App\Models\Semester;
 use App\Models\Specialization;
-use Illuminate\Support\Collection;
 use stdClass;
 
 class GetThesisData
