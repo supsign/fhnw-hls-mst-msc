@@ -39,7 +39,7 @@
 
     @isset($optionalCourses)
     <div>
-        <div> {{ '<optional courses title>' }} </div>
+        <div>Optional English Class for MSc Students</div>
 
         @foreach($optionalCourses AS $semester)
             <div class="text-lg mb-1"><b>{{ $semester->name }}</b></div>
@@ -86,7 +86,7 @@
     <br />
 
     @if($overlappingCourses->count())
-        <div> {{ '<overlapping courses title>' }} </div>
+        <div>The following modules you have selected will probably take place at the same time. Please change your choice: </div>
 
         @foreach ($overlappingCourses AS $semesterSlots)
             @if(!$semesterSlots->slots->count())
@@ -111,6 +111,8 @@
 
             </table>
         @endforeach
+    @else
+        <div> The modules you have selected will probably not take place at the same time.</div>
     @endif
     <br />
 
