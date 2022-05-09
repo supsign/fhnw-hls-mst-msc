@@ -9,6 +9,7 @@ use App\Models\Course;
 use App\Models\CourseGroup;
 use App\Models\Semester;
 use App\Models\Specialization;
+use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use stdClass;
 
@@ -54,7 +55,7 @@ class GetPdfData
                 'overlapping_courses' => $this->overlappingCoursesData,
                 'study_mode' => StudyMode::getByValue($request->study_mode),
                 'thesis_further_details' => $request->master_thesis['further_details'],
-                'thesis_end' => Semester::find($request->master_thesis['time_frames']['end']),
+                'thesis_end' => Carbon::parse($request->master_thesis['time_frames']['end']),
                 'thesis_start' => Semester::find($request->master_thesis['time_frames']['start']['id'])
             ]
         );
