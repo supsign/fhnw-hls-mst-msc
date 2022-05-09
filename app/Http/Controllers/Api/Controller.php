@@ -14,6 +14,7 @@ use App\Services\GetPdfData;
 use App\Services\GetPersonalData;
 use App\Services\GetThesisData;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Storage;
 use stdClass;
 
 class Controller extends BaseController
@@ -37,13 +38,14 @@ class Controller extends BaseController
 
     public function postPdf(PostPdfData $request, GetPdfData $getPdfData)
     {
+        $path = Storage::path('public');
         $filename = uniqid().'.pdf';
         $pdf = App::make('dompdf.wrapper');
         $pdf->getDomPDF()->set_option('enable_php', true);
         $pdf->loadView('pdf', $getPdfData($request));
-        $pdf->save($filename);
+        $pdf->save($path.'/'.$filename);
 
-        return $filename;
+        return 'storage/'.$filename;
     }
 
     public function postThesisData(
