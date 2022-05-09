@@ -9,8 +9,6 @@ use App\Models\Course;
 use App\Models\CourseGroup;
 use App\Models\Semester;
 use App\Models\Specialization;
-use App\Models\Thesis;
-use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use stdClass;
 
@@ -41,7 +39,7 @@ class GetPdfData
             ]
         )->addSelectedCourses(
             $request->only([
-                'optional_english',
+                'optional_courses',
                 'selected_courses',
             ])
         )->addToPdfData(
@@ -71,7 +69,7 @@ class GetPdfData
         //         'specialization',
         //         'selected_courses',
         //         'modules_outside',
-        //         'optional_english',
+        //         'optional_courses',
         //         'master_thesis'
         //     ])
         // );

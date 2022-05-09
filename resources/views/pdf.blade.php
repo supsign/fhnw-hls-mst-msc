@@ -37,11 +37,11 @@
         @endforeach
     </div>
 
-    @isset($optionalEnglish)
+    @isset($optionalCourses)
     <div>
         <div> {{ '<optional courses title>' }} </div>
 
-        @foreach($optionalEnglish AS $semester)
+        @foreach($optionalCourses AS $semester)
             <div class="text-lg mb-1"><b>{{ $semester->name }}</b></div>
             <table class='border'>
                 <tr class='border-b p-1'>
