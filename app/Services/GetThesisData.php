@@ -29,18 +29,14 @@ class GetThesisData
 
         return (object)[
             'theses' => $specialization->theses,
-            'starts' => $this->getStarts(),
-            'end' => $this->getEnd(),
+            'time_frames' => $this->getStarts(),
         ];
     }
 
-    protected function getEnd()
+    protected function getStarts(): array
     {
-        return null;
-    }
+        $timeFrames = [];
 
-    protected function getStarts(): Collection
-    {
         $startSemester = ($this->getUpcomingSemesters)(
             $this->studyMode === StudyMode::FullTime ? 2 : 4,
             $this->semester->start_date
@@ -53,6 +49,15 @@ class GetThesisData
             $startSemester = $startSemester->nextSemester;
         }
 
-        return ($this->getUpcomingSemesters)($count, $startSemester->start_date);
+        $availibleStartSemesters = ($this->getUpcomingSemesters)($count, $startSemester->start_date);
+
+        foreach ($availibleStartSemesters AS $semester) {
+            $timeFrames[] = (object)[
+                'start' => $semester,
+                'end' => $semester->start_date->addMonth(6),
+            ];
+        }
+
+        return $timeFrames;
     }
 }
