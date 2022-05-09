@@ -15,54 +15,135 @@
     <div>Specialization: {{ $specialization->name }}</div>
     <br />
     <div>
-        @foreach($selected_courses AS $semester)
+        @foreach($selectedCourses AS $semester)
             <div class="text-lg mb-1"><b>{{ $semester->name }}</b></div>
             <table class='border'>
                 <tr class='border-b p-1'>
                     <th class='border-r p-1'>Module Title</th>
                     <th class='border-r p-1'>Type</th>
-                    <th class='p-1'>ECTS Venue</th>
+                    <th class='border-r p-1'>ECTS</th>
+                    <th class='p-1'>Venue</th>
                 </tr>
                 @foreach($semester->selectedCourses AS $course)
                     <tr class='border-b'>
                         <td class='border-r p-1'>{{ $course->name }}</td>
                         <td class='border-r p-1'>{{ $course->courseGroup?->courseGroupTypeShortName }}</td>
-                        <td class='p-1'>{{ $course->ects }}</td>
+                        <td class='border-r p-1'>{{ $course->ects }}</td>
+                        <td class='p-1'>{{ $course->venue->name }}</td>
                     </tr>
                 @endforeach
             </table>
             <br />
         @endforeach
     </div>
-    <br />
+
+    @isset($optionalCourses)
     <div>
-        <div>Master Thesis planned for {{ $thesis_start->start_date->format('d.m.Y') }} to {{ $thesis_start->end_date }}</div>
+        <div>Optional English Class for MSc Students</div>
+
+        @foreach($optionalCourses AS $semester)
+            <div class="text-lg mb-1"><b>{{ $semester->name }}</b></div>
+            <table class='border'>
+                <tr class='border-b p-1'>
+                    <th class='border-r p-1'>Module Title</th>
+                    <th class='border-r p-1'>ECTS</th>
+                    <th class='p-1'>Venue</th>
+                </tr>
+                @foreach($semester->selectedCourses AS $course)
+                    <tr class='border-b'>
+                        <td class='border-r p-1'>{{ $course->name }}</td>
+                        <td class='border-r p-1'>{{ $course->ects }}</td>
+                        <td class='p-1'>{{ $course->venue->name }}</td>
+                    </tr>
+                @endforeach
+            </table>
+            <br />
+        @endforeach
+    </div>
+    @endisset
+
+    <br />
+    @isset($modulesOutside)
+    <div>
+        <div> {{ '<outsideModules title>' }} </div>
+        <table class='border'>
+            <tr class='border-b p-1'>
+                <th class='border-r p-1'>Module Title</th>
+                <th class='border-r p-1'>ECTS</th>
+                <th class='p-1'>University</th>
+            </t>
+
+            @foreach($modulesOutside AS $outsideModule)
+                <tr class='border-b'>
+                    <td class='border-r p-1'>{{ $outsideModule['title'] }}</td>
+                    <td class='border-r p-1'>{{ $outsideModule['ects'] }}</td>
+                    <td class='p-1'>{{ $outsideModule['university'] }}</td>
+                </tr>
+            @endforeach
+        </table>
+    </div>
+    @endisset
+    <br />
+
+    @if($overlappingCourses->count())
+        <div>The following modules you have selected will probably take place at the same time. Please change your choice: </div>
+
+        @foreach ($overlappingCourses AS $semesterSlots)
+            @if(!$semesterSlots->slots->count())
+                @continue
+            @endif
+
+            <div class="text-lg mb-1"><b>{{ $semesterSlots->semester->name }}</b></div>
+
+            <table>
+
+            @foreach ($semesterSlots->slots AS $slot)
+                <tr class='border-b p-1'>
+                    <th class='border-r p-1'>Slot {{ $slot->name }}</th>
+                </t>
+
+                @foreach ($slot->courses AS $course)
+                    <tr class='border-b'>
+                        <td class='border-r p-1'>{{ $course->name }}</td>
+                    </tr>
+                @endforeach
+            @endforeach
+
+            </table>
+        @endforeach
+    @else
+        <div>The modules you have selected will probably not take place at the same time.</div>
+    @endif
+    <br />
+
+    <div>
+        <div>Master Thesis planned for {{ $thesisStart->start_date->format('d.m.Y') }} to {{ $thesisEnd?->format('d.m.Y') }}</div>
         <div>Broad Subject Area</div>
         <ul class="list-disc list-inside">
-            @foreach($thesis_subject AS $value)
+            @foreach($thesis AS $value)
                 <li>{{ $value->name }}</li>
             @endforeach
         </ul>
         <br />
-        @if($thesis_further_details)
+        @isset($thesisFurtherDetails)
             <div><b>Further Details on Thesis (Optional)</b></div>
-        <div>{{$thesis_further_details}}</div>
-            @endif
+            <div>{{$thesisFurtherDetails}}</div>
+        @endisset
     </div>
     <br />
-    @if(isset($additional_comments))
-    <div>
-        <div><b>Additional Comments</b></div>
-        <div>{{ $additional_comments}}</div>
-    </div>
+    @isset($additionalComments)
+        <div>
+            <div><b>Additional Comments</b></div>
+            <div>{{ $additionalComments}}</div>
+        </div>
         <br />
-    @endif
+    @endisset
     <div>
-        <div>Summary Statistics</div>
-        <div>{{ $counts['specialization'] }} of Specialization Modules</div>
-        <div>{{ $counts['cluster_specific'] }} of Cluster-specific Modules</div>
-        <div>{{ $counts['core_compentences'] }} Core Competence Modules</div>
-        <div>{{ $ects }} Total number of ECTS</div>
+        <div><strong>Summary Statistics</strong></div>
+        <div>Number of Specialization Modules: {{ $statistics['specialization'] }}</div>
+        <div>Number of Cluster-specific Modules: {{ $statistics['cluster'] }} </div>
+        <div>Number Core Competence Modules: {{ $statistics['core'] }}</div>
+        <div>Total number of ECTS: {{ $statistics['ects'] }}</div>
     </div>
     <br />
     <div>Please note that the module offer and the timing of the modules may change in the future.</div>

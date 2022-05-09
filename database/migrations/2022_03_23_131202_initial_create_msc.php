@@ -1,7 +1,7 @@
 <?php
 
 use App\Models\App;
-use App\Services\Auth\PasswordService;
+use App\Services\PasswordService;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -17,6 +17,7 @@ return new class extends Migration
     {        
         Schema::create('semesters', function (Blueprint $table) {
             $table->id();
+            $table->unsignedInteger('type');
             $table->timestamp('start_date')->unique();
             $table->timestamps();
         });
@@ -74,10 +75,12 @@ return new class extends Migration
         Schema::create('courses', function (Blueprint $table) {
             $table->id();
             $table->foreignId('cluster_id')->nullable()->constrained();
-            $table->foreignId('slot_as_id')->nullable()->constrained('slots');
-            $table->foreignId('slot_ss_id')->nullable()->constrained('slots');
+            $table->foreignId('end_semester_id')->nullable()->constrained('semesters');
+            $table->foreignId('slot_id')->nullable()->constrained();
             $table->foreignId('specialization_id')->nullable()->constrained();
+            $table->foreignId('start_semester_id')->nullable()->constrained('semesters');
             $table->foreignId('venue_id')->nullable()->constrained();
+            $table->unsignedInteger('semester_type');
             $table->string('name');
             $table->string('internal_name');
             $table->string('short_name')->nullable();
@@ -85,14 +88,6 @@ return new class extends Migration
             $table->text('content');
             $table->unsignedInteger('ects');
             $table->timestamps();
-        });
-
-        Schema::create('course_semester', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('course_id')->constrained();
-            $table->foreignId('semester_id')->constrained();
-            $table->timestamps();
-            $table->unique(['course_id', 'semester_id']);
         });
 
         Schema::create('course_course_group', function (Blueprint $table) {

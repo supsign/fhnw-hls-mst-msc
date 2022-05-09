@@ -5,11 +5,9 @@ namespace App\Imports\ConfigurationSheets;
 use App\Enums\Error;
 use App\Models\Course;
 use App\Models\CourseCourseGroup;
-use App\Models\CourseSemester;
 use App\Models\Slot;
 use App\Models\Venue;
-use App\Services\Semesters\GetSemesterService;
-use App\Services\Semesters\GetUpcomingSemestersService;
+use App\Services\GetSemester;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
@@ -23,8 +21,7 @@ class CourseSheetImport implements ToCollection, WithHeadingRow
 
     public function collection(Collection $rows): void
     {
-        $getSemesterService = App::make(GetSemesterService::class);
-        $getUpcomingSemestersService = App::make(GetUpcomingSemestersService::class);
+        $getSemesterService = App::make(GetSemester::class);
 
         foreach ($rows as $row) {
             $row = $row->ToArray();
@@ -34,13 +31,23 @@ class CourseSheetImport implements ToCollection, WithHeadingRow
             }
 
             try {
+                if (!empty($row['end'])) {
+                    $endSemester = $row['semshort'] === 'SS' 
+                        ? $getSemesterService($row['end'] + 1, false)
+                        : $getSemesterService($row['end'], true);
+                } else {
+                    $endSemester = null;
+                }
+
                 Course::create([
                     'id' => $row['id'],
                     'cluster_id' => $row['clustercore'],
-                    'slot_as_id' => !empty($row['slotas']) ? Slot::firstOrCreate(['name' => $row['slotas']])->id : null,
-                    'slot_ss_id' => !empty($row['slotss']) ? Slot::firstOrCreate(['name' => $row['slotss']])->id : null,
+                    'end_semester_id' => $endSemester?->id,
+                    'slot_id' => !empty($row['slotas']) ? Slot::firstOrCreate(['name' => $row['slotas']])->id : (!empty($row['slotss']) ? Slot::firstOrCreate(['name' => $row['slotss']])->id : null),
                     'specialization_id' => $row['specialisation'],
+                    'start_semester_id' => $getSemesterService($row['start'], $row['semshort'] === 'AS')->id,
                     'venue_id' => !empty($row['venue']) ? Venue::firstOrCreate(['name' => $row['venue']])->id : null,
+                    'semester_type' => $row['semshort'] === 'SS' ? 2 : 1,
                     'name' => $row['modulename'],
                     'internal_name' => $row['internalcode'],
                     'short_name' => $row['short'],
@@ -105,33 +112,6 @@ class CourseSheetImport implements ToCollection, WithHeadingRow
                 }
 
                 throw new InvalidData($error);
-            }
-
-            $startSemester = $getSemesterService($row['start'], $row['semshort'] === 'AS');
-
-            if (!empty($row['end'])) {
-                $endSemester = $row['semshort'] === 'SS' 
-                    ? $getSemesterService($row['end'] + 1, false)
-                    : $getSemesterService($row['end'], true);
-            } else {
-                $endSemester = false;
-            }
-
-            $upcomingSemesters = $getUpcomingSemestersService(startDate: $startSemester->start_date);
-
-            foreach ($upcomingSemesters AS $upcomingSemester) {
-                if ($upcomingSemester->semesterTypeShortName !== $row['semshort']) {
-                    continue;
-                }
-
-                CourseSemester::create([
-                    'course_id' => $row['id'],
-                    'semester_id' => $upcomingSemester->id,
-                ]);
-
-                if ($endSemester && $upcomingSemester->id === $endSemester->id) {
-                    break;
-                }
             }
         }
     }
