@@ -17,7 +17,7 @@ class GetPersonalData
         return (object)[
             'semesters' => ($this->getUpcomingSemesters)(8),
             'studyMode' => (object)[
-                'tooltip' => PageContent::getContentByName('study_mode_tooptip'),
+                'tooltip' => PageContent::getContentByName('study_mode_tooltip'),
                 'studyModes' => StudyMode::asArray(),
             ],
             'specializations' => Specialization::all(),
