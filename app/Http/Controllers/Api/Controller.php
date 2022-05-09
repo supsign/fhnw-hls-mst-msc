@@ -37,7 +37,7 @@ class Controller extends BaseController
 
     public function postPdf(PostPdfData $request, GetPdfData $getPdfData)
     {
-        $filename = 'test'.'.pdf';
+        $filename = uniqid().'.pdf';
         $pdf = App::make('dompdf.wrapper');
         $pdf->getDomPDF()->set_option('enable_php', true);
         $pdf->loadView('pdf', $getPdfData($request));
