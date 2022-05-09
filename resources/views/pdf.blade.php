@@ -137,7 +137,7 @@
         <br />
     @endisset
     <div>
-        <div>Summary Statistics</div>
+        <div><strong>Summary Statistics</strong></div>
         <div>Number of Specialization Modules: {{ $statistics['specialization'] }}</div>
         <div>Number of Cluster-specific Modules: {{ $statistics['cluster'] }} </div>
         <div>Number Core Competence Modules: {{ $statistics['core'] }}</div>
