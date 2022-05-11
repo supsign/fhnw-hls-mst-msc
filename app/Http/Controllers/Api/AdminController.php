@@ -19,6 +19,6 @@ class AdminController extends Controller
             abort(500);
         }
 
-        return redirect('http://localhost:3000/admin/config');
+        return redirect(env('APP_URL').'/admin/config');
     }
 }
