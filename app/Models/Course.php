@@ -13,7 +13,6 @@ class Course extends BaseModel
 		'block',
 		'cluster_id',
         'created_at',
-        'slot_id',
         'specialization_id',
         'pivot',
         // 'tooltip',
