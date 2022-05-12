@@ -106,10 +106,6 @@ class GetPdfData
                         'slots' => ($this->getOverlappingCourses)($semester->selectedCourses)
                     ]);     
                 }
-
-                foreach ($semester->selectedCourses AS $course) {
-                    $course->courseGroup = $this->getCourseGroupForCourse($course);
-                }
             }
 
             $data[$key] = $semesters;

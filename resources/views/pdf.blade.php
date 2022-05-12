@@ -27,7 +27,7 @@
                 @foreach($semester->selectedCourses AS $course)
                     <tr class='border-b'>
                         <td class='border-r p-1'>{{ $course->name }}</td>
-                        <td class='border-r p-1'>{{ $course->courseGroup?->courseGroupTypeShortName }}</td>
+                        <td class='border-r p-1'>{{ $course->typeLabelShort }}</td>
                         <td class='border-r p-1'>{{ $course->ects }}</td>
                         <td class='p-1'>{{ $course->venue->name }}</td>
                     </tr>
@@ -36,31 +36,6 @@
             <br />
         @endforeach
     </div>
-
-    @isset($optionalCourses)
-    <div>
-        <div>Optional English Class for MSc Students</div>
-
-        @foreach($optionalCourses AS $semester)
-            <div class="text-lg mb-1"><b>{{ $semester->name }}</b></div>
-            <table class='border'>
-                <tr class='border-b p-1'>
-                    <th class='border-r p-1'>Module Title</th>
-                    <th class='border-r p-1'>ECTS</th>
-                    <th class='p-1'>Venue</th>
-                </tr>
-                @foreach($semester->selectedCourses AS $course)
-                    <tr class='border-b'>
-                        <td class='border-r p-1'>{{ $course->name }}</td>
-                        <td class='border-r p-1'>{{ $course->ects }}</td>
-                        <td class='p-1'>{{ $course->venue->name }}</td>
-                    </tr>
-                @endforeach
-            </table>
-            <br />
-        @endforeach
-    </div>
-    @endisset
 
     <br />
     @isset($modulesOutside)

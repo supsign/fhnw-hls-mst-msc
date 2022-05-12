@@ -53,7 +53,7 @@ class GetThesisData
         foreach ($availibleStartSemesters AS $semester) {
             $timeFrames[] = (object)[
                 'start' => $semester,
-                'end' => $semester->start_date->addMonth(6),
+                'end' => $semester->start_date->addMonth(8),
             ];
         }
 
