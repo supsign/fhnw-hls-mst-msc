@@ -6,8 +6,8 @@ use App\Helpers\GeneralHelper;
 
 enum CourseGroupType: int
 {
-    case CoreCompetences = 3;
-    case ClusterSpecific = 4;
+    case CoreCompetences = 4;
+    case ClusterSpecific = 3;
     case Specialization = 1;
     case Elective = 2;
 
@@ -44,11 +44,6 @@ enum CourseGroupType: int
             static::Elective,
             static::ClusterSpecific => GeneralHelper::getInitialsOnUpperCase($this->name),
         };
-    }
-
-    public static function withoutClusterSpecific(): array
-    {
-        return array_filter(self::cases(), fn($case) => $case->value !== self::ClusterSpecific->value);
     }
 
     public static function withoutSpecialization(): array
