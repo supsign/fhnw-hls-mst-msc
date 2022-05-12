@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\CourseGroupType;
 use App\Enums\SemesterType;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -9,6 +10,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Course extends BaseModel
 {
+	protected $appends = [
+        'type_label_short',
+	];
 	protected $hidden = [
 		'block',
 		'cluster_id',
@@ -27,14 +31,6 @@ class Course extends BaseModel
 	public function cluster(): BelongsTo
 	{
 		return $this->belongsTo(Cluster::class);
-	}
-
-	public function courseGroup(): Attribute
-	{
-		return Attribute::make(
-			get: fn () => $this->attributes['course_group'] ?? null,
-			set: fn (?CourseGroup $courseGroup) => $this->attributes['course_group'] = $courseGroup,
-		);
 	}
 
 	public function endSemester(): BelongsTo
@@ -62,12 +58,33 @@ class Course extends BaseModel
 		return $this->belongsTo(Semester::class, 'start_semester_id');
 	}
 
-	// public function tooltip(): Attribute
-	// {
-	// 	return Attribute::make(
-	// 		get: fn () => $this->courseGroup?->type->tooltip()
-	// 	);
-	// }
+	public function type(): Attribute
+	{
+		return Attribute::make(
+			get: function () {
+				if ($this->specialization_id) {
+					return CourseGroupType::Specialization;
+				}
+
+				if ($this->cluster_id) {
+					if ($this->cluster->core_competences) {
+						return CourseGroupType::CoreCompetences;
+					}
+
+					return CourseGroupType::ClusterSpecific;
+				}
+
+				return null;
+			},
+		);
+	}
+
+	public function typeLabelShort(): Attribute
+	{
+		return Attribute::make(
+			get: fn () => $this->type?->labelShort()
+		);
+	}
 
 	public function venue(): BelongsTo
 	{
