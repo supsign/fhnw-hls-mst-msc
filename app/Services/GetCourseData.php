@@ -10,6 +10,7 @@ use App\Models\CourseGroup;
 use App\Models\CourseGroupSpecialization;
 use App\Models\PageContent;
 use App\Models\Semester;
+use App\Models\Slot;
 use App\Models\Specialization;
 use App\Services\GetUpcomingSemesters;
 use Illuminate\Support\Collection;
@@ -55,6 +56,7 @@ class GetCourseData
                 'courses' => Course::whereNull(['cluster_id', 'specialization_id'])->get(),
             ],
             'semesters' => $semesters,
+            'slots' => Slot::all(),
             'texts' => PageContent::findByName([
                 'additional_comments_title',
                 'description_before_further',
