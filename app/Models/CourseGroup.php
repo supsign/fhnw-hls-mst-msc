@@ -9,11 +9,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class CourseGroup extends BaseModel
 {
 	protected $appends = [
-		'course_group_type_short_name', 
-		'course_group_type_tooltip', 
 		'description', 
 		'title',
-		'tooltip',
 	];
 
 	protected $casts = [
@@ -57,13 +54,6 @@ class CourseGroup extends BaseModel
 		return Attribute::make(
 			get: fn () => $this->attributes['title'] ?? null,
 			set: fn (?string $title) => $this->attributes['title'] = $title
-		);
-	}
-
-	public function tooltip(): Attribute
-	{
-		return Attribute::make(
-			get: fn () => $this->type->tooltip()
 		);
 	}
 }

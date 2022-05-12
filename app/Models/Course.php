@@ -12,6 +12,7 @@ class Course extends BaseModel
 {
 	protected $appends = [
         'type_label_short',
+        'type_tooltip'
 	];
 	protected $hidden = [
 		'block',
@@ -82,6 +83,13 @@ class Course extends BaseModel
 	{
 		return Attribute::make(
 			get: fn () => $this->type?->labelShort()
+		);
+	}
+
+	public function typeTooltip(): Attribute
+	{
+		return Attribute::make(
+			get: fn () => $this->type?->tooltip()
 		);
 	}
 
