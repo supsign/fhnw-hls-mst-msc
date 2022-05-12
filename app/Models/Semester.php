@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\SemesterType;
+use App\Enums\ThesisStarts;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Support\Collection;
 
@@ -12,6 +13,7 @@ class Semester extends BaseModel
 	    'name',
 	    'long_name',
 	    'short_name',
+	    // '',
 	    'tooltip',
 	    'year',
 	];
@@ -42,7 +44,8 @@ class Semester extends BaseModel
 	public function longName(): Attribute
 	{
 		return Attribute::make(
-			get: fn () => $this->year.' '.$this->semesterTypeLongName
+			get: fn () => !empty($this->attributes['long_name']) ? $this->attributes['long_name'] : $this->year.' '.$this->semesterTypeLongName,
+			set: fn (string $longName) => $this->attributes['long_name'] = $longName,
 		);
 	}
 
@@ -72,6 +75,19 @@ class Semester extends BaseModel
 	{
 		return Attribute::make(
 			get: fn () => $this->semesterTypeShortName.substr($this->year, 2, 2),
+		);
+	}
+
+	public function thesisStart(): Attribute
+	{
+		return Attribute::make(
+			get: function () {
+				if ($this->type === SemesterType::AutumnStart) {
+					return ThesisStarts::Middle->label().' '.($this->year + 1);
+				}
+
+				return ThesisStarts::Beginning->label().' '.($this->year + 1);
+			}
 		);
 	}
 

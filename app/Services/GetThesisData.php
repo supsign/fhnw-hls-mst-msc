@@ -36,24 +36,26 @@ class GetThesisData
     {
         $timeFrames = [];
 
-        $startSemester = ($this->getUpcomingSemesters)(
-            $this->studyMode === StudyMode::FullTime ? 2 : 4,
-            $this->semester->start_date
-        )->last();
+        // $startSemester = ($this->getUpcomingSemesters)(
+        //     $this->studyMode === StudyMode::FullTime ? 2 : 4,
+        //     $this->semester->start_date
+        // )->last();
 
         $count = $this->studyMode === StudyMode::FullTime ? 3 : 6;
 
         if ($this->doubleDegree) {
             $count++;
-            $startSemester = $startSemester->nextSemester;
+            // $startSemester = $startSemester->nextSemester;
         }
 
-        $availibleStartSemesters = ($this->getUpcomingSemesters)($count, $startSemester->start_date);
+        $availibleStartSemesters = ($this->getUpcomingSemesters)($count, $this->semester->start_date);
 
         foreach ($availibleStartSemesters AS $semester) {
+            $semester->long_name = $semester->thesisStart;
+
             $timeFrames[] = (object)[
                 'start' => $semester,
-                'end' => $semester->start_date->addMonth(8),
+                'end' => $semester->start_date->addMonth(16),
             ];
         }
 
