@@ -38,7 +38,7 @@
     </div>
 
     <br />
-    @isset($modulesOutside)
+    @if(!empty($modulesOutside))
     <div>
         <div> {{ '<outsideModules title>' }} </div>
         <table class='border'>
@@ -57,7 +57,7 @@
             @endforeach
         </table>
     </div>
-    @endisset
+    @endif
     <br />
 
     @if($overlappingCourses->count())
