@@ -15,9 +15,10 @@
     <div>Specialization: {{ $specialization->name }}</div>
     <br />
     <div>
+        <div class="text-lg font-bold mb-3">Study Programme</div>
         @foreach($selectedCourses AS $semester)
-            <div class="text-lg mb-1"><b>{{ $semester->name }}</b></div>
-            <table class='border'>
+            <div class="mb-1 font-bold">{{ $semester->name }}</div>
+            <table class='border mb-5'>
                 <tr class='border-b p-1'>
                     <th class='border-r p-1'>Module Title</th>
                     <th class='border-r p-1'>Type</th>
@@ -33,20 +34,17 @@
                     </tr>
                 @endforeach
             </table>
-            <br />
         @endforeach
     </div>
-
-    <br />
     @if(!empty($modulesOutside))
-    <div>
-        <div> {{ '<outsideModules title>' }} </div>
-        <table class='border'>
+    <div class="mb-5">
+        <div class="text-lg font-bold">Modules outside the Curriculum</div>
+        <table class='border mt-2'>
             <tr class='border-b p-1'>
                 <th class='border-r p-1'>Module Title</th>
                 <th class='border-r p-1'>ECTS</th>
                 <th class='p-1'>University</th>
-            </t>
+            </tr>
 
             @foreach($modulesOutside AS $outsideModule)
                 <tr class='border-b'>
@@ -58,8 +56,7 @@
         </table>
     </div>
     @endif
-    <br />
-
+<div class="mb-5">
     @if($overlappingCourses->count())
         <div>The following modules you have selected will probably take place at the same time. Please change your choice: </div>
 
@@ -75,7 +72,7 @@
             @foreach ($semesterSlots->slots AS $slot)
                 <tr class='border-b p-1'>
                     <th class='border-r p-1'>Slot {{ $slot->name }}</th>
-                </t>
+                </tr>
 
                 @foreach ($slot->courses AS $course)
                     <tr class='border-b'>
@@ -89,9 +86,13 @@
     @else
         <div>The modules you have selected will probably not take place at the same time.</div>
     @endif
-    <br />
-
-    <div>
+</div>
+    <div class="mb-5">
+        <div class="text-lg font-bold">Double Degree</div>
+      @if($doubleDegree)<div>Yes</div>@else<div>No</div>@endif
+    </div>
+    <div class="mb-5">
+        <div class="text-lg font-bold">Master Thesis</div>
         <div>Master Thesis planned for {{ $thesisStart->start_date->format('d.m.Y') }} to {{ $thesisEnd?->format('d.m.Y') }}</div>
         <div>Broad Subject Area</div>
         <ul class="list-disc list-inside">
@@ -101,24 +102,24 @@
         </ul>
         <br />
         @isset($thesisFurtherDetails)
-            <div><b>Further Details on Thesis (Optional)</b></div>
+        <div class="text-lg font-bold">Further Details on Thesis (Optional)</div>
             <div>{{$thesisFurtherDetails}}</div>
         @endisset
     </div>
     <br />
     @isset($additionalComments)
-        <div>
-            <div><b>Additional Comments</b></div>
+        <div class="mb-5">
+            <div class="text-lg font-bold">Additional Comments</div>
             <div>{{ $additionalComments}}</div>
         </div>
         <br />
     @endisset
     <div>
-        <div><strong>Summary Statistics</strong></div>
+        <div class="text-lg font-bold">Summary Statistics</div>
         <div>Number of Specialization Modules: {{ $statistics['specialization'] }}</div>
         <div>Number of Cluster-specific Modules: {{ $statistics['cluster'] }} </div>
         <div>Number Core Competence Modules: {{ $statistics['core'] }}</div>
-        <div>Total number of ECTS: {{ $statistics['ects'] }}</div>
+        <div>Total number of ECTS: {{ $statistics['ects'] }} (50 required)</div>
     </div>
     <br />
     <div>Please note that the module offer and the timing of the modules may change in the future.</div>
