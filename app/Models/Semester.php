@@ -114,7 +114,7 @@ class Semester extends BaseModel
 	public function year(): Attribute
 	{
 		return Attribute::make(
-			get: fn () => $this->start_date->year
+			get: fn () => $this->start_date->year ?? 10000,
 		);
 	}
 }
