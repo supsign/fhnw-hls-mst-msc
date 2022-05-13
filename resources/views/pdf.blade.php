@@ -4,7 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 </head>
 <body>
-<div style='font-family: sans-serif; font-size: 1rem; border-color: black;'>
+<div style='font-family: sans-serif; font-size: 1rem;'>
     <div>
         <div style='font-size: 1.5rem; line-height: 2rem; float: left; margin-right: 2.5rem;'>Your Study Plan MSc in Life Sciences FHWN</div>
         <img style='height:2rem;' src="{{ asset('img/logos/fhnw-logo-klein.png') }}" alt="Logo FHNW">
@@ -17,18 +17,18 @@
         <div style='font-size: 1.125rem; line-height: 1.75rem; font-weight: 700; margin-bottom: 0.75rem'>Study Programme</div>
         @foreach($selectedCourses AS $semester)
             <div style='font-weight: 700; margin-bottom: 0.25rem;'>{{ $semester->name }}</div>
-            <table style='border-width: 1px; margin-bottom: 1.25rem; width: 100%;'>
-                <tr style='border-bottom-width: 1px; padding: 0.25rem;'>
-                    <th style='border-right: 1px; padding: 0.25rem;  width: 25rem;'>Module Title</th>
-                    <th style='border-right-width: 1px; padding: 0.25rem; width: 3rem;'>Type</th>
-                    <th style='border-right-width: 1px; padding: 0.25rem; width:3.5rem;'>ECTS</th>
+            <table style='margin-bottom: 1.25rem; width: 100%;'>
+                <tr style='border-bottom: 1px solid black;'>
+                    <th style='border-right: 1px solid black; padding: 0.25rem; width: 25rem;'>Module Title</th>
+                    <th style='border-right: 1px solid black; padding: 0.25rem; width: 3rem;'>Type</th>
+                    <th style='border-right: 1px solid black; padding: 0.25rem; width:3.5rem;'>ECTS</th>
                     <th style='padding: 0.25rem; width: 10rem;'>Venue</th>
                 </tr>
                 @foreach($semester->selectedCourses AS $course)
-                    <tr style='border-bottom-width: 1px;'>
-                        <td style='border-right-width: 1px; padding: 0.25rem; width: 25rem;'>{{ $course->name }}</td>
-                        <td style='border-right-width: 1px; padding: 0.25rem; width: 3rem;'>{{ $course->typeLabelShort }}</td>
-                        <td style='border-right-width: 1px; padding: 0.25rem; text-align: right; width: 3.5rem;'>{{ $course->ects }}</td>
+                    <tr style='border: 1px solid black;'>
+                        <td style='border-right: 1px solid black; padding: 0.25rem; width: 25rem;'>{{ $course->name }}</td>
+                        <td style='border-right: 1px solid black; padding: 0.25rem; width: 3rem;'>{{ $course->typeLabelShort }}</td>
+                        <td style='border-right: 1px solid black; padding: 0.25rem; text-align: right; width: 3.5rem;'>{{ $course->ects }}</td>
                         <td style='padding: 0.25rem; width: 10rem;'>{{ $course->venue->name }}</td>
                     </tr>
                 @endforeach
