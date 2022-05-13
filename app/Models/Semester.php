@@ -78,6 +78,19 @@ class Semester extends BaseModel
 		);
 	}
 
+	public function thesisEnd(): Attribute
+	{
+		return Attribute::make(
+			get: function () {
+				if ($this->type === SemesterType::AutumnStart) {
+					return 'spring '.($this->year + 2);
+				}
+
+				return 'autumn '.($this->year + 2);
+			}
+		);
+	}
+
 	public function thesisStart(): Attribute
 	{
 		return Attribute::make(
