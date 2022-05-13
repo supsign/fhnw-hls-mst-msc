@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class Course extends BaseModel
 {
 	protected $appends = [
+		'type',
         'type_label_short',
         'type_tooltip'
 	];

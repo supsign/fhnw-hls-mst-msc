@@ -89,7 +89,13 @@
 </div>
     <div class="mb-5">
         <div class="text-lg font-bold">Double Degree</div>
-      @if($doubleDegree)<div>Yes</div>@else<div>No</div>@endif
+        <div>
+            @if($doubleDegree)
+                Yes
+            @else
+                No
+            @endif
+        </div>
     </div>
     <div class="mb-5">
         <div class="text-lg font-bold">Master Thesis</div>
