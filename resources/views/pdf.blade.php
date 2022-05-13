@@ -42,16 +42,16 @@
         <div style='font-size: 1.125rem; line-height: 1.75rem; font-weight: 700; margin-bottom: 0.75rem'>Modules outside the Curriculum</div>
         <table style='border-width: 1px; margin-bottom: 1.25rem; width: 100%; border-collapse: collapse;'>
             <tr style='border: 1px solid black;'>
-                <th style='border-right: 1px solid black; padding: 0.25rem; width: 23rem;'>Module Title</th>
-                <th style='border-right: 1px solid black; padding: 0.25rem; width:3.5rem;'>ECTS</th>
-                <th style='padding: 0.25rem; width: 15rem;'>University</th>
+                <th style='border-right: 1px solid black; padding: 0.25rem; width: 23rem; text-align: left;'>Module Title</th>
+                <th style='border-right: 1px solid black; padding: 0.25rem; width:3.5rem; text-align: center;'>ECTS</th>
+                <th style='padding: 0.25rem; width: 15rem; text-align: left;'>University</th>
             </tr>
 
             @foreach($modulesOutside AS $outsideModule)
                 <tr style='border: 1px solid black;'>
                     <td style='border-right: 1px solid black; padding: 0.25rem; width: 23rem;'>{{ $outsideModule['title'] }}</td>
-                    <td style='border-right: 1px solid black; padding: 0.25rem; text-align: right; width:3.5rem;'>{{ $outsideModule['ects'] }}</td>
-                    <th style='padding: 0.25rem; width: 15rem;'>{{ $outsideModule['university'] }}</td>
+                    <td style='border-right: 1px solid black; padding: 0.25rem; text-align: right; width:3.5rem; text-align: center;'>{{ $outsideModule['ects'] }}</td>
+                    <td style='padding: 0.25rem; width: 15rem; text-align: left;'>{{ $outsideModule['university'] }}</td>
                 </tr>
             @endforeach
         </table>
