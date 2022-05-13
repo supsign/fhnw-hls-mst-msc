@@ -112,7 +112,11 @@ class GetCourseData
                     $query->where('id', $this->specialization->cluster_id);
                 }
             })
-            ->with(['courses', 'courses.cluster'])
+            ->with([
+                'courses', 
+                'courses.cluster', 
+                'courses.endSemester',
+            ])
             ->get();
 
         foreach ($clusters AS $cluster) {
@@ -132,7 +136,11 @@ class GetCourseData
     protected function getFurtherCoursesBySpecialization(): Collection
     {
         $specializations = Specialization::where('specializations.id', '<>', $this->specialization->id)
-            ->with(['courses', 'courses.cluster'])
+            ->with([
+                'courses', 
+                'courses.cluster', 
+                'courses.endSemester'
+            ])
             ->get();
 
         foreach ($specializations AS $specialization) {
@@ -170,6 +178,7 @@ class GetCourseData
             ->with([
                 'courseGroup',
                 'courseGroup.courses',
+                'courseGroup.courses.endSemester',
             ])
             ->orderBy('course_groups.type')
             ->get()
