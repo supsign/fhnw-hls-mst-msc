@@ -16,39 +16,41 @@
     <div>
         <div style='font-size: 1.125rem; line-height: 1.75rem; font-weight: 700; margin-bottom: 0.75rem'>Study Programme</div>
         @foreach($selectedCourses AS $semester)
+            @if(count($semester->selectedCourses))
             <div style='font-weight: 700; margin-bottom: 0.25rem;'>{{ $semester->name }}</div>
-            <table style='margin-bottom: 1.25rem; width: 100%;'>
-                <tr style='border-bottom: 1px solid black;'>
-                    <th style='border-right: 1px solid black; padding: 0.25rem; width: 25rem;'>Module Title</th>
+            <table style='margin-bottom: 1.25rem; width: 100%; border-collapse: collapse;'>
+                <tr style='border: 1px solid black;'>
+                    <th style='border-right: 1px solid black; padding: 0.25rem; width: 25rem; text-align: left'>Module Title</th>
                     <th style='border-right: 1px solid black; padding: 0.25rem; width: 3rem;'>Type</th>
                     <th style='border-right: 1px solid black; padding: 0.25rem; width:3.5rem;'>ECTS</th>
-                    <th style='padding: 0.25rem; width: 10rem;'>Venue</th>
+                    <th style='padding: 0.25rem; width: 10rem; text-align: left'>Venue</th>
                 </tr>
                 @foreach($semester->selectedCourses AS $course)
                     <tr style='border: 1px solid black;'>
                         <td style='border-right: 1px solid black; padding: 0.25rem; width: 25rem;'>{{ $course->name }}</td>
-                        <td style='border-right: 1px solid black; padding: 0.25rem; width: 3rem;'>{{ $course->typeLabelShort }}</td>
-                        <td style='border-right: 1px solid black; padding: 0.25rem; text-align: right; width: 3.5rem;'>{{ $course->ects }}</td>
+                        <td style='border-right: 1px solid black; padding: 0.25rem; width: 3rem; text-align: center;'>{{ $course->typeLabelShort }}</td>
+                        <td style='border-right: 1px solid black; padding: 0.25rem; text-align: right; width: 3.5rem; text-align: center;'>{{ $course->ects }}</td>
                         <td style='padding: 0.25rem; width: 10rem;'>{{ $course->venue->name }}</td>
                     </tr>
                 @endforeach
             </table>
+            @endif
         @endforeach
     </div>
     @if(!empty($modulesOutside))
     <div style='margin-bottom: 1.25rem;'>
         <div style='font-size: 1.125rem; line-height: 1.75rem; font-weight: 700; margin-bottom: 0.75rem'>Modules outside the Curriculum</div>
-        <table style='border-width: 1px; margin-bottom: 1.25rem; width: 100%'>
-            <tr style='border-bottom-width: 1px;'>
-                <th style='border-right-width: 1px; padding: 0.25rem; width: 23rem;'>Module Title</th>
-                <th style='border-right-width: 1px; padding: 0.25rem; width:3.5rem;'>ECTS</th>
+        <table style='border-width: 1px; margin-bottom: 1.25rem; width: 100%; border-collapse: collapse;'>
+            <tr style='border: 1px solid black;'>
+                <th style='border-right: 1px solid black; padding: 0.25rem; width: 23rem;'>Module Title</th>
+                <th style='border-right: 1px solid black; padding: 0.25rem; width:3.5rem;'>ECTS</th>
                 <th style='padding: 0.25rem; width: 15rem;'>University</th>
             </tr>
 
             @foreach($modulesOutside AS $outsideModule)
-                <tr style='border-bottom-width: 1px;'>
-                    <td style='border-right-width: 1px; padding: 0.25rem; width: 23rem;'>{{ $outsideModule['title'] }}</td>
-                    <td style='border-right-width: 1px; padding: 0.25rem; text-align: right; width:3.5rem;'>{{ $outsideModule['ects'] }}</td>
+                <tr style='border: 1px solid black;'>
+                    <td style='border-right: 1px solid black; padding: 0.25rem; width: 23rem;'>{{ $outsideModule['title'] }}</td>
+                    <td style='border-right: 1px solid black; padding: 0.25rem; text-align: right; width:3.5rem;'>{{ $outsideModule['ects'] }}</td>
                     <th style='padding: 0.25rem; width: 15rem;'>{{ $outsideModule['university'] }}</td>
                 </tr>
             @endforeach
@@ -100,13 +102,13 @@
     <br />
     <div >
         <div style='float: left; margin-right: 2.5rem;'>
-            <div style='border-bottom-width: 1px; padding-bottom: 2.5rem;'>Agreed, Date</div>
+            <div style='border-bottom: 1px solid black; padding-bottom: 2.5rem;'>Agreed, Date</div>
         </div>
         <div style='float: left; margin-right: 2.5rem;'>
-            <div style='border-bottom-width: 1px; padding-bottom: 2.5rem;'>Signature Student</div>
+            <div style='border-bottom: 1px solid black; padding-bottom: 2.5rem;'>Signature Student</div>
         </div>
         <div style='float: left; margin-right: 2.5rem;'>
-            <div style='border-bottom-width: 1px; padding-bottom: 2.5rem;'>Signature Director of Study Programme</div>
+            <div style='border-bottom: 1px solid black; padding-bottom: 2.5rem;'>Signature Director of Study Programme</div>
         </div>
     </div>
 </div>
