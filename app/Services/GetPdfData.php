@@ -55,8 +55,8 @@ class GetPdfData
                 'overlapping_courses' => $this->overlappingCoursesData,
                 'study_mode' => StudyMode::getByValue($request->study_mode),
                 'thesis_further_details' => $request->master_thesis['further_details'],
-                'thesis_end' => Carbon::parse($request->master_thesis['time_frames']['end']),
-                'thesis_start' => Semester::find($request->master_thesis['time_frames']['start']['id'])
+                'thesis_end' => $request->master_thesis['time_frames']['end'],
+                'thesis_start' => $request->master_thesis['time_frames']['start']['long_name']
             ]
         );
 

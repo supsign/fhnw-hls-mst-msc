@@ -26,7 +26,3 @@ Route::controller(Controller::class)->group(function () {
 Route::controller(AdminController::class)->group(function () {
     Route::post('admin/configuration', 'postConfiguration')->name('admin.post.configuration');
 });
-
-
-
-
