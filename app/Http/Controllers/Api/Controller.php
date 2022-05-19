@@ -38,11 +38,12 @@ class Controller extends BaseController
 
     public function postPdf(PostPdfData $request, GetPdfData $getPdfData)
     {
+        $data = $getPdfData($request);
         $path = Storage::path('public');
-        $filename = uniqid().'.pdf';
+        $filename = $data['filename'];
         $pdf = App::make('dompdf.wrapper');
         $pdf->getDomPDF()->set_option('enable_php', true);
-        $pdf->loadView('pdf', $getPdfData($request));
+        $pdf->loadView('pdf', $data);
         $pdf->save($path.'/'.$filename);
 
         return 'storage/'.$filename;
