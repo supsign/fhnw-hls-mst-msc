@@ -110,10 +110,7 @@ class GetPdfData
 
             $data[$key] = $semesters
                 ->filter(fn ($semester) => $semester->selectedCourses->count())
-                ->sortBy([
-                    ['year', 'asc'],
-                    ['type', 'desc'],
-                ])->values();
+                ->sortBy('type')->sortBy('year')->values();
         }
 
         return $this->addToPdfData($data);
