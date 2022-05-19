@@ -60,8 +60,8 @@ class GetPdfData
                 'thesis_end' => $request->master_thesis['time_frames']['end'],
                 'thesis_start' => $request->master_thesis['time_frames']['start']['long_name'],
                 'texts' => PageContent::findByName([
-                    'thesis_text'
-                ]),
+                    'pdf_text'
+                ])
             ]
         );
 
