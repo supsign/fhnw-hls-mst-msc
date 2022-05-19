@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Enums\StudyMode;
+use App\Models\PageContent;
 use App\Models\Semester;
 use App\Models\Specialization;
 use stdClass;
@@ -29,6 +30,9 @@ class GetThesisData
         return (object)[
             'theses' => $specialization->theses,
             'time_frames' => $this->getStarts(),
+            'texts' => PageContent::findByName([
+                'thesis_text'
+            ]),
         ];
     }
 
