@@ -52,6 +52,7 @@ class GetPdfData
                 'surname',
                 'statistics',
             ]) + [
+                'filename' => $this->getFilename($request),
                 'overlapping_courses' => $this->overlappingCoursesData,
                 'study_mode' => StudyMode::getByValue($request->study_mode),
                 'thesis_further_details' => $request->master_thesis['further_details'],
@@ -172,5 +173,15 @@ class GetPdfData
         }
 
         return null;
+    }
+
+    protected function getFilename(PostPdfData $request): string
+    {
+        return strtolower(implode('_', [
+            $request->surname,
+            $request->given_name,
+            $this->semester->shortName,
+            Carbon::now()->format('Y-m-d'),
+        ])).'.pdf';
     }
 }
