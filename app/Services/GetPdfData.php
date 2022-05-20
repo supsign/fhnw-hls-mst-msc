@@ -88,10 +88,10 @@ class GetPdfData
 
             if ($key === 'selectedCourses') {
                 $this->doubleDegreeSemester = $semesters->last()->nextSemester;
-            }
 
-            if (count($semesterIds) > $semesters->count()) {
-                $semesters->push(Semester::new(['name' => 'later']));
+                if (count($semesterIds) > $semesters->count()) {
+                    $semesters->push(Semester::new(['name' => 'later']));
+                }
             }
 
             foreach ($semesters AS $semester) {
