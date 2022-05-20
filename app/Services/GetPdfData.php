@@ -7,8 +7,10 @@ use App\Helpers\GeneralHelper;
 use App\Http\Requests\PostPdfData;
 use App\Models\Course;
 use App\Models\CourseGroup;
+use App\Models\PageContent;
 use App\Models\Semester;
 use App\Models\Specialization;
+use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use stdClass;
 
@@ -53,11 +55,15 @@ class GetPdfData
                 'statistics',
             ]) + [
                 'double_degree_semester' => $this->doubleDegreeSemester,
+                'filename' => $this->getFilename($request),
                 'overlapping_courses' => $this->overlappingCoursesData,
                 'study_mode' => StudyMode::getByValue($request->study_mode),
                 'thesis_further_details' => $request->master_thesis['further_details'],
                 'thesis_end' => $request->master_thesis['time_frames']['end'],
-                'thesis_start' => $request->master_thesis['time_frames']['start']['long_name']
+                'thesis_start' => $request->master_thesis['time_frames']['start']['long_name'],
+                'texts' => PageContent::findByName([
+                    'pdf_text'
+                ])
             ]
         );
 
@@ -174,5 +180,15 @@ class GetPdfData
         }
 
         return null;
+    }
+
+    protected function getFilename(PostPdfData $request): string
+    {
+        return strtolower(implode('_', [
+            $request->surname,
+            $request->given_name,
+            $this->semester->shortName,
+            Carbon::now()->format('Y-m-d'),
+        ])).'.pdf';
     }
 }

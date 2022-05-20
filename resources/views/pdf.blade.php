@@ -96,7 +96,9 @@
         <div>Total number of ECTS: {{ $statistics['ects'] }} (50 required)</div>
     </div>
     <br />
-    <div>Please note that the module offer and the timing of the modules may change in the future.</div>
+    @isset($texts)
+    {!! $texts[0]['content'] !!}
+    @endisset
     <br />
     <div >
         <div style='float: left; margin-right: 2.5rem;'>
