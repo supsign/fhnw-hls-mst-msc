@@ -42,17 +42,14 @@ class GetThesisData
         $startSemester = $this->semester;
 
         if ($this->studyMode === StudyMode::PartTime) {
-            $count = 6;
-            $startSemester = $startSemester->nextSemester;
-        } else {
-            $count = 3;
+            $startSemester = $startSemester->nextSemester->nextSemester;
         }
 
         if ($this->doubleDegree) {
             $startSemester = $startSemester->nextSemester;
         }
 
-        $availibleStartSemesters = ($this->getUpcomingSemesters)($count, $startSemester->start_date);
+        $availibleStartSemesters = ($this->getUpcomingSemesters)(3, $startSemester->start_date);
 
         foreach ($availibleStartSemesters AS $semester) {
             $semester->long_name = $semester->thesisStart;
