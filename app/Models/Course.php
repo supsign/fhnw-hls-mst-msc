@@ -16,7 +16,6 @@ class Course extends BaseModel
         'type_tooltip'
 	];
 	protected $hidden = [
-		'block',
 		'cluster_id',
         'created_at',
         'end_semester_id',
