@@ -24,6 +24,8 @@ class GetPersonalData
             'texts' => PageContent::findByName([
                 'intro_title',
                 'intro_content',
+                'hints_title',
+                'hints_list'
             ]),
         ];
     } 
