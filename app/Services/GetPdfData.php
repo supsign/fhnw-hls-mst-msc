@@ -9,12 +9,12 @@ use App\Models\Course;
 use App\Models\CourseGroup;
 use App\Models\Semester;
 use App\Models\Specialization;
-use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use stdClass;
 
 class GetPdfData
 {
+    protected Semester $doubleDegreeSemester;
     protected stdClass $courseData;
     protected Collection $overlappingCoursesData;
     protected array $pdfData = [];
@@ -52,6 +52,7 @@ class GetPdfData
                 'surname',
                 'statistics',
             ]) + [
+                'double_degree_semester' => $this->doubleDegreeSemester,
                 'overlapping_courses' => $this->overlappingCoursesData,
                 'study_mode' => StudyMode::getByValue($request->study_mode),
                 'thesis_further_details' => $request->master_thesis['further_details'],
@@ -79,7 +80,11 @@ class GetPdfData
 
         foreach ($selectedCoursesData AS $key => $selectedCourses) {
             $semesterIds = array_column($selectedCourses, 'semesterId');
-            $semesters = Semester::find($semesterIds);
+            $semesters = Semester::find($semesterIds)
+                ->sortBy('type')
+                ->sortBy('year');
+
+            $this->doubleDegreeSemester = $semesters->last()->nextSemester;
 
             if (count($semesterIds) > $semesters->count()) {
                 $semesters->push(Semester::new(['name' => 'later']));
@@ -110,7 +115,7 @@ class GetPdfData
 
             $data[$key] = $semesters
                 ->filter(fn ($semester) => $semester->selectedCourses->count())
-                ->sortBy('type')->sortBy('year')->values();
+                ->values();
         }
 
         return $this->addToPdfData($data);
