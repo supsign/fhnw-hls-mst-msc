@@ -16,7 +16,6 @@
     <div>
         <div style='font-size: 1.125rem; line-height: 1.75rem; font-weight: 700; margin-bottom: 0.75rem'>Study Programme</div>
         @foreach($selectedCourses AS $semester)
-            @if(count($semester->selectedCourses))
             <div style='font-weight: 700; margin-bottom: 0.25rem;'>{{ $semester->long_name }}</div>
             <table style='margin-bottom: 1.25rem; width: 100%; border-collapse: collapse;'>
                 <tr style='border: 1px solid black;'>
@@ -34,7 +33,6 @@
                     </tr>
                 @endforeach
             </table>
-            @endif
         @endforeach
     </div>
     @if($doubleDegree)
@@ -98,6 +96,30 @@
     @isset($texts)
     {!! $texts[0]['content'] !!}
     @endisset
+    <br />
+
+    @if($overlappingCourses->count())
+        <div style='font-size: 1.125rem; line-height: 1.75rem; font-weight: 700; margin-bottom: 0.75rem'>Overlapping Courses</div>
+    @endif
+    @foreach($overlappingCourses AS $semester)
+        <div style='font-weight: 700; margin-bottom: 0.25rem;'>{{ $semester->long_name }}</div>
+        <table style='margin-bottom: 1.25rem; width: 100%; border-collapse: collapse;'>
+            <tr style='border: 1px solid black;'>
+                <th style='border-right: 1px solid black; padding: 0.25rem; width: 25rem; text-align: left'>Module Title</th>
+            </tr>
+            @foreach($semester->overlappingCourses AS $courses)
+                <tr style='border: 1px solid black;'>
+                    <th style='border-right: 1px solid black; padding: 0.25rem; width: 25rem; text-align: left'>{{ $courses->first()->slot->name }}</th>
+                </tr>
+                @foreach ($courses AS $course)
+                    <tr style='border: 1px solid black;'>
+                        <td style='border-right: 1px solid black; padding: 0.25rem; width: 25rem;'>{{ $course->name }}</td>
+                    </tr>
+                @endforeach ($courses AS $course)
+            @endforeach
+        </table>
+    @endforeach
+
     <br />
     <div >
         <div style='float: left; margin-right: 2.5rem;'>
