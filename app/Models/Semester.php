@@ -13,6 +13,7 @@ class Semester extends BaseModel
 	    'name',
 	    'long_name',
 	    'short_name',
+        'long_name_with_short',
 	    // '',
 	    'tooltip',
 	    'year',
