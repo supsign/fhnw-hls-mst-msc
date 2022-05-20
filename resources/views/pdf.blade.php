@@ -40,7 +40,7 @@
     </div>
     @if($doubleDegree)
         <div style='margin-bottom: 1.25rem;'>
-            <div style='font-weight: 700; margin-bottom: 0.25rem;'>SEMESTER PLACEHOLDER</div>
+            <div style='font-weight: 700; margin-bottom: 0.25rem;'>{{ $doubleDegreeSemester->long_name }}</div>
             <div>Possible Double-Degree Semester at Partner University</div>
         </div>
     @endif
