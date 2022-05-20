@@ -13,6 +13,7 @@ class Semester extends BaseModel
 	    'name',
 	    'long_name',
 	    'short_name',
+        'long_name_with_short',
 	    // '',
 	    'tooltip',
 	    'year',
@@ -48,6 +49,13 @@ class Semester extends BaseModel
 			set: fn (string $longName) => $this->attributes['long_name'] = $longName,
 		);
 	}
+
+    public function longNameWithShort(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => !empty($this->attributes['long_name']) ? $this->attributes['long_name'] : $this->semesterTypeLongName.' ('.$this->semesterTypeShortName.') '.$this->year,
+        );
+    }
 
 	public function selectedCourses(): Attribute
 	{
