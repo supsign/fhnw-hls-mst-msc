@@ -14,7 +14,6 @@
     <div>Specialization: {{ $specialization->name }}</div>
     <br />
     <div>
-
         <div style='font-size: 1.125rem; line-height: 1.75rem; font-weight: 700; margin-bottom: 0.75rem'>Study Programme</div>
         @foreach($selectedCourses AS $semester)
             @if(count($semester->selectedCourses))

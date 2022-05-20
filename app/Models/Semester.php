@@ -57,11 +57,19 @@ class Semester extends BaseModel
         );
     }
 
+	public function overlappingCourses(): Attribute
+	{
+		return Attribute::make(
+			get: fn () => $courses ?? collect(),
+			set: fn (?Collection $courses) => $courses,
+		);
+	}
+
 	public function selectedCourses(): Attribute
 	{
 		return Attribute::make(
-			get: fn () => $this->attributes['selected_courses'] ?? collect(),
-			set: fn (?Collection $courses) => $this->attributes['selected_courses'] = $courses,
+			get: fn () => $courses ?? collect(),
+			set: fn (?Collection $courses) => $courses,
 		);
 	}
 
@@ -75,7 +83,7 @@ class Semester extends BaseModel
 	public function semesterTypeLongName(): Attribute
 	{
 		return Attribute::make(
-			get: fn () => $this->type->longName()
+			get: fn () => $this->type?->longName() ?? 'later',
 		);
 	}
 

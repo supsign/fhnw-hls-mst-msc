@@ -36,7 +36,7 @@ class Controller extends BaseController
         );
     }
 
-    public function postPdf(PostPdfData $request, GetPdfData $getPdfData)
+    public function postPdf(PostPdfData $request, GetPdfData $getPdfData): string
     {
         $data = $getPdfData($request);
         $path = Storage::path('public');
