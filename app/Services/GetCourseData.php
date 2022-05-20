@@ -44,6 +44,7 @@ class GetCourseData
         );
 
         return (object)[
+            'double_degree_semester' => $semesters->last()->nextSemester,
             'courses' => array_merge(
                 [$this->getCourseGroups()], 
                 [$this->getFurtherCourses()],
