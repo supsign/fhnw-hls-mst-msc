@@ -24,12 +24,8 @@ class GetPdfData
     protected Specialization $specialization;
     protected Semester $thesisStart;
 
-    public function __construct(
-        protected GetCourseData $getCourseData, 
-        protected GetOverlappingCourses $getOverlappingCourses
-    ) {
-        $this->overlappingCoursesData = collect();
-    }
+    public function __construct(protected GetCourseData $getCourseData) 
+    {}
 
     public function __invoke(PostPdfData $request): array
     {
@@ -42,7 +38,7 @@ class GetPdfData
             ]
         )->addSelectedCourses(
             $request->only([
-                'optional_courses',
+                'overlapping_courses',
                 'selected_courses',
             ])
         )->addToPdfData(
@@ -56,7 +52,6 @@ class GetPdfData
             ]) + [
                 'double_degree_semester' => $this->doubleDegreeSemester,
                 'filename' => $this->getFilename($request),
-                'overlapping_courses' => $this->overlappingCoursesData,
                 'study_mode' => StudyMode::getByValue($request->study_mode),
                 'thesis_further_details' => $request->master_thesis['further_details'],
                 'thesis_end' => $request->master_thesis['time_frames']['end'],
@@ -85,42 +80,36 @@ class GetPdfData
         $data = [];
 
         foreach ($selectedCoursesData AS $key => $selectedCourses) {
+            $key = GeneralHelper::snakeToCamelCase($key);
             $semesterIds = array_column($selectedCourses, 'semesterId');
             $semesters = Semester::find($semesterIds)
                 ->sortBy('type')
                 ->sortBy('year');
 
-            $this->doubleDegreeSemester = $semesters->last()->nextSemester;
+            if ($key === 'selectedCourses') {
+                $this->doubleDegreeSemester = $semesters->last()->nextSemester;
 
-            if (count($semesterIds) > $semesters->count()) {
-                $semesters->push(Semester::new(['name' => 'later']));
+                if (count($semesterIds) > $semesters->count()) {
+                    $semesters->push(Semester::new(['name' => 'later']));
+                }
             }
 
             foreach ($semesters AS $semester) {
                 foreach ($selectedCourses AS $value) {
                     if ($value['semesterId'] === $semester->id) {
-                        $semester->selectedCourses = Course::find($value['courses'])->load('venue');
+                        $semester->{$key} = $this->{'get'.ucfirst($key)}($value['courses']);
                         break;
                     }
 
                     if ($value['semesterId'] === $semester->name) {
-                        $semester->selectedCourses = Course::find($value['courses'])->load('venue');
+                        $semester->{$key} = $this->{'get'.ucfirst($key)}($value['courses']);
                         break;
                     }
-                }
-
-                $overlappingCourses = ($this->getOverlappingCourses)($semester->selectedCourses);
-
-                if ($overlappingCourses->count()) {
-                    $this->overlappingCoursesData->push((object)[
-                        'semester' => $semester,
-                        'slots' => ($this->getOverlappingCourses)($semester->selectedCourses)
-                    ]);     
                 }
             }
 
             $data[$key] = $semesters
-                ->filter(fn ($semester) => $semester->selectedCourses->count())
+                ->filter(fn ($semester) => $semester->{$key}->count())
                 ->values();
         }
 
@@ -190,5 +179,21 @@ class GetPdfData
             $this->semester->shortName,
             Carbon::now()->format('Y-m-d'),
         ])).'.pdf';
+    }
+
+    protected function getOverlappingCourses(array $idGroups): Collection
+    {
+        $result = collect();
+
+        foreach ($idGroups AS $ids) {
+            $result->push(Course::find($ids));
+        }
+
+        return $result;
+    }
+
+    protected function getSelectedCourses(array $ids): Collection
+    {
+        return Course::find($ids)->load('venue');
     }
 }

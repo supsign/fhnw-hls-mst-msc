@@ -14,10 +14,8 @@
     <div>Specialization: {{ $specialization->name }}</div>
     <br />
     <div>
-
         <div style='font-size: 1.125rem; line-height: 1.75rem; font-weight: 700; margin-bottom: 0.75rem'>Study Programme</div>
         @foreach($selectedCourses AS $semester)
-            @if(count($semester->selectedCourses))
             <div style='font-weight: 700; margin-bottom: 0.25rem;'>{{ $semester->long_name }}</div>
             <table style='margin-bottom: 1.25rem; width: 100%; border-collapse: collapse;'>
                 <tr style='border: 1px solid black;'>
@@ -35,7 +33,6 @@
                     </tr>
                 @endforeach
             </table>
-            @endif
         @endforeach
     </div>
     @if($doubleDegree)
@@ -59,7 +56,7 @@
         @endisset
     </div>
     @if(!empty($modulesOutside))
-        <div style='margin-bottom: 1.25rem;'>
+        <div style='    margin-bottom: 1.25rem;'>
             <div style='font-size: 1.125rem; line-height: 1.75rem; font-weight: 700; margin-bottom: 0.75rem'>Modules outside the Curriculum</div>
             <table style='border-width: 1px; margin-bottom: 1.25rem; width: 100%; border-collapse: collapse;'>
                 <tr style='border: 1px solid black;'>
@@ -78,8 +75,6 @@
             </table>
         </div>
     @endif
-
-    <br />
     @isset($additionalComments)
         <div style='margin-bottom: 1.25rem;'>
             <div style='font-size: 1.125rem; line-height: 1.75rem; font-weight: 700; margin-bottom: 0.75rem'>Additional Comments</div>
@@ -87,6 +82,19 @@
         </div>
         <br />
     @endisset
+    @if($overlappingCourses->count())
+        <div style='font-size: 1.125rem; line-height: 1.75rem; font-weight: 700; margin-bottom: 0.75rem'>Overlapping Courses</div>
+        @foreach($overlappingCourses AS $semester)
+            <div style='font-weight: 700; margin-bottom: 0.25rem;'>{{ $semester->long_name }}</div>
+            @foreach($semester->overlappingCourses AS $courses)
+                <ul style='list-style-type: disc; list-style-position: inside; margin-bottom: 20px;'>
+                    @foreach ($courses AS $course)
+                        <li>{{ $course->name }}</li>
+                    @endforeach ($courses AS $course)
+                </ul>
+            @endforeach
+        @endforeach
+    @endif
     <div>
         <div style='font-size: 1.125rem; line-height: 1.75rem; font-weight: 700; margin-bottom: 0.75rem'>Summary Statistics</div>
         <div>Number of Specialization Modules: {{ $statistics['specialization'] }}</div>
@@ -99,6 +107,9 @@
     @isset($texts)
     {!! $texts[0]['content'] !!}
     @endisset
+    <br />
+
+
     <br />
     <div >
         <div style='float: left; margin-right: 2.5rem;'>
