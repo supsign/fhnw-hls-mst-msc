@@ -14,10 +14,11 @@
     <div>Specialization: {{ $specialization->name }}</div>
     <br />
     <div>
+
         <div style='font-size: 1.125rem; line-height: 1.75rem; font-weight: 700; margin-bottom: 0.75rem'>Study Programme</div>
         @foreach($selectedCourses AS $semester)
             @if(count($semester->selectedCourses))
-            <div style='font-weight: 700; margin-bottom: 0.25rem;'>{{ $semester->name }}</div>
+            <div style='font-weight: 700; margin-bottom: 0.25rem;'>{{ $semester->long_name }}</div>
             <table style='margin-bottom: 1.25rem; width: 100%; border-collapse: collapse;'>
                 <tr style='border: 1px solid black;'>
                     <th style='border-right: 1px solid black; padding: 0.25rem; width: 25rem; text-align: left'>Module Title</th>
@@ -36,6 +37,26 @@
             </table>
             @endif
         @endforeach
+    </div>
+    @if($doubleDegree)
+        <div style='margin-bottom: 1.25rem;'>
+            <div style='font-weight: 700; margin-bottom: 0.25rem;'>{{ $doubleDegreeSemester->long_name }}</div>
+            <div>Possible Double-Degree Semester at Partner University</div>
+        </div>
+    @endif
+    <div style='margin-bottom: 1.25rem;'>
+        <div style='font-weight: 700; margin-bottom: 0.25rem;'>{{ $thesisStart }} to {{ $thesisEnd }}</div>
+        <div>Projected time frame of the MSc Thesis in subject area(s):</div>
+        <ul style='list-style-type: disc; list-style-position: inside;'>
+            @foreach($thesis AS $value)
+                <li>{{ $value->name }}</li>
+            @endforeach
+        </ul>
+        <br />
+        @isset($thesisFurtherDetails)
+            <div style='font-size: 1.125rem; line-height: 1.75rem; font-weight: 700; margin-bottom: 0.75rem'>Further Details on Thesis (Optional)</div>
+            <div>{{$thesisFurtherDetails}}</div>
+        @endisset
     </div>
     @if(!empty($modulesOutside))
         <div style='margin-bottom: 1.25rem;'>
@@ -57,31 +78,7 @@
             </table>
         </div>
     @endif
-    <div style='margin-bottom: 1.25rem;'>
-        <div style='font-size: 1.125rem; line-height: 1.75rem; font-weight: 700; margin-bottom: 0.75rem'>Double Degree</div>
-        <div>
-            @if($doubleDegree)
-                Yes
-            @else
-                No
-            @endif
-        </div>
-    </div>
-    <div style='margin-bottom: 1.25rem;'>
-        <div style='font-size: 1.125rem; line-height: 1.75rem; font-weight: 700; margin-bottom: 0.75rem'>Master Thesis</div>
-        <div>Master Thesis planned for {{ $thesisStart }} to {{ $thesisEnd }}</div>
-        <div>Broad Subject Area</div>
-        <ul style='list-style-type: disc; list-style-position: inside;'>
-            @foreach($thesis AS $value)
-                <li>{{ $value->name }}</li>
-            @endforeach
-        </ul>
-        <br />
-        @isset($thesisFurtherDetails)
-            <div style='font-size: 1.125rem; line-height: 1.75rem; font-weight: 700; margin-bottom: 0.75rem'>Further Details on Thesis (Optional)</div>
-            <div>{{$thesisFurtherDetails}}</div>
-        @endisset
-    </div>
+
     <br />
     @isset($additionalComments)
         <div style='margin-bottom: 1.25rem;'>
@@ -95,6 +92,7 @@
         <div>Number of Specialization Modules: {{ $statistics['specialization'] }}</div>
         <div>Number of Cluster-specific Modules: {{ $statistics['cluster'] }} </div>
         <div>Number Core Competence Modules: {{ $statistics['core'] }}</div>
+        <div>Number Modules outside the Curriculum: {{ $statistics['outside'] }}</div>
         <div>Total number of ECTS: {{ $statistics['ects'] }} (50 required)</div>
     </div>
     <br />
