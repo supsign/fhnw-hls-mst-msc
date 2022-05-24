@@ -51,7 +51,7 @@
         </ul>
         <br />
         @isset($thesisFurtherDetails)
-            <div style='font-size: 1.125rem; line-height: 1.75rem; font-weight: 700; margin-bottom: 0.75rem'>Further Details on Thesis (Optional)</div>
+            <div style='margin-bottom: 0.75rem'>Further Details on Thesis (Optional)</div>
             <div>{{$thesisFurtherDetails}}</div>
         @endisset
     </div>
