@@ -82,9 +82,7 @@ class GetPdfData
         foreach ($selectedCoursesData AS $key => $selectedCourses) {
             $key = GeneralHelper::snakeToCamelCase($key);
             $semesterIds = array_column($selectedCourses, 'semesterId');
-            $semesters = Semester::find($semesterIds)
-                ->sortBy('type')
-                ->sortBy('year');
+            $semesters = Semester::orderBy('start_date')->find($semesterIds);
 
             if ($key === 'selectedCourses') {
                 $this->doubleDegreeSemester = $semesters->last()->nextSemester;
