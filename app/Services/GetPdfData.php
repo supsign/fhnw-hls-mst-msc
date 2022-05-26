@@ -88,7 +88,7 @@ class GetPdfData
                 $this->doubleDegreeSemester = $semesters->last()->nextSemester;
 
                 if (count($semesterIds) > $semesters->count()) {
-                    $semesters->push(Semester::new(['name' => 'later']));
+                    $semesters->push(Semester::new(['name' => 'Later']));
                 }
             }
 
@@ -99,7 +99,7 @@ class GetPdfData
                         break;
                     }
 
-                    if ($value['semesterId'] === $semester->name) {
+                    if ($value['semesterId'] === strtolower($semester->name)) {
                         $semester->{$key} = $this->{'get'.ucfirst($key)}($value['courses']);
                         break;
                     }

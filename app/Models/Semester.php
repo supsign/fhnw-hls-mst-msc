@@ -50,7 +50,7 @@ class Semester extends BaseModel
 					return $this->attributes['long_name'];
 				}
 
-				if ($this->name === 'later') {
+				if (strtolower($this->name) === 'later') {
 					return $this->name;
 				}
 
