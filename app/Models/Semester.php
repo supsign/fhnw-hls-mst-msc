@@ -112,7 +112,7 @@ class Semester extends BaseModel
 					return 'spring '.($this->year + 2);
 				}
 
-				return 'autumn '.($this->year + 2);
+				return 'autumn '.($this->year + 1);
 			}
 		);
 	}
