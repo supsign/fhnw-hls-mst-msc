@@ -20,8 +20,8 @@ enum SemesterType: int
     public function longName(): string
     {
         return match($this) {
-            static::AutumnStart => 'autumn semester',
-            static::SpringStart => 'spring semester',
+            static::AutumnStart => 'Autumn Semester',
+            static::SpringStart => 'Spring Semester',
         };
     }
 
