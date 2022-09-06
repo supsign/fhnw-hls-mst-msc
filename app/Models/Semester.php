@@ -5,7 +5,6 @@ namespace App\Models;
 use App\Enums\SemesterType;
 use App\Enums\ThesisStarts;
 use Carbon\Carbon;
-use Exception;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Support\Collection;
 
