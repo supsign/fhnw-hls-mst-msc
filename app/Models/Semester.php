@@ -4,6 +4,8 @@ namespace App\Models;
 
 use App\Enums\SemesterType;
 use App\Enums\ThesisStarts;
+use Carbon\Carbon;
+use Exception;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Support\Collection;
 
@@ -14,9 +16,9 @@ class Semester extends BaseModel
 	    'long_name',
 	    'short_name',
         'long_name_with_short',
-	    // '',
 	    'tooltip',
 	    'year',
+	    'is_current'
 	];
 
 	protected $casts = [
@@ -24,21 +26,18 @@ class Semester extends BaseModel
 	    'type' => SemesterType::class,
 	];
 
-	public function name(): Attribute
+	public function isCurrent(): Attribute
 	{
 		return Attribute::make(
-			get: fn () => !empty($this->attributes['name']) ? $this->attributes['name'] : $this->year.' '.$this->semesterTypeShortName,
-			set: fn (string $name) => $this->attributes['name'] = $name,
-		);
-	}
+			get: function (): mixed {
+				$now = Carbon::now();
 
-	public function nextSemester(): Attribute
-	{
-		return Attribute::make(
-			get: fn () => Semester::where('start_date', '>', $this->start_date)
-				->where('type', '<>', $this->type->value)
-				->orderBy('start_date')
-				->first(),
+				if (abs($this->year - $now->year) > 1) {
+					return false;
+				}
+
+				return $this->start_date < $now && $this->nextSemester->start_date > $now;
+			}
 		);
 	}
 
@@ -66,6 +65,24 @@ class Semester extends BaseModel
             get: fn () => !empty($this->attributes['long_name']) ? $this->attributes['long_name'] : $this->semesterTypeLongName.' ('.$this->semesterTypeShortName.') '.$this->year,
         );
     }
+
+	public function name(): Attribute
+	{
+		return Attribute::make(
+			get: fn () => !empty($this->attributes['name']) ? $this->attributes['name'] : $this->year.' '.$this->semesterTypeShortName,
+			set: fn (string $name) => $this->attributes['name'] = $name,
+		);
+	}
+
+	public function nextSemester(): Attribute
+	{
+		return Attribute::make(
+			get: fn () => Semester::where('start_date', '>', $this->start_date)
+				->where('type', '<>', $this->type->value)
+				->orderBy('start_date')
+				->first(),
+		);
+	}
 
 	public function overlappingCourses(): Attribute
 	{

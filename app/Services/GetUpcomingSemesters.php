@@ -14,7 +14,7 @@ class GetUpcomingSemesters
 
     public function __invoke(int $numberOfSemesters = 10, Carbon $startDate = null): Collection
     {
-        $this->currentDate = $startDate ?: Carbon::now();
+        $this->currentDate = $startDate ?: Carbon::now()->subYears(2)->subMonths(6);
         $this->numberOfSemesters = $numberOfSemesters;
 
         $semesters = Semester::whereDate('start_date', '>=', $this->currentDate)
