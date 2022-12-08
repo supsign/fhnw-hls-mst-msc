@@ -202,7 +202,9 @@ class GetCourseData
             }
         }
 
-        return $courseGroups;
+        return $courseGroups
+            ->filter(fn (CourseGroup $courseGroup) => $courseGroup->courses->count())
+            ->values();
     }
 
     protected function getCourseGroupTitle(CourseGroup $courseGroup): ?string
