@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "outDir": "dist",
+    "paths": {
+      "@/*": [
+        "./resources/js/*"
+      ]
+    },
+    "sourceMap": true,
+    "useUnknownInCatchVariables": false
+  },
+  "extends": "@vue/tsconfig/tsconfig.json",
+  "include": [
+    "resources/**/*"
+  ],
+  "types": [
+    "vite/client"
+  ]
+}

@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,8 +14,5 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::get('/', fn () => view('config'))->name('config');
 
-// Route::get('/test', function () {
-	
-// })->name('test');
+Route::get('{any}', fn (): View => view('app'))->where('any', '.*');
