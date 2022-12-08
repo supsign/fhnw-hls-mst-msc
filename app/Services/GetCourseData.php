@@ -89,7 +89,7 @@ class GetCourseData
             AND
             is_null($course->endSemester)
             ||
-            $course->endSemester->start_date >= $this->semester->start_date;
+            $course->endSemester->start_date > $this->semester->start_date;
     }
 
     protected function getFurtherCourses(): array
