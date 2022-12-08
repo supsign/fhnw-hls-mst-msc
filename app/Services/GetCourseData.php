@@ -194,7 +194,7 @@ class GetCourseData
     protected function getCourseGroupIds(): array
     {
         return array_map(
-            fn ($courseGroupType) => $courseGroupType->value, 
+            fn (CourseGroupType $courseGroupType): int => $courseGroupType->value,
             CourseGroupType::cases()
         );
     }
@@ -239,7 +239,7 @@ class GetCourseData
         }
 
         return $courseGroups
-            ->filter(fn (CourseGroup $courseGroup) => $courseGroup->courses->count())
+            ->filter(fn (CourseGroup $courseGroup): bool => $courseGroup->courses->count())
             ->values();
     }
 
