@@ -20,7 +20,7 @@ class GetCourseData
 {
     protected ?string $courseGroupTitle;
     protected array $mainCourseIds;
-    protected ?Semester $semester;
+    protected Collection $semesters;
     protected Specialization $specialization;
 
     public function __construct(
@@ -32,18 +32,18 @@ class GetCourseData
 
     public function __invoke(Specialization $specialization, Semester $semester = null, StudyMode $studyMode = null): stdClass 
     {
-        $this->semester = $semester;
         $this->specialization = $specialization;
-        $this->mainCourseIds = $this->getCourses()->pluck('id')->toArray();
 
         if (!$studyMode) {
             $studyMode = StudyMode::FullTime;
         }
 
-        $semesters = ($this->getUpcomingSemestersService)(
+        $this->semesters = ($this->getUpcomingSemestersService)(
             $studyMode === StudyMode::FullTime ? 2 : 4,
             $semester?->start_date
         );
+
+        $this->mainCourseIds = $this->getCourses()->pluck('id')->toArray();
 
         return (object)[
             'courses' => array_merge(
@@ -55,9 +55,12 @@ class GetCourseData
                     'optional_english_title',
                     'optional_english_description',
                 ]),
-                'courses' => Course::whereNull(['cluster_id', 'specialization_id'])->get(),
+                'courses' => Course::whereNull(['cluster_id', 'specialization_id'])
+                    ->get()
+                    ->filter($this->courseDateFilter())
+                    ->values(),
             ],
-            'semesters' => $semesters,
+            'semesters' => $this->semesters,
             'slots' => Slot::all(),
             'texts' => PageContent::findByName([
                 'additional_comments_title',
@@ -67,7 +70,7 @@ class GetCourseData
                 'double_degree_title',
                 'modules_outside_description',
             ]),
-            'theses' => ($this->getThesesData)($specialization, false, $semesters->first(), $studyMode),
+            'theses' => ($this->getThesesData)($specialization, false, $this->semesters->first(), $studyMode),
         ];
     }
 
@@ -85,11 +88,11 @@ class GetCourseData
         // };
 
         return fn (Course $course): bool =>
-            $course->startSemester->start_date <= $this->semester->start_date
+            $course->startSemester->start_date <= $this->semesters->last()->start_date
             AND
             is_null($course->endSemester)
             ||
-            $course->endSemester->start_date > $this->semester->start_date;
+            $course->endSemester->start_date >= $this->semesters->first()->start_date;
     }
 
     protected function getFurtherCourses(): array

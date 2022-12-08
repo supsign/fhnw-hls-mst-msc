@@ -61,14 +61,18 @@ class Semester extends BaseModel
     protected function longNameWithShort(): Attribute
     {
         return Attribute::make(
-            get: fn () => !empty($this->attributes['long_name']) ? $this->attributes['long_name'] : $this->semesterTypeLongName.' ('.$this->semesterTypeShortName.') '.$this->year,
+            get: fn () => !empty($this->attributes['long_name']) 
+            	? $this->attributes['long_name'] 
+            	: $this->semesterTypeLongName.' ('.$this->semesterTypeShortName.') '.$this->year,
         );
     }
 
 	protected function name(): Attribute
 	{
 		return Attribute::make(
-			get: fn () => !empty($this->attributes['name']) ? $this->attributes['name'] : $this->year.' '.$this->semesterTypeShortName,
+			get: fn () => !empty($this->attributes['name']) 
+				? $this->attributes['name'] 
+				: $this->year.' '.$this->semesterTypeShortName,
 			set: fn (string $name) => $this->attributes['name'] = $name,
 		);
 	}
