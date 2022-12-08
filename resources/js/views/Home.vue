@@ -58,9 +58,6 @@ import Warning from '../components/home/Warning.vue';
 import { getOverlappingCourses } from '../services/course.service';
 import type { IStatistics } from '../interfaces/statistics.interface';
 import { getEcts, getModuleGroupCount } from '../helpers/counts';
-
-const env = import.meta.env;
-const warningBlock = ref<HTMLInputElement | null>(null);
 //Personal Data
 const personalData: Ref<IPersonalData> = ref({
     surname: '',
