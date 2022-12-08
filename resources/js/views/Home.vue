@@ -299,7 +299,7 @@ async function createPdf() {
         return;
     }
     const filename = await axios.post('/pdf', pdfData.value);
-    window.open(env.VITE_BACKEND_URL + '/' + filename.data);
+    window.open(filename.data);
 }
 function resetData() {
     modulesOutside.value = [];
