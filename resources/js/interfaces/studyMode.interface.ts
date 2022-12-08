@@ -1,4 +1,4 @@
-import { IModel } from './model.interface';
+import type { IModel } from './model.interface';
 
 export interface IStudyMode extends IModel {
     studyModes: Array<{ id: number; label: string }>;

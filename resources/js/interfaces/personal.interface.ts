@@ -1,7 +1,7 @@
-import type{ IModel } from './model.interface';
-import type{ ISemester } from './semester.interface';
-import type{ ISpecialization } from './specialization.interface';
-import type{ IStudyMode } from './studyMode.interface';
+import type { IModel } from './model.interface';
+import type { ISemester } from './semester.interface';
+import type { ISpecialization } from './specialization.interface';
+import type { IStudyMode } from './studyMode.interface';
 
 export interface IPersonalDataResponse {
     semesters: ISemester[];
