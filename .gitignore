@@ -13,6 +13,7 @@ yarn-error.log
 /.idea
 /.vscode
 .npmrc
+public/build/
 public/css/
 public/fonts/
 public/images/
