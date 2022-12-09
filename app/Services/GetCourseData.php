@@ -76,17 +76,6 @@ class GetCourseData
 
     protected function courseDateFilter(): callable
     {
-        // $semester = $this->semester;
-
-        // return function (Course $course) use ($semester): bool {
-        //     return
-        //         $course->startSemester->start_date <= $semester->start_date
-        //         AND
-        //         is_null($course->endSemester)
-        //         ||
-        //         $course->endSemester->start_date >= $semester->start_date;
-        // };
-
         return fn (Course $course): bool =>
             $course->startSemester->start_date <= $this->semesters->last()->start_date
             AND
