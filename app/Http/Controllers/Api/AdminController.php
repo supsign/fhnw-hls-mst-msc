@@ -19,6 +19,6 @@ class AdminController extends Controller
             abort(500);
         }
 
-        return redirect(env('FRONTEND_URL').'admin/config');
+        return redirect(env('APP_URL').'/admin/config');
     }
 }
