@@ -2,7 +2,7 @@
     <div class="container p-3 mx-auto">
         <Card>
             <form
-                :action="env.VITE_API_URL + '/admin/configuration'"
+                :action="'/api/admin/configuration'"
                 enctype="multipart/form-data"
                 method="POST"
                 class="flex flex-col gap-10"
@@ -24,5 +24,5 @@
 <script setup lang="ts">
 import Card from '../components/base/Card.vue';
 import Input from '../components/base/Input.vue';
-const env = import.meta.env;
+
 </script>

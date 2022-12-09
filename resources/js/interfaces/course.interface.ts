@@ -39,6 +39,7 @@ export interface ICourse extends IModel {
     semester_type: number;
     selected_semester: ISemester | String | null | any;
     slot_id: number;
+    start_semester: ISemester
     start_semester_id: number;
     type_label_short: string;
     type_tooltip: string;

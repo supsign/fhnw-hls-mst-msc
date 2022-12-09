@@ -12,7 +12,7 @@
             </div>
             <div v-for="(semester, index) in semesters" :key="index" class="flex text-center w-20 justify-center">
                 <input
-                    v-if="semester.type === course.semester_type && checkEndDate(semester, course.end_semester)"
+                    v-if="showCourseSelect(semester)"
                     type="radio"
                     class="my-auto h-5 w-5"
                     v-model="course.selected_semester"
@@ -33,7 +33,7 @@
 </template>
 <script setup lang="ts">
 import dayjs from 'dayjs';
-import type { PropType } from 'vue';
+import { computed, ref, type PropType } from 'vue';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
 import type { ICourse } from '../../interfaces/course.interface';
 import type { ISemester } from '../../interfaces/semester.interface';
@@ -47,14 +47,20 @@ const props = defineProps({
     tooltip: String,
 });
 
-function checkEndDate(semester: ISemester, endSemester: ISemester) {
-    if (!endSemester) {
-        return true;
-    }
-    if (dayjs(endSemester.start_date).isSameOrAfter(dayjs(semester.start_date))) {
-        return true;
-    }
-    return false;
+const startDayjs = computed(() => {
+    if(!props.course.start_semester) return
+    return dayjs(props.course.start_semester.start_date)
+})
+const endDayjs = computed(() => {
+    if(!props.course.end_semester) return
+    return dayjs(props.course.end_semester.start_date)
+})
+
+function showCourseSelect(semester: ISemester) {    
+    if(semester.type !== props.course.semester_type) return false
+    if(startDayjs.value && dayjs(semester.start_date).isBefore(startDayjs.value)) return false
+    if(endDayjs.value && dayjs(semester.start_date).isAfter(endDayjs.value)) return false
+    return true;
 }
 
 function laterIsVisible(semesters: ISemester[], endSemester: ISemester) {
