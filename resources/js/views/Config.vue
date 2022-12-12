@@ -1,5 +1,5 @@
 <template>
-    <div class="container p-3 mx-auto">
+    <div class="container mx-auto p-3">
         <Card>
             <form
                 :action="'/api/admin/configuration'"
@@ -12,7 +12,7 @@
 
                 <button
                     type="submit"
-                    class="transition transform duration-300 ease-in-out text-white py-1 px-4 rounded-md shadow-sm w-60 bg-blue-700 hover:bg-blue-800 hover:shadow-xl cursor-pointer"
+                    class="rounded-md cursor-pointer bg-blue-700 shadow-sm text-white py-1 transform px-4 transition ease-in-out w-60 duration-300 hover:bg-blue-800 hover:shadow-xl"
                 >
                     Submit
                 </button>
