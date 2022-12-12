@@ -36,6 +36,9 @@ import Input from '../base/Input.vue';
 import Select from '../base/Select.vue';
 import Introduction from './Introduction.vue';
 import dayjs from 'dayjs';
+import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
+
+dayjs.extend(isSameOrAfter)
 
 const props = defineProps({
     modelValue: { type: Object as PropType<IPersonalData>, required: true },
@@ -64,7 +67,21 @@ async function getPersonalData() {
 }
 
 function prefillValues(data: IPersonalDataResponse) {
+const currentSemester = data.semesters.find((semester) => semester.is_current);
+const springSwitchDate = dayjs(dayjs().get('year') + '-04-30')
+const autumSwitchDate = dayjs(dayjs().get('year') + '-11-30')
+console.log(dayjs())
+console.log(autumSwitchDate)
+console.log(dayjs().isSameOrAfter(autumSwitchDate,'day'))
+if(currentSemester?.type === 1 && dayjs().isSameOrAfter(autumSwitchDate,'day')) {
+    const index = data.semesters.findIndex((semester) => semester.is_current);
+     value.value.semester = data.semesters[index + 1]
+} else if(currentSemester?.type === 2 && dayjs().isSameOrAfter(springSwitchDate,'day')) {
+    const index = data.semesters.findIndex((semester) => semester.is_current);
+     value.value.semester = data.semesters[index + 1]
+} else  {
     value.value.semester = data.semesters.find((semester) => semester.is_current);
+}
     value.value.studyMode = data.studyMode.studyModes[0];
 }
 
