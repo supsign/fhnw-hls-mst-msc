@@ -40,7 +40,7 @@ class Semester extends BaseModel
 		);
 	}
 
-	public function longName(): Attribute
+	protected function longName(): Attribute
 	{
 		return Attribute::make(
 			get: function () {
@@ -58,22 +58,26 @@ class Semester extends BaseModel
 		);
 	}
 
-    public function longNameWithShort(): Attribute
+    protected function longNameWithShort(): Attribute
     {
         return Attribute::make(
-            get: fn () => !empty($this->attributes['long_name']) ? $this->attributes['long_name'] : $this->semesterTypeLongName.' ('.$this->semesterTypeShortName.') '.$this->year,
+            get: fn () => !empty($this->attributes['long_name']) 
+            	? $this->attributes['long_name'] 
+            	: $this->semesterTypeLongName.' ('.$this->semesterTypeShortName.') '.$this->year,
         );
     }
 
-	public function name(): Attribute
+	protected function name(): Attribute
 	{
 		return Attribute::make(
-			get: fn () => !empty($this->attributes['name']) ? $this->attributes['name'] : $this->year.' '.$this->semesterTypeShortName,
+			get: fn () => !empty($this->attributes['name']) 
+				? $this->attributes['name'] 
+				: $this->year.' '.$this->semesterTypeShortName,
 			set: fn (string $name) => $this->attributes['name'] = $name,
 		);
 	}
 
-	public function nextSemester(): Attribute
+	protected function nextSemester(): Attribute
 	{
 		return Attribute::make(
 			get: fn () => Semester::where('start_date', '>', $this->start_date)
@@ -83,7 +87,7 @@ class Semester extends BaseModel
 		);
 	}
 
-	public function overlappingCourses(): Attribute
+	protected function overlappingCourses(): Attribute
 	{
 		return Attribute::make(
 			get: fn () => $courses ?? collect(),
@@ -91,7 +95,7 @@ class Semester extends BaseModel
 		);
 	}
 
-	public function selectedCourses(): Attribute
+	protected function selectedCourses(): Attribute
 	{
 		return Attribute::make(
 			get: fn () => $courses ?? collect(),
@@ -99,28 +103,28 @@ class Semester extends BaseModel
 		);
 	}
 
-	public function semesterTypeShortName(): Attribute
+	protected function semesterTypeShortName(): Attribute
 	{
 		return Attribute::make(
 			get: fn () => $this->type->shortName()
 		);
 	}
 
-	public function semesterTypeLongName(): Attribute
+	protected function semesterTypeLongName(): Attribute
 	{
 		return Attribute::make(
 			get: fn () => $this->type?->longName() ?? 'later',
 		);
 	}
 
-	public function shortName(): Attribute
+	protected function shortName(): Attribute
 	{
 		return Attribute::make(
 			get: fn () => $this->semesterTypeShortName.substr($this->year, 2, 2),
 		);
 	}
 
-	public function thesisEnd(): Attribute
+	protected function thesisEnd(): Attribute
 	{
 		return Attribute::make(
 			get: function () {
@@ -133,7 +137,7 @@ class Semester extends BaseModel
 		);
 	}
 
-	public function thesisStart(): Attribute
+	protected function thesisStart(): Attribute
 	{
 		return Attribute::make(
 			get: function () {
@@ -146,14 +150,14 @@ class Semester extends BaseModel
 		);
 	}
 
-	public function tooltip(): Attribute
+	protected function tooltip(): Attribute
 	{
 		return Attribute::make(
 			get: fn () => $this->type->tooltip()
 		);
 	}
 
-	public function year(): Attribute
+	protected function year(): Attribute
 	{
 		return Attribute::make(
 			get: fn () => $this->start_date->year ?? 10000,

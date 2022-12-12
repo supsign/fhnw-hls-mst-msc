@@ -20,6 +20,7 @@ class GetCourseData
 {
     protected ?string $courseGroupTitle;
     protected array $mainCourseIds;
+    protected Collection $semesters;
     protected Specialization $specialization;
 
     public function __construct(
@@ -32,16 +33,17 @@ class GetCourseData
     public function __invoke(Specialization $specialization, Semester $semester = null, StudyMode $studyMode = null): stdClass 
     {
         $this->specialization = $specialization;
-        $this->mainCourseIds = $this->getCourses()->pluck('id')->toArray();
 
         if (!$studyMode) {
             $studyMode = StudyMode::FullTime;
         }
 
-        $semesters = ($this->getUpcomingSemestersService)(
+        $this->semesters = ($this->getUpcomingSemestersService)(
             $studyMode === StudyMode::FullTime ? 2 : 4,
             $semester?->start_date
         );
+
+        $this->mainCourseIds = $this->getCourses()->pluck('id')->toArray();
 
         return (object)[
             'courses' => array_merge(
@@ -53,9 +55,12 @@ class GetCourseData
                     'optional_english_title',
                     'optional_english_description',
                 ]),
-                'courses' => Course::whereNull(['cluster_id', 'specialization_id'])->get(),
+                'courses' => Course::whereNull(['cluster_id', 'specialization_id'])
+                    ->get()
+                    ->filter($this->courseDateFilter())
+                    ->values(),
             ],
-            'semesters' => $semesters,
+            'semesters' => $this->semesters,
             'slots' => Slot::all(),
             'texts' => PageContent::findByName([
                 'additional_comments_title',
@@ -65,8 +70,18 @@ class GetCourseData
                 'double_degree_title',
                 'modules_outside_description',
             ]),
-            'theses' => ($this->getThesesData)($specialization, false, $semesters->first(), $studyMode),
+            'theses' => ($this->getThesesData)($specialization, false, $this->semesters->first(), $studyMode),
         ];
+    }
+
+    protected function courseDateFilter(): callable
+    {
+        return fn (Course $course): bool =>
+            $course->startSemester->start_date <= $this->semesters->last()->start_date
+            AND
+            is_null($course->endSemester)
+            ||
+            $course->endSemester->start_date >= $this->semesters->first()->start_date;
     }
 
     protected function getFurtherCourses(): array
@@ -116,20 +131,23 @@ class GetCourseData
                 'courses', 
                 'courses.cluster', 
                 'courses.endSemester',
+                'courses.startSemester'
             ])
             ->get();
 
         foreach ($clusters AS $cluster) {
             $cluster->setRelation(
                 'courses', 
-                $cluster->courses->filter(
-                    fn ($course) => !in_array($course->id, $this->mainCourseIds)
-                )->values()
+                $cluster
+                    ->courses
+                    ->filter(fn (Course $course): bool => !in_array($course->id, $this->mainCourseIds))
+                    ->filter($this->courseDateFilter())
+                    ->values()
             );
         }
 
         return $clusters
-            ->filter(fn ($cluster) => $cluster->courses->count())
+            ->filter(fn (Cluster $cluster): bool => $cluster->courses->count())
             ->values();
     }
 
@@ -139,21 +157,24 @@ class GetCourseData
             ->with([
                 'courses', 
                 'courses.cluster', 
-                'courses.endSemester'
+                'courses.endSemester',
+                'courses.startSemester'
             ])
             ->get();
 
         foreach ($specializations AS $specialization) {
             $specialization->setRelation(
                 'courses', 
-                $specialization->courses->filter(
-                    fn ($course) => !in_array($course->id, $this->mainCourseIds)
-                )->values()
+                $specialization
+                    ->courses
+                    ->filter(fn (Course $course): bool => !in_array($course->id, $this->mainCourseIds))
+                    ->filter($this->courseDateFilter())
+                    ->values()
             );
         }
 
         return $specializations
-            ->filter(fn ($specialization) => $specialization->courses->count())
+            ->filter(fn (Specialization $specialization): bool => $specialization->courses->count())
             ->values();
     }
 
@@ -165,7 +186,7 @@ class GetCourseData
     protected function getCourseGroupIds(): array
     {
         return array_map(
-            fn ($courseGroupType) => $courseGroupType->value, 
+            fn (CourseGroupType $courseGroupType): int => $courseGroupType->value,
             CourseGroupType::cases()
         );
     }
@@ -179,18 +200,25 @@ class GetCourseData
                 'courseGroup',
                 'courseGroup.courses',
                 'courseGroup.courses.endSemester',
+                'courseGroup.courses.startSemester',
             ])
             ->orderBy('course_groups.type')
             ->get()
                 ->pluck('courseGroup')
                 ->unique()
-                ->filter(function ($courseGroup) {
-                    return $courseGroup->courses->count();
-                })
+                ->filter(fn (CourseGroup $courseGroup): bool => $courseGroup->courses->count())
                 ->values();
 
         foreach ($courseGroups AS $courseGroup) {
             $courseGroup->title = $this->getCourseGroupTitle($courseGroup);
+
+            $courseGroup->setRelation(
+                'courses', 
+                $courseGroup
+                    ->courses
+                    ->filter($this->courseDateFilter())
+                    ->values()
+            );
 
             switch ($courseGroup->type->name) {
                 case CourseGroupType::CoreCompetences->name:
@@ -202,7 +230,9 @@ class GetCourseData
             }
         }
 
-        return $courseGroups;
+        return $courseGroups
+            ->filter(fn (CourseGroup $courseGroup): bool => $courseGroup->courses->count())
+            ->values();
     }
 
     protected function getCourseGroupTitle(CourseGroup $courseGroup): ?string

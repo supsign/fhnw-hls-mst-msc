@@ -2,7 +2,7 @@
     <div class="container mx-auto p-3">
         <Card>
             <form
-                action="/admin/configuration'"
+                :action="'/api/admin/configuration'"
                 enctype="multipart/form-data"
                 method="POST"
                 class="flex flex-col gap-10"
