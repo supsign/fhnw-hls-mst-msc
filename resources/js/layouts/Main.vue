@@ -15,7 +15,9 @@
       </div>
     </div>
     <main class="grow">
-      <router-view />
+      <div class="container mx-auto px-4">
+        <router-view />
+      </div>
     </main>
     <footer class="footer block bg-black pt-7 text-[#bebdb9]">
       <div class="container mx-auto px-4 pt-15 pb-6">
