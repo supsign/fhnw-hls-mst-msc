@@ -17,10 +17,12 @@ const router = createRouter({
         },
         {
           path: 'privacy',
+          name: 'Privacy',
           component: () => import('../views/Privacy.vue')
         },
         {
           path: 'imprint',
+          name: 'Imprint',
           component: () => import('../views/Imprint.vue')
         }
       ]

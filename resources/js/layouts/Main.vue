@@ -15,38 +15,58 @@
   </div>
   <main class="h-screen">
     <router-view />
-    <footer class="bottom-0 w-full bg-black p-2 text-white">
-      <div class="container mx-auto flex justify-start border-b py-5">
-        <div>
-          <div class="my-1 text-lg">
-            Contact
+    <footer class="footer">
+      <div class="footer__inner container">
+        <div class="grid grid-cols-3">
+          <div>
+            <h3 class="footer__title">
+              Contact
+            </h3>
+            <div class="textwidget">
+              <p>FHNW School of Life Sciences<br>Institute for Chemistry and Bioanalytics<br>Hofackerstrasse 30<br>4132 Muttenz</p>
+              <p>
+                <a
+                  href="https://www.fhnw.ch/en/people/georg-lipps/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-gray-400 hover:text-gray-300">
+                  Prof. Dr. Georg Lipps</a>
+              </p>
+              <br>
+              <p>
+                E-Mail:
+                <a
+                  href="mailto:georg.lipps@fhnw.ch"
+                  target="_blank"
+                  rel="noopener noreferrer">georg.lipps@fhnw.ch</a>
+              </p>
+            </div>
           </div>
-          <div class="text-gray-400">
-            <p>FHNW School of Life Sciences</p>
-            <p>Institute for Chemistry and Bioanalytics</p>
-            <p>Hofackerstrasse 30</p>
-            <p>4132 Muttenz</p>
-            <br>
-            <p>
-              <a
-                href="https://www.fhnw.ch/en/people/georg-lipps/"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="text-gray-400 hover:text-gray-300">
-                Prof. Dr. Georg Lipps</a>
-            </p>
-            <br>
-            <p>
-              e-mail:
-              <a
-                href="mailto:georg.lipps@fhnw.ch"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="text-gray-400 hover:text-gray-300">georg.lipps@fhnw.ch</a>
-            </p>
-          </div>
+        </div>
+      </div>
+      <div class="footer__meta container">
+        <div class="flex justify-center border-t-2">
+          <p class="text-xs">
+            <a
+              class="text-sm leading-6 tracking-wide"
+              href="https://www.fhnw.ch"
+              target="_blank">www.fhnw.ch</a>
+            <span class="d-inline-block mx-md-2 mx-1">|</span>
+            <RouterLink
+              :to="{ name: 'Imprint' }"
+              class="text-sm leading-6 tracking-wide">
+              Imprint
+            </RouterLink>
+            <span class="d-inline-block mx-md-2 mx-1">|</span>
+            <RouterLink
+              :to="{ name: 'Privacy' }"
+              class="text-sm leading-6 tracking-wide">
+              Privacy
+            </RouterLink>
+          </p>
         </div>
       </div>
     </footer>
   </main>
 </template>
+
