@@ -45,14 +45,3 @@ h1 {
     line-height: 1.5;
     margin-bottom: 1rem;
   }
-  footer {
-    background-color: #000;
-    color: #bebdb9
-  }
-  footer a {
-    color: #bebdb9;
-    text-decoration: none;
-    overflow-wrap: break-word;
-    word-wrap: break-word;
-    word-break: break-word;
-}

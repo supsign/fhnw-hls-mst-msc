@@ -1,5 +1,5 @@
 <template>
-  <div class="p-5">
+  <div class="container mx-auto px-4">
     <h1>Data protection</h1>
     <p>
       The University of Applied Sciences and Arts Northwestern Switzerland FHNW places great importance on correct and up-to-date information.
