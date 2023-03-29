@@ -44,67 +44,67 @@ interface IThesisForPdf {
 }
 
 export function pdfDataService(data: pdfDataServiceInput) {
-    const parsedData: parsedPdfDataInput = {
-        surname: data.personalData.surname,
-        given_name: data.personalData.givenName,
-        //@ts-ignore
-        semester: data.personalData.semester?.id,
-        //@ts-ignore
-        study_mode: data.personalData.studyMode?.id,
-        //@ts-ignore
-        specialization: data.personalData.specialization?.id,
-        selected_courses: parseSelectedCoursesForPdf(data.semestersWithCourses),
-        modules_outside: data.modulesOutside,
-        double_degree: data.doubleDegree,
-        master_thesis: parseMasterThesis(JSON.parse(JSON.stringify(data.masterThesis))),
-        additional_comments: data.additionalComments,
-        statistics: data.statistics,
-        overlapping_courses: parseOverlappingCourses(data.overlappingCourses),
-    };
-    const validator = validateData(parsedData);
+  const parsedData: parsedPdfDataInput = {
+    surname: data.personalData.surname,
+    given_name: data.personalData.givenName,
+    // @ts-expect-error
+    semester: data.personalData.semester?.id,
+    // @ts-expect-error
+    study_mode: data.personalData.studyMode?.id,
+    // @ts-expect-error
+    specialization: data.personalData.specialization?.id,
+    selected_courses: parseSelectedCoursesForPdf(data.semestersWithCourses),
+    modules_outside: data.modulesOutside,
+    double_degree: data.doubleDegree,
+    master_thesis: parseMasterThesis(JSON.parse(JSON.stringify(data.masterThesis))),
+    additional_comments: data.additionalComments,
+    statistics: data.statistics,
+    overlapping_courses: parseOverlappingCourses(data.overlappingCourses)
+  };
+  const validator = validateData(parsedData);
 
-    if (!validator.amount) {
-        parsedData.statistics.moduleGroupCount = [];
-        return parsedData;
-    }
-    return validator;
+  if (!validator.amount) {
+    parsedData.statistics.moduleGroupCount = [];
+    return parsedData;
+  }
+  return validator;
 }
 function parseMasterThesis(masterThesis: IThesisSelection): IThesisForPdf | null {
-    if (!masterThesis || !masterThesis.hasOwnProperty('start') || !masterThesis.theses.length) {
-        return null;
-    }
-    return {
-        time_frames: masterThesis.start,
-        theses: masterThesis.theses.map((theses) => {
-            return theses.id;
-        }),
-        further_details: masterThesis.furtherDetails,
-    };
+  if (!masterThesis || !masterThesis.hasOwnProperty('start') || !masterThesis.theses.length) {
+    return null;
+  }
+  return {
+    time_frames: masterThesis.start,
+    theses: masterThesis.theses.map((theses) => {
+      return theses.id;
+    }),
+    further_details: masterThesis.furtherDetails
+  };
 }
 
 function parseSelectedCoursesForPdf(semestersWithCourses: ISemester[]): ISelectedCoursesForPdf[] {
-    return semestersWithCourses.map((semester) => {
-        return {
-            semesterId: semester.id ? semester.id : semester.name,
-            courses: semester.courses.map((course) => {
-                return course.id;
-            }),
-        };
-    });
+  return semestersWithCourses.map((semester) => {
+    return {
+      semesterId: semester.id ? semester.id : semester.name,
+      courses: semester.courses.map((course) => {
+        return course.id;
+      })
+    };
+  });
 }
 function parseOverlappingCourses(semesterWithOverlappingCourses: ISemesterWithOverlappingCourses[]) {
-    return semesterWithOverlappingCourses
-        .map((obj) => {
-            return {
-                semesterId: obj.semester.hasOwnProperty('id') ? obj.semester.id : obj.semester.name,
-                courses: obj.courses.map((coursePair) => {
-                    return coursePair.map((course) => {
-                        return course.id;
-                    });
-                }),
-            };
+  return semesterWithOverlappingCourses
+    .map((obj) => {
+      return {
+        semesterId: obj.semester.hasOwnProperty('id') ? obj.semester.id : obj.semester.name,
+        courses: obj.courses.map((coursePair) => {
+          return coursePair.map((course) => {
+            return course.id;
+          });
         })
-        .filter((obj) => {
-            if (obj.courses.length > 0) return obj;
-        });
+      };
+    })
+    .filter((obj) => {
+      if (obj.courses.length > 0) return obj;
+    });
 }

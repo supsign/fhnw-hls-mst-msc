@@ -1,7 +1,7 @@
 <template>
-    <div class="p-2 rounded bg-white flex flex-col gap-5 shadow-xl">
-        <div class="flex-grow p-3 flex gap-10 flex-col">
-            <slot />
-        </div>
+  <div class="flex flex-col gap-5 rounded bg-white p-2 shadow-xl">
+    <div class="flex grow flex-col gap-10 p-3">
+      <slot />
     </div>
+  </div>
 </template>
