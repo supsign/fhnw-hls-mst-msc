@@ -1,8 +1,8 @@
 <template>
-  <div class="rounded-md bg-orange-400 p-2 shadow-xl">
-    <div class="mb-3 text-lg font-bold">
+  <div class="my-10 bg-orange-400 p-3 shadow-xl">
+    <h3>
       Warning
-    </div>
+    </h3>
     <div class="flex flex-col">
       <div
         v-if="semestersWithOverlappingCourses.length"
@@ -18,12 +18,12 @@
               {{ semester.semester.short_name ? semester.semester.short_name : semester.semester.name }}
             </div>
             <div
-              v-for="(courses, index) in semester.courses"
-              :key="index"
+              v-for="(courses, sIdx) in semester.courses"
+              :key="sIdx"
               class="mb-5">
               <div
-                v-for="(course, index) in courses"
-                :key="index">
+                v-for="(course, cIdx) in courses"
+                :key="cIdx">
                 - {{ course.name }}
               </div>
             </div>
@@ -62,15 +62,13 @@
 </template>
 
 <script setup lang="ts">
-import type { PropType } from 'vue';
-import type { ICourse, ISemesterWithOverlappingCourses } from '../../interfaces/course.interface';
+import type { ISemesterWithOverlappingCourses } from '../../interfaces/course.interface';
 import type { ISemester } from '../../interfaces/semester.interface';
-const props = defineProps({
-  semestersWithOverlappingCourses: {
-    type: Array as PropType<ISemesterWithOverlappingCourses[]>,
-    required: true
-  },
-  selectedLaterCount: Number,
-  blockCoursesAtEndOfSemester: { type: Object as PropType<ISemester | null>, required: true }
-});
+
+type Props = {
+  semestersWithOverlappingCourses: ISemesterWithOverlappingCourses[];
+  selectedLaterCount: number;
+  blockCoursesAtEndOfSemester: ISemester | null;
+}
+defineProps<Props>();
 </script>

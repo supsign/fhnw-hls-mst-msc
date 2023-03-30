@@ -31,6 +31,7 @@ function getEctsFromModulesOutside(modulesOutside: IModuleOutside[]) {
 
 export function getModuleGroupCount(groupsWithSelectedCourses: ICourseGroup[]) {
   const filterModules = groupsWithSelectedCourses.filter((group) => {
+    // eslint-disable-next-line no-prototype-builtins
     if (group.hasOwnProperty('id')) {
       return group;
     }

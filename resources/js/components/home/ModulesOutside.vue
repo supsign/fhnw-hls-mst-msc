@@ -1,8 +1,9 @@
+<!-- eslint-disable vue/no-v-html -->
 <template>
   <div>
-    <div class="mb-5 text-lg font-bold">
+    <h2 class="mt-10">
       Modules outside the Curriculum
-    </div>
+    </h2>
     <div
       v-if="description"
       class="mb-5"
@@ -31,9 +32,10 @@
       </div>
       <div>
         <button
-          class="cursor-pointer rounded-md bg-blue-700 py-1 px-4 text-white shadow-sm transition duration-300 ease-in-out hover:bg-blue-800 hover:shadow-xl"
+          type="button"
+          class="flex min-h-[50px] items-center justify-center bg-black px-4 text-center font-medium leading-4 text-white hover:bg-primary hover:text-black"
           @click="addNewModule">
-          New Module
+          <span class="">New Module</span>
         </button>
       </div>
     </div>
@@ -42,23 +44,27 @@
 
 <script setup lang="ts">
 import { whenever } from '@vueuse/core';
-import { type PropType, type Ref, ref } from 'vue';
+import { type Ref, ref } from 'vue';
 import type { IModuleOutside } from '../../interfaces/moduleOutside.interface';
 import type { IText } from '../../interfaces/text.interface';
 import Input from '../base/Input.vue';
 import NumberInput from '../base/NumberInput.vue';
-const props = defineProps({
-  texts: { type: Array as PropType<IText[]>, required: true }
-});
-const emits = defineEmits(['updateModulesOutsideData']);
+
+type Props = {
+  texts: IText[];
+}
+type Emits = {
+  (e: 'updateModulesOutsideData', value: IModuleOutside[]): void;
+}
+const props = defineProps<Props>();
+const emit = defineEmits<Emits>();
 const description: IText | null = props.texts.find((text) => text.name === 'modules_outside_description') || null;
 const modulesOutsideArray: Ref<IModuleOutside[]> = ref([]);
 
 function addNewModule() {
   modulesOutsideArray.value.push({ title: '', ects: 0, university: '' });
 }
-// @ts-expect-error
-whenever(modulesOutsideArray.value, (value) => {
-  emits('updateModulesOutsideData', value);
+whenever(modulesOutsideArray, (value) => {
+  emit('updateModulesOutsideData', value);
 });
 </script>

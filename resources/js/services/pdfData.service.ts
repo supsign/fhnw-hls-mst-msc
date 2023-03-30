@@ -47,11 +47,11 @@ export function pdfDataService(data: pdfDataServiceInput) {
   const parsedData: parsedPdfDataInput = {
     surname: data.personalData.surname,
     given_name: data.personalData.givenName,
-    // @ts-expect-error
+    // @ts-expect-error: ???
     semester: data.personalData.semester?.id,
-    // @ts-expect-error
+    // @ts-expect-error: ???
     study_mode: data.personalData.studyMode?.id,
-    // @ts-expect-error
+    // @ts-expect-error: ???
     specialization: data.personalData.specialization?.id,
     selected_courses: parseSelectedCoursesForPdf(data.semestersWithCourses),
     modules_outside: data.modulesOutside,
@@ -70,6 +70,7 @@ export function pdfDataService(data: pdfDataServiceInput) {
   return validator;
 }
 function parseMasterThesis(masterThesis: IThesisSelection): IThesisForPdf | null {
+  // eslint-disable-next-line no-prototype-builtins
   if (!masterThesis || !masterThesis.hasOwnProperty('start') || !masterThesis.theses.length) {
     return null;
   }
@@ -96,6 +97,7 @@ function parseOverlappingCourses(semesterWithOverlappingCourses: ISemesterWithOv
   return semesterWithOverlappingCourses
     .map((obj) => {
       return {
+        // eslint-disable-next-line no-prototype-builtins
         semesterId: obj.semester.hasOwnProperty('id') ? obj.semester.id : obj.semester.name,
         courses: obj.courses.map((coursePair) => {
           return coursePair.map((course) => {

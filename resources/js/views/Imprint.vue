@@ -4,12 +4,12 @@
     Responsibility for the content of this site.
   </p>
   <h2>Contact</h2>
-  <p>Fachhochschule Nordwestschweiz FHNW</p>
-  <p>Institute for Chemistry and Bioanalytics</p>
-  <p>Hofackerstrasse 30</p>
-  <p>4132 Muttenz</p>
-  <br>
-  <p>E-Mail: <a href="mailto:georg.lipps@fhnw.ch">georg.lipps@fhnw.ch</a></p>
+  <p>
+    Fachhochschule Nordwestschweiz FHNW<br>
+    Institute for Chemistry and Bioanalytics<br>
+    Hofackerstrasse 30<br>
+    4132 Muttenz
+  </p><p>E-Mail: <a href="mailto:georg.lipps@fhnw.ch">georg.lipps@fhnw.ch</a></p>
 
   <h2>Accessibility</h2>
   <p>

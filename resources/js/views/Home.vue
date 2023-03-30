@@ -1,20 +1,17 @@
+<!-- eslint-disable no-prototype-builtins -->
 <template>
   <div class="container mx-auto p-3 pb-10">
-    <Card>
-      <Personal
-        v-model="personalData"
-        @getCourseData="getCourseData" />
-    </Card>
-    <Card v-if="courseData">
-      <CourseSelection
-        v-if="statistics"
-        :course-data="courseData"
-        :statistics="statistics" />
-    </Card>
-    <Card v-if="courseData && masterThesisData">
+    <Personal
+      v-model="personalData"
+      @get-course-data="getCourseData" />
+    <CourseSelection
+      v-if="statistics && courseData"
+      :course-data="courseData"
+      :statistics="statistics" />
+    <template v-if="courseData && masterThesisData">
       <ModulesOutside
         :texts="courseData.texts"
-        @updateModulesOutsideData="updateModulesOutsideData" />
+        @update-modules-outside-data="updateModulesOutsideData" />
       <DoubleDegree
         v-model="doubleDegree"
         :texts="courseData.texts" />
@@ -36,12 +33,12 @@
       <div class="flex justify-end">
         <button
           type="button"
-          class="w-60 cursor-pointer rounded-md bg-blue-700 py-1 px-4 text-white shadow-sm transition duration-300 ease-in-out hover:bg-blue-800 hover:shadow-xl"
+          class="flex min-h-[50px] w-1/2 items-center justify-center bg-black text-center font-medium leading-4 text-white hover:bg-primary hover:text-black"
           @click="createPdf">
-          Submit
+          <span class="">Submit</span>
         </button>
       </div>
-    </Card>
+    </template>
   </div>
 </template>
 
@@ -57,7 +54,6 @@ import type { ICourseDataResponse, ICourseGroup } from '../interfaces/course.int
 import MasterThesis from '../components/home/MasterThesis.vue';
 import type { IThesisDataResponse, IThesisSelection } from '../interfaces/theses.interface';
 import CourseSelection from '../components/home/CourseSelection.vue';
-import Card from '../components/base/Card.vue';
 import { pdfDataService } from '../services/pdfData.service';
 import Statistics from '../components/home/Statistics.vue';
 import Swal from 'sweetalert2';
@@ -168,6 +164,7 @@ const groupsWithSelectedCourses: ComputedRef<ICourseGroup[]> = computed(() => {
   });
   const furtherGroups = courseDataGroups.courses[1];
   const furtherGroupsWithSelected = furtherGroups.map((group) => {
+    // eslint-disable-next-line no-prototype-builtins
     if (group.hasOwnProperty('specializations')) {
       group.courses = group.specializations
         .map((spec) => {
@@ -180,6 +177,7 @@ const groupsWithSelectedCourses: ComputedRef<ICourseGroup[]> = computed(() => {
           }
         });
     }
+    // eslint-disable-next-line no-prototype-builtins
     if (group.hasOwnProperty('clusters')) {
       group.courses = group.clusters
         .map((clusters) => {
@@ -242,6 +240,7 @@ const overlappingCourses = computed(() => {
     return [];
   }
   return overlapping.filter((obj) => {
+    // eslint-disable-next-line no-prototype-builtins
     if (obj.semester.hasOwnProperty('id')) {
       return obj;
     }
@@ -295,6 +294,7 @@ async function createPdf() {
     statistics: statistics.value,
     overlappingCourses: overlappingCourses.value
   });
+  // eslint-disable-next-line no-prototype-builtins
   if (pdfData.value.hasOwnProperty('errors')) {
     errors.value = pdfData.value;
     Swal.fire({
@@ -315,7 +315,7 @@ function resetData() {
   doubleDegree.value = false;
 }
 
-function getErrorHtml(errors: any) {
+function getErrorHtml(errors: unknown[]) {
   let string = '';
   for (let error of errors) {
     string += `<div class="text-red-500">${error}</div>`;

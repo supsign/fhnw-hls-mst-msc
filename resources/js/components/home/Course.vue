@@ -1,17 +1,18 @@
+<!-- eslint-disable vue/no-mutating-props -->
 <template>
   <div
-    class="flex hover:bg-gray-50"
+    class="flex border-b border-light "
     :title="course.content">
-    <div class="w-[26rem] border-x border-b p-1">
+    <div class="w-[26rem] px-5 py-4">
       {{ course.name }}
     </div>
     <div
-      class="w-10 border-r border-b p-1"
+      class="w-20 px-5 py-4"
       :title="course.type_tooltip">
       {{ course.type_label_short }}
     </div>
     <div class="flex gap-5 border-b">
-      <div class="flex w-20 justify-center text-center">
+      <div class="flex w-20 justify-center px-5 py-4 text-center">
         <input
           v-model="course.selected_semester"
           type="radio"
@@ -21,7 +22,7 @@
       <div
         v-for="(semester, index) in semesters"
         :key="index"
-        class="flex w-20 justify-center text-center">
+        class="flex w-20 justify-center px-5 py-4 text-center">
         <input
           v-if="showCourseSelect(semester)"
           v-model="course.selected_semester"
@@ -29,12 +30,12 @@
           class="my-auto h-5 w-5"
           :value="semester">
       </div>
-      <div class="flex w-20 justify-center border-r text-center">
+      <div class="flex w-20 justify-center px-5 py-4 text-center">
         <input
           v-if="laterIsVisible(semesters, course.end_semester)"
           v-model="course.selected_semester"
           type="radio"
-          class="my-auto h-5 w-5"
+          class="my-auto h-5 w-5  px-5 py-4"
           value="later">
       </div>
     </div>
@@ -43,17 +44,19 @@
 
 <script setup lang="ts">
 import dayjs from 'dayjs';
-import { computed, ref, type PropType } from 'vue';
+import { computed } from 'vue';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
 import type { ICourse } from '../../interfaces/course.interface';
 import type { ISemester } from '../../interfaces/semester.interface';
-const props = defineProps({
-  course: { type: Object as PropType<ICourse>, required: true },
-  semesters: { type: Array as PropType<ISemester[]>, required: true },
-  type: String,
-  further: Boolean,
-  tooltip: String
-});
+
+type Props = {
+  course: ICourse;
+  semesters: ISemester[];
+  type?: string;
+  further?: boolean;
+  tooltip?: string;
+}
+const props = defineProps<Props>();
 
 dayjs.extend(isSameOrAfter);
 
@@ -84,5 +87,6 @@ function laterIsVisible(semesters: ISemester[], endSemester: ISemester) {
   return false;
 }
 
+// eslint-disable-next-line vue/no-mutating-props
 props.course.selected_semester = null;
 </script>

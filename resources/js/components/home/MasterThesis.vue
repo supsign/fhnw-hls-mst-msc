@@ -1,10 +1,11 @@
+<!-- eslint-disable vue/no-v-html -->
 <template>
   <div
     v-if="data"
     class="flex flex-col gap-5">
-    <div class="text-lg font-bold">
+    <h2 class="mt-10">
       Master Thesis
-    </div>
+    </h2>
     <Select
       v-model="value.start"
       label="Start of MSc Thesis"
@@ -24,27 +25,31 @@
     <div>
       <label
         for="furtherDetails"
-        class="bg-white px-1 text-gray-400">Further Details on MSc Topic (optional)</label>
+        class="px-1 text-black">Further Details on MSc Topic (optional)</label>
       <textarea
         id="furtherDetails"
         v-model="value.furtherDetails"
-        class="box-border block w-full rounded-lg border border-gray-200 py-2 px-4 text-gray-900 shadow-md" />
+        class="w-full border border-light px-4 py-2 outline-light" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { type PropType, computed, type WritableComputedRef } from 'vue';
+import { computed, type WritableComputedRef } from 'vue';
 import type { IText } from '../../interfaces/text.interface';
 import type { IThesisDataResponse, IThesisSelection } from '../../interfaces/theses.interface';
 import Select from '../base/Select.vue';
 
-const props = defineProps({
-  data: { type: Object as PropType<IThesisDataResponse>, required: true },
-  modelValue: { type: Object as PropType<IThesisSelection>, required: true }
-});
+type Props = {
+  data: IThesisDataResponse;
+  modelValue: IThesisSelection;
+}
+type Emits = {
+  (e: 'update:modelValue', value: IThesisSelection): void;
+}
+const props = defineProps<Props>();
 
-const emits = defineEmits(['update:modelValue']);
+const emit = defineEmits<Emits>();
 
 const text: IText | null = props.data.texts.find((text) => text.name === 'thesis_text') || null;
 
@@ -53,7 +58,7 @@ const value: WritableComputedRef<IThesisSelection> = computed({
     return props.modelValue;
   },
   set(value) {
-    emits('update:modelValue', value);
+    emit('update:modelValue', value);
   }
 });
 </script>

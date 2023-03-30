@@ -1,5 +1,6 @@
+<!-- eslint-disable vue/no-v-html -->
 <template>
-  <div class="sticky top-0 z-10 self-start border bg-hls p-2 shadow-xl">
+  <div class="sticky top-[141px] z-10 self-start border-t-4 border-white  bg-primary p-2 shadow-xl">
     <div
       v-if="description"
       v-html="description.content" />
@@ -22,13 +23,13 @@
 </template>
 
 <script setup lang="ts">
-import type { PropType } from 'vue';
 import type { IStatistics } from '../../interfaces/statistics.interface';
 import type { IText } from '../../interfaces/text.interface';
 
-const props = defineProps({
-  texts: { type: Array as PropType<IText[]>, required: true },
-  statistics: { type: Object as PropType<IStatistics>, required: true }
-});
+type Props = {
+  texts: IText[];
+  statistics: IStatistics;
+}
+const props = defineProps<Props>();
 const description: IText | null = props.texts.find((text) => text.name === 'description_before_further') || null;
 </script>

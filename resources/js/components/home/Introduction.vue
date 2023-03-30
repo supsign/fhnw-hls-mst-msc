@@ -1,33 +1,27 @@
+<!-- eslint-disable vue/no-v-html -->
 <template>
-  <div v-if="texts">
-    <div class="mb-10">
-      <div
-        v-if="title"
-        class="mb-2 text-2xl"
-        v-html="title.content" />
-      <div
-        v-if="description"
-        v-html="description.content" />
-    </div>
-    <div>
-      <div
-        v-if="hintsTitle"
-        class="mb-2 font-bold"
-        v-html="hintsTitle.content" />
-      <div
-        v-if="hintsList"
-        v-html="hintsList.content" />
-    </div>
-  </div>
+  <h1
+    v-if="title"
+    v-html="title.content" />
+  <div
+    v-if="description"
+    v-html="description.content" />
+  <h3
+    v-if="hintsTitle"
+    class="mb-2 font-bold"
+    v-html="hintsTitle.content" />
+  <div
+    v-if="hintsList"
+    v-html="hintsList.content" />
 </template>
 
 <script setup lang="ts">
-import type { PropType } from 'vue';
 import type { IText } from '../../interfaces/text.interface';
 
-const props = defineProps({
-  texts: { type: Array as PropType<IText[]>, required: true }
-});
+type Props = {
+  texts: IText[];
+}
+const props = defineProps<Props>();
 
 const title: IText | null = props.texts.find((text) => text.name === 'intro_title') || null;
 const description: IText | null = props.texts.find((text) => text.name === 'intro_content') || null;
@@ -36,10 +30,10 @@ const hintsList: IText | null = props.texts.find((text) => text.name === 'hints_
 </script>
 
 <style>
-ul {
+  ul {
     list-style: disc inside;
-}
-li {
+  }
+  li {
     margin: 1px 0px;
-}
+  }
 </style>

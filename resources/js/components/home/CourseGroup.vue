@@ -1,116 +1,127 @@
+<!-- eslint-disable vue/no-v-html -->
 <template>
   <div>
-    <div class="mb-5 text-lg font-bold">
+    <h2>
       {{ group.title }}
-    </div>
+    </h2>
     <div
       class="mb-5"
       v-html="group.description" />
     <div class="flex">
-      <div class="w-[26rem] border-b p-1 font-bold">
-        Module
-      </div>
-      <div class="w-10 border-b font-bold">
-        Type
-      </div>
-      <div class="flex gap-5 border-b">
-        <div class="w-20 text-center font-bold">
-          none
+      <div class="flex flex-col">
+        <div class="border-x border-t">
+          <div class="flex font-bold">
+            <div class="flex border-b border-light bg-[#f1f1ee]">
+              <div class="w-[26rem] px-5 py-4">
+                Module
+              </div>
+              <div class="w-20 px-5 py-4">
+                Type
+              </div>
+              <div class="flex gap-5 text-center">
+                <div class="w-20 px-5 py-4">
+                  none
+                </div>
+                <div
+                  v-for="(semester, index) in semesters"
+                  :key="index"
+                  class="w-20 px-5 py-4"
+                  :title="semester.tooltip">
+                  {{ semester.short_name }}
+                </div>
+                <div class="w-20 px-5 py-4">
+                  later
+                </div>
+              </div>
+            </div>
+          </div>
+          <template v-if="group.specializations">
+            <div
+              v-for="(specialization, index) in group.specializations"
+              :key="index">
+              <div class="flex border-b border-light">
+                <div class="w-[26rem] px-5 py-4">
+                  {{ specialization.name }}
+                </div>
+                <div class="w-10 px-5 py-4" />
+                <div
+                  v-if="semesters"
+                  class="flex gap-5">
+                  <div
+                    v-for="sIdx in semesters.length + 2"
+                    :key="sIdx"
+                    class="w-20 px-5 py-4 text-center"
+                    :class="{ 'border-r': index === semesters.length + 2 }" />
+                </div>
+              </div>
+              <Course
+                v-for="course, cIdx in sortCourses(specialization.courses)"
+                :key="cIdx"
+                :course="course"
+                further
+                :semesters="semesters" />
+            </div>
+          </template>
+          <template v-if="group.clusters">
+            <div
+              v-for="(cluster, index) in group.clusters"
+              :key="index">
+              <div class="flex border-b border-light">
+                <div class="w-[26rem] px-5 py-4">
+                  {{ cluster.name }}
+                </div>
+                <div class="w-10 px-5 py-4" />
+                <div
+                  v-if="semesters"
+                  class="flex gap-5">
+                  <div
+                    v-for="sIdx in semesters.length + 2"
+                    :key="sIdx"
+                    class="w-20 px-5 py-4 text-center"
+                    :class="{ 'border-r': index === semesters.length + 2 }" />
+                </div>
+              </div>
+              <Course
+                v-for="course, cIdx in sortCourses(cluster.courses)"
+                :key="cIdx"
+                :course="course"
+                further
+                :semesters="semesters" />
+            </div>
+          </template>
+          <template v-if="group.courses">
+            <div class="max-w-min">
+              <Course
+                v-for="(course, index) in sortCourses(group.courses)"
+                :key="index"
+                :course="course"
+                :type="group.course_group_type_short_name"
+                :semesters="semesters" />
+            </div>
+          </template>
         </div>
         <div
-          v-for="(semester, index) in semesters"
-          :key="index"
-          class="w-20 text-center font-bold"
-          :title="semester.tooltip">
-          {{ semester.short_name }}
-        </div>
-        <div class="w-20 text-center font-bold">
-          later
-        </div>
-      </div>
-    </div>
-    <template v-if="group.specializations">
-      <div
-        v-for="(specialization, index) in group.specializations"
-        :key="index">
-        <div class="flex">
-          <div class="w-[26rem] border-l border-b p-1 font-bold">
-            {{ specialization.name }}
-          </div>
-          <div class="w-10 border-b" />
-          <div
-            v-if="semesters"
-            class="flex gap-5 border-b">
-            <div
-              v-for="index in semesters.length + 2"
-              :key="index"
-              class="w-20 text-center"
-              :class="{ 'border-r': index == semesters.length + 2 }" />
-          </div>
-        </div>
-        <Course
-          v-for="course in sortCourses(specialization.courses)"
-          :key="index"
-          :course="course"
-          further
-          :semesters="semesters" />
-      </div>
-    </template>
-    <template v-if="group.clusters">
-      <div
-        v-for="(cluster, index) in group.clusters"
-        :key="index">
-        <div class="flex">
-          <div class="w-[26rem] border-l border-b p-1 font-bold">
-            {{ cluster.name }}
-          </div>
-          <div class="w-10 border-b" />
-          <div
-            v-if="semesters"
-            class="flex gap-5 border-b">
-            <div
-              v-for="index in semesters.length + 2"
-              :key="index"
-              class="w-20 text-center"
-              :class="{ 'border-r': index == semesters.length + 2 }" />
-          </div>
-        </div>
-        <Course
-          v-for="course in sortCourses(cluster.courses)"
-          :key="index"
-          :course="course"
-          further
-          :semesters="semesters" />
-      </div>
-    </template>
-    <template v-if="group.courses">
-      <div class="max-w-min">
-        <Course
-          v-for="(course, index) in sortCourses(group.courses)"
-          :key="index"
-          :course="course"
-          :type="group.course_group_type_short_name"
-          :semesters="semesters" />
-        <div
-          class="flex justify-end"
+          v-if="group.courses"
+          class="mt-2 flex justify-end"
           :class="[count < group.required_courses_count ? 'text-red-600' : 'text-green-600']">
           Chosen {{ count }} / Required {{ group.required_courses_count }}
         </div>
       </div>
-    </template>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { type PropType, computed } from 'vue';
+import { computed } from 'vue';
 import type { ICourseGroup, ICourse } from '../../interfaces/course.interface';
 import type { ISemester } from '../../interfaces/semester.interface';
 import Course from './Course.vue';
 
-const props = defineProps({
-  group: { type: Object as PropType<ICourseGroup>, required: true },
-  semesters: { type: Array as PropType<ISemester[]>, required: true }
-});
+type Props = {
+  group: ICourseGroup;
+  semesters: ISemester[];
+}
+const props = defineProps<Props>();
 
 function sortCourses(courses: ICourse[]) {
   return courses.sort((a, b) => a.semester_type - b.semester_type);

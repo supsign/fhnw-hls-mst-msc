@@ -3,10 +3,10 @@
     <label
       v-if="label"
       for="input"
-      class="bg-white px-1 text-gray-400">{{ label }}</label>
+      class="px-1 text-black">{{ label }}</label>
     <input
       id="input"
-      class="box-border block w-full rounded-lg border border-gray-200 py-2 px-4 text-gray-900 shadow-md"
+      class="w-full border border-light px-4 py-2 outline-light"
       :value="modelValue"
       v-bind="$attrs"
       @input="$emit('update:modelValue', ($event.target as HTMLTextAreaElement).value)">
