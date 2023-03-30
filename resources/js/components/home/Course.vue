@@ -7,11 +7,11 @@
       {{ course.name }}
     </div>
     <div
-      class="w-20 px-5 py-4"
+      class="my-auto w-20 px-5 py-4"
       :title="course.type_tooltip">
       {{ course.type_label_short }}
     </div>
-    <div class="flex gap-5">
+    <div class="flex gap-5 border-b">
       <div class="flex w-20 justify-center px-5 py-4 text-center">
         <input
           v-model="course.selected_semester"

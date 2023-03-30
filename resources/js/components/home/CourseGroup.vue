@@ -40,7 +40,7 @@
               v-for="(specialization, index) in group.specializations"
               :key="index">
               <div class="flex border-b border-light">
-                <div class="w-[26rem] px-5 py-4">
+                <div class="w-[26rem] px-5 py-4 font-bold">
                   {{ specialization.name }}
                 </div>
                 <div class="w-10 px-5 py-4" />
@@ -66,7 +66,7 @@
               v-for="(cluster, index) in group.clusters"
               :key="index">
               <div class="flex border-b border-light">
-                <div class="w-[26rem] px-5 py-4">
+                <div class="w-[26rem] px-5 py-4 font-bold">
                   {{ cluster.name }}
                 </div>
                 <div class="w-10 px-5 py-4" />

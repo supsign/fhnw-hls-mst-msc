@@ -10,7 +10,7 @@
       v-html="description.content" />
     <div class="flex">
       <div class="flex flex-col">
-        <div class="border-x border-t">
+        <div class="border-x border-t border-light">
           <div class="flex border-b border-light bg-[#f1f1ee] font-bold">
             <div class="w-[26rem] px-5 py-4">
               Module
@@ -31,10 +31,11 @@
               </div>
             </div>
           </div>
+
+          <Course
+            :course="courseData.optional_courses.courses[0]"
+            :semesters="courseData.semesters" />
         </div>
-        <Course
-          :course="courseData.optional_courses.courses[0]"
-          :semesters="courseData.semesters" />
       </div>
     </div>
   </div>
