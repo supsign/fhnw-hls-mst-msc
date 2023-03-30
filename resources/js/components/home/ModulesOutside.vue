@@ -24,10 +24,13 @@
         <Input
           v-model="module.university"
           label="University" />
-        <div
-          class="mt-6 flex h-10 cursor-pointer items-center rounded-md bg-red-600 py-1 px-4 text-white shadow-sm transition duration-300 ease-in-out hover:bg-red-700 hover:shadow-xl"
-          @click="modulesOutsideArray.splice(index, 1)">
-          Remove
+        <div class="flex flex-col">
+          <button
+            type="button"
+            class="mt-auto flex min-h-[40px] items-center bg-red-500 px-4 text-center font-medium leading-4 text-white hover:bg-red-600 "
+            @click="modulesOutsideArray.splice(index, 1)">
+            Remove
+          </button>
         </div>
       </div>
       <div>
@@ -66,5 +69,5 @@ function addNewModule() {
 }
 whenever(modulesOutsideArray, (value) => {
   emit('updateModulesOutsideData', value);
-});
+}, { deep: true });
 </script>
