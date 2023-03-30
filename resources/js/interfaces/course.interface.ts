@@ -37,6 +37,7 @@ export interface ICourse extends IModel {
     name: string;
     short_name: string;
     semester_type: number;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     selected_semester: ISemester | string | null | any;
     slot_id: number;
     start_semester: ISemester
