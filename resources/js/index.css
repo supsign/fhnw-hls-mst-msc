@@ -14,7 +14,7 @@ h1::after {
     content: " ";
 }
   
-h2 {
+h2 { 
     @apply text-[1.375rem] font-semibold leading-[1.1] mb-8 pb-2 border-b-4 border-light
 }
 
@@ -40,4 +40,8 @@ p {
 }
 p a {
     @apply opacity-80 font-medium underline outline-none hover:text-black hover:opacity-100 hover:transition-opacity hover:ease-in hover:duration-500
+}
+
+#swal2-title {
+     @apply border-b-0
 }

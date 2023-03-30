@@ -11,12 +11,12 @@
       :title="course.type_tooltip">
       {{ course.type_label_short }}
     </div>
-    <div class="flex gap-5 border-b">
+    <div class="flex gap-5">
       <div class="flex w-20 justify-center px-5 py-4 text-center">
         <input
           v-model="course.selected_semester"
           type="radio"
-          class="my-auto h-5 w-5"
+          class="my-auto h-5 w-5 cursor-pointer"
           :value="null">
       </div>
       <div
@@ -27,7 +27,7 @@
           v-if="showCourseSelect(semester)"
           v-model="course.selected_semester"
           type="radio"
-          class="my-auto h-5 w-5"
+          class="my-auto h-5 w-5 cursor-pointer"
           :value="semester">
       </div>
       <div class="flex w-20 justify-center px-5 py-4 text-center">
@@ -35,7 +35,7 @@
           v-if="laterIsVisible(semesters, course.end_semester)"
           v-model="course.selected_semester"
           type="radio"
-          class="my-auto h-5 w-5  px-5 py-4"
+          class="my-auto h-5 w-5 cursor-pointer"
           value="later">
       </div>
     </div>

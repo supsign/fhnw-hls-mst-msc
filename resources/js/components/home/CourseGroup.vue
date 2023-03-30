@@ -50,8 +50,7 @@
                   <div
                     v-for="sIdx in semesters.length + 2"
                     :key="sIdx"
-                    class="w-20 px-5 py-4 text-center"
-                    :class="{ 'border-r': index === semesters.length + 2 }" />
+                    class="w-20 px-5 py-4 text-center" />
                 </div>
               </div>
               <Course
@@ -77,8 +76,7 @@
                   <div
                     v-for="sIdx in semesters.length + 2"
                     :key="sIdx"
-                    class="w-20 px-5 py-4 text-center"
-                    :class="{ 'border-r': index === semesters.length + 2 }" />
+                    class="w-20 px-5 py-4 text-center" />
                 </div>
               </div>
               <Course

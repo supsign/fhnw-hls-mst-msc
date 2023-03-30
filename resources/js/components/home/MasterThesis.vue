@@ -10,7 +10,7 @@
       v-model="value.start"
       label="Start of MSc Thesis"
       :options="data.time_frames"
-      option_labels="start.long_name" />
+      option-labels="start.long_name" />
     <div
       v-if="text"
       v-html="text.content" />
