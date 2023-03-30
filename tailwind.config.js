@@ -1,5 +1,3 @@
-const defaultTheme = require('tailwindcss/defaultTheme');
-
 module.exports = {
   content: ['./resources/**/*.{js,ts,jsx,tsx,blade.php,vue}'],
   theme: {
