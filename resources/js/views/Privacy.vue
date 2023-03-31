@@ -120,7 +120,7 @@
     <p>This website uses the Yoast SEO plugin. This is provided by Yoast BV, Don Emanuelstraat 3, 6602 GX Wijchen, The Netherlands, tel: +31 (0)24 82 00 337 (Chamber of Commerce / KvK: 55404367, VAT no: NL851692540B01).</p>
     <p>This plugin is responsible for the entire technical optimisation of our websites for search engines. It also plays a role in the development of content.</p>
     <p>» <a href="https://yoast.com/privacy-policy/">Privacy policy</a></p>
-    <h4>YoutTube</h4>
+    <h4>YouTube</h4>
     <p>This website can use functions of the YouTube service. These functions are provided by Google Inc., 1600 Amphitheatre Parkway, Mountain View, CA 94043, USA.</p>
     <p>» <a href="https://policies.google.com/privacy">Privacy policy</a></p>
     <p>» <a href="https://www.google.com/account/about/?hl=de">Opt-out</a></p>
