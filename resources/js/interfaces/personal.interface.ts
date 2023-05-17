@@ -19,6 +19,6 @@ export interface IPersonalData {
 }
 
 interface IText extends IModel {
-    name: String;
-    content: String;
+    name: string;
+    content: string;
 }

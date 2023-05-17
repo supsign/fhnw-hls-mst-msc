@@ -2,7 +2,7 @@ import type { IModel } from './model.interface';
 import type { ISemester } from './semester.interface';
 import type { ISpecialization } from './specialization.interface';
 import type { IText } from './text.interface';
-import type  { IThesis } from './theses.interface';
+import type { IThesis } from './theses.interface';
 
 export interface ICourseDataResponse {
     courses: ICourseGroup[][];
@@ -37,7 +37,8 @@ export interface ICourse extends IModel {
     name: string;
     short_name: string;
     semester_type: number;
-    selected_semester: ISemester | String | null | any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    selected_semester: ISemester | string | null | any;
     slot_id: number;
     start_semester: ISemester
     start_semester_id: number;

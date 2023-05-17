@@ -1,31 +1,57 @@
+<!-- eslint-disable vue/no-v-html -->
 <template>
-    <div v-if="courseData">
-        <div class="font-bold text-lg mb-5">Optional English Class for MSc Students (no ECTS gained)</div>
-        <div v-if="description" v-html="description.content" class="mb-5"></div>
-
-        <div class="flex">
-            <div class="border-b p-1 w-[26rem]"></div>
-            <div class="border-b w-10"></div>
-            <div class="border-b flex gap-5">
-                <div class="text-center w-20">none</div>
-                <div v-for="(semester, index) in courseData.semesters" :key="index" class="text-center w-20">
-                    {{ semester.short_name }}
-                </div>
-                <div class="text-center w-20">later</div>
+  <div v-if="courseData">
+    <h2 class="mt-10">
+      Optional English Class for MSc Students (no ECTS gained)
+    </h2>
+    <div
+      v-if="description"
+      class="mb-5"
+      v-html="description.content" />
+    <div class="flex">
+      <div class="flex flex-col">
+        <div class="border-x border-t border-light">
+          <div class="flex border-b border-light bg-[#f1f1ee] font-bold">
+            <div class="w-[26rem] px-5 py-4">
+              Module
             </div>
+            <div class="w-20 px-5 py-4" />
+            <div class="flex gap-5 text-center">
+              <div class="w-20 px-5 py-4">
+                none
+              </div>
+              <div
+                v-for="(semester, index) in courseData.semesters"
+                :key="index"
+                class="w-20 px-5 py-4">
+                {{ semester.short_name }}
+              </div>
+              <div class="w-20 px-5 py-4">
+                later
+              </div>
+            </div>
+          </div>
+
+          <Course
+            :course="courseData.optional_courses.courses[0]"
+            :semesters="courseData.semesters" />
         </div>
-        <Course :course="courseData.optional_courses.courses[0]" :semesters="courseData.semesters" />
+      </div>
     </div>
+  </div>
 </template>
+
 <script setup lang="ts">
-import type { PropType } from 'vue';
 import type { ICourseDataResponse } from '../../interfaces/course.interface';
 import type { IText } from '../../interfaces/text.interface';
 import Course from './Course.vue';
-const props = defineProps({
-    courseData: { type: Object as PropType<ICourseDataResponse>, required: true },
-});
+
+type Props = {
+  courseData: ICourseDataResponse;
+}
+const props = defineProps<Props>();
+
 
 const description: IText | null =
-    props.courseData.optional_courses?.texts.find((text) => text.name === 'optional_english_description') || null;
+  props.courseData.optional_courses?.texts.find((text) => text.name === 'optional_english_description') || null;
 </script>

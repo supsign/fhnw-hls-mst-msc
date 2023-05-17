@@ -1,25 +1,26 @@
-const defaultTheme = require('tailwindcss/defaultTheme');
-
 module.exports = {
-    content: ['./resources/**/*.{js,ts,jsx,tsx,blade.php,vue}'],
-    theme: {
-        extend: {
-            fontFamily: {
-                sans: ['Inter var', ...defaultTheme.fontFamily.sans],
-            },
-            colors: {
-                hls: {
-                    DEFAULT: '#FDE70E',
-                    200: '#fef387',
-                    700: '#ead20a',
-                },
-            },
+  content: ['./resources/**/*.{js,ts,jsx,tsx,blade.php,vue}'],
+  theme: {
+    extend: {
+      colors: {
+        hls: {
+          DEFAULT: '#FDE70E',
+          200: '#fef387',
+          700: '#ead20a'
         },
-    },
-    variants: {
-        extend: {
-            backgroundColor: ['active'],
-        },
-    },
-    plugins: [],
+        primary: '#fde70e',
+        light: '#deded9',
+        dark: '#4c4c4c'
+      },
+      padding: {
+        '15': '60px'
+      }
+    }
+  },
+  variants: {
+    extend: {
+      backgroundColor: ['active']
+    }
+  },
+  plugins: []
 };
