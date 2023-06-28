@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@supsign/eslint-config": "^0.0.7",
-    "@vue/tsconfig": "^0.1.3",
+    "@vue/tsconfig": "^0.4.0",
     "@vueuse/core": "^9.6.0",
     "dayjs": "^1.11.7",
     "eslint": "^8.37.0",
@@ -23,7 +23,7 @@
   "devDependencies": {
     "@types/vue-select": "^3.16.2",
     "@vitejs/plugin-vue": "latest",
-    "@vue/tsconfig": "^0.1.3",
+    "@vue/tsconfig": "^0.4.0",
     "autoprefixer": "^10.4.13",
     "axios": "^1.2.1",
     "laravel-vite-plugin": "^0.7.1",
