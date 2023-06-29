@@ -12,7 +12,7 @@
     "@supsign/eslint-config": "^0.0.7",
     "@vue/tsconfig": "^0.4.0",
     "@vueuse/core": "^9.6.0",
-    "dayjs": "^1.11.7",
+    "dayjs": "^1.11.8",
     "eslint": "^8.37.0",
     "sass": "^1.62.1",
     "sweetalert2": "^11.6.15",
