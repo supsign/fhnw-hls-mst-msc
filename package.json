@@ -13,7 +13,7 @@
     "@vue/tsconfig": "^0.4.0",
     "@vueuse/core": "^9.6.0",
     "dayjs": "^1.11.7",
-    "eslint": "^8.37.0",
+    "eslint": "^8.42.0",
     "sass": "^1.62.1",
     "sweetalert2": "^11.6.15",
     "vue": "^3.3.4",
