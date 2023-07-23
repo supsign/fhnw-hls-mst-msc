@@ -9,7 +9,7 @@
     "lint": "eslint --ext .ts,.vue --ignore-path .gitignore --fix resources/js"
   },
   "dependencies": {
-    "@supsign/eslint-config": "^0.0.7",
+    "@supsign/eslint-config": "^0.0.9",
     "@vue/tsconfig": "^0.4.0",
     "@vueuse/core": "^10.2.0",
     "dayjs": "^1.11.7",
