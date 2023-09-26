@@ -15,7 +15,7 @@
     "dayjs": "^1.11.9",
     "eslint": "^8.47.0",
     "sass": "^1.66.1",
-    "sweetalert2": "^11.7.25",
+    "sweetalert2": "^11.7.27",
     "vue": "^3.3.4",
     "vue-router": "^4.2.4",
     "vue-select": "^4.0.0-beta.3"
