@@ -11,7 +11,7 @@
   "dependencies": {
     "@supsign/eslint-config": "^0.0.9",
     "@vue/tsconfig": "^0.4.0",
-    "@vueuse/core": "^10.4.1",
+    "@vueuse/core": "^10.5.0",
     "dayjs": "^1.11.10",
     "eslint": "^8.50.0",
     "sass": "^1.69.0",
