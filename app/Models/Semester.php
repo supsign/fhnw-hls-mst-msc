@@ -17,7 +17,7 @@ class Semester extends BaseModel
         'long_name_with_short',
 	    'tooltip',
 	    'year',
-	    'is_current'
+	    'is_replanning'
 	];
 
 	protected $casts = [
@@ -25,17 +25,17 @@ class Semester extends BaseModel
 	    'type' => SemesterType::class,
 	];
 
-	public function isCurrent(): Attribute
+	public function isReplanning(): Attribute
 	{
 		return Attribute::make(
-			get: function (): mixed {
+			get: function (): bool {
 				$now = Carbon::now();
 
-				if (abs($this->year - $now->year) > 1) {
-					return false;
+				if ($this->start_date < $now) {
+					return true;
 				}
 
-				return $this->start_date < $now && $this->nextSemester->start_date > $now;
+				return false;
 			}
 		);
 	}

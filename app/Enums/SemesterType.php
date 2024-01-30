@@ -36,8 +36,8 @@ enum SemesterType: int
     public function startDate(): string
     {
         return match($this) {
-            static::AutumnStart => '09-01',
-            static::SpringStart => '02-01',
+            static::AutumnStart => '10-01',
+            static::SpringStart => '03-01',
         };
     }
 

@@ -224,7 +224,7 @@ const semesterWithCourses: ComputedRef<ISemester[]> = computed(() => {
     courses: selectedCourses.filter((course) => {
       return course.selected_semester === 'later';
     }),
-    is_current: false
+    is_replanning: false
   });
 
   return coursesInSemester;

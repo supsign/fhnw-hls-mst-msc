@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Controller;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Route;
 
@@ -14,5 +15,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::controller(Controller::class)->group(function () {
+    Route::get('test', 'test');
+});
 
 Route::get('{any}', fn (): View => view('app'))->where('any', '.*');
