@@ -28,29 +28,12 @@
 </template>
 
 <script setup lang="ts">
+import type { ICourseDataResponse, ICourseGroup, IModuleOutside, IPersonalData, ISemester, IStatistics, IThesisDataResponse, IThesisSelection } from '@/interfaces';
+
+import { getEcts, getModuleGroupCount } from '@/helpers/counts';
+import { getOverlappingCourses, pdfDataService } from '@/services';
 import axios from 'axios';
 import Swal from 'sweetalert2';
-import { computed, type ComputedRef, ref, type Ref, watch } from 'vue';
-
-import type { ICourseDataResponse, ICourseGroup } from '../interfaces/course.interface';
-import type { IModuleOutside } from '../interfaces/moduleOutside.interface';
-import type { IPersonalData } from '../interfaces/personal.interface';
-import type { ISemester } from '../interfaces/semester.interface';
-import type { IStatistics } from '../interfaces/statistics.interface';
-import type { IThesisDataResponse, IThesisSelection } from '../interfaces/theses.interface';
-
-import AdditionalComments from '../components/home/AdditionalComments.vue';
-import CourseSelection from '../components/home/CourseSelection.vue';
-import DoubleDegree from '../components/home/DoubleDegree.vue';
-import MasterThesis from '../components/home/MasterThesis.vue';
-import ModulesOutside from '../components/home/ModulesOutside.vue';
-import OptionalEnglish from '../components/home/OptionalEnglish.vue';
-import Personal from '../components/home/Personal.vue';
-import Statistics from '../components/home/Statistics.vue';
-import Warning from '../components/home/Warning.vue';
-import { getEcts, getModuleGroupCount } from '../helpers/counts';
-import { getOverlappingCourses } from '../services/course.service';
-import { pdfDataService } from '../services/pdfData.service';
 
 // Personal Data
 const personalData: Ref<IPersonalData> = ref({
@@ -94,7 +77,8 @@ const masterThesisData: Ref<IThesisDataResponse | null> = ref(null);
 const masterThesis: Ref<IThesisSelection> = ref({
   furtherDetails: '',
   start: { end: '', start: null },
-  theses: []
+  theses1: null,
+  theses2: null
 });
 
 async function getThesisData() {

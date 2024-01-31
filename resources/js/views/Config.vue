@@ -22,7 +22,3 @@
     </button>
   </form>
 </template>
-
-<script setup lang="ts">
-import Input from '../components/base/Input.vue';
-</script>

@@ -4,29 +4,29 @@ const router = createRouter({
   history: createWebHistory(),
   routes: [
     {
-      path: '/',
-      component: () => import('../layouts/Main.vue'),
       children: [
         {
-          path: '',
+          component: () => import('../views/Home.vue'),
           name: 'Home',
-          component: () => import('../views/Home.vue')
+          path: ''
         },
         {
-          path: 'admin/config',
-          component: () => import('../views/Config.vue')
+          component: () => import('../views/Config.vue'),
+          path: 'admin/config'
         },
         {
-          path: 'privacy',
+          component: () => import('../views/Privacy.vue'),
           name: 'Privacy',
-          component: () => import('../views/Privacy.vue')
+          path: 'privacy'
         },
         {
-          path: 'imprint',
+          component: () => import('../views/Imprint.vue'),
           name: 'Imprint',
-          component: () => import('../views/Imprint.vue')
+          path: 'imprint'
         }
-      ]
+      ],
+      component: () => import('../layouts/Main.vue'),
+      path: '/'
     }
   ]
 });

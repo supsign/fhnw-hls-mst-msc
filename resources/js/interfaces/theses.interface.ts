@@ -3,25 +3,27 @@ import type { ISemester } from './semester.interface';
 import type { IText } from './text.interface';
 
 export interface IThesis extends IModel {
-    name: string;
+  name: string;
 }
 
 export interface IThesisDataResponse {
-    theses: IThesis[];
-    time_frames: IThesisTimeFrame[];
-    texts: IText[];
+  texts: IText[];
+  theses: IThesis[];
+  time_frames: IThesisTimeFrame[];
 }
 export interface IThesisTimeFrame {
-    end: string;
-    start: ISemester | null;
+  end: string;
+  start: ISemester | null;
 }
 
 export interface ThesisRequestData {
-    specialization: number;
+  specialization: number;
 }
 
 export interface IThesisSelection {
-    start: IThesisTimeFrame;
-    theses: IThesis[];
-    furtherDetails: string;
+  furtherDetails: string;
+  start: IThesisTimeFrame;
+  theses1: IThesis;
+  theses2: IThesis;
+  theses3?: IThesis;
 }

@@ -3,8 +3,8 @@
   <div>
     <label
       v-if="label"
-      for="input"
       class="px-1 text-black"
+      for="input"
       :title="tooltip">{{ label }}</label>
     <select
       id="select"
@@ -15,17 +15,17 @@
       <template v-if="options.length > 0">
         <option
           v-if="placeholder"
-          value="null"
           disabled
-          selected>
+          selected
+          value="null">
           {{ placeholder }}
         </option>
         <option
           v-for="(option, index) in options"
           :key="index"
-          :value="option"
           class="appearance-none border-t border-gray-50"
-          :label="getLabel(option)" />
+          :label="getLabel(option)"
+          :value="option" />
       </template>
       <template v-else>
         <option
@@ -44,24 +44,22 @@ import { computed } from 'vue';
 type Props = {
   label?: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  options: any[];
-  optionLabels?: string;
-  placeholder?: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   modelValue?: any;
+  optionLabels?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  options: any[];
+  placeholder?: string;
   tooltip?: string;
 };
 type Emits = {
   (e: 'change'): void;
   (e: 'update:modelValue', value: unknown): void;
-}
+};
 const props = defineProps<Props>();
 const emit = defineEmits<Emits>();
 
 const value = computed({
-  get() {
-    return props.modelValue;
-  },
+  get: () => props.modelValue,
   set(value) {
     emit('update:modelValue', value);
   }
@@ -72,7 +70,7 @@ function getLabel(option: any) {
   if (!props.optionLabels) {
     return option.name;
   }
-  const strings = props.optionLabels.split('.').map((s) => [s]);
+  const strings = props.optionLabels.split('.').map(s => [s]);
   if (strings.length === 1) {
     // @ts-expect-error: ???
     return option[strings[0]];
