@@ -1,41 +1,26 @@
-<!-- eslint-disable no-prototype-builtins -->
 <template>
   <div class="container mx-auto p-3 pb-10">
-    <Personal
-      v-model="personalData"
-      @get-course-data="getCourseData" />
-    <CourseSelection
-      v-if="statistics && courseData"
-      :course-data="courseData"
-      :statistics="statistics" />
+    <Personal v-model="personalData" @get-course-data="getCourseData" />
+    <CourseSelection v-if="statistics && courseData" :course-data="courseData" :statistics="statistics" />
     <template v-if="courseData && masterThesisData">
-      <ModulesOutside
-        :texts="courseData.texts"
-        @update-modules-outside-data="updateModulesOutsideData" />
-      <DoubleDegree
-        v-model="doubleDegree"
-        :texts="courseData.texts" />
-      <MasterThesis
-        v-model="masterThesis"
-        :data="masterThesisData" />
+      <ModulesOutside :texts="courseData.texts" @update-modules-outside-data="updateModulesOutsideData" />
+      <DoubleDegree v-model="doubleDegree" :texts="courseData.texts" />
+      <MasterThesis v-model="masterThesis" :data="masterThesisData" />
       <OptionalEnglish :course-data="courseData" />
       <AdditionalComments v-model="additionalComments" />
       <Statistics
-        v-if="semesterWithCourses && statistics"
-        :semester-with-courses="semesterWithCourses"
-        :master-thesis="masterThesis"
-        :statistics="statistics" />
+        v-if="semesterWithCourses && statistics" :master-thesis="masterThesis"
+        :semester-with-courses="semesterWithCourses" :statistics="statistics" />
       <Warning
-        v-if="selectedLaterCount || overlappingCourses.length || blockCoursesAtEndOfSemester?.courses.length"
-        :semesters-with-overlapping-courses="overlappingCourses"
-        :selected-later-count="selectedLaterCount"
-        :block-courses-at-end-of-semester="blockCoursesAtEndOfSemester" />
+        v-if="selectedLaterCount || overlappingCourses.length > 0 || blockCoursesAtEndOfSemester?.courses.length"
+        :block-courses-at-end-of-semester="blockCoursesAtEndOfSemester" :selected-later-count="selectedLaterCount"
+        :semesters-with-overlapping-courses="overlappingCourses" />
       <div class="flex justify-end">
         <button
-          type="button"
           class="flex min-h-[50px] w-1/2 items-center justify-center bg-black text-center font-medium leading-4 text-white hover:bg-primary hover:text-black"
+          type="button"
           @click="createPdf">
-          <span class="">Submit</span>
+          <span class="">Generate PDF Document of Study Plan</span>
         </button>
       </div>
     </template>
@@ -43,34 +28,37 @@
 </template>
 
 <script setup lang="ts">
-import Personal from '../components/home/Personal.vue';
 import axios from 'axios';
-import { type Ref, ref, watch, computed, type ComputedRef } from 'vue';
-import ModulesOutside from '../components/home/ModulesOutside.vue';
-import DoubleDegree from '../components/home/DoubleDegree.vue';
-import OptionalEnglish from '../components/home/OptionalEnglish.vue';
-import AdditionalComments from '../components/home/AdditionalComments.vue';
-import type { ICourseDataResponse, ICourseGroup } from '../interfaces/course.interface';
-import MasterThesis from '../components/home/MasterThesis.vue';
-import type { IThesisDataResponse, IThesisSelection } from '../interfaces/theses.interface';
-import CourseSelection from '../components/home/CourseSelection.vue';
-import { pdfDataService } from '../services/pdfData.service';
-import Statistics from '../components/home/Statistics.vue';
 import Swal from 'sweetalert2';
-import type { IPersonalData } from '../interfaces/personal.interface';
+import { computed, type ComputedRef, ref, type Ref, watch } from 'vue';
+
+import type { ICourseDataResponse, ICourseGroup } from '../interfaces/course.interface';
 import type { IModuleOutside } from '../interfaces/moduleOutside.interface';
+import type { IPersonalData } from '../interfaces/personal.interface';
 import type { ISemester } from '../interfaces/semester.interface';
-import Warning from '../components/home/Warning.vue';
-import { getOverlappingCourses } from '../services/course.service';
 import type { IStatistics } from '../interfaces/statistics.interface';
+import type { IThesisDataResponse, IThesisSelection } from '../interfaces/theses.interface';
+
+import AdditionalComments from '../components/home/AdditionalComments.vue';
+import CourseSelection from '../components/home/CourseSelection.vue';
+import DoubleDegree from '../components/home/DoubleDegree.vue';
+import MasterThesis from '../components/home/MasterThesis.vue';
+import ModulesOutside from '../components/home/ModulesOutside.vue';
+import OptionalEnglish from '../components/home/OptionalEnglish.vue';
+import Personal from '../components/home/Personal.vue';
+import Statistics from '../components/home/Statistics.vue';
+import Warning from '../components/home/Warning.vue';
 import { getEcts, getModuleGroupCount } from '../helpers/counts';
+import { getOverlappingCourses } from '../services/course.service';
+import { pdfDataService } from '../services/pdfData.service';
+
 // Personal Data
 const personalData: Ref<IPersonalData> = ref({
-  surname: '',
   givenName: '',
   semester: undefined,
+  specialization: null,
   studyMode: null,
-  specialization: null
+  surname: ''
 });
 
 // Course Data
@@ -83,8 +71,8 @@ async function getCourseData() {
   }
   courseData.value = null;
   const response = await axios.post<ICourseDataResponse>(`/coursedata/${personalData.value.specialization.id}`, {
-    study_mode: personalData.value.studyMode.id,
-    semester: personalData.value.semester.id
+    semester: personalData.value.semester.id,
+    study_mode: personalData.value.studyMode.id
   });
   courseData.value = response.data;
   getThesisData();
@@ -104,9 +92,9 @@ watch(doubleDegree, () => getThesisData());
 // Master Thesis
 const masterThesisData: Ref<IThesisDataResponse | null> = ref(null);
 const masterThesis: Ref<IThesisSelection> = ref({
-  start: { start: null, end: '' },
-  theses: [],
-  furtherDetails: ''
+  furtherDetails: '',
+  start: { end: '', start: null },
+  theses: []
 });
 
 async function getThesisData() {
@@ -131,20 +119,19 @@ const statistics: ComputedRef<IStatistics | null> = computed(() => {
     return null;
   }
   const allCourses = groupsWithSelectedCourses.value
-    .map((group) => {
+    .flatMap((group) => {
       return group.courses;
-    })
-    .flat(1);
+    });
   if (!semesterWithCourses.value || !modulesOutside.value) {
     return null;
   }
   return {
-    specialization: allCourses.filter((course) => course.type === 1).length,
-    core: allCourses.filter((course) => course.type === 4).length,
-    cluster: allCourses.filter((course) => course.type === 3).length,
-    outside: modulesOutside.value.length,
+    cluster: allCourses.filter(course => course.type === 3).length,
+    core: allCourses.filter(course => course.type === 4).length,
     ects: getEcts(semesterWithCourses.value, modulesOutside.value),
-    moduleGroupCount: getModuleGroupCount(groupsWithSelectedCourses.value)
+    moduleGroupCount: getModuleGroupCount(groupsWithSelectedCourses.value),
+    outside: modulesOutside.value.length,
+    specialization: allCourses.filter(course => course.type === 1).length
   };
 });
 
@@ -167,10 +154,9 @@ const groupsWithSelectedCourses: ComputedRef<ICourseGroup[]> = computed(() => {
     // eslint-disable-next-line no-prototype-builtins
     if (group.hasOwnProperty('specializations')) {
       group.courses = group.specializations
-        .map((spec) => {
+        .flatMap((spec) => {
           return spec.courses;
         })
-        .flat(1)
         .filter((course) => {
           if (course.selected_semester) {
             return course;
@@ -180,10 +166,9 @@ const groupsWithSelectedCourses: ComputedRef<ICourseGroup[]> = computed(() => {
     // eslint-disable-next-line no-prototype-builtins
     if (group.hasOwnProperty('clusters')) {
       group.courses = group.clusters
-        .map((clusters) => {
+        .flatMap((clusters) => {
           return clusters.courses;
         })
-        .flat(1)
         .filter((course) => {
           if (course.selected_semester) {
             return course;
@@ -195,16 +180,15 @@ const groupsWithSelectedCourses: ComputedRef<ICourseGroup[]> = computed(() => {
   return groupsWithSelected.concat(furtherGroupsWithSelected);
 });
 
-// @ts-expect-error: ???
 const semesterWithCourses: ComputedRef<ISemester[]> = computed(() => {
   if (!groupsWithSelectedCourses.value || !courseData.value) {
     return null;
   }
   const courses = [];
-  for (let group of groupsWithSelectedCourses.value) {
+  for (const group of groupsWithSelectedCourses.value) {
     courses.push(group.courses);
   }
-  for (let optional of courseData.value.optional_courses.courses) {
+  for (const optional of courseData.value.optional_courses.courses) {
     if (optional.selected_semester) {
       courses.push(optional);
     }
@@ -212,19 +196,19 @@ const semesterWithCourses: ComputedRef<ISemester[]> = computed(() => {
 
   const selectedCourses = courses.flat(1);
   const coursesInSemester: ISemester[] = courseData.value.semesters.map((semester) => {
-    const courses = selectedCourses.filter((course) => course.selected_semester.id === semester.id);
+    const courses = selectedCourses.filter(course => course.selected_semester.id === semester.id);
     return {
       ...semester,
       courses: courses
     };
   });
   coursesInSemester.push({
-    id: 0,
-    name: 'later',
     courses: selectedCourses.filter((course) => {
       return course.selected_semester === 'later';
     }),
-    is_replanning: false
+    id: 0,
+    is_replanning: false,
+    name: 'later'
   });
 
   return coursesInSemester;
@@ -236,13 +220,13 @@ const overlappingCourses = computed(() => {
     return [];
   }
   const overlapping = getOverlappingCourses(semesterWithCourses.value, courseData.value.slots);
-  if (overlapping.every((semester) => semester.courses.length === 0)) {
+  if (overlapping.every(semester => semester.courses.length === 0)) {
     return [];
   }
-  return overlapping.filter((obj) => {
+  return overlapping.filter((object) => {
     // eslint-disable-next-line no-prototype-builtins
-    if (obj.semester.hasOwnProperty('id')) {
-      return obj;
+    if (object.semester.hasOwnProperty('id')) {
+      return object;
     }
   });
 });
@@ -252,7 +236,7 @@ const blockCoursesAtEndOfSemester: ComputedRef<ISemester | null> = computed(() =
     return null;
   }
   const semester: ISemester = JSON.parse(
-    JSON.stringify(semesterWithCourses.value[semesterWithCourses.value.length - 2])
+    JSON.stringify(semesterWithCourses.value.at(-2))
   );
 
   semester.courses = semester.courses.filter((course) => {
@@ -267,7 +251,7 @@ const selectedLaterCount = computed(() => {
   if (!semesterWithCourses.value) {
     return 0;
   }
-  const laterSemester = semesterWithCourses.value.find((semester) => semester.name === 'later');
+  const laterSemester = semesterWithCourses.value.find(semester => semester.name === 'later');
   if (!laterSemester) {
     return 0;
   }
@@ -284,24 +268,24 @@ async function createPdf() {
     return;
   }
   pdfData.value = pdfDataService({
+    additionalComments: additionalComments.value,
+    doubleDegree: doubleDegree.value,
+    groupsWithSelectedCourses: groupsWithSelectedCourses.value,
+    masterThesis: masterThesis.value,
+    modulesOutside: modulesOutside.value,
+    overlappingCourses: overlappingCourses.value,
     personalData: personalData.value,
     semestersWithCourses: semesterWithCourses.value,
-    modulesOutside: modulesOutside.value,
-    doubleDegree: doubleDegree.value,
-    masterThesis: masterThesis.value,
-    additionalComments: additionalComments.value,
-    groupsWithSelectedCourses: groupsWithSelectedCourses.value,
-    statistics: statistics.value,
-    overlappingCourses: overlappingCourses.value
+    statistics: statistics.value
   });
   // eslint-disable-next-line no-prototype-builtins
   if (pdfData.value.hasOwnProperty('errors')) {
     errors.value = pdfData.value;
     Swal.fire({
-      title: 'Error!',
+      confirmButtonText: 'OK',
       html: getErrorHtml(pdfData.value.errors),
       icon: 'error',
-      confirmButtonText: 'OK'
+      title: 'Error!'
     });
     return;
   }
@@ -310,14 +294,14 @@ async function createPdf() {
 }
 function resetData() {
   modulesOutside.value = [];
-  masterThesis.value = { start: { start: null, end: '' }, theses: [], furtherDetails: '' };
+  masterThesis.value = { furtherDetails: '', start: { end: '', start: null }, theses: [] };
   additionalComments.value = '';
   doubleDegree.value = false;
 }
 
 function getErrorHtml(errors: unknown[]) {
   let string = '';
-  for (let error of errors) {
+  for (const error of errors) {
     string += `<div class="text-red-500">${error}</div>`;
   }
   return string;

@@ -2,22 +2,22 @@
   <h1>Configuration</h1>
   <form
     action="/api/admin/configuration"
+    class="mt-10 flex flex-col gap-10"
     enctype="multipart/form-data"
-    method="POST"
-    class="mt-10 flex flex-col gap-10">
+    method="POST">
     <Input
       label="Password"
       name="password"
-      type="password"
-      required />
+      required
+      type="password" />
     <Input
       label="File"
       name="config_file"
-      type="file"
-      required />
+      required
+      type="file" />
     <button
-      type="submit"
-      class="flex min-h-[50px] w-1/2 items-center justify-center bg-black text-center font-medium leading-4 text-white hover:bg-primary hover:text-black">
+      class="flex min-h-[50px] w-1/2 items-center justify-center bg-black text-center font-medium leading-4 text-white hover:bg-primary hover:text-black"
+      type="submit">
       <span class="">Submit</span>
     </button>
   </form>
