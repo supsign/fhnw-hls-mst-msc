@@ -250,7 +250,7 @@ async function createPdf() {
     additionalComments: additionalComments.value,
     doubleDegree: doubleDegree.value,
     groupsWithSelectedCourses: groupsWithSelectedCourses.value,
-    masterThesis: { ...masterThesis.value, start: masterThesisData.value?.time_frames.find(tf => tf.start?.id === masterThesis.value.start?.id) },
+    masterThesis: { ...masterThesis.value, start: masterThesisData.value?.time_frames.find(tf => tf.start?.id === masterThesis.value.start?.start?.id) },
     modulesOutside: modulesOutside.value,
     overlappingCourses: overlappingCourses.value,
     personalData: personalData.value as Required<IPersonalData>,
