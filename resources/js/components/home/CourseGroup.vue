@@ -93,8 +93,8 @@
                 v-for="(course, index) in sortCourses(group.courses)"
                 :key="index"
                 :course="course"
-                :type="group.course_group_type_short_name"
-                :semesters="semesters" />
+                :semesters="semesters"
+                :type="group.course_group_type_short_name" />
             </div>
           </template>
         </div>
@@ -110,25 +110,22 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
-import type { ICourseGroup, ICourse } from '../../interfaces/course.interface';
-import type { ISemester } from '../../interfaces/semester.interface';
+import type { ICourse, ICourseGroup, ISemester } from '@/interfaces';
+
 import Course from './Course.vue';
 
 type Props = {
   group: ICourseGroup;
   semesters: ISemester[];
-}
+};
 const props = defineProps<Props>();
 
-function sortCourses(courses: ICourse[]) {
-  return courses.sort((a, b) => a.semester_type - b.semester_type);
-}
+const sortCourses = (courses: ICourse[]) => courses.sort((a, b) => a.semester_type - b.semester_type);
 
 const count = computed(() => {
   if (props.group.courses) {
     let count = 0;
-    for (let course of props.group.courses) {
+    for (const course of props.group.courses) {
       if (course.selected_semester) {
         count += 1;
       }

@@ -12,6 +12,11 @@
     "allowJs": true,
     "experimentalDecorators": true,
     "resolveJsonModule": true,
+    "lib": [
+      "ESNext",
+      "DOM",
+      "DOM.Iterable"
+    ],
     "baseUrl": ".",
     "paths": {
       "@/*": [
