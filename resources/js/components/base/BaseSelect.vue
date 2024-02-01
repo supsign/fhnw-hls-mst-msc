@@ -18,7 +18,7 @@
       :required="required"
       :searchable="searchable"
       :track-by="searchKey"
-      value-prop="id"
+      :value-prop="valueProp"
       @change="$emit('change', $event)"
       @deselect="$emit('deselect', $event)"
       @select="$emit('select', $event)" />
@@ -41,6 +41,8 @@ type Props = {
   rules?: string;
   searchable?: boolean;
   searchKey?: string;
+  tooltip?: string;
+  valueProp?: string;
 };
 type Emits = {
   change: [value: T];
@@ -53,13 +55,14 @@ withDefaults(defineProps<Props>(), {
   label: '',
   mode: 'single',
   modelValue: undefined,
-  optionLabel: 'name',
+  optionLabel: 'label',
   rules: '',
-  searchKey: 'name'
+  searchKey: 'name',
+  valueProp: 'id'
 });
 defineEmits<Emits>();
 
-const modelValue = defineModel<T>();
+const modelValue = defineModel<number | T>();
 </script>
 
 <style src="@vueform/multiselect/themes/default.css"></style>
@@ -73,7 +76,9 @@ const modelValue = defineModel<T>();
     --ms-border-color-active: #d1d5db;
     --ms-dropdown-border-color: #d1d5db;
     --ms-option-color-pointed: #1f2937;
-    --ms-option-bg-selected: #1e5eaa;
-    --ms-option-bg-selected-pointed: #1e5eaa;
+    --ms-option-bg-selected:#fde70e;
+    --ms-option-color-selected: #000000;
+    --ms-option-color-selected-pointed: #000000;
+    --ms-option-bg-selected-pointed: #fde70e;
 }
 </style>

@@ -5,7 +5,7 @@
     </h3>
     <div class="flex flex-col">
       <div
-        v-if="semestersWithOverlappingCourses.length"
+        v-if="semestersWithOverlappingCourses.length > 0"
         class="flex flex-wrap gap-10">
         <div class="mb-3 font-bold">
           Overlapping Courses
@@ -13,7 +13,7 @@
         <div
           v-for="(semester, index) in semestersWithOverlappingCourses"
           :key="index">
-          <div v-if="semester.courses.length">
+          <div v-if="semester.courses.length > 0">
             <div class="font-bold">
               {{ semester.semester.short_name ? semester.semester.short_name : semester.semester.name }}
             </div>
@@ -37,9 +37,7 @@
         </div>
       </div>
       <template v-if="blockCoursesAtEndOfSemester">
-        <div
-          v-if="blockCoursesAtEndOfSemester.courses.length"
-          class="font-bold">
+        <div class="font-bold">
           <template v-for="(course, index) in blockCoursesAtEndOfSemester.courses">
             Module {{ course.name
             }}<template
@@ -62,13 +60,12 @@
 </template>
 
 <script setup lang="ts">
-import type { ISemesterWithOverlappingCourses } from '../../interfaces/course.interface';
-import type { ISemester } from '../../interfaces/semester.interface';
+import type { ICourse, ISemester, ISemesterWithOverlappingCourses } from '@/interfaces';
 
 type Props = {
-  semestersWithOverlappingCourses: ISemesterWithOverlappingCourses[];
+  blockCoursesAtEndOfSemester?: ISemester & { courses: ICourse[] };
   selectedLaterCount: number;
-  blockCoursesAtEndOfSemester: ISemester | null;
-}
+  semestersWithOverlappingCourses: ISemesterWithOverlappingCourses[];
+};
 defineProps<Props>();
 </script>

@@ -37,6 +37,9 @@ export default defineConfig(({ mode }) => {
         refresh: true
       }),
       vue({
+        script: {
+          defineModel: true
+        },
         template: {
           transformAssetUrls: {
             base: null,

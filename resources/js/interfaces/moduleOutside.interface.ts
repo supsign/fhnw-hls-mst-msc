@@ -1,5 +1,5 @@
 export interface IModuleOutside {
-    title: string;
-    ects: number;
-    university: string;
+  ects: number;
+  title: string;
+  university: string;
 }

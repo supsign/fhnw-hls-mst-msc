@@ -46,24 +46,19 @@
 </template>
 
 <script setup lang="ts">
+import type { IModuleOutside, IText } from '@/interfaces';
+
 import { whenever } from '@vueuse/core';
-import { ref, type Ref } from 'vue';
-
-import type { IModuleOutside } from '../../interfaces/moduleOutside.interface';
-import type { IText } from '../../interfaces/text.interface';
-
-import Input from '../base/Input.vue';
-import NumberInput from '../base/NumberInput.vue';
 
 type Props = {
   texts: IText[];
 };
 type Emits = {
-  (e: 'updateModulesOutsideData', value: IModuleOutside[]): void;
+  'updateModulesOutsideData': [ value: IModuleOutside[]];
 };
 const props = defineProps<Props>();
 const emit = defineEmits<Emits>();
-const description: IText | null = props.texts.find(text => text.name === 'modules_outside_description') || null;
+const description: IText | undefined = props.texts.find(text => text.name === 'modules_outside_description') || undefined;
 const modulesOutsideArray: Ref<IModuleOutside[]> = ref([]);
 
 function addNewModule() {

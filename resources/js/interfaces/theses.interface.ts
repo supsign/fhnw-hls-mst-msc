@@ -22,8 +22,8 @@ export interface ThesisRequestData {
 
 export interface IThesisSelection {
   furtherDetails: string;
-  start: IThesisTimeFrame;
-  theses1: IThesis;
-  theses2: IThesis;
-  theses3?: IThesis;
+  start?: IThesisTimeFrame;
+  theses1_id?: number;
+  theses2_id?: number;
+  theses3_id?: number;
 }

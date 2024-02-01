@@ -23,13 +23,12 @@
 </template>
 
 <script setup lang="ts">
-import type { IStatistics } from '../../interfaces/statistics.interface';
-import type { IText } from '../../interfaces/text.interface';
+import type { IStatistics, IText } from '@/interfaces';
 
 type Props = {
-  texts: IText[];
   statistics: IStatistics;
-}
+  texts: IText[];
+};
 const props = defineProps<Props>();
-const description: IText | null = props.texts.find((text) => text.name === 'description_before_further') || null;
+const description: IText | undefined = props.texts.find(text => text.name === 'description_before_further');
 </script>

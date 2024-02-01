@@ -4,21 +4,21 @@ import type { ISpecialization } from './specialization.interface';
 import type { IStudyMode } from './studyMode.interface';
 
 export interface IPersonalDataResponse {
-    semesters: ISemester[];
-    specializations: ISpecialization[];
-    studyMode: IStudyMode;
-    texts: IText[];
+  semesters: ISemester[];
+  specializations: ISpecialization[];
+  studyMode: IStudyMode;
+  texts: IText[];
 }
 
 export interface IPersonalData {
-    surname: string;
-    givenName: string;
-    semester: ISemester | undefined;
-    specialization: ISpecialization | null;
-    studyMode: { id: number; label: string } | null;
+  givenName: string;
+  semester_id?: number;
+  specialization_id?: number;
+  studyMode_id?: number;
+  surname: string;
 }
 
 interface IText extends IModel {
-    name: string;
-    content: string;
+  content: string;
+  name: string;
 }

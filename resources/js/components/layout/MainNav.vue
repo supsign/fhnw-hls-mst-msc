@@ -4,18 +4,18 @@
     style="transform: translateY(0px); transition: all 0.5s ease 0s;">
     <div class="container relative mx-auto flex flex-wrap items-center justify-between px-4">
       <RouterLink
-        :to="{ name: 'Home' }"
-        class="m-4">
+        class="m-4"
+        :to="{ name: 'Home' }">
         <img
+          alt="Logo FHNW"
           class="mr-6 max-h-[50px] max-w-[350px] py-1"
-          src="../../assets/logos/fhnw_hls_e_10mm.png"
-          alt="Logo FHNW">
+          src="../../assets/logos/fhnw_hls_e_10mm.png">
       </RouterLink>
     </div>
     <div class="w-full bg-primary py-1">
       <RouterLink
-        :to="{ name: 'Home' }"
-        class="hover:no-underline">
+        class="hover:no-underline"
+        :to="{ name: 'Home' }">
         <p class="container mx-auto my-4 px-4 text-lg tracking-wide">
           MSc in Life Sciences FHNW – Plan your studies
         </p>

@@ -46,12 +46,10 @@
 </template>
 
 <script setup lang="ts">
+import type { ICourse, ISemester } from '@/interfaces';
+
 import dayjs from 'dayjs';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
-import { computed } from 'vue';
-
-import type { ICourse } from '../../interfaces/course.interface';
-import type { ISemester } from '../../interfaces/semester.interface';
 
 type Props = {
   course: ICourse;
@@ -76,21 +74,18 @@ const endDayjs = computed(() => {
 function showCourseSelect(semester: ISemester) {
   if (semester.type !== props.course.semester_type) return false;
   if (startDayjs.value && dayjs(semester.start_date).isBefore(startDayjs.value)) return false;
-  if (endDayjs.value && dayjs(semester.start_date).isAfter(endDayjs.value)) return false;
-  return true;
+  return !(endDayjs.value && dayjs(semester.start_date).isAfter(endDayjs.value));
 }
 
 function laterIsVisible(semesters: ISemester[], endSemester: ISemester) {
   if (!endSemester) {
     return true;
   }
-  const lastSemester = semesters.at(-1);
-  if (dayjs(endSemester.start_date).isAfter(dayjs(lastSemester.start_date))) {
-    return true;
-  }
-  return false;
+  // eslint-disable-next-line unicorn/prefer-at
+  const lastSemester = semesters[semesters.length - 1];
+  return dayjs(endSemester.start_date).isAfter(dayjs(lastSemester.start_date));
 }
 
 // eslint-disable-next-line vue/no-mutating-props
-props.course.selected_semester = null;
+props.course.selected_semester = undefined;
 </script>
