@@ -17,7 +17,7 @@
           v-model="course.selected_semester"
           class="my-auto size-5 cursor-pointer"
           type="radio"
-          :value="null">
+          :value="undefined">
       </div>
       <div
         v-for="(semester, index) in semesters"
