@@ -84,27 +84,6 @@ const masterThesis: Ref<IThesisSelection> = ref({
   furtherDetails: ''
 });
 
-async function getThesisData(value: Required<IPersonalData>) {
-  try {
-    const { data } = await useAxios<IThesisDataResponse>(`/thesisdata/${value.specialization_id}`, {
-      data: {
-        double_degree: doubleDegree.value,
-        semester: value.semester_id,
-        study_mode: value.studyMode_id
-      },
-      method: 'POST'
-
-    });
-    if (data.value) {
-      masterThesisData.value = data.value;
-      masterThesis.value.start = data.value.time_frames[0];
-    }
-  }
-  catch (error) {
-    console.log(error);
-  }
-}
-
 // AdditionalComments
 const additionalComments = ref<string>('');
 
@@ -241,6 +220,28 @@ const blockCoursesAtEndOfSemester = computed<(ISemester & { courses: ICourse[] }
 });
 
 const errors = ref<{ amount: number; errors: string[] }>();
+
+async function getThesisData(value: Required<IPersonalData>) {
+  try {
+    const { data } = await useAxios<IThesisDataResponse>(`/thesisdata/${value.specialization_id}`, {
+      data: {
+        double_degree: doubleDegree.value,
+        earlier_start_allowed: earlierThesisStartAllowed.value,
+        semester: value.semester_id,
+        study_mode: value.studyMode_id
+      },
+      method: 'POST'
+
+    });
+    if (data.value) {
+      masterThesisData.value = data.value;
+      masterThesis.value.start = data.value.time_frames[0];
+    }
+  }
+  catch (error) {
+    console.log(error);
+  }
+}
 
 async function createPdf() {
   if (!personalData.value) return;
