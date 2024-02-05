@@ -9,6 +9,7 @@
       v-model="modelValue"
       v-bind="$attrs"
       :can-clear="clearable"
+      :can-deselect="false"
       class="multiselect-custom"
       :disabled="disabled"
       :hide-selected="hideSelected"
