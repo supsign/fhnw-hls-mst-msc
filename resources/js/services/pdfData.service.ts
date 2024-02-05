@@ -85,7 +85,7 @@ function parseSelectedCoursesForPdf(semestersWithCourses: (ISemester & { courses
       courses: semester.courses.map((course) => {
         return course.id;
       }),
-      semesterId: semester.id ?? semester.name
+      semesterId: semester.id || semester.name
     };
   });
 }

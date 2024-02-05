@@ -31,7 +31,7 @@
 import type { ICourse, ICourseDataResponse, ICourseGroup, IModuleOutside, IPersonalData, ISemester, IStatistics, IThesisDataResponse, IThesisSelection } from '@/interfaces';
 
 import { getEcts, getModuleGroupCount } from '@/helpers/counts';
-import { getOverlappingCourses, type parsedPdfDataInput, pdfDataService } from '@/services';
+import { getOverlappingCourses, pdfDataService } from '@/services';
 import { useAxios } from '@vueuse/integrations/useAxios';
 import Swal from 'sweetalert2';
 
@@ -167,6 +167,29 @@ const semesterWithCourses = computed<(ISemester & { courses: ICourse[] })[]>(() 
   return coursesInSemester;
 });
 
+const selectedLastSemesterCount = computed(() => {
+  const lastSemester = courseData.value?.semesters[courseData.value?.semesters.length - 1];
+  if (!lastSemester) return 0;
+  const lastSemesterEntry = semesterWithCourses.value?.find(semester => semester.id === lastSemester.id);
+  return lastSemesterEntry?.courses.length || 0;
+});
+
+const selectedLaterCount = computed(() => {
+  const laterSemester = semesterWithCourses.value?.find(semester => semester.name === 'later');
+  return laterSemester?.courses.length || 0;
+});
+
+const earlierThesisStartAllowed = computed(() => {
+  if (selectedLastSemesterCount.value > 0) return false;
+  // eslint-disable-next-line sonarjs/prefer-single-boolean-return
+  if (selectedLaterCount.value > 0) return false;
+  return true;
+});
+
+watch(earlierThesisStartAllowed, async () => {
+  await getThesisData(personalData.value as Required<IPersonalData>);
+});
+
 const statistics = computed<IStatistics | undefined>(() => {
   if (!groupsWithSelectedCourses.value) return;
   const allCourses = groupsWithSelectedCourses.value
@@ -201,25 +224,20 @@ const overlappingCourses = computed(() => {
   });
 });
 
-const blockCoursesAtEndOfSemester = computed(() => {
+const blockCoursesAtEndOfSemester = computed<(ISemester & { courses: ICourse[] } | undefined)>(() => {
   if (!semesterWithCourses.value) return;
-  const laterSemesterIndex = semesterWithCourses.value.findIndex(semester => semester.name === 'later');
-  if (laterSemesterIndex === -1) {
+  // eslint-disable-next-line ts/no-unsafe-assignment
+  const semester: ISemester & { courses: ICourse[] } = JSON.parse(
     // eslint-disable-next-line unicorn/prefer-at
-    const semester = semesterWithCourses.value[semesterWithCourses.value.length - 1];
-    semester.courses = semester.courses.filter(course => course.block);
-    if (semester.courses.length > 0) return semester;
-  }
-  else {
-    const semester = semesterWithCourses.value[laterSemesterIndex - 1];
-    semester.courses = semester.courses.filter(course => course.block);
-    if (semester.courses.length > 0) return semester;
-  }
-});
+    JSON.stringify(semesterWithCourses.value[semesterWithCourses.value.length - 2])
+  );
 
-const selectedLaterCount = computed(() => {
-  const laterSemester = semesterWithCourses.value?.find(semester => semester.name === 'later');
-  return laterSemester?.courses.length || 0;
+  semester.courses = semester.courses.filter((course) => {
+    if (course.block) {
+      return course;
+    }
+  });
+  return semester;
 });
 
 const errors = ref<{ amount: number; errors: string[] }>();
@@ -232,7 +250,7 @@ async function createPdf() {
     additionalComments: additionalComments.value,
     doubleDegree: doubleDegree.value,
     groupsWithSelectedCourses: groupsWithSelectedCourses.value,
-    masterThesis: masterThesis.value,
+    masterThesis: { ...masterThesis.value, start: masterThesisData.value?.time_frames.find(tf => tf.start?.id === masterThesis.value.start?.start?.id) },
     modulesOutside: modulesOutside.value,
     overlappingCourses: overlappingCourses.value,
     personalData: personalData.value as Required<IPersonalData>,
