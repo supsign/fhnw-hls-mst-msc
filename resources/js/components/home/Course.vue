@@ -24,7 +24,7 @@
         :key="index"
         class="flex w-20 justify-center px-5 py-4 text-center">
         <div v-if="semester.is_replanning">
-          replaning
+          replanning
         </div>
         <input
           v-else-if="showCourseSelect(semester)"
