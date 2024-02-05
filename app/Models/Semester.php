@@ -86,6 +86,16 @@ class Semester extends BaseModel
 		);
 	}
 
+	protected function previousSemester(): Attribute
+	{
+		return Attribute::make(
+			get: fn (): ?Semester => Semester::where('start_date', '<', $this->start_date)
+				->where('type', '<>', $this->type->value)
+				->orderByDesc('start_date')
+				->first(),
+		);
+	}
+
 	protected function selectedCourses(): Attribute
 	{
 		return Attribute::make(
