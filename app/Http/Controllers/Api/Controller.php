@@ -59,7 +59,7 @@ class Controller extends BaseController
             $request->double_degree,
             $request->semester ? Semester::find($request->semester) : null,
             $request->study_mode ? StudyMode::getByValue($request->study_mode) : null,
-            $request->early_start,
+            $request->early_start ?? false,
         );
     }
 }
