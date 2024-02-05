@@ -226,7 +226,7 @@ async function getThesisData(value: Required<IPersonalData>) {
     const { data } = await useAxios<IThesisDataResponse>(`/thesisdata/${value.specialization_id}`, {
       data: {
         double_degree: doubleDegree.value,
-        earlier_start_allowed: earlierThesisStartAllowed.value,
+        early_start: earlierThesisStartAllowed.value,
         semester: value.semester_id,
         study_mode: value.studyMode_id
       },
