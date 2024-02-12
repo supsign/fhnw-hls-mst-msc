@@ -1,20 +1,30 @@
 {
+  "extends": "@vue/tsconfig/tsconfig.dom.json",
+  "include": [
+    "./resources/**/*.ts",
+    "./resources/**/*.d.ts",
+    "./resources/**/*.vue",
+    "eslint.config.*",
+    "tailwind.config.*",
+    "vite.config.*",
+  ],
   "compilerOptions": {
     "allowJs": true,
-    "outDir": "dist",
+    "experimentalDecorators": true,
+    "resolveJsonModule": true,
+    "lib": [
+      "ESNext",
+      "DOM",
+      "DOM.Iterable"
+    ],
+    "baseUrl": ".",
     "paths": {
       "@/*": [
         "./resources/js/*"
-      ]
+      ],
     },
-    "sourceMap": true,
-    "useUnknownInCatchVariables": false
-  },
-  "extends": "@vue/tsconfig/tsconfig.json",
-  "include": [
-    "resources/**/*"
-  ],
-  "types": [
-    "vite/client"
-  ]
+    "types": [
+      "vite/client"
+    ]
+  }
 }

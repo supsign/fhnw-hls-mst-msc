@@ -17,33 +17,24 @@ class Semester extends BaseModel
         'long_name_with_short',
 	    'tooltip',
 	    'year',
-	    'is_current'
+	    'is_replanning'
 	];
-
 	protected $casts = [
 	    'start_date' => 'date',
 	    'type' => SemesterType::class,
 	];
 
-	public function isCurrent(): Attribute
+	public function isReplanning(): Attribute
 	{
 		return Attribute::make(
-			get: function (): mixed {
-				$now = Carbon::now();
-
-				if (abs($this->year - $now->year) > 1) {
-					return false;
-				}
-
-				return $this->start_date < $now && $this->nextSemester->start_date > $now;
-			}
+			get: fn (): bool => $this->start_date < Carbon::now(),
 		);
 	}
 
 	protected function longName(): Attribute
 	{
 		return Attribute::make(
-			get: function () {
+			get: function (): string {
 				if (!empty($this->attributes['long_name'])) {
 					return $this->attributes['long_name'];
 				}
@@ -61,7 +52,7 @@ class Semester extends BaseModel
     protected function longNameWithShort(): Attribute
     {
         return Attribute::make(
-            get: fn () => !empty($this->attributes['long_name']) 
+            get: fn (): string => !empty($this->attributes['long_name']) 
             	? $this->attributes['long_name'] 
             	: $this->semesterTypeLongName.' ('.$this->semesterTypeShortName.') '.$this->year,
         );
@@ -70,7 +61,7 @@ class Semester extends BaseModel
 	protected function name(): Attribute
 	{
 		return Attribute::make(
-			get: fn () => !empty($this->attributes['name']) 
+			get: fn (): string => !empty($this->attributes['name']) 
 				? $this->attributes['name'] 
 				: $this->year.' '.$this->semesterTypeShortName,
 			set: fn (string $name) => $this->attributes['name'] = $name,
@@ -80,7 +71,7 @@ class Semester extends BaseModel
 	protected function nextSemester(): Attribute
 	{
 		return Attribute::make(
-			get: fn () => Semester::where('start_date', '>', $this->start_date)
+			get: fn (): ?Semester => Semester::where('start_date', '>', $this->start_date)
 				->where('type', '<>', $this->type->value)
 				->orderBy('start_date')
 				->first(),
@@ -90,15 +81,25 @@ class Semester extends BaseModel
 	protected function overlappingCourses(): Attribute
 	{
 		return Attribute::make(
-			get: fn () => $courses ?? collect(),
+			get: fn (): Collection => $courses ?? collect(),
 			set: fn (?Collection $courses) => $courses,
+		);
+	}
+
+	protected function previousSemester(): Attribute
+	{
+		return Attribute::make(
+			get: fn (): ?Semester => Semester::where('start_date', '<', $this->start_date)
+				->where('type', '<>', $this->type->value)
+				->orderByDesc('start_date')
+				->first(),
 		);
 	}
 
 	protected function selectedCourses(): Attribute
 	{
 		return Attribute::make(
-			get: fn () => $courses ?? collect(),
+			get: fn (): Collection => $courses ?? collect(),
 			set: fn (?Collection $courses) => $courses,
 		);
 	}
@@ -106,28 +107,28 @@ class Semester extends BaseModel
 	protected function semesterTypeShortName(): Attribute
 	{
 		return Attribute::make(
-			get: fn () => $this->type->shortName()
+			get: fn (): string => $this->type->shortName()
 		);
 	}
 
 	protected function semesterTypeLongName(): Attribute
 	{
 		return Attribute::make(
-			get: fn () => $this->type?->longName() ?? 'later',
+			get: fn (): string => $this->type?->longName() ?? 'later',
 		);
 	}
 
 	protected function shortName(): Attribute
 	{
 		return Attribute::make(
-			get: fn () => $this->semesterTypeShortName.substr($this->year, 2, 2),
+			get: fn (): string => $this->semesterTypeShortName.substr($this->year, 2, 2),
 		);
 	}
 
 	protected function thesisEnd(): Attribute
 	{
 		return Attribute::make(
-			get: function () {
+			get: function (): string {
 				if ($this->type === SemesterType::AutumnStart) {
 					return 'spring '.($this->year + 2);
 				}
@@ -140,7 +141,7 @@ class Semester extends BaseModel
 	protected function thesisStart(): Attribute
 	{
 		return Attribute::make(
-			get: function () {
+			get: function (): string {
 				if ($this->type === SemesterType::AutumnStart) {
 					return ThesisStarts::Middle->label().' '.($this->year + 1);
 				}
@@ -153,14 +154,14 @@ class Semester extends BaseModel
 	protected function tooltip(): Attribute
 	{
 		return Attribute::make(
-			get: fn () => $this->type->tooltip()
+			get: fn (): string => $this->type->tooltip()
 		);
 	}
 
 	protected function year(): Attribute
 	{
 		return Attribute::make(
-			get: fn () => $this->start_date->year ?? 10000,
+			get: fn (): int => $this->start_date->year ?? 10000,
 		);
 	}
 }

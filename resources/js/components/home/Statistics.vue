@@ -24,7 +24,7 @@
           <div class="w-28 px-5 py-4">
             {{ semester.short_name ? semester.short_name : semester.name }}
           </div>
-          <div class="w-20  py-4 px-5 text-right">
+          <div class="w-20  px-5 py-4 text-right">
             {{ getEctsFromCourses(semester.courses) }}
           </div>
         </div>
@@ -38,7 +38,7 @@
         </div>
       </div>
     </div>
-    <div v-if="masterThesis.start.start">
+    <div v-if="masterThesis.start?.start">
       Possible Time Frame of Thesis: {{ masterThesis.start.start.long_name }} -
       {{ masterThesis.start.end }}
     </div>
@@ -46,15 +46,14 @@
 </template>
 
 <script setup lang="ts">
-import type { IThesisSelection } from '../../interfaces/theses.interface';
-import type { ISemester } from '../../interfaces/semester.interface';
-import type { IStatistics } from '../../interfaces/statistics.interface';
-import { getEctsFromCourses } from '../../helpers/counts';
+import type { ISemester, IStatistics, IThesisSelection } from '@/interfaces';
+
+import { getEctsFromCourses } from '@/helpers';
 
 type Props = {
-  semesterWithCourses: ISemester[];
   masterThesis: IThesisSelection;
+  semesterWithCourses: ISemester[];
   statistics: IStatistics;
-}
+};
 defineProps<Props>();
 </script>

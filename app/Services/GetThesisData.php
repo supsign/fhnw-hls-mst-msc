@@ -11,6 +11,7 @@ use stdClass;
 class GetThesisData
 {
     protected bool $doubleDegree;
+    protected bool $early_start;
     protected ?Semester $semester;
     protected StudyMode $studyMode;
 
@@ -21,9 +22,11 @@ class GetThesisData
         Specialization $specialization,
         bool $doubleDegree,
         Semester $semester,
-        StudyMode $studyMode
+        StudyMode $studyMode,
+        bool $early_start = false,
     ): stdClass {
         $this->doubleDegree = $doubleDegree;
+        $this->early_start = $early_start;
         $this->semester = $semester;
         $this->studyMode = $studyMode;
 
@@ -42,17 +45,21 @@ class GetThesisData
         $startSemester = $this->semester;
 
         if ($this->studyMode === StudyMode::PartTime) {
-            $startSemester = $startSemester->nextSemester->nextSemester;
+            $startSemester = $startSemester->next_semester->next_semester;
         }
 
         if ($this->doubleDegree) {
-            $startSemester = $startSemester->nextSemester;
+            $startSemester = $startSemester->next_semester;
+        }
+
+        if ($this->early_start) {
+            $startSemester = $startSemester->previous_semester;
         }
 
         $availibleStartSemesters = ($this->getUpcomingSemesters)(3, $startSemester->start_date);
 
         foreach ($availibleStartSemesters AS $semester) {
-            $semester->long_name = $semester->thesisStart;
+            $semester->long_name = $semester->thesis_start;
 
             $timeFrames[] = (object)[
                 'start' => $semester,

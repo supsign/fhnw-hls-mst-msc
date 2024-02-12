@@ -16,17 +16,17 @@
 </template>
 
 <script setup lang="ts">
-import type { IText } from '../../interfaces/text.interface';
+import type { IText } from '@/interfaces';
 
 type Props = {
   texts: IText[];
-}
+};
 const props = defineProps<Props>();
 
-const title: IText | null = props.texts.find((text) => text.name === 'intro_title') || null;
-const description: IText | null = props.texts.find((text) => text.name === 'intro_content') || null;
-const hintsTitle: IText | null = props.texts.find((text) => text.name === 'hints_title') || null;
-const hintsList: IText | null = props.texts.find((text) => text.name === 'hints_list') || null;
+const title: IText | undefined = props.texts.find(text => text.name === 'intro_title');
+const description: IText | undefined = props.texts.find(text => text.name === 'intro_content');
+const hintsTitle: IText | undefined = props.texts.find(text => text.name === 'hints_title');
+const hintsList: IText | undefined = props.texts.find(text => text.name === 'hints_list');
 </script>
 
 <style>

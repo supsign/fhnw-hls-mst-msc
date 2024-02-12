@@ -9,26 +9,23 @@
     v-html="description.content" />
   <div class="flex">
     <input
-      type="checkbox"
-      :value="modelValue"
-      class="box-border h-7 w-7 rounded-lg border border-gray-200 shadow-md"
-      @input="$emit('update:modelValue', !modelValue)">
+      v-model="modelValue"
+      class="box-border size-7 rounded-lg border border-gray-200 shadow-md"
+      type="checkbox">
     <label class="ml-2">I'm interested in the Double-Degree option</label>
   </div>
 </template>
 
 <script setup lang="ts">
-import type { IText } from '../../interfaces/text.interface';
+import type { IText } from '@/interfaces';
 
 type Props = {
   texts: IText[];
-  modelValue: boolean;
-}
-type Emits = {
-  (e: 'update:modelValue', value: boolean): void;
-}
-const props = defineProps<Props>();
-defineEmits<Emits>();
+};
 
-const description: IText | null = props.texts.find((text) => text.name === 'double_degree_description') || null;
+const props = defineProps<Props>();
+
+const modelValue = defineModel<boolean>();
+
+const description: IText | undefined = props.texts.find(text => text.name === 'double_degree_description');
 </script>

@@ -42,16 +42,14 @@
 </template>
 
 <script setup lang="ts">
-import type { ICourseDataResponse } from '../../interfaces/course.interface';
-import type { IText } from '../../interfaces/text.interface';
+import type { ICourseDataResponse, IText } from '@/interfaces';
+
 import Course from './Course.vue';
 
 type Props = {
   courseData: ICourseDataResponse;
-}
+};
 const props = defineProps<Props>();
 
-
-const description: IText | null =
-  props.courseData.optional_courses?.texts.find((text) => text.name === 'optional_english_description') || null;
+const description: IText | undefined = props.courseData.optional_courses?.texts.find(text => text.name === 'optional_english_description');
 </script>

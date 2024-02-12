@@ -5,63 +5,62 @@ import type { IText } from './text.interface';
 import type { IThesis } from './theses.interface';
 
 export interface ICourseDataResponse {
-    courses: ICourseGroup[][];
-    semesters: ISemester[];
-    texts: IText[];
-    slots: ISlot[];
-    theses: IThesis;
-    optional_courses: { courses: ICourse[]; texts: IText[] };
+  courses: ICourseGroup[][];
+  optional_courses: { courses: ICourse[]; texts: IText[] };
+  semesters: ISemester[];
+  slots: ISlot[];
+  texts: IText[];
+  theses: IThesis;
 }
 
 export interface ICourseGroup extends IModel {
-    count: number;
-    course_group_type_short_name: string;
-    course_group_type_tooltip: string;
-    courses: ICourse[];
-    description?: string;
-    internal_name: string;
-    name: string;
-    required_courses_count: number;
-    title: string;
-    type: number;
-    specializations: ISpecialization[];
-    clusters: ICluster[];
-    tooltip: string;
+  clusters: ICluster[];
+  count: number;
+  course_group_type_short_name: string;
+  course_group_type_tooltip: string;
+  courses: ICourse[];
+  description?: string;
+  internal_name: string;
+  name: string;
+  required_courses_count: number;
+  specializations: ISpecialization[];
+  title: string;
+  tooltip: string;
+  type: number;
 }
 
 export interface ICourse extends IModel {
-    content: string;
-    ects: number;
-    end_semester: ISemester;
-    internal_name: string;
-    name: string;
-    short_name: string;
-    semester_type: number;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    selected_semester: ISemester | string | null | any;
-    slot_id: number;
-    start_semester: ISemester
-    start_semester_id: number;
-    type_label_short: string;
-    type_tooltip: string;
-    type: number;
-    block: boolean;
+  block: boolean;
+  content: string;
+  ects: number;
+  end_semester: ISemester;
+  internal_name: string;
+  name: string;
+  selected_semester?: | ISemester | string;
+  semester_type: number;
+  short_name: string;
+  slot_id: number;
+  start_semester: ISemester;
+  start_semester_id: number;
+  type: number;
+  type_label_short: string;
+  type_tooltip: string;
 }
 
 export interface ISelectedCourses {
-    course: ICourse;
-    semester: ISemester;
+  course: ICourse;
+  semester: ISemester;
 }
 export interface ICluster extends IModel {
-    core_competences: string;
-    courses: ICourse[];
-    name: string;
+  core_competences: string;
+  courses: ICourse[];
+  name: string;
 }
 
 export interface ISlot extends IModel {
-    name: string;
+  name: string;
 }
 export interface ISemesterWithOverlappingCourses {
-    semester: ISemester;
-    courses: ICourse[][];
+  courses: ICourse[][];
+  semester: ISemester;
 }

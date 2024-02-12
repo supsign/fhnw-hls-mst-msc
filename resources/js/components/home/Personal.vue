@@ -1,112 +1,111 @@
 <template>
-  <template v-if="data">
-    <Introduction :texts="data.texts" />
+  <template v-if="personalData">
+    <Introduction :texts="personalData.texts" />
     <h2 class="mt-10">
       Personal Data
     </h2>
     <div class="flex flex-col gap-5">
       <Input
-        v-model="value.surname"
+        v-model="modelValue.surname"
         label="Surname" />
       <Input
-        v-model="value.givenName"
+        v-model="modelValue.givenName"
         label="Given Name" />
-      <Select
-        v-model="value.semester"
+      <BaseSelect
+        v-model="modelValue.semester_id"
         label="Start of Studies"
+        option-label="long_name_with_short"
         :options="semesters"
-        option-labels="long_name_with_short"
-        @change="$emit('getCourseData')" />
-      <Select
-        v-model="value.studyMode"
+        @update:model-value="selectUpdated" />
+      <BaseSelect
+        v-model="modelValue.studyMode_id"
         label="Study Mode"
-        :options="data.studyMode.studyModes"
-        option-labels="label"
-        :tooltip="data.studyMode.tooltip"
-        @change="$emit('getCourseData')" />
-      <Select
-        v-model="value.specialization"
+        :options="personalData.studyMode.studyModes"
+        :tooltip="personalData.studyMode.tooltip"
+        @update:model-value="selectUpdated" />
+      <BaseSelect
+        v-model="modelValue.specialization_id"
         label="Specialization"
-        :options="data.specializations"
+        option-label="name"
+        :options="personalData.specializations"
         placeholder="-- Choose Specialization --"
-        @change="$emit('getCourseData')" />
+        @update:model-value="selectUpdated" />
     </div>
   </template>
 </template>
 
 <script setup lang="ts">
-import { onBeforeMount, ref, type WritableComputedRef, computed } from 'vue';
-import axios from 'axios';
-import type { IPersonalDataResponse, IPersonalData } from '../../interfaces/personal.interface';
-import Input from '../base/Input.vue';
-import Select from '../base/Select.vue';
-import Introduction from './Introduction.vue';
+import type { IPersonalData, IPersonalDataResponse, ISemester } from '@/interfaces';
+
+import { useAxios } from '@vueuse/integrations/useAxios';
 import dayjs from 'dayjs';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
-import type { ISemester } from '@/interfaces/semester.interface';
 
-type Props = {
-  modelValue: IPersonalData;
-}
+import Introduction from './Introduction.vue';
+
 type Emits = {
-  (e: 'getCourseData'): void;
-  (e: 'update:modelValue', value: IPersonalData): void;
-}
-
-const props = defineProps<Props>();
+  'filledOrChanged': [value: Required<IPersonalData>];
+};
 
 const emit = defineEmits<Emits>();
 
+const modelValue = defineModel<IPersonalData>({ default: {
+  givenName: '',
+  surname: ''
+} });
+
 dayjs.extend(isSameOrAfter);
 
-const data = ref<IPersonalDataResponse>();
+const personalData = ref<IPersonalDataResponse>();
 
-const value: WritableComputedRef<IPersonalData> = computed({
-  get() {
-    return props.modelValue;
-  },
-  set(value) {
-    emit('update:modelValue', value);
-  }
+onMounted(async () => {
+  await useAxios<IPersonalDataResponse>('/personaldata', undefined, {
+    immediate: true,
+    onError(error) {
+      console.log(error);
+    },
+    onSuccess(data: IPersonalDataResponse) {
+      prefillValues(data);
+      personalData.value = data;
+    }
+  });
 });
-
-onBeforeMount(async() => {
-  data.value = await getPersonalData();
-  prefillValues(data.value);
-});
-
-async function getPersonalData() {
-  const response = await axios.get<IPersonalDataResponse>('/personaldata');
-  return response.data;
-}
 
 function prefillValues(data: IPersonalDataResponse) {
-  const currentSemester = data.semesters.find((semester) => semester.is_current);
+  modelValue.value.studyMode_id = data.studyMode.studyModes[0].id;
+  const nextSemester = data.semesters.find(semester => !semester.is_replanning);
+  if (nextSemester) modelValue.value.semester_id = nextSemester.id;
+
+  /* const currentSemester = data.semesters.find(semester => semester.is_replanning);
   const springSwitchDate = dayjs(dayjs().get('year') + '-04-30');
   const autumSwitchDate = dayjs(dayjs().get('year') + '-11-30');
   console.log(dayjs());
   console.log(autumSwitchDate);
   console.log(dayjs().isSameOrAfter(autumSwitchDate, 'day'));
   if (currentSemester?.type === 1 && dayjs().isSameOrAfter(autumSwitchDate, 'day')) {
-    const index = data.semesters.findIndex((semester) => semester.is_current);
-    value.value.semester = data.semesters[index + 1];
-  } else if (currentSemester?.type === 2 && dayjs().isSameOrAfter(springSwitchDate, 'day')) {
-    const index = data.semesters.findIndex((semester) => semester.is_current);
-    value.value.semester = data.semesters[index + 1];
-  } else {
-    value.value.semester = data.semesters.find((semester) => semester.is_current);
+    const index = data.semesters.findIndex(semester => semester.is_replanning);
+    value.value.semester_id = data.semesters[index + 1].id;
   }
-  value.value.studyMode = data.studyMode.studyModes[0];
+  else if (currentSemester?.type === 2 && dayjs().isSameOrAfter(springSwitchDate, 'day')) {
+    const index = data.semesters.findIndex(semester => semester.is_replanning);
+    value.value.semester_id = data.semesters[index + 1].id;
+  }
+  else {
+    value.value.semester_id = data.semesters.find(semester => semester.is_replanning).id;
+  }
+  */
 }
 
 const semesters = computed(() => {
-  if (!data.value) return [];
-  const current = data.value.semesters.find((semester: ISemester) => semester.is_current);
-  return data.value.semesters.map((semester: ISemester) => {
-    if (dayjs(semester.start_date).isBefore(dayjs(current?.start_date))) {
-      semester.long_name_with_short += ' (replanning of already started studies)';
-    }
-    return semester;
-  });
+  return personalData.value?.semesters.map(semester => ({
+    ...semester,
+    long_name_with_short: `${semester.long_name_with_short}${semester.is_replanning ? ' (replanning of already started studies)' : ''}`
+  })) || [];
 });
+
+function selectUpdated() {
+  if (modelValue.value.semester_id && modelValue.value.studyMode_id && modelValue.value.specialization_id) {
+    emit('filledOrChanged', modelValue.value as Required<IPersonalData>);
+  }
+}
 </script>

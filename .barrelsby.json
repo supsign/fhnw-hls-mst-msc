@@ -1,0 +1,9 @@
+{
+  "directory": [
+    "./resources/js/interfaces",
+    "./resources/js/services",
+    "./resources/js/helpers"
+  ],
+  "delete": true,
+  "singleQuotes": true
+}

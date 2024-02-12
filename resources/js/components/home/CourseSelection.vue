@@ -8,8 +8,8 @@
       :group="group"
       :semesters="courseData.semesters" />
     <EctsCount
-      :texts="courseData.texts"
-      :statistics="statistics" />
+      :statistics="statistics"
+      :texts="courseData.texts" />
     <CourseGroup
       v-for="(group, index) in courseData.courses[1]"
       :key="index"
@@ -19,14 +19,14 @@
 </template>
 
 <script setup lang="ts">
-import type { ICourseDataResponse } from '../../interfaces/course.interface';
-import type { IStatistics } from '../../interfaces/statistics.interface';
+import type { ICourseDataResponse, IStatistics } from '@/interfaces';
+
 import CourseGroup from './CourseGroup.vue';
 import EctsCount from './EctsCount.vue';
 
 type Props = {
   courseData: ICourseDataResponse;
   statistics: IStatistics;
-}
+};
 defineProps<Props>();
 </script>

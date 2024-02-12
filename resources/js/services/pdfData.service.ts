@@ -1,65 +1,64 @@
+import type { ICourse, ICourseGroup, IModuleOutside, IPersonalData, ISemester, ISemesterWithOverlappingCourses, ISpecialization, IStatistics, IStudyMode, IThesisSelection, IThesisTimeFrame } from '@/interfaces';
+
 import { validateData } from '../helpers/validation';
-import type { ICourseGroup, ISemesterWithOverlappingCourses } from '../interfaces/course.interface';
-import type { IModuleOutside } from '../interfaces/moduleOutside.interface';
-import type { IPersonalData } from '../interfaces/personal.interface';
-import type { ISemester } from '../interfaces/semester.interface';
-import type{ ISpecialization } from '../interfaces/specialization.interface';
-import type { IStatistics } from '../interfaces/statistics.interface';
-import type { IStudyMode } from '../interfaces/studyMode.interface';
-import type { IThesisSelection, IThesisTimeFrame } from '../interfaces/theses.interface';
 
 interface pdfDataServiceInput {
-    personalData: IPersonalData;
-    semestersWithCourses: ISemester[];
-    modulesOutside: IModuleOutside[];
-    doubleDegree: boolean;
-    masterThesis: IThesisSelection;
-    additionalComments: string;
-    statistics: IStatistics;
-    groupsWithSelectedCourses: ICourseGroup[];
-    overlappingCourses: ISemesterWithOverlappingCourses[];
+  additionalComments: string;
+  doubleDegree: boolean;
+  groupsWithSelectedCourses: ICourseGroup[];
+  masterThesis: IThesisSelection;
+  modulesOutside: IModuleOutside[];
+  overlappingCourses: ISemesterWithOverlappingCourses[];
+  personalData: Required<IPersonalData>;
+  semestersWithCourses: (ISemester & { courses: ICourse[] })[];
+  statistics: IStatistics;
 }
+
+interface IParsedOverlappingCourses {
+  courses: number[][];
+  semesterId: number | string;
+}
+
 export interface parsedPdfDataInput {
-    surname: string;
-    given_name: string;
-    semester: ISemester;
-    study_mode: IStudyMode;
-    specialization: ISpecialization;
-    selected_courses: ISelectedCoursesForPdf[];
-    modules_outside: IModuleOutside[];
-    double_degree: boolean;
-    master_thesis: IThesisForPdf | null;
-    additional_comments: string;
-    statistics: IStatistics;
+  additional_comments: string;
+  double_degree: boolean;
+  given_name: string;
+  master_thesis: IThesisForPdf;
+  modules_outside: IModuleOutside[];
+  overlapping_courses: IParsedOverlappingCourses[];
+  selected_courses: ISelectedCoursesForPdf[];
+  semester: number;
+  specialization: number;
+  statistics: IStatistics;
+  study_mode: number;
+  surname: string;
 }
 interface ISelectedCoursesForPdf {
-    semesterId: number | string;
-    courses: number[];
+  courses: number[];
+  semesterId: number | string;
 }
 
 interface IThesisForPdf {
-    time_frames: IThesisTimeFrame;
-    theses: number[];
-    further_details: string;
+  further_details: string;
+  theses: (number | undefined)[];
+  time_frames: IThesisTimeFrame;
 }
 
 export function pdfDataService(data: pdfDataServiceInput) {
+  console.log(data);
   const parsedData: parsedPdfDataInput = {
-    surname: data.personalData.surname,
-    given_name: data.personalData.givenName,
-    // @ts-expect-error: ???
-    semester: data.personalData.semester?.id,
-    // @ts-expect-error: ???
-    study_mode: data.personalData.studyMode?.id,
-    // @ts-expect-error: ???
-    specialization: data.personalData.specialization?.id,
-    selected_courses: parseSelectedCoursesForPdf(data.semestersWithCourses),
-    modules_outside: data.modulesOutside,
-    double_degree: data.doubleDegree,
-    master_thesis: parseMasterThesis(JSON.parse(JSON.stringify(data.masterThesis))),
     additional_comments: data.additionalComments,
+    double_degree: data.doubleDegree,
+    given_name: data.personalData.givenName,
+    master_thesis: parseMasterThesis(data.masterThesis),
+    modules_outside: data.modulesOutside,
+    overlapping_courses: parseOverlappingCourses(data.overlappingCourses),
+    selected_courses: parseSelectedCoursesForPdf(data.semestersWithCourses),
+    semester: data.personalData.semester_id,
+    specialization: data.personalData.specialization_id,
     statistics: data.statistics,
-    overlapping_courses: parseOverlappingCourses(data.overlappingCourses)
+    study_mode: data.personalData.studyMode_id,
+    surname: data.personalData.surname
   };
   const validator = validateData(parsedData);
 
@@ -69,44 +68,42 @@ export function pdfDataService(data: pdfDataServiceInput) {
   }
   return validator;
 }
-function parseMasterThesis(masterThesis: IThesisSelection): IThesisForPdf | null {
-  // eslint-disable-next-line no-prototype-builtins
-  if (!masterThesis || !masterThesis.hasOwnProperty('start') || !masterThesis.theses.length) {
-    return null;
-  }
+function parseMasterThesis(masterThesis: IThesisSelection): IThesisForPdf {
+  const theses = [masterThesis.theses1_id, masterThesis.theses2_id];
+  if (masterThesis.theses3_id) theses.push(masterThesis.theses3_id);
   return {
-    time_frames: masterThesis.start,
-    theses: masterThesis.theses.map((theses) => {
-      return theses.id;
-    }),
-    further_details: masterThesis.furtherDetails
+    further_details: masterThesis.furtherDetails,
+    theses: theses,
+    time_frames: masterThesis.start as IThesisTimeFrame
   };
 }
 
-function parseSelectedCoursesForPdf(semestersWithCourses: ISemester[]): ISelectedCoursesForPdf[] {
+// eslint-disable-next-line prefer-arrow/prefer-arrow-functions
+function parseSelectedCoursesForPdf(semestersWithCourses: (ISemester & { courses: ICourse[] })[]): ISelectedCoursesForPdf[] {
   return semestersWithCourses.map((semester) => {
     return {
-      semesterId: semester.id ? semester.id : semester.name,
       courses: semester.courses.map((course) => {
         return course.id;
-      })
+      }),
+      semesterId: semester.id || semester.name
     };
   });
 }
+
+// eslint-disable-next-line prefer-arrow/prefer-arrow-functions
 function parseOverlappingCourses(semesterWithOverlappingCourses: ISemesterWithOverlappingCourses[]) {
   return semesterWithOverlappingCourses
-    .map((obj) => {
+    .map((object) => {
       return {
-        // eslint-disable-next-line no-prototype-builtins
-        semesterId: obj.semester.hasOwnProperty('id') ? obj.semester.id : obj.semester.name,
-        courses: obj.courses.map((coursePair) => {
+        courses: object.courses.map((coursePair) => {
           return coursePair.map((course) => {
             return course.id;
           });
-        })
+        }),
+        semesterId: Object.prototype.hasOwnProperty.call(object.semester, 'id') ? object.semester.id : object.semester.name
       };
     })
-    .filter((obj) => {
-      if (obj.courses.length > 0) return obj;
+    .filter((object) => {
+      if (object.courses.length > 0) return object;
     });
 }

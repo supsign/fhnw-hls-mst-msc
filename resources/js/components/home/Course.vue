@@ -15,27 +15,30 @@
       <div class="flex w-20 justify-center px-5 py-4 text-center">
         <input
           v-model="course.selected_semester"
+          class="my-auto size-5 cursor-pointer"
           type="radio"
-          class="my-auto h-5 w-5 cursor-pointer"
-          :value="null">
+          :value="undefined">
       </div>
       <div
         v-for="(semester, index) in semesters"
         :key="index"
         class="flex w-20 justify-center px-5 py-4 text-center">
+        <div v-if="semester.is_replanning">
+          replanning
+        </div>
         <input
-          v-if="showCourseSelect(semester)"
+          v-else-if="showCourseSelect(semester)"
           v-model="course.selected_semester"
+          class="my-auto size-5 cursor-pointer"
           type="radio"
-          class="my-auto h-5 w-5 cursor-pointer"
           :value="semester">
       </div>
       <div class="flex w-20 justify-center px-5 py-4 text-center">
         <input
           v-if="laterIsVisible(semesters, course.end_semester)"
           v-model="course.selected_semester"
+          class="my-auto size-5 cursor-pointer"
           type="radio"
-          class="my-auto h-5 w-5 cursor-pointer"
           value="later">
       </div>
     </div>
@@ -43,19 +46,18 @@
 </template>
 
 <script setup lang="ts">
+import type { ICourse, ISemester } from '@/interfaces';
+
 import dayjs from 'dayjs';
-import { computed } from 'vue';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
-import type { ICourse } from '../../interfaces/course.interface';
-import type { ISemester } from '../../interfaces/semester.interface';
 
 type Props = {
   course: ICourse;
-  semesters: ISemester[];
-  type?: string;
   further?: boolean;
+  semesters: ISemester[];
   tooltip?: string;
-}
+  type?: string;
+};
 const props = defineProps<Props>();
 
 dayjs.extend(isSameOrAfter);
@@ -72,21 +74,18 @@ const endDayjs = computed(() => {
 function showCourseSelect(semester: ISemester) {
   if (semester.type !== props.course.semester_type) return false;
   if (startDayjs.value && dayjs(semester.start_date).isBefore(startDayjs.value)) return false;
-  if (endDayjs.value && dayjs(semester.start_date).isAfter(endDayjs.value)) return false;
-  return true;
+  return !(endDayjs.value && dayjs(semester.start_date).isAfter(endDayjs.value));
 }
 
 function laterIsVisible(semesters: ISemester[], endSemester: ISemester) {
   if (!endSemester) {
     return true;
   }
+  // eslint-disable-next-line unicorn/prefer-at
   const lastSemester = semesters[semesters.length - 1];
-  if (dayjs(endSemester.start_date).isAfter(dayjs(lastSemester.start_date))) {
-    return true;
-  }
-  return false;
+  return dayjs(endSemester.start_date).isAfter(dayjs(lastSemester.start_date));
 }
 
 // eslint-disable-next-line vue/no-mutating-props
-props.course.selected_semester = null;
+props.course.selected_semester = undefined;
 </script>

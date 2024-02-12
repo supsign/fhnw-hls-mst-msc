@@ -1,41 +1,26 @@
-<!-- eslint-disable no-prototype-builtins -->
 <template>
   <div class="container mx-auto p-3 pb-10">
-    <Personal
-      v-model="personalData"
-      @get-course-data="getCourseData" />
-    <CourseSelection
-      v-if="statistics && courseData"
-      :course-data="courseData"
-      :statistics="statistics" />
+    <Personal v-model="personalData" @filled-or-changed="getCourseData" />
+    <CourseSelection v-if="statistics && courseData" :course-data="courseData" :statistics="statistics" />
     <template v-if="courseData && masterThesisData">
-      <ModulesOutside
-        :texts="courseData.texts"
-        @update-modules-outside-data="updateModulesOutsideData" />
-      <DoubleDegree
-        v-model="doubleDegree"
-        :texts="courseData.texts" />
-      <MasterThesis
-        v-model="masterThesis"
-        :data="masterThesisData" />
+      <ModulesOutside :texts="courseData.texts" @update-modules-outside-data="modulesOutside = $event" />
+      <DoubleDegree v-model="doubleDegree" :texts="courseData.texts" @update:model-value="changedDoubleDegree" />
+      <MasterThesis v-model="masterThesis" :data="masterThesisData" />
       <OptionalEnglish :course-data="courseData" />
       <AdditionalComments v-model="additionalComments" />
       <Statistics
-        v-if="semesterWithCourses && statistics"
-        :semester-with-courses="semesterWithCourses"
-        :master-thesis="masterThesis"
-        :statistics="statistics" />
+        v-if="semesterWithCourses && statistics" :master-thesis="masterThesis"
+        :semester-with-courses="semesterWithCourses" :statistics="statistics" />
       <Warning
-        v-if="selectedLaterCount || overlappingCourses.length || blockCoursesAtEndOfSemester?.courses.length"
-        :semesters-with-overlapping-courses="overlappingCourses"
-        :selected-later-count="selectedLaterCount"
-        :block-courses-at-end-of-semester="blockCoursesAtEndOfSemester" />
+        v-if="selectedLaterCount || overlappingCourses.length > 0 || blockCoursesAtEndOfSemester"
+        :block-courses-at-end-of-semester="blockCoursesAtEndOfSemester" :selected-later-count="selectedLaterCount"
+        :semesters-with-overlapping-courses="overlappingCourses" />
       <div class="flex justify-end">
         <button
-          type="button"
           class="flex min-h-[50px] w-1/2 items-center justify-center bg-black text-center font-medium leading-4 text-white hover:bg-primary hover:text-black"
+          type="button"
           @click="createPdf">
-          <span class="">Submit</span>
+          <span class="">Generate PDF Document of Study Plan</span>
         </button>
       </div>
     </template>
@@ -43,191 +28,162 @@
 </template>
 
 <script setup lang="ts">
-import Personal from '../components/home/Personal.vue';
-import axios from 'axios';
-import { type Ref, ref, watch, computed, type ComputedRef } from 'vue';
-import ModulesOutside from '../components/home/ModulesOutside.vue';
-import DoubleDegree from '../components/home/DoubleDegree.vue';
-import OptionalEnglish from '../components/home/OptionalEnglish.vue';
-import AdditionalComments from '../components/home/AdditionalComments.vue';
-import type { ICourseDataResponse, ICourseGroup } from '../interfaces/course.interface';
-import MasterThesis from '../components/home/MasterThesis.vue';
-import type { IThesisDataResponse, IThesisSelection } from '../interfaces/theses.interface';
-import CourseSelection from '../components/home/CourseSelection.vue';
-import { pdfDataService } from '../services/pdfData.service';
-import Statistics from '../components/home/Statistics.vue';
+import type { ICourse, ICourseDataResponse, ICourseGroup, IModuleOutside, IPersonalData, ISemester, IStatistics, IThesisDataResponse, IThesisSelection } from '@/interfaces';
+
+import { getEcts, getModuleGroupCount } from '@/helpers/counts';
+import { getOverlappingCourses, pdfDataService } from '@/services';
+import { useAxios } from '@vueuse/integrations/useAxios';
 import Swal from 'sweetalert2';
-import type { IPersonalData } from '../interfaces/personal.interface';
-import type { IModuleOutside } from '../interfaces/moduleOutside.interface';
-import type { ISemester } from '../interfaces/semester.interface';
-import Warning from '../components/home/Warning.vue';
-import { getOverlappingCourses } from '../services/course.service';
-import type { IStatistics } from '../interfaces/statistics.interface';
-import { getEcts, getModuleGroupCount } from '../helpers/counts';
+
 // Personal Data
-const personalData: Ref<IPersonalData> = ref({
-  surname: '',
+const personalData = ref<IPersonalData>({
   givenName: '',
-  semester: undefined,
-  studyMode: null,
-  specialization: null
+  surname: ''
 });
 
 // Course Data
-const courseData: Ref<ICourseDataResponse | null> = ref(null);
+const courseData = ref<ICourseDataResponse>();
 
-async function getCourseData() {
+async function getCourseData(value: Required<IPersonalData>) {
   resetData();
-  if (!personalData.value.specialization || !personalData.value.studyMode || !personalData.value.semester) {
-    return;
+  courseData.value = undefined;
+  console.log('HIT');
+  try {
+    const { data } = await useAxios<ICourseDataResponse>(`/coursedata/${personalData.value.specialization_id}`, {
+      data: {
+        semester: value.semester_id,
+        study_mode: value.studyMode_id
+      },
+      method: 'POST'
+    });
+    if (data.value) courseData.value = data.value;
+    await getThesisData(value);
   }
-  courseData.value = null;
-  const response = await axios.post<ICourseDataResponse>(`/coursedata/${personalData.value.specialization.id}`, {
-    study_mode: personalData.value.studyMode.id,
-    semester: personalData.value.semester.id
-  });
-  courseData.value = response.data;
-  getThesisData();
+  catch (error) {
+    console.log(error);
+  }
 }
 
 // Modules Outside
 const modulesOutside: Ref<IModuleOutside[]> = ref([]);
 
-function updateModulesOutsideData(data: IModuleOutside[]) {
-  modulesOutside.value = data;
-}
-
 // Double Degree
 const doubleDegree = ref(false);
-watch(doubleDegree, () => getThesisData());
+
+async function changedDoubleDegree() {
+  const value = personalData.value;
+  if (value && value.studyMode_id && value.semester_id && value.specialization_id) {
+    await getThesisData(value as Required<IPersonalData>);
+  }
+}
 
 // Master Thesis
-const masterThesisData: Ref<IThesisDataResponse | null> = ref(null);
+const masterThesisData = ref<IThesisDataResponse>();
+
 const masterThesis: Ref<IThesisSelection> = ref({
-  start: { start: null, end: '' },
-  theses: [],
   furtherDetails: ''
 });
 
-async function getThesisData() {
-  if (!personalData.value?.specialization || !personalData.value.semester || !personalData.value.studyMode) {
-    return;
-  }
-  const response = await axios.post<IThesisDataResponse>(`/thesisdata/${personalData.value.specialization.id}`, {
-    double_degree: doubleDegree.value,
-    semester: personalData.value?.semester.id,
-    study_mode: personalData.value?.studyMode.id
-  });
-  masterThesisData.value = response.data;
-  masterThesis.value.start = response.data.time_frames[0];
-}
-
 // AdditionalComments
-const additionalComments = ref();
+const additionalComments = ref<string>('');
 
 // Statistics
-const statistics: ComputedRef<IStatistics | null> = computed(() => {
-  if (!groupsWithSelectedCourses.value) {
-    return null;
-  }
-  const allCourses = groupsWithSelectedCourses.value
-    .map((group) => {
-      return group.courses;
-    })
-    .flat(1);
-  if (!semesterWithCourses.value || !modulesOutside.value) {
-    return null;
-  }
-  return {
-    specialization: allCourses.filter((course) => course.type === 1).length,
-    core: allCourses.filter((course) => course.type === 4).length,
-    cluster: allCourses.filter((course) => course.type === 3).length,
-    outside: modulesOutside.value.length,
-    ects: getEcts(semesterWithCourses.value, modulesOutside.value),
-    moduleGroupCount: getModuleGroupCount(groupsWithSelectedCourses.value)
-  };
-});
-
 const groupsWithSelectedCourses: ComputedRef<ICourseGroup[]> = computed(() => {
-  if (!courseData.value) {
-    return [];
-  }
-  const courseDataGroups: ICourseDataResponse = JSON.parse(JSON.stringify(courseData.value));
-  const groups = courseDataGroups.courses[0];
-  const groupsWithSelected = groups.map((group) => {
-    group.courses = group.courses.filter((course) => {
-      if (course.selected_semester) {
-        return course;
-      }
-    });
-    return group;
-  });
-  const furtherGroups = courseDataGroups.courses[1];
+  if (!courseData.value) return [];
+
+  const groups = courseData.value.courses[0];
+  const groupsWithSelected = groups.map(group => ({
+    ...group,
+    courses: group.courses.filter(course => course.selected_semester)
+  }));
+
+  const furtherGroups = courseData.value.courses[1];
   const furtherGroupsWithSelected = furtherGroups.map((group) => {
-    // eslint-disable-next-line no-prototype-builtins
-    if (group.hasOwnProperty('specializations')) {
-      group.courses = group.specializations
-        .map((spec) => {
-          return spec.courses;
-        })
-        .flat(1)
-        .filter((course) => {
-          if (course.selected_semester) {
-            return course;
-          }
-        });
+    let courses: ICourse[] = [];
+    if (group.specializations) {
+      const specializationCourses = group.specializations.flatMap(spec => spec.courses);
+      courses = [...courses, ...specializationCourses];
     }
-    // eslint-disable-next-line no-prototype-builtins
-    if (group.hasOwnProperty('clusters')) {
-      group.courses = group.clusters
-        .map((clusters) => {
-          return clusters.courses;
-        })
-        .flat(1)
-        .filter((course) => {
-          if (course.selected_semester) {
-            return course;
-          }
-        });
+    if (group.clusters) {
+      const clusterCourses = group.clusters.flatMap(cluster => cluster.courses);
+      courses = [...courses, ...clusterCourses];
     }
-    return group;
+    return {
+      ...group,
+      courses: courses.filter(course => course.selected_semester)
+    };
   });
-  return groupsWithSelected.concat(furtherGroupsWithSelected);
+
+  return [...groupsWithSelected, ...furtherGroupsWithSelected];
 });
 
-// @ts-expect-error: ???
-const semesterWithCourses: ComputedRef<ISemester[]> = computed(() => {
-  if (!groupsWithSelectedCourses.value || !courseData.value) {
-    return null;
-  }
-  const courses = [];
-  for (let group of groupsWithSelectedCourses.value) {
-    courses.push(group.courses);
-  }
-  for (let optional of courseData.value.optional_courses.courses) {
-    if (optional.selected_semester) {
-      courses.push(optional);
-    }
-  }
+const semesterWithCourses = computed<(ISemester & { courses: ICourse[] })[]>(() => {
+  if (!groupsWithSelectedCourses.value || !courseData.value) return [];
 
-  const selectedCourses = courses.flat(1);
-  const coursesInSemester: ISemester[] = courseData.value.semesters.map((semester) => {
-    const courses = selectedCourses.filter((course) => course.selected_semester.id === semester.id);
+  const selectedCourses = [
+    ...groupsWithSelectedCourses.value.flatMap(group => group.courses),
+    ...courseData.value.optional_courses.courses.filter(optional => optional.selected_semester)
+  ];
+
+  const coursesInSemester: (ISemester & { courses: ICourse[] })[] = courseData.value.semesters.map((semester) => {
+    const courses = selectedCourses.filter(course => course.selected_semester && typeof course.selected_semester !== 'string' && course.selected_semester.id === semester.id);
     return {
       ...semester,
       courses: courses
     };
   });
-  coursesInSemester.push({
-    id: 0,
-    name: 'later',
-    courses: selectedCourses.filter((course) => {
-      return course.selected_semester === 'later';
-    }),
-    is_current: false
-  });
+
+  const laterCourses = selectedCourses.filter(course => course.selected_semester === 'later');
+  if (laterCourses.length > 0) {
+    coursesInSemester.push({
+      courses: laterCourses,
+      id: 0,
+      is_replanning: false,
+      name: 'later'
+    });
+  }
 
   return coursesInSemester;
+});
+
+const selectedLastSemesterCount = computed(() => {
+  const lastSemester = courseData.value?.semesters[courseData.value?.semesters.length - 1];
+  if (!lastSemester) return 0;
+  const lastSemesterEntry = semesterWithCourses.value?.find(semester => semester.id === lastSemester.id);
+  return lastSemesterEntry?.courses.length || 0;
+});
+
+const selectedLaterCount = computed(() => {
+  const laterSemester = semesterWithCourses.value?.find(semester => semester.name === 'later');
+  return laterSemester?.courses.length || 0;
+});
+
+const earlierThesisStartAllowed = computed(() => {
+  if (selectedLastSemesterCount.value > 0) return false;
+  // eslint-disable-next-line sonarjs/prefer-single-boolean-return
+  if (selectedLaterCount.value > 0) return false;
+  return true;
+});
+
+watch(earlierThesisStartAllowed, async () => {
+  await getThesisData(personalData.value as Required<IPersonalData>);
+});
+
+const statistics = computed<IStatistics | undefined>(() => {
+  if (!groupsWithSelectedCourses.value) return;
+  const allCourses = groupsWithSelectedCourses.value
+    .flatMap((group) => {
+      return group.courses;
+    });
+  if (!semesterWithCourses.value || !modulesOutside.value) return;
+  return {
+    cluster: allCourses.filter(course => course.type === 3).length,
+    core: allCourses.filter(course => course.type === 4).length,
+    ects: getEcts(semesterWithCourses.value, modulesOutside.value),
+    moduleGroupCount: getModuleGroupCount(groupsWithSelectedCourses.value),
+    outside: modulesOutside.value.length,
+    specialization: allCourses.filter(course => course.type === 1).length
+  };
 });
 
 // Warning
@@ -236,22 +192,22 @@ const overlappingCourses = computed(() => {
     return [];
   }
   const overlapping = getOverlappingCourses(semesterWithCourses.value, courseData.value.slots);
-  if (overlapping.every((semester) => semester.courses.length === 0)) {
+  if (overlapping.every(semester => semester.courses.length === 0)) {
     return [];
   }
-  return overlapping.filter((obj) => {
+  return overlapping.filter((object) => {
     // eslint-disable-next-line no-prototype-builtins
-    if (obj.semester.hasOwnProperty('id')) {
-      return obj;
+    if (object.semester.hasOwnProperty('id')) {
+      return object;
     }
   });
 });
 
-const blockCoursesAtEndOfSemester: ComputedRef<ISemester | null> = computed(() => {
-  if (!semesterWithCourses.value) {
-    return null;
-  }
-  const semester: ISemester = JSON.parse(
+const blockCoursesAtEndOfSemester = computed<(ISemester & { courses: ICourse[] } | undefined)>(() => {
+  if (!semesterWithCourses.value) return;
+  // eslint-disable-next-line ts/no-unsafe-assignment
+  const semester: ISemester & { courses: ICourse[] } = JSON.parse(
+    // eslint-disable-next-line unicorn/prefer-at
     JSON.stringify(semesterWithCourses.value[semesterWithCourses.value.length - 2])
   );
 
@@ -263,61 +219,68 @@ const blockCoursesAtEndOfSemester: ComputedRef<ISemester | null> = computed(() =
   return semester;
 });
 
-const selectedLaterCount = computed(() => {
-  if (!semesterWithCourses.value) {
-    return 0;
-  }
-  const laterSemester = semesterWithCourses.value.find((semester) => semester.name === 'later');
-  if (!laterSemester) {
-    return 0;
-  }
-  return laterSemester.courses.length;
-});
+const errors = ref<{ amount: number; errors: string[] }>();
 
-const errors = ref();
-async function createPdf() {
-  if (!personalData.value) {
-    return;
-  }
-  const pdfData = ref();
-  if (!statistics.value) {
-    return;
-  }
-  pdfData.value = pdfDataService({
-    personalData: personalData.value,
-    semestersWithCourses: semesterWithCourses.value,
-    modulesOutside: modulesOutside.value,
-    doubleDegree: doubleDegree.value,
-    masterThesis: masterThesis.value,
-    additionalComments: additionalComments.value,
-    groupsWithSelectedCourses: groupsWithSelectedCourses.value,
-    statistics: statistics.value,
-    overlappingCourses: overlappingCourses.value
-  });
-  // eslint-disable-next-line no-prototype-builtins
-  if (pdfData.value.hasOwnProperty('errors')) {
-    errors.value = pdfData.value;
-    Swal.fire({
-      title: 'Error!',
-      html: getErrorHtml(pdfData.value.errors),
-      icon: 'error',
-      confirmButtonText: 'OK'
+async function getThesisData(value: Required<IPersonalData>) {
+  try {
+    const { data } = await useAxios<IThesisDataResponse>(`/thesisdata/${value.specialization_id}`, {
+      data: {
+        double_degree: doubleDegree.value,
+        early_start: earlierThesisStartAllowed.value,
+        semester: value.semester_id,
+        study_mode: value.studyMode_id
+      },
+      method: 'POST'
+
     });
-    return;
+    if (data.value) {
+      masterThesisData.value = data.value;
+      masterThesis.value.start = data.value.time_frames[0];
+    }
   }
-  const filename = await axios.post('/pdf', pdfData.value);
-  window.open(filename.data);
+  catch (error) {
+    console.log(error);
+  }
+}
+
+async function createPdf() {
+  if (!personalData.value) return;
+  if (!statistics.value) return;
+
+  const pdfData = pdfDataService({
+    additionalComments: additionalComments.value,
+    doubleDegree: doubleDegree.value,
+    groupsWithSelectedCourses: groupsWithSelectedCourses.value,
+    masterThesis: { ...masterThesis.value, start: masterThesisData.value?.time_frames.find(tf => tf.start?.id === masterThesis.value.start?.start?.id) },
+    modulesOutside: modulesOutside.value,
+    overlappingCourses: overlappingCourses.value,
+    personalData: personalData.value as Required<IPersonalData>,
+    semestersWithCourses: semesterWithCourses.value,
+    statistics: statistics.value
+  });
+
+  if (Object.hasOwnProperty.call(pdfData, 'errors')) {
+    errors.value = pdfData as { amount: number;errors: string[] };
+    return await Swal.fire({
+      confirmButtonText: 'OK',
+      html: getErrorHtml(errors.value.errors),
+      icon: 'error',
+      title: 'Error!'
+    });
+  }
+  const { data } = await useAxios<string>('/pdf', { data: pdfData, method: 'POST' });
+  if (data.value) window.open(data.value);
 }
 function resetData() {
   modulesOutside.value = [];
-  masterThesis.value = { start: { start: null, end: '' }, theses: [], furtherDetails: '' };
+  masterThesis.value = { furtherDetails: '', start: undefined, theses1_id: undefined, theses2_id: undefined, theses3_id: undefined };
   additionalComments.value = '';
   doubleDegree.value = false;
 }
 
-function getErrorHtml(errors: unknown[]) {
+function getErrorHtml(errors: string[]) {
   let string = '';
-  for (let error of errors) {
+  for (const error of errors) {
     string += `<div class="text-red-500">${error}</div>`;
   }
   return string;
