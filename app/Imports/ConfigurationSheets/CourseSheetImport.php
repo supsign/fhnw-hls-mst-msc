@@ -31,21 +31,15 @@ class CourseSheetImport implements ToCollection, WithHeadingRow
             }
 
             try {
-                if (!empty($row['end'])) {
-                    $endSemester = $row['semshort'] === 'SS' 
-                        ? $getSemesterService($row['end'] + 1, false)
-                        : $getSemesterService($row['end'], true);
-                } else {
-                    $endSemester = null;
-                }
+                $offset = $row['semshort'] === 'SS' ? 1 : 0;
 
                 Course::create([
                     'id' => $row['id'],
                     'cluster_id' => $row['clustercore'],
-                    'end_semester_id' => $endSemester?->id,
+                    'end_semester_id' => !empty($row['end']) ? $getSemesterService($row['end'] + $offset, $row['semshort'] === 'AS') : null,
                     'slot_id' => !empty($row['slotas']) ? Slot::firstOrCreate(['name' => $row['slotas']])->id : (!empty($row['slotss']) ? Slot::firstOrCreate(['name' => $row['slotss']])->id : null),
                     'specialization_id' => $row['specialisation'],
-                    'start_semester_id' => $getSemesterService($row['start'], $row['semshort'] === 'AS')->id,
+                    'start_semester_id' => $getSemesterService($row['start'] + $offset, $row['semshort'] === 'AS')->id,
                     'venue_id' => !empty($row['venue']) ? Venue::firstOrCreate(['name' => $row['venue']])->id : null,
                     'semester_type' => $row['semshort'] === 'SS' ? 2 : 1,
                     'name' => $row['modulename'],
