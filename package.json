@@ -24,7 +24,7 @@
     "eslint": "^8.56.0",
     "sass": "^1.70.0",
     "sweetalert2": "^11.10.4",
-    "vue": "3.3.13",
+    "vue": "^3.4.14",
     "vue-router": "^4.2.5"
   },
   "devDependencies": {
