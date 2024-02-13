@@ -36,7 +36,7 @@ class CourseSheetImport implements ToCollection, WithHeadingRow
                 Course::create([
                     'id' => $row['id'],
                     'cluster_id' => $row['clustercore'],
-                    'end_semester_id' => !empty($row['end']) ? $getSemesterService($row['end'] + $offset, $row['semshort'] === 'AS') : null,
+                    'end_semester_id' => !empty($row['end']) ? $getSemesterService($row['end'] + $offset, $row['semshort'] === 'AS')->id : null,
                     'slot_id' => !empty($row['slotas']) ? Slot::firstOrCreate(['name' => $row['slotas']])->id : (!empty($row['slotss']) ? Slot::firstOrCreate(['name' => $row['slotss']])->id : null),
                     'specialization_id' => $row['specialisation'],
                     'start_semester_id' => $getSemesterService($row['start'] + $offset, $row['semshort'] === 'AS')->id,
