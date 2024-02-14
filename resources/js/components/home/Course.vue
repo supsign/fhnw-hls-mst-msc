@@ -23,11 +23,8 @@
         v-for="(semester, index) in semesters"
         :key="index"
         class="flex w-20 justify-center px-5 py-4 text-center">
-        <div v-if="semester.is_replanning">
-          replanning
-        </div>
         <input
-          v-else-if="showCourseSelect(semester)"
+          v-if="showCourseSelect(semester)"
           v-model="course.selected_semester"
           class="my-auto size-5 cursor-pointer"
           type="radio"

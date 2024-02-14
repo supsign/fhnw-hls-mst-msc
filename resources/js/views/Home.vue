@@ -12,7 +12,7 @@
         v-if="semesterWithCourses && statistics" :master-thesis="masterThesis"
         :semester-with-courses="semesterWithCourses" :statistics="statistics" />
       <Warning
-        v-if="selectedLaterCount || overlappingCourses.length > 0 || blockCoursesAtEndOfSemester"
+        v-if="selectedLaterCount || overlappingCourses.length > 0 || (blockCoursesAtEndOfSemester && blockCoursesAtEndOfSemester.courses.length > 0)"
         :block-courses-at-end-of-semester="blockCoursesAtEndOfSemester" :selected-later-count="selectedLaterCount"
         :semesters-with-overlapping-courses="overlappingCourses" />
       <div class="flex justify-end">
