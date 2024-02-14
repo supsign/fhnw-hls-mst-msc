@@ -17,7 +17,7 @@ use Spatie\FlareClient\Http\Exceptions\InvalidData;
 
 class CourseSheetImport implements ToCollection, WithHeadingRow
 {
-    protected array $courseCourseGroupColumns = ['ac', 'acb', 'ba', 'bme', 'bt', 'ce', 'et', 'osc', 'pt'];
+    protected array $courseCourseGroupColumns = ['ac', 'acb', 'ba', 'ds', 'bt', 'ce', 'et', 'osc', 'pt'];
 
     public function collection(Collection $rows): void
     {
