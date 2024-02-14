@@ -36,12 +36,11 @@
           plan
         </div>
       </div>
-      <template v-if="blockCoursesAtEndOfSemester">
+      <template v-if="blockCoursesAtEndOfSemester && blockCoursesAtEndOfSemester.courses.length > 0">
         <div class="font-bold">
           <template v-for="(course, index) in blockCoursesAtEndOfSemester.courses">
-            Module {{ course.name
-            }}<template
-              v-if="blockCoursesAtEndOfSemester && index < blockCoursesAtEndOfSemester.courses.length - 1">
+            Module {{ course.name }}
+            <template v-if="blockCoursesAtEndOfSemester && index < blockCoursesAtEndOfSemester.courses.length - 1">
               ,
             </template>
           </template>
