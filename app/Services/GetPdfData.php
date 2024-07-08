@@ -69,7 +69,18 @@ class GetPdfData
     {
         foreach ($data AS $key => $value) {
             $model = 'App\\Models\\'.ucfirst($key);
-            $this->{$key} = $data[$key] = $model::find($value);
+
+            if (is_array($value)) {
+                $tmp = [];
+
+                foreach ($value AS $id) {
+                    $tmp[] = $model::find($id);
+                }
+            } else {
+                $tmp = $model::find($value);
+            }
+
+            $this->{$key} = $data[$key] = $tmp;
         }
 
         return $this->addToPdfData($data);
