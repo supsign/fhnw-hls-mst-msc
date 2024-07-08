@@ -208,16 +208,22 @@ const blockCoursesAtEndOfSemester = computed<(ISemester & { courses: ICourse[] }
   // eslint-disable-next-line ts/no-unsafe-assignment
   const semester: ISemester & { courses: ICourse[] } = JSON.parse(
     // eslint-disable-next-line unicorn/prefer-at
-    JSON.stringify(semesterWithCourses.value[semesterWithCourses.value.length - 2])
+    JSON.stringify(semesterWithCourses.value[semesterWithCourses.value.length - 1].name === 'later'
+  ? semesterWithCourses.value[semesterWithCourses.value.length - 2] 
+  : semesterWithCourses.value[semesterWithCourses.value.length - 1])
   );
-
-  semester.courses = semester.courses.filter((course) => {
-    if (course.block) {
+  if(semester.type === 1) {
+    semester.courses = semester.courses.filter((course) => {
+    if (course.thesis_warning) {
       return course;
     }
   });
+  }
   return semester;
-});
+})
+
+
+
 
 const errors = ref<{ amount: number; errors: string[] }>();
 
