@@ -214,7 +214,7 @@ const blockCoursesAtEndOfSemester = computed<(ISemester & { courses: ICourse[] }
   );
 
   semester.courses = semester.courses.filter((course) => {
-    if (course.thesis_warning === 1) {
+    if (course.thesis_warning === 1 && semester.type === 1) {
       return course;
     }
   });
