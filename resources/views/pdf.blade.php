@@ -41,14 +41,26 @@
             <div>Possible Double-Degree Semester at Partner University</div>
         </div>
     @endif
+    @php
+        if (!function_exists('ordinal')) {
+            function ordinal($number) {
+                if ($number > 3) {
+                    // Für Zahlen größer als 3 geben wir einfach die Zahl zurück, ohne Ordinalzahl-Suffix.
+                    return $number;
+                }
+                $ends = ['th','st','nd','rd'];
+                return $number . $ends[$number];
+            }
+        }
+    @endphp
     <div style='margin-bottom: 1.25rem;'>
         <div style='font-weight: 700; margin-bottom: 0.25rem;'>{{ $thesisStart }} to {{ $thesisEnd }}</div>
         <div>Projected time frame of the MSc Thesis in subject area(s):</div>
-        <ul style='list-style-type: disc; list-style-position: inside;'>
+        <div>
             @foreach($thesis AS $value)
-                <li>{{ $value->name }}</li>
+                <div>{{ ordinal($loop->iteration) }} preference: {{ $value->name }}</div>
             @endforeach
-        </ul>
+        </div>
         <br />
         @isset($thesisFurtherDetails)
             <div style='margin-bottom: 0.75rem'>Further Details on Thesis (Optional)</div>
