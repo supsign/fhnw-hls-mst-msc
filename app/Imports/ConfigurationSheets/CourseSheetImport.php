@@ -48,7 +48,7 @@ class CourseSheetImport implements ToCollection, WithHeadingRow
                     'content' => $row['content'],
                     'ects' => $row['ects'],
                     'block' => $row['block'],
-                    'thesis_warning' => str_contains($row['semlong'], 'AS') && str_contains($row['semlong'], 'B'),
+                    'thesis_warning' => str_contains($row['semlong'], 'AS-B'),
                 ]);
             } catch (QueryException $e) {
                 switch (true) {
