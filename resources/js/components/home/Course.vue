@@ -69,7 +69,7 @@ const endDayjs = computed(() => {
 });
 
 function showCourseSelect(semester: ISemester) {
-  if (semester.type !== props.course.semester_type) return false;
+  if ((semester.type !== props.course.semester_type) && props.course.semester_type !== 3) return false;
   if (startDayjs.value && dayjs(semester.start_date).isBefore(startDayjs.value)) return false;
   return !(endDayjs.value && dayjs(semester.start_date).isAfter(endDayjs.value));
 }
