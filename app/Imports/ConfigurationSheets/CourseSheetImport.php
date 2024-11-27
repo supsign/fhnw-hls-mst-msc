@@ -3,7 +3,6 @@
 namespace App\Imports\ConfigurationSheets;
 
 use App\Enums\Error;
-use App\Enums\SemesterType;
 use App\Models\Course;
 use App\Models\CourseCourseGroup;
 use App\Models\Slot;
