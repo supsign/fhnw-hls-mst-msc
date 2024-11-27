@@ -3,6 +3,7 @@
 namespace App\Imports\ConfigurationSheets;
 
 use App\Enums\Error;
+use App\Enums\SemesterType;
 use App\Models\Course;
 use App\Models\CourseCourseGroup;
 use App\Models\Slot;
@@ -41,7 +42,7 @@ class CourseSheetImport implements ToCollection, WithHeadingRow
                     'specialization_id' => $row['specialisation'],
                     'start_semester_id' => $getSemesterService($row['start'] + $offset, $row['semshort'] === 'AS')->id,
                     'venue_id' => !empty($row['venue']) ? Venue::firstOrCreate(['name' => $row['venue']])->id : null,
-                    'semester_type' => $row['semshort'] === 'SS' ? 2 : 1,
+                    'semester_type' => $this->getSemesterType($row['semshort']),
                     'name' => $row['modulename'],
                     'internal_name' => $row['internalcode'],
                     'short_name' => $row['short'],
@@ -108,6 +109,21 @@ class CourseSheetImport implements ToCollection, WithHeadingRow
 
                 throw new InvalidData($error);
             }
+        }
+    }
+
+    protected function getSemesterType(string $input): int
+    {
+        switch ($input) {
+            case 'SS':
+                return 2;
+
+            case 'BS':
+                return 3;
+
+            default:
+            case 'AS':
+                return 1;
         }
     }
 }

@@ -51,7 +51,7 @@ enum SemesterType: int
         return match($this) {
             static::AutumnStart => static::AutumnStart->longName().' (September – January) ',
             static::SpringStart => static::SpringStart->longName().' (February – June)',
-            static::BothStart   => static::BothStart->longName(),
+            static::BothStart => static::BothStart->longName(),
         };
     }
 }
