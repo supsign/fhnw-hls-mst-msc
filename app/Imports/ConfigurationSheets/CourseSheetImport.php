@@ -31,7 +31,7 @@ class CourseSheetImport implements ToCollection, WithHeadingRow
             }
 
             try {
-                $offset = $row['semshort'] !== 'SS' ? 1 : 0;
+                $offset = $row['semshort'] === 'SS' ? 1 : 0;
 
                 Course::create([
                     'id' => $row['id'],
