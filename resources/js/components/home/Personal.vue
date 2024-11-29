@@ -27,6 +27,7 @@
         v-model="modelValue.specialization_id"
         label="Specialization"
         option-label="name"
+        extend
         :options="personalData.specializations"
         placeholder="-- Choose Specialization --"
         @update:model-value="selectUpdated" />
