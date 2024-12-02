@@ -10,7 +10,7 @@
       v-bind="$attrs"
       :can-clear="clearable"
       :can-deselect="false"
-      class="multiselect-custom"
+      :class="!extend ? 'multiselect-custom' : 'multiselect-custom-extend'"
       :disabled="disabled"
       :hide-selected="hideSelected"
       :label="optionLabel"
@@ -33,9 +33,11 @@ type Props = {
   clearable?: boolean;
   disabled?: boolean;
   error?: string;
+  extend?: boolean;
   hideSelected?: boolean;
   label?: string;
   mode?: Multiselect['mode'];
+  noLimit?: boolean
   optionLabel?: string;
   options: T[];
   required?: boolean;
@@ -70,6 +72,20 @@ const modelValue = defineModel<number | T>();
 
 <style>
 .multiselect-custom {
+    --ms-border-color: #d1d5db;
+    --ms-radius: 0rem;
+    --ms-ring-width: 0px;
+    --ms-option-py: 0.25rem;
+    --ms-border-color-active: #d1d5db;
+    --ms-dropdown-border-color: #d1d5db;
+    --ms-option-color-pointed: #1f2937;
+    --ms-option-bg-selected:#fde70e;
+    --ms-option-color-selected: #000000;
+    --ms-option-color-selected-pointed: #000000;
+    --ms-option-bg-selected-pointed: #fde70e;
+}
+.multiselect-custom-extend {
+    --ms-max-height: 20rem;
     --ms-border-color: #d1d5db;
     --ms-radius: 0rem;
     --ms-ring-width: 0px;
