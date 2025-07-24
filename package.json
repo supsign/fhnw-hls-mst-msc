@@ -30,7 +30,7 @@
   "devDependencies": {
     "@vitejs/plugin-vue": "4.6.2",
     "autoprefixer": "^10.4.17",
-    "axios": "^1.7.7",
+    "axios": "^1.10.0",
     "barrelsby": "^2.8.1",
     "laravel-vite-plugin": "0.8.1",
     "lodash": "^4.17.21",
