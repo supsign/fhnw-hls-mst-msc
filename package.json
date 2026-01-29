@@ -21,7 +21,7 @@
     "@vueuse/core": "^10.7.2",
     "@vueuse/integrations": "^10.7.2",
     "dayjs": "^1.11.10",
-    "eslint": "^8.56.0",
+    "eslint": "^9.26.0",
     "sass": "^1.70.0",
     "sweetalert2": "^11.10.4",
     "vue": "^3.4.14",
