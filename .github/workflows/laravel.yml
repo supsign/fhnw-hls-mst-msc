@@ -3,8 +3,12 @@ name: Laravel
 on:
   push:
     branches: [ features/* ]
+  # Der Default-Branch heisst main; ein master-Branch existiert in diesem Repo
+  # nicht. Der Filter stand auf [ master ] und hat den Workflow dadurch nie
+  # ausgeloest -- laravel.yml hatte null Runs. Dependabot-PRs waeren ungeprueft
+  # geblieben.
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
 
 jobs:
   php-cs-fixer:
