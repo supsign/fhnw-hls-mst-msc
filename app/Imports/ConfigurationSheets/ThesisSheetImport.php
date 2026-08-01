@@ -14,8 +14,7 @@ class ThesisSheetImport implements ToCollection, WithHeadingRow
 {
     public function collection(Collection $rows): void
     {
-        foreach ($rows as $row)
-        {
+        foreach ($rows as $row) {
             $row = $row->ToArray();
 
             if (!isset($row['subject'])) {
@@ -28,8 +27,6 @@ class ThesisSheetImport implements ToCollection, WithHeadingRow
                     'specialization_id' => $row['specialisation'],
                 ]);
             } catch (QueryException $e) {
-
-
                 switch (true) {
                     case str_contains($e->getMessage(), 'theses_specialization_id_foreign'):
                         $error = 'invalid specialisation id "'.$row['specialisation'].'" found in thesis "'.$row['subject'].'"';

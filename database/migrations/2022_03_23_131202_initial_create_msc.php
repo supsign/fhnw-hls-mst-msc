@@ -6,15 +6,14 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
      * @return void
      */
     public function up()
-    {        
+    {
         Schema::create('semesters', function (Blueprint $table) {
             $table->id();
             $table->unsignedInteger('type');
@@ -70,7 +69,7 @@ return new class extends Migration
             $table->foreignId('specialization_id')->constrained();
             $table->timestamps();
             $table->unique(['course_group_id', 'specialization_id'], 'cgs_course_group_id_specialization_id_unique');
-        });        
+        });
 
         Schema::create('courses', function (Blueprint $table) {
             $table->id();
@@ -119,7 +118,7 @@ return new class extends Migration
 
         App::create([
             'id' => 1,
-            'admin_password' => PasswordService::hash(env('ADMIN_PASSWORD'))
+            'admin_password' => PasswordService::hash(env('ADMIN_PASSWORD')),
         ]);
     }
 

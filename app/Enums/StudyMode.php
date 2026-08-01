@@ -16,7 +16,7 @@ enum StudyMode: int
 
     public function label(): string
     {
-        return match($this) {
+        return match ($this) {
             static::FullTime,
             static::PartTime => ucfirst(GeneralHelper::splitStringOnUppercase($this->name, '-', 'strtolower')),
         };

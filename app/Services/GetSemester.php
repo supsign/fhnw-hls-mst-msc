@@ -13,7 +13,7 @@ class GetSemester
     {
         $currentYear = (string)Carbon::now()->year;
 
-        while(($i = strlen($year)) < strlen($currentYear)) {
+        while (($i = strlen($year)) < strlen($currentYear)) {
             $year = $currentYear[$i - 1].$year;
         }
 

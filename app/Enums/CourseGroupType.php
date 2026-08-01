@@ -18,7 +18,7 @@ enum CourseGroupType: int
 
     public function tooltip(): string
     {
-        return match($this) {
+        return match ($this) {
             static::CoreCompetences => static::CoreCompetences->label().' Module (online & Muttenz)',
             static::Specialization => static::Specialization->label().' Module (Muttenz)',
             static::Elective => static::Elective->label().' Module',
@@ -28,8 +28,8 @@ enum CourseGroupType: int
 
     public function label(): string
     {
-        return match($this) {
-            static::CoreCompetences, 
+        return match ($this) {
+            static::CoreCompetences,
             static::Specialization,
             static::Elective => GeneralHelper::splitStringOnUppercase($this->name, ' ', 'ucfirst'),
             static::ClusterSpecific => GeneralHelper::splitStringOnUppercase($this->name, '-', 'ucfirst'),
@@ -38,8 +38,8 @@ enum CourseGroupType: int
 
     public function labelShort(): string
     {
-        return match($this) {
-            static::CoreCompetences, 
+        return match ($this) {
+            static::CoreCompetences,
             static::Specialization,
             static::Elective,
             static::ClusterSpecific => GeneralHelper::getInitialsOnUpperCase($this->name),
@@ -48,6 +48,6 @@ enum CourseGroupType: int
 
     public static function withoutSpecialization(): array
     {
-        return array_filter(self::cases(), fn($case) => $case->value !== self::Specialization->value);
+        return array_filter(self::cases(), fn ($case) => $case->value !== self::Specialization->value);
     }
 }

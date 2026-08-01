@@ -40,12 +40,12 @@ class GetUpcomingSemesters
         ) {
             Semester::firstOrCreate([
                 'start_date' => Carbon::parse($i.'-'.SemesterType::AutumnStart->startDate()),
-                'type' => SemesterType::AutumnStart->value
+                'type' => SemesterType::AutumnStart->value,
             ]);
-            
+
             Semester::firstOrCreate([
                 'start_date' => Carbon::parse($i.'-'.SemesterType::SpringStart->startDate()),
-                'type' => SemesterType::SpringStart->value
+                'type' => SemesterType::SpringStart->value,
             ]);
         }
 

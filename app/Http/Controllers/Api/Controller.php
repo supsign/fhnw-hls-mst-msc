@@ -25,8 +25,8 @@ class Controller extends BaseController
     }
 
     public function postCourseData(
-        Specialization $specialization, 
-        PostCourseData $request, 
+        Specialization $specialization,
+        PostCourseData $request,
         GetCourseData $getCourseData
     ): stdClass {
         return $getCourseData(
@@ -50,8 +50,8 @@ class Controller extends BaseController
     }
 
     public function postThesisData(
-        Specialization $specialization, 
-        PostThesisData $request, 
+        Specialization $specialization,
+        PostThesisData $request,
         GetThesisData $getThesisData
     ): stdClass {
         return $getThesisData(

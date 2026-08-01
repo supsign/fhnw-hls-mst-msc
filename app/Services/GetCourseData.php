@@ -30,7 +30,7 @@ class GetCourseData
         $this->courseGroupTitle = PageContent::getContentByName('group_title');
     }
 
-    public function __invoke(Specialization $specialization, Semester $semester = null, StudyMode $studyMode = null): stdClass 
+    public function __invoke(Specialization $specialization, Semester $semester = null, StudyMode $studyMode = null): stdClass
     {
         $this->specialization = $specialization;
 
@@ -47,7 +47,7 @@ class GetCourseData
 
         return (object)[
             'courses' => array_merge(
-                [$this->getCourseGroups()], 
+                [$this->getCourseGroups()],
                 [$this->getFurtherCourses()],
             ),
             'optional_courses' => (object)[
@@ -76,8 +76,7 @@ class GetCourseData
 
     protected function courseDateFilter(): callable
     {
-        return fn (Course $course): bool =>
-            is_null($course->endSemester)
+        return fn (Course $course): bool => is_null($course->endSemester)
             ||
             $course->endSemester->start_date >= $this->semesters->first()->start_date;
     }
@@ -91,7 +90,7 @@ class GetCourseData
                 'title' => PageContent::getContentByName('further_specialisation_title'),
                 'description' => PageContent::getContentByName('further_specialisation_description'),
                 'type' => CourseGroupType::Specialization,
-                'specializations' => $this->getFurtherCoursesBySpecialization()
+                'specializations' => $this->getFurtherCoursesBySpecialization(),
             ];
         }
 
@@ -119,23 +118,23 @@ class GetCourseData
     protected function getFurtherCoursesByCluster($otherClusters = false): Collection
     {
         $clusters = Cluster::where(function ($query) use ($otherClusters) {
-                if ($otherClusters) {
-                    $query->where('id', '<>', $this->specialization->cluster_id);
-                } else {
-                    $query->where('id', $this->specialization->cluster_id);
-                }
-            })
+            if ($otherClusters) {
+                $query->where('id', '<>', $this->specialization->cluster_id);
+            } else {
+                $query->where('id', $this->specialization->cluster_id);
+            }
+        })
             ->with([
-                'courses', 
-                'courses.cluster', 
+                'courses',
+                'courses.cluster',
                 'courses.endSemester',
-                'courses.startSemester'
+                'courses.startSemester',
             ])
             ->get();
 
-        foreach ($clusters AS $cluster) {
+        foreach ($clusters as $cluster) {
             $cluster->setRelation(
-                'courses', 
+                'courses',
                 $cluster
                     ->courses
                     ->filter(fn (Course $course): bool => !in_array($course->id, $this->mainCourseIds))
@@ -153,16 +152,16 @@ class GetCourseData
     {
         $specializations = Specialization::where('specializations.id', '<>', $this->specialization->id)
             ->with([
-                'courses', 
-                'courses.cluster', 
+                'courses',
+                'courses.cluster',
                 'courses.endSemester',
-                'courses.startSemester'
+                'courses.startSemester',
             ])
             ->get();
 
-        foreach ($specializations AS $specialization) {
+        foreach ($specializations as $specialization) {
             $specialization->setRelation(
-                'courses', 
+                'courses',
                 $specialization
                     ->courses
                     ->filter(fn (Course $course): bool => !in_array($course->id, $this->mainCourseIds))
@@ -207,11 +206,11 @@ class GetCourseData
                 ->filter(fn (CourseGroup $courseGroup): bool => $courseGroup->courses->count())
                 ->values();
 
-        foreach ($courseGroups AS $courseGroup) {
+        foreach ($courseGroups as $courseGroup) {
             $courseGroup->title = $this->getCourseGroupTitle($courseGroup);
 
             $courseGroup->setRelation(
-                'courses', 
+                'courses',
                 $courseGroup
                     ->courses
                     ->filter($this->courseDateFilter())
@@ -246,7 +245,7 @@ class GetCourseData
             ], [
                 $courseGroup->required_courses_count,
                 $courseGroup->name,
-            ], 
+            ],
             $this->courseGroupTitle
         );
     }

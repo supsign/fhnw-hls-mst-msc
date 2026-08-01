@@ -16,7 +16,8 @@ class GetThesisData
     protected StudyMode $studyMode;
 
     public function __construct(protected GetUpcomingSemesters $getUpcomingSemesters)
-    {}
+    {
+    }
 
     public function __invoke(
         Specialization $specialization,
@@ -34,7 +35,7 @@ class GetThesisData
             'theses' => $specialization->theses,
             'time_frames' => $this->getStarts(),
             'texts' => PageContent::findByName([
-                'thesis_text'
+                'thesis_text',
             ]),
         ];
     }
@@ -58,7 +59,7 @@ class GetThesisData
 
         $availibleStartSemesters = ($this->getUpcomingSemesters)(3, $startSemester->start_date);
 
-        foreach ($availibleStartSemesters AS $semester) {
+        foreach ($availibleStartSemesters as $semester) {
             $semester->long_name = $semester->thesis_start;
 
             $timeFrames[] = (object)[

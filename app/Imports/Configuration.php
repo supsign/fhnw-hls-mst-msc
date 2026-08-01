@@ -13,18 +13,18 @@ use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 
 class Configuration implements WithMultipleSheets
 {
-	protected array $clusters;
+    protected array $clusters;
 
-   	public function sheets(): array
+    public function sheets(): array
     {
-    	return [
-    		'ClusterCore' => new ClusterSheetImport,
-    		'Specialisation' => new SpecialisationSheetImport,
-    		'Thesis' => new ThesisSheetImport,
-    		'Module Groups' => new CourseGroupSheetImport,
-    		'Modules' => new CourseSheetImport,
-    		'Texte' => new PageContentSheetImport,
-    		'links' => new LinkSheetImport,
-    	];
+        return [
+            'ClusterCore' => new ClusterSheetImport,
+            'Specialisation' => new SpecialisationSheetImport,
+            'Thesis' => new ThesisSheetImport,
+            'Module Groups' => new CourseGroupSheetImport,
+            'Modules' => new CourseSheetImport,
+            'Texte' => new PageContentSheetImport,
+            'links' => new LinkSheetImport,
+        ];
     }
 }

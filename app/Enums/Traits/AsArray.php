@@ -8,7 +8,7 @@ trait AsArray
     {
         $result = [];
 
-        foreach (self::cases() AS $case) {
+        foreach (self::cases() as $case) {
             $result[] = [
                 'id' => $case->value,
                 'label' => method_exists(self::class, 'label') ? $case->label() : $case->name,
