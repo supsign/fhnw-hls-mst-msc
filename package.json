@@ -3,8 +3,8 @@
   "private": true,
   "version": "0.0.0",
   "engines": {
-    "node": ">=16.0.0",
-    "npm": ">=8.19.4"
+    "node": "^20.19.0 || >=22.12.0",
+    "npm": ">=10.0.0"
   },
   "type": "module",
   "scripts": {
@@ -15,7 +15,7 @@
     "lint": "eslint --ext .ts,.vue --ignore-path .gitignore --fix resources/js"
   },
   "dependencies": {
-    "@supsign/eslint-config": "2.1.0",
+    "@supsign/eslint-config": "file:tools/supsign-eslint-config-2.1.0.tgz",
     "@vue/tsconfig": "0.9.1",
     "@vueform/multiselect": "^2.6.11",
     "@vueuse/core": "^10.7.2",

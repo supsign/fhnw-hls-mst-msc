@@ -2,11 +2,7 @@ name: Laravel
 
 on:
   push:
-    branches: [ features/* ]
-  # Der Default-Branch heisst main; ein master-Branch existiert in diesem Repo
-  # nicht. Der Filter stand auf [ master ] und hat den Workflow dadurch nie
-  # ausgeloest -- laravel.yml hatte null Runs. Dependabot-PRs waeren ungeprueft
-  # geblieben.
+    branches: [ main, features/* ]
   pull_request:
     branches: [ main ]
 
@@ -15,55 +11,43 @@ jobs:
     name: PHP-CS-Fixer
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: PHP-CS-Fixer
-        uses: docker://oskarstark/php-cs-fixer-ga
-        with:
-          args: --config=.php-cs-fixer.php --diff --allow-risky=yes
+      - uses: actions/checkout@v7
 
-      - name: Commit changes
-        uses: stefanzweifel/git-auto-commit-action@v4
+      # v2.37.2 -- Release-SHA statt Branch-Commit, damit der Pin reproduzierbar bleibt
+      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240
         with:
-          commit_message: Fix styling
+          php-version: '8.2'
+          coverage: none
+
+      - name: Install Dependencies
+        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+
+      # Check-only: Auto-Commits scheitern auf Dependabot-PRs am read-only
+      # GITHUB_TOKEN und machen den Check nicht-deterministisch. Lokal fixen mit:
+      # vendor/bin/php-cs-fixer fix
+      - name: PHP-CS-Fixer (dry-run)
+        run: vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.php --diff --dry-run --allow-risky=yes
 
   build-laravel:
     runs-on: ubuntu-latest
-    env:
-      DB_DATABASE: laravel
-      DB_USERNAME: root
-      DB_PASSWORD: password
-      DB_HOST: 127.0.0.1
-      DB_PORT: 32574
-      CACHE_DRIVER: array
-      SESSION_DRIVER: array
-      QUEUE_DRIVER: array
-      MYSQL_ALLOW_EMPTY_PASSWORD: false
-      MYSQL_ROOT_PASSWORD: password
-      MYSQL_DATABASE: laravel
-
-    services:
-      mariadb:
-        image: mariadb:10.4
-        env:
-          MYSQL_ALLOW_EMPTY_PASSWORD: false
-          MYSQL_ROOT_PASSWORD: password
-          MYSQL_DATABASE: laravel
-        ports:
-          - 32574:3306
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
-
     steps:
-      - uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e
-        with:
-          php-version: '8.0'
+      - uses: actions/checkout@v7
 
-      - uses: actions/checkout@v2
+      # v2.37.2 -- Release-SHA statt Branch-Commit, damit der Pin reproduzierbar bleibt
+      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240
+        with:
+          # composer.lock verlangt >=8.2 (symfony/string 7.2 u.a.); Laravel 9
+          # supportet offiziell maximal 8.2
+          php-version: '8.2'
+          extensions: mbstring, dom, curl, zip, gd, pdo_sqlite, sqlite3
+          coverage: none
 
       - name: Setup Node.js
-        uses: actions/setup-node@v2-beta
+        uses: actions/setup-node@v4
         with:
-          node-version: '15'
-          check-latest: true
+          # sass im Lockfile verlangt Node >=20.19; Vite 8 (PR-Pfad) >=20.19/22.12
+          node-version: '22'
+          cache: npm
 
       - name: Copy .env
         run: php -r "file_exists('.env') || copy('.env.example', '.env');"
@@ -77,13 +61,11 @@ jobs:
       - name: Directory Permissions
         run: chmod -R 777 storage bootstrap/cache
 
+      # Tests laufen auf sqlite :memory: (phpunit.xml) -- kein DB-Service noetig
       - name: Execute tests (Unit and Feature tests) via PHPUnit
-
         run: php artisan test
 
       - name: Compile Assets
         run: |
-          npm config set strict-ssl false
-          npm install
-          php artisan lang:js --json --source=lang
-          npm run prod
+          npm ci
+          npm run build-prod

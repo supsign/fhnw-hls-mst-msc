@@ -18,6 +18,8 @@ on: pull_request
 permissions:
     contents: write
     pull-requests: write
+    # Labels laufen ueber die Issues-API
+    issues: write
 
 jobs:
     auto-merge:
@@ -42,6 +44,11 @@ jobs:
 
             # Bei Gruppen-PRs meldet fetch-metadata das hoechste Update im Bundle --
             # ein Minor oder Major in der Gruppe macht also den ganzen PR reviewpflichtig.
+            # Ein fehlendes Label darf den Job nicht scheitern lassen (das Label ist
+            # Kosmetik, kein Gate) -- daher nur Warnung statt Exit 1.
             - name: Minor und Major fuer manuelles Review markieren
               if: steps.metadata.outputs.update-type == 'version-update:semver-minor' || steps.metadata.outputs.update-type == 'version-update:semver-major'
-              run: gh pr edit "$PR_URL" --add-label needs-manual-review
+              run: |
+                  if ! gh pr edit "$PR_URL" --add-label needs-manual-review; then
+                      echo "::warning::Label needs-manual-review konnte nicht gesetzt werden (existiert es im Repo?)."
+                  fi
