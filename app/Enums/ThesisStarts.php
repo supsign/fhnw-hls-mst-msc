@@ -9,7 +9,7 @@ enum ThesisStarts: int
 
     public function label(): string
     {
-        return match($this) {
+        return match ($this) {
             static::Beginning => 'Beginning of year',
             static::Middle => 'Mid year'
         };

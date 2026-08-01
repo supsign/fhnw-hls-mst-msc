@@ -10,13 +10,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Course extends BaseModel
 {
-	protected $appends = [
-		'type',
+    protected $appends = [
+        'type',
         'type_label_short',
-        'type_tooltip'
-	];
-	protected $hidden = [
-		'cluster_id',
+        'type_tooltip',
+    ];
+    protected $hidden = [
+        'cluster_id',
         'created_at',
         'end_semester_id',
         'specialization_id',
@@ -24,81 +24,78 @@ class Course extends BaseModel
         'pivot',
         'updated_at',
         'venue_id',
-	];
+    ];
+    protected $casts = [
+        'semester_type' => SemesterType::class,
+    ];
 
-	protected $casts = [
-	    'semester_type' => SemesterType::class,
-	];
+    public function cluster(): BelongsTo
+    {
+        return $this->belongsTo(Cluster::class);
+    }
 
-	public function cluster(): BelongsTo
-	{
-		return $this->belongsTo(Cluster::class);
-	}
+    public function endSemester(): BelongsTo
+    {
+        return $this->belongsTo(Semester::class, 'end_semester_id');
+    }
 
-	public function endSemester(): BelongsTo
-	{
-		return $this->belongsTo(Semester::class, 'end_semester_id');
-	}
+    public function semesters(): BelongsToMany
+    {
+        return $this->belongsToMany(Semester::class)->orderBy('start_date');
+    }
 
-	public function semesters(): BelongsToMany
-	{
-		return $this->belongsToMany(Semester::class)->orderBy('start_date');
-	}
+    public function slot(): BelongsTo
+    {
+        return $this->belongsTo(Slot::class);
+    }
 
-	public function slot(): BelongsTo
-	{
-		return $this->belongsTo(Slot::class);
-	}
+    public function specialization(): BelongsTo
+    {
+        return $this->belongsTo(Specialization::class);
+    }
 
-	public function	specialization(): BelongsTo
-	{
-		return $this->belongsTo(Specialization::class);
-	}
+    public function startSemester(): BelongsTo
+    {
+        return $this->belongsTo(Semester::class, 'start_semester_id');
+    }
 
-	public function startSemester(): BelongsTo
-	{
-		return $this->belongsTo(Semester::class, 'start_semester_id');
-	}
+    public function type(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                if ($this->specialization_id) {
+                    return CourseGroupType::Specialization;
+                }
 
-	public function type(): Attribute
-	{
-		return Attribute::make(
-			get: function () {
-				if ($this->specialization_id) {
-					return CourseGroupType::Specialization;
-				}
+                if ($this->cluster_id) {
+                    if ($this->cluster->core_competences) {
+                        return CourseGroupType::CoreCompetences;
+                    }
 
-				if ($this->cluster_id) {
-					if ($this->cluster->core_competences) {
-						return CourseGroupType::CoreCompetences;
-					}
+                    return CourseGroupType::ClusterSpecific;
+                }
 
-					return CourseGroupType::ClusterSpecific;
-				}
+                return null;
+            },
+        );
+    }
 
-				return null;
-			},
-		);
-	}
+    public function typeLabelShort(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->type?->labelShort()
+        );
+    }
 
-	public function typeLabelShort(): Attribute
-	{
-		return Attribute::make(
-			get: fn () => $this->type?->labelShort()
-		);
-	}
+    public function typeTooltip(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->type?->tooltip()
+        );
+    }
 
-	public function typeTooltip(): Attribute
-	{
-		return Attribute::make(
-			get: fn () => $this->type?->tooltip()
-		);
-	}
-
-	public function venue(): BelongsTo
-	{
-		return $this->belongsTo(Venue::class);
-	}
+    public function venue(): BelongsTo
+    {
+        return $this->belongsTo(Venue::class);
+    }
 }
-
-

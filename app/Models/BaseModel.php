@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class BaseModel extends Model
 {
     use HasFactory;
-
     protected $guarded = [];
     protected $hidden = [
         'created_at',
@@ -20,7 +19,7 @@ class BaseModel extends Model
     {
         $model = new static;
 
-        foreach ($attributes AS $key => $value)  {
+        foreach ($attributes as $key => $value) {
             $model->{$key} = $value;
         }
 

@@ -10,9 +10,10 @@ use stdClass;
 class GetPersonalData
 {
     public function __construct(protected GetUpcomingSemesters $getUpcomingSemesters)
-    {}
+    {
+    }
 
-    public function __invoke(): stdClass 
+    public function __invoke(): stdClass
     {
         return (object)[
             'semesters' => ($this->getUpcomingSemesters)(8),
@@ -25,8 +26,8 @@ class GetPersonalData
                 'intro_title',
                 'intro_content',
                 'hints_title',
-                'hints_list'
+                'hints_list',
             ]),
         ];
-    } 
+    }
 }

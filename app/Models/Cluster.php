@@ -15,6 +15,4 @@ class Cluster extends BaseModel
     {
         return $this->hasMany(Specialization::class);
     }
-
-
 }

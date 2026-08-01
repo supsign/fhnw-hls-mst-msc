@@ -14,15 +14,15 @@ class GetOverlappingCourses
             return $overlappingCourses;
         }
 
-        foreach ($courses->load(['slot'])->groupBy('semester_type.name') AS $coursesBySemesterType) {
-            foreach ($coursesBySemesterType->groupBy('slot.name') AS $slotName => $coursesBySlot) {
+        foreach ($courses->load(['slot'])->groupBy('semester_type.name') as $coursesBySemesterType) {
+            foreach ($coursesBySemesterType->groupBy('slot.name') as $slotName => $coursesBySlot) {
                 if ($coursesBySlot->count() === 1) {
                     continue;
                 }
 
                 $overlappingCourses->push((object)[
                     'name' => $slotName,
-                    'courses' => $coursesBySlot
+                    'courses' => $coursesBySlot,
                 ]);
             }
         }

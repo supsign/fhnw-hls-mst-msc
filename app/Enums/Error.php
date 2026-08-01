@@ -8,7 +8,7 @@ enum Error: int
 
     public function label(): string
     {
-        return match($this) {
+        return match ($this) {
             static::Unknown => 'unknown error',
         };
     }

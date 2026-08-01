@@ -28,7 +28,7 @@ class DeletePdfs extends Command
      */
     public function handle()
     {
-        foreach (Storage::files('public') AS $file) {
+        foreach (Storage::files('public') as $file) {
             if (!str_contains($file, '.pdf')) {
                 continue;
             }

@@ -24,17 +24,18 @@ class GetPdfData
     protected Specialization $specialization;
     protected Semester $thesisStart;
 
-    public function __construct(protected GetCourseData $getCourseData) 
-    {}
+    public function __construct(protected GetCourseData $getCourseData)
+    {
+    }
 
     public function __invoke(PostPdfData $request): array
     {
         $this->addModels(
             $request->only([
-                'semester', 
+                'semester',
                 'specialization',
             ]) + [
-                'thesis' => $request->master_thesis['theses']
+                'thesis' => $request->master_thesis['theses'],
             ]
         )->addSelectedCourses(
             $request->only([
@@ -57,8 +58,8 @@ class GetPdfData
                 'thesis_end' => $request->master_thesis['time_frames']['end'],
                 'thesis_start' => $request->master_thesis['time_frames']['start']['long_name'],
                 'texts' => PageContent::findByName([
-                    'pdf_text'
-                ])
+                    'pdf_text',
+                ]),
             ]
         );
 
@@ -67,13 +68,13 @@ class GetPdfData
 
     protected function addModels(array $data): self
     {
-        foreach ($data AS $key => $value) {
+        foreach ($data as $key => $value) {
             $model = 'App\\Models\\'.ucfirst($key);
 
             if (is_array($value)) {
                 $tmp = [];
 
-                foreach ($value AS $id) {
+                foreach ($value as $id) {
                     $tmp[] = $model::find($id);
                 }
             } else {
@@ -90,7 +91,7 @@ class GetPdfData
     {
         $data = [];
 
-        foreach ($selectedCoursesData AS $key => $selectedCourses) {
+        foreach ($selectedCoursesData as $key => $selectedCourses) {
             $key = GeneralHelper::snakeToCamelCase($key);
             $semesterIds = array_column($selectedCourses, 'semesterId');
             $semesters = Semester::orderBy('start_date')->find($semesterIds);
@@ -103,8 +104,8 @@ class GetPdfData
                 }
             }
 
-            foreach ($semesters AS $semester) {
-                foreach ($selectedCourses AS $value) {
+            foreach ($semesters as $semester) {
+                foreach ($selectedCourses as $value) {
                     if ($value['semesterId'] === $semester->id) {
                         $semester->{$key} = $this->{'get'.ucfirst($key)}($value['courses']);
                         break;
@@ -134,7 +135,7 @@ class GetPdfData
 
     protected function arrayKeysToCamelCase(array $data): array
     {
-        foreach ($data AS $key => $value) {
+        foreach ($data as $key => $value) {
             $newKey = GeneralHelper::snakeToCamelCase($key);
 
             if ($newKey === $key) {
@@ -159,16 +160,16 @@ class GetPdfData
 
     protected function getCourseGroupForCourse(Course $course): ?CourseGroup
     {
-        foreach ($this->getCourseData()->courses[0] AS $courseGroup) {
+        foreach ($this->getCourseData()->courses[0] as $courseGroup) {
             if ($courseGroup->courses->contains($course)) {
                 return $courseGroup;
             }
         }
 
-        foreach ($this->getCourseData()->courses[1] AS $furtherCourseData) {
-            foreach (['clusters', 'specializations'] AS $key) {
+        foreach ($this->getCourseData()->courses[1] as $furtherCourseData) {
+            foreach (['clusters', 'specializations'] as $key) {
                 if (isset($furtherCourseData->{$key})) {
-                    foreach ($furtherCourseData->{$key} AS $$key) {
+                    foreach ($furtherCourseData->{$key} as $$key) {
                         if ($$key->courses->contains($course)) {
                             return CourseGroup::new(['type' => $furtherCourseData->type]);
                         }
@@ -194,7 +195,7 @@ class GetPdfData
     {
         $result = collect();
 
-        foreach ($idGroups AS $ids) {
+        foreach ($idGroups as $ids) {
             $result->push(Course::find($ids));
         }
 

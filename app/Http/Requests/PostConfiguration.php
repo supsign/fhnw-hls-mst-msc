@@ -26,7 +26,7 @@ class PostConfiguration extends FormRequest
     {
         return [
             'password' => ['required', 'string'],
-            'config_file' => ['required', 'mimes:xlsx']
+            'config_file' => ['required', 'mimes:xlsx'],
         ];
     }
 }

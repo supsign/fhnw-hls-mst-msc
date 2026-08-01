@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Imports\Configuration AS ConfigurationImporter;
+use App\Imports\Configuration as ConfigurationImporter;
 use App\Models\Cluster;
 use App\Models\Course;
 use App\Models\CourseCourseGroup;
@@ -14,8 +14,8 @@ use App\Models\Specialization;
 use App\Models\Thesis;
 use Exception;
 use Illuminate\Support\Facades\DB;
-use Maatwebsite\Excel\Excel;
 use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Excel;
 use Spatie\FlareClient\Http\Exceptions\InvalidData;
 use stdClass;
 
@@ -34,9 +34,10 @@ class ConfigurationImport
     ];
 
     public function __construct(
-        protected ConfigurationImporter $configurationImporter, 
+        protected ConfigurationImporter $configurationImporter,
         protected Excel $excel
-    ) {}
+    ) {
+    }
 
     public function __invoke(string $file): stdClass
     {
@@ -71,7 +72,7 @@ class ConfigurationImport
     {
         DB::statement('SET FOREIGN_KEY_CHECKS = 0;');
 
-        foreach ($this->tablesToTruncate AS $table) {
+        foreach ($this->tablesToTruncate as $table) {
             $table::getQuery()->delete();
         }
 

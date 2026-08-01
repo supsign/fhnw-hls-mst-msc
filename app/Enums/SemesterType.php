@@ -12,7 +12,7 @@ enum SemesterType: int
 
     public function month(): string
     {
-        return match($this) {
+        return match ($this) {
             static::AutumnStart => Carbon::parse('1987-'.static::AutumnStart->startDate())->monthName,
             static::SpringStart => Carbon::parse('1992-'.static::SpringStart->startDate())->monthName,
             static::BothStart => '',
@@ -21,7 +21,7 @@ enum SemesterType: int
 
     public function longName(): string
     {
-        return match($this) {
+        return match ($this) {
             static::AutumnStart => 'Autumn Semester',
             static::SpringStart => 'Spring Semester',
             static::BothStart => 'Either Semester',
@@ -30,7 +30,7 @@ enum SemesterType: int
 
     public function shortName(): string
     {
-        return match($this) {
+        return match ($this) {
             static::AutumnStart => 'AS',
             static::SpringStart => 'SS',
             static::BothStart => 'BS',
@@ -39,7 +39,7 @@ enum SemesterType: int
 
     public function startDate(): string
     {
-        return match($this) {
+        return match ($this) {
             static::AutumnStart => '10-01',
             static::SpringStart => '03-01',
             static::BothStart => '',
@@ -48,7 +48,7 @@ enum SemesterType: int
 
     public function tooltip(): string
     {
-        return match($this) {
+        return match ($this) {
             static::AutumnStart => static::AutumnStart->longName().' (September – January) ',
             static::SpringStart => static::SpringStart->longName().' (February – June)',
             static::BothStart => static::BothStart->longName(),

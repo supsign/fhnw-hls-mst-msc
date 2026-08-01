@@ -18,8 +18,7 @@ class CourseGroupSheetImport implements ToCollection, WithHeadingRow
     {
         $courseGroupTypes = CourseGroupType::withoutSpecialization();
 
-        foreach ($rows as $row)
-        {
+        foreach ($rows as $row) {
             $row = $row->ToArray();
 
             if (!isset($row['id'])) {
@@ -29,7 +28,7 @@ class CourseGroupSheetImport implements ToCollection, WithHeadingRow
             try {
                 $typeId = null;
 
-                foreach ($courseGroupTypes AS $courseGroupType) {
+                foreach ($courseGroupTypes as $courseGroupType) {
                     if (str_contains($row['name'], $courseGroupType->label())) {
                         $typeId = $courseGroupType->value;
                     }
@@ -47,7 +46,7 @@ class CourseGroupSheetImport implements ToCollection, WithHeadingRow
                     'required_courses_count' => $row['requiredmodulescount'],
                 ]);
 
-                foreach (explode(',', $row['specialisation']) AS $specialisationId) {
+                foreach (explode(',', $row['specialisation']) as $specialisationId) {
                     CourseGroupSpecialization::create([
                         'course_group_id' => $row['id'],
                         'specialization_id' => $specialisationId,

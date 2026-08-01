@@ -8,52 +8,51 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class CourseGroup extends BaseModel
 {
-	protected $appends = [
-		'description', 
-		'title',
-	];
+    protected $appends = [
+        'description',
+        'title',
+    ];
+    protected $casts = [
+        'type' => CourseGroupType::class,
+    ];
 
-	protected $casts = [
-	    'type' => CourseGroupType::class,
-	];
+    public function courses(): BelongsToMany
+    {
+        return $this->belongsToMany(Course::class);
+    }
 
-	public function courses(): BelongsToMany
-	{
-		return $this->belongsToMany(Course::class);
-	}
+    public function description(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->attributes['description'] ?? null,
+            set: fn (?string $description) => $this->attributes['description'] = $description
+        );
+    }
 
-	public function description(): Attribute
-	{
-		return Attribute::make(
-			get: fn () => $this->attributes['description'] ?? null,
-			set: fn (?string $description) => $this->attributes['description'] = $description
-		);
-	}
+    public function courseGroupTypeShortName(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->type->labelShort(),
+        );
+    }
 
-	public function courseGroupTypeShortName(): Attribute
-	{
-		return Attribute::make(
-			get: fn () => $this->type->labelShort(),
-		);
-	}
+    public function courseGroupTypeTooltip(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->type->tooltip(),
+        );
+    }
 
-	public function courseGroupTypeTooltip(): Attribute
-	{
-		return Attribute::make(
-			get: fn () => $this->type->tooltip(),
-		);
-	}
+    public function specializations(): BelongsToMany
+    {
+        return $this->belongsToMany(Specialization::class);
+    }
 
-	public function specializations(): BelongsToMany
-	{
-		return $this->belongsToMany(Specialization::class);
-	}
-
-	public function title(): Attribute
-	{
-		return Attribute::make(
-			get: fn () => $this->attributes['title'] ?? null,
-			set: fn (?string $title) => $this->attributes['title'] = $title
-		);
-	}
+    public function title(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->attributes['title'] ?? null,
+            set: fn (?string $title) => $this->attributes['title'] = $title
+        );
+    }
 }

@@ -85,7 +85,7 @@ class CourseSheetImport implements ToCollection, WithHeadingRow
             }
 
             try {
-                foreach ($this->courseCourseGroupColumns AS $column) {
+                foreach ($this->courseCourseGroupColumns as $column) {
                     if (empty($row[$column])) {
                         continue;
                     }

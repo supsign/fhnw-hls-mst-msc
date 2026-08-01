@@ -14,8 +14,7 @@ class SpecialisationSheetImport implements ToCollection, WithHeadingRow
 {
     public function collection(Collection $rows): void
     {
-        foreach ($rows as $row)
-        {
+        foreach ($rows as $row) {
             $row = $row->ToArray();
 
             if (!isset($row['id'])) {
