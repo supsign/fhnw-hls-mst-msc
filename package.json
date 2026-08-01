@@ -28,11 +28,11 @@
     "vue-router": "^4.2.5"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "4.6.2",
+    "@vitejs/plugin-vue": "6.0.8",
     "autoprefixer": "^10.5.4",
     "axios": "^1.18.1",
     "barrelsby": "^2.8.1",
-    "laravel-vite-plugin": "0.8.1",
+    "laravel-vite-plugin": "3.1.3",
     "lodash": "^4.18.1",
     "postcss": "^8.5.15",
     "prettier": "^3.9.6",
@@ -40,6 +40,6 @@
     "typescript": "^5.3.3",
     "unplugin-auto-import": "^0.17.5",
     "unplugin-vue-components": "^0.26.0",
-    "vite": "4.5.14"
+    "vite": "8.2.0"
   }
 }
