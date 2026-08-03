@@ -22,7 +22,7 @@
     "@vueuse/integrations": "^10.7.2",
     "dayjs": "^1.11.21",
     "eslint": "^8.56.0",
-    "sass": "^1.101.3",
+    "sass": "^1.102.0",
     "sweetalert2": "^11.26.25",
     "vue": "^3.5.40",
     "vue-router": "^4.2.5"
