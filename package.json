@@ -18,7 +18,7 @@
     "@supsign/eslint-config": "file:tools/supsign-eslint-config-2.1.0.tgz",
     "@vue/tsconfig": "0.9.1",
     "@vueform/multiselect": "^2.6.11",
-    "@vueuse/core": "^10.7.2",
+    "@vueuse/core": "^14.3.0",
     "@vueuse/integrations": "^10.7.2",
     "dayjs": "^1.11.21",
     "eslint": "^8.56.0",
