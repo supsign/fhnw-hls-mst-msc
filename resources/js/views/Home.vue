@@ -43,6 +43,8 @@
 </template>
 
 <script setup lang="ts">
+import { useAxios } from '@vueuse/integrations/useAxios';
+import Swal from 'sweetalert2';
 import { getEcts, getModuleGroupCount } from '@/helpers/counts';
 import type {
   ICourse,
@@ -56,8 +58,6 @@ import type {
   IThesisSelection,
 } from '@/interfaces';
 import { getOverlappingCourses, pdfDataService } from '@/services';
-import { useAxios } from '@vueuse/integrations/useAxios';
-import Swal from 'sweetalert2';
 
 const personalData = ref<IPersonalData>({ givenName: '', surname: '' });
 const courseData = ref<ICourseDataResponse>();
@@ -193,12 +193,11 @@ const blockCoursesAtEndOfSemester = computed<(ISemester & { courses: ICourse[] }
       return;
     }
 
-    const semester = structuredClone(source);
-    semester.courses = semester.courses.filter(
-      (course) => course.thesis_warning === 1 && semester.type === 1
-    );
-
-    return semester;
+    // Shallow copy — structuredClone fails on Vue reactive proxies
+    return {
+      ...source,
+      courses: source.courses.filter((course) => course.thesis_warning === 1 && source.type === 1),
+    };
   }
 );
 
