@@ -5,7 +5,6 @@
     "./resources/**/*.d.ts",
     "./resources/**/*.vue",
     "eslint.config.*",
-    "tailwind.config.*",
     "vite.config.*",
   ],
   "compilerOptions": {

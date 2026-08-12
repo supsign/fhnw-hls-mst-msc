@@ -1,31 +1,30 @@
+import tailwindcss from '@tailwindcss/vite';
 import vue from '@vitejs/plugin-vue';
 import laravel from 'laravel-vite-plugin';
-import path from 'node:path';
+import { fileURLToPath, URL } from 'node:url';
 import AutoImport from 'unplugin-auto-import/vite';
 import Components from 'unplugin-vue-components/vite';
 import { defineConfig } from 'vite';
 
 export default defineConfig(({ mode }) => {
+  const isDevBuild = mode === 'development';
+
   return {
     build: {
-      reportCompressedSize: mode === 'development' ? false : true,
+      reportCompressedSize: !isDevBuild,
       rollupOptions: {
         output: {
-          assetFileNames: mode === 'development' ? 'css/[name].[ext]' : 'css/[name].[hash].[ext]',
-          entryFileNames: mode === 'development' ? 'js/[name].js' : 'js/[name].[hash].js'
+          assetFileNames: isDevBuild ? 'css/[name].[ext]' : 'css/[name].[hash].[ext]',
+          entryFileNames: isDevBuild ? 'js/[name].js' : 'js/[name].[hash].js'
         }
       }
     },
     plugins: [
+      tailwindcss(),
       AutoImport({
         defaultExportByFilename: true,
         dts: 'resources/js/types/auto-imports.d.ts',
-        eslintrc: {
-          enabled: true
-        },
-        imports: [
-          'vue'
-        ],
+        imports: ['vue'],
         vueTemplate: true
       }),
       Components({
@@ -37,9 +36,6 @@ export default defineConfig(({ mode }) => {
         refresh: true
       }),
       vue({
-        script: {
-          defineModel: true
-        },
         template: {
           transformAssetUrls: {
             base: null,
@@ -50,7 +46,7 @@ export default defineConfig(({ mode }) => {
     ],
     resolve: {
       alias: {
-        '@': path.resolve(__dirname, './resources/js')
+        '@': fileURLToPath(new URL('./resources/js', import.meta.url))
       }
     }
   };

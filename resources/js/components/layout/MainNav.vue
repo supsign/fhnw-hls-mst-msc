@@ -1,6 +1,6 @@
 <template>
   <nav
-    class="sticky top-0 z-20 w-full flex-col  flex-wrap items-stretch justify-between bg-white p-0 shadow-sm lg:flex-row lg:flex-nowrap lg:justify-start"
+    class="sticky top-0 z-20 w-full flex-col  flex-wrap items-stretch justify-between bg-white p-0 shadow-xs lg:flex-row lg:flex-nowrap lg:justify-start"
     style="transform: translateY(0px); transition: all 0.5s ease 0s;">
     <div class="container relative mx-auto flex flex-wrap items-center justify-between px-4">
       <RouterLink

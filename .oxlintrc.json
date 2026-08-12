@@ -1,0 +1,56 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "categories": {
+    "correctness": "error",
+    "pedantic": "off",
+    "perf": "warn",
+    "restriction": "warn",
+    "style": "warn",
+    "suspicious": "warn"
+  },
+  "env": { "builtin": true },
+  "globals": {},
+  "ignorePatterns": [
+    "**/node_modules/**",
+    "**/vendor/**",
+    "**/storage/**",
+    "**/public/build/**",
+    "**/bootstrap/cache/**",
+    "resources/js/components.d.ts",
+    "resources/js/types/auto-imports.d.ts",
+    "resources/js/helpers/index.ts",
+    "resources/js/interfaces/index.ts",
+    "resources/js/services/index.ts",
+    "**/*.sql",
+    "**/*.docx",
+    "**/*.pdf",
+    "**/*.zip"
+  ],
+  "plugins": ["eslint", "typescript", "unicorn", "oxc", "vue"],
+  "rules": {
+    "eslint/no-ternary": "off",
+    "func-style": ["error", "declaration"],
+    "id-length": ["error", { "exceptions": ["_", "a", "b", "K", "T", "F", "L", "q"] }],
+    "import/unambiguous": "off",
+    "max-statements": "off",
+    "no-magic-numbers": "off",
+    "no-undefined": "off",
+    "oxc/no-async-await": "off",
+    "oxc/no-optional-chaining": "off",
+    "oxc/no-rest-spread-properties": "off",
+    "sort-imports": "off",
+    "typescript/consistent-type-definitions": "error",
+    "typescript/explicit-function-return-type": "off",
+    "typescript/explicit-module-boundary-types": "off",
+    "typescript/no-empty-object-type": ["error", { "allowInterfaces": "with-single-extends" }],
+    "unicorn/filename-case": ["error", { "cases": { "camelCase": true, "pascalCase": true } }],
+    "vue/define-props-destructuring": "off",
+    "vue/max-props": "off"
+  },
+  "overrides": [
+    {
+      "files": ["resources/js/types/**"],
+      "rules": { "typescript/consistent-type-definitions": "off" }
+    }
+  ]
+}
