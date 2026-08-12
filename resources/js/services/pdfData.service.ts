@@ -1,8 +1,18 @@
-import type { ICourse, ICourseGroup, IModuleOutside, IPersonalData, ISemester, ISemesterWithOverlappingCourses, ISpecialization, IStatistics, IStudyMode, IThesisSelection, IThesisTimeFrame } from '@/interfaces';
+import type {
+  ICourse,
+  ICourseGroup,
+  IModuleOutside,
+  IPersonalData,
+  ISemester,
+  ISemesterWithOverlappingCourses,
+  IStatistics,
+  IThesisSelection,
+  IThesisTimeFrame,
+} from '@/interfaces';
 
 import { validateData } from '../helpers/validation';
 
-interface pdfDataServiceInput {
+interface PdfDataServiceInput {
   additionalComments: string;
   doubleDegree: boolean;
   groupsWithSelectedCourses: ICourseGroup[];
@@ -19,7 +29,7 @@ interface IParsedOverlappingCourses {
   semesterId: number | string;
 }
 
-export interface parsedPdfDataInput {
+export interface ParsedPdfDataInput {
   additional_comments: string;
   double_degree: boolean;
   given_name: string;
@@ -33,6 +43,7 @@ export interface parsedPdfDataInput {
   study_mode: number;
   surname: string;
 }
+
 interface ISelectedCoursesForPdf {
   courses: number[];
   semesterId: number | string;
@@ -44,9 +55,38 @@ interface IThesisForPdf {
   time_frames: IThesisTimeFrame;
 }
 
-export function pdfDataService(data: pdfDataServiceInput) {
-  console.log(data);
-  const parsedData: parsedPdfDataInput = {
+function parseMasterThesis(masterThesis: IThesisSelection): IThesisForPdf {
+  const theses = [masterThesis.theses1_id, masterThesis.theses2_id];
+  if (masterThesis.theses3_id) {
+    theses.push(masterThesis.theses3_id);
+  }
+  return {
+    further_details: masterThesis.furtherDetails,
+    theses,
+    time_frames: masterThesis.start as IThesisTimeFrame,
+  };
+}
+
+function parseSelectedCoursesForPdf(
+  semestersWithCourses: (ISemester & { courses: ICourse[] })[]
+): ISelectedCoursesForPdf[] {
+  return semestersWithCourses.map((semester) => ({
+    courses: semester.courses.map((course) => course.id),
+    semesterId: semester.id || semester.name,
+  }));
+}
+
+function parseOverlappingCourses(semesterWithOverlappingCourses: ISemesterWithOverlappingCourses[]) {
+  return semesterWithOverlappingCourses
+    .map((object) => ({
+      courses: object.courses.map((coursePair) => coursePair.map((course) => course.id)),
+      semesterId: Object.hasOwn(object.semester, 'id') ? object.semester.id : object.semester.name,
+    }))
+    .filter((object) => object.courses.length > 0);
+}
+
+export function pdfDataService(data: PdfDataServiceInput) {
+  const parsedData: ParsedPdfDataInput = {
     additional_comments: data.additionalComments,
     double_degree: data.doubleDegree,
     given_name: data.personalData.givenName,
@@ -58,8 +98,9 @@ export function pdfDataService(data: pdfDataServiceInput) {
     specialization: data.personalData.specialization_id,
     statistics: data.statistics,
     study_mode: data.personalData.studyMode_id,
-    surname: data.personalData.surname
+    surname: data.personalData.surname,
   };
+
   const validator = validateData(parsedData);
 
   if (!validator.amount) {
@@ -67,43 +108,4 @@ export function pdfDataService(data: pdfDataServiceInput) {
     return parsedData;
   }
   return validator;
-}
-function parseMasterThesis(masterThesis: IThesisSelection): IThesisForPdf {
-  const theses = [masterThesis.theses1_id, masterThesis.theses2_id];
-  if (masterThesis.theses3_id) theses.push(masterThesis.theses3_id);
-  return {
-    further_details: masterThesis.furtherDetails,
-    theses: theses,
-    time_frames: masterThesis.start as IThesisTimeFrame
-  };
-}
-
-// eslint-disable-next-line prefer-arrow/prefer-arrow-functions
-function parseSelectedCoursesForPdf(semestersWithCourses: (ISemester & { courses: ICourse[] })[]): ISelectedCoursesForPdf[] {
-  return semestersWithCourses.map((semester) => {
-    return {
-      courses: semester.courses.map((course) => {
-        return course.id;
-      }),
-      semesterId: semester.id || semester.name
-    };
-  });
-}
-
-// eslint-disable-next-line prefer-arrow/prefer-arrow-functions
-function parseOverlappingCourses(semesterWithOverlappingCourses: ISemesterWithOverlappingCourses[]) {
-  return semesterWithOverlappingCourses
-    .map((object) => {
-      return {
-        courses: object.courses.map((coursePair) => {
-          return coursePair.map((course) => {
-            return course.id;
-          });
-        }),
-        semesterId: Object.prototype.hasOwnProperty.call(object.semester, 'id') ? object.semester.id : object.semester.name
-      };
-    })
-    .filter((object) => {
-      if (object.courses.length > 0) return object;
-    });
 }

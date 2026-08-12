@@ -11,18 +11,18 @@ js:
   bracket-spacing: true
   finder:
     exclude:
-      - "modules"
-      - "node_modules"
-      - "nova"
-      - "nova-components"
-      - "storage"
-      - "spark"
-      - "vendor"
+      - 'modules'
+      - 'node_modules'
+      - 'nova'
+      - 'nova-components'
+      - 'storage'
+      - 'spark'
+      - 'vendor'
     name:
-      - "*.js"
-      - "*.jsx"
+      - '*.js'
+      - '*.jsx'
     not-name:
-      - "*.min.js"
+      - '*.min.js'
 ts:
   tab-width: 4
   use-tabs: false
@@ -35,14 +35,14 @@ ts:
   bracket-spacing: true
   finder:
     exclude:
-      - "modules"
-      - "node_modules"
-      - "nova"
-      - "nova-components"
-      - "storage"
-      - "spark"
-      - "vendor"
-    name: "*.ts"
+      - 'modules'
+      - 'node_modules'
+      - 'nova'
+      - 'nova-components'
+      - 'storage'
+      - 'spark'
+      - 'vendor'
+    name: '*.ts'
 vue:
   tab-width: 4
   use-tabs: false
@@ -57,14 +57,14 @@ vue:
   whitespace-sensitivity: css
   finder:
     exclude:
-      - "modules"
-      - "node_modules"
-      - "nova"
-      - "nova-components"
-      - "storage"
-      - "spark"
-      - "vendor"
-    name: "*.vue"
+      - 'modules'
+      - 'node_modules'
+      - 'nova'
+      - 'nova-components'
+      - 'storage'
+      - 'spark'
+      - 'vendor'
+    name: '*.vue'
 css:
   tab-width: 4
   use-tabs: false
@@ -72,14 +72,14 @@ css:
   double-quotes: false
   finder:
     exclude:
-      - "modules"
-      - "node_modules"
-      - "nova"
-      - "nova-components"
-      - "storage"
-      - "spark"
-      - "vendor"
+      - 'modules'
+      - 'node_modules'
+      - 'nova'
+      - 'nova-components'
+      - 'storage'
+      - 'spark'
+      - 'vendor'
     name:
-      - "*.css"
-      - "*.scss"
-      - "*.less"
+      - '*.css'
+      - '*.scss'
+      - '*.less'

@@ -4,27 +4,15 @@
     "./resources/**/*.ts",
     "./resources/**/*.d.ts",
     "./resources/**/*.vue",
-    "eslint.config.*",
-    "tailwind.config.*",
-    "vite.config.*",
+    "vite.config.*"
   ],
   "compilerOptions": {
     "allowJs": true,
     "experimentalDecorators": true,
     "resolveJsonModule": true,
-    "lib": [
-      "ESNext",
-      "DOM",
-      "DOM.Iterable"
-    ],
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "baseUrl": ".",
-    "paths": {
-      "@/*": [
-        "./resources/js/*"
-      ],
-    },
-    "types": [
-      "vite/client"
-    ]
+    "paths": { "@/*": ["./resources/js/*"] },
+    "types": ["vite/client"]
   }
 }

@@ -5,16 +5,8 @@
     class="mt-10 flex flex-col gap-10"
     enctype="multipart/form-data"
     method="POST">
-    <Input
-      label="Password"
-      name="password"
-      required
-      type="password" />
-    <Input
-      label="File"
-      name="config_file"
-      required
-      type="file" />
+    <Input label="Password" name="password" required type="password" />
+    <Input label="File" name="config_file" required type="file" />
     <button
       class="flex min-h-[50px] w-1/2 items-center justify-center bg-black text-center font-medium leading-4 text-white hover:bg-primary hover:text-black"
       type="submit">

@@ -4,24 +4,16 @@
     <h2>
       {{ group.title }}
     </h2>
-    <div
-      class="mb-5"
-      v-html="group.description" />
+    <div class="mb-5" v-html="group.description" />
     <div class="flex">
       <div class="flex flex-col">
         <div class="border-x border-t">
           <div class="flex font-bold">
             <div class="flex border-b border-light bg-[#f1f1ee]">
-              <div class="w-[26rem] px-5 py-4">
-                Module
-              </div>
-              <div class="w-20 px-5 py-4">
-                Type
-              </div>
+              <div class="w-[26rem] px-5 py-4">Module</div>
+              <div class="w-20 px-5 py-4">Type</div>
               <div class="flex gap-5 text-center">
-                <div class="w-20 px-5 py-4">
-                  none
-                </div>
+                <div class="w-20 px-5 py-4">none</div>
                 <div
                   v-for="(semester, index) in semesters"
                   :key="index"
@@ -29,24 +21,18 @@
                   :title="semester.tooltip">
                   {{ semester.short_name }}
                 </div>
-                <div class="w-20 px-5 py-4">
-                  later
-                </div>
+                <div class="w-20 px-5 py-4">later</div>
               </div>
             </div>
           </div>
           <template v-if="group.specializations">
-            <div
-              v-for="(specialization, index) in group.specializations"
-              :key="index">
+            <div v-for="(specialization, index) in group.specializations" :key="index">
               <div class="flex border-b border-light">
                 <div class="w-[26rem] px-5 py-4 font-bold">
                   {{ specialization.name }}
                 </div>
                 <div class="w-10 px-5 py-4" />
-                <div
-                  v-if="semesters"
-                  class="flex gap-5">
+                <div v-if="semesters" class="flex gap-5">
                   <div
                     v-for="sIdx in semesters.length + 2"
                     :key="sIdx"
@@ -54,7 +40,7 @@
                 </div>
               </div>
               <Course
-                v-for="course, cIdx in sortCourses(specialization.courses)"
+                v-for="(course, cIdx) in sortCourses(specialization.courses)"
                 :key="cIdx"
                 :course="course"
                 further
@@ -62,17 +48,13 @@
             </div>
           </template>
           <template v-if="group.clusters">
-            <div
-              v-for="(cluster, index) in group.clusters"
-              :key="index">
+            <div v-for="(cluster, index) in group.clusters" :key="index">
               <div class="flex border-b border-light">
                 <div class="w-[26rem] px-5 py-4 font-bold">
                   {{ cluster.name }}
                 </div>
                 <div class="w-10 px-5 py-4" />
-                <div
-                  v-if="semesters"
-                  class="flex gap-5">
+                <div v-if="semesters" class="flex gap-5">
                   <div
                     v-for="sIdx in semesters.length + 2"
                     :key="sIdx"
@@ -80,7 +62,7 @@
                 </div>
               </div>
               <Course
-                v-for="course, cIdx in sortCourses(cluster.courses)"
+                v-for="(course, cIdx) in sortCourses(cluster.courses)"
                 :key="cIdx"
                 :course="course"
                 further
@@ -114,24 +96,28 @@ import type { ICourse, ICourseGroup, ISemester } from '@/interfaces';
 
 import Course from './Course.vue';
 
-type Props = {
+interface Props {
   group: ICourseGroup;
   semesters: ISemester[];
-};
+}
+
 const props = defineProps<Props>();
 
-const sortCourses = (courses: ICourse[]) => courses.sort((a, b) => a.semester_type - b.semester_type);
+function sortCourses(courses: ICourse[]) {
+  return courses.toSorted((a, b) => a.semester_type - b.semester_type);
+}
 
 const count = computed(() => {
-  if (props.group.courses) {
-    let count = 0;
-    for (const course of props.group.courses) {
-      if (course.selected_semester) {
-        count += 1;
-      }
-    }
-    return count;
+  if (!props.group.courses) {
+    return 0;
   }
-  return 0;
+
+  let selectedCount = 0;
+  for (const course of props.group.courses) {
+    if (course.selected_semester) {
+      selectedCount += 1;
+    }
+  }
+  return selectedCount;
 });
 </script>
