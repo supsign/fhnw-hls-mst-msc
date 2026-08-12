@@ -7,10 +7,9 @@
       Master Thesis
     </h2>
     <BaseSelect
-      v-model="modelValue.start"
+      v-model="selectedStartId"
       label="Start of MSc Thesis"
-      :options="timeFrames"
-      value-prop="start" />
+      :options="timeFrameOptions" />
     <div
       v-if="text"
       v-html="text.content" />
@@ -68,12 +67,18 @@ function getThesisData(data: IThesisDataResponse, select: 1 | 2 | 3) {
   return data.theses;
 }
 
-const timeFrames = computed(() => {
-  return props.data.time_frames.map((timeFrame) => {
-    return {
-      ...timeFrame,
-      label: timeFrame.start?.long_name
-    };
-  });
+// Select speichert nur die ID; modelValue.start bleibt das volle Timeframe-Objekt.
+const selectedStartId = computed({
+  get: () => modelValue.value.start?.start?.id,
+  set: (id: number | undefined) => {
+    modelValue.value.start = props.data.time_frames.find(tf => tf.start?.id === id);
+  }
+});
+
+const timeFrameOptions = computed(() => {
+  return props.data.time_frames.map((timeFrame) => ({
+    id: timeFrame.start?.id,
+    label: timeFrame.start?.long_name
+  }));
 });
 </script>
