@@ -20,13 +20,15 @@ jobs:
           coverage: none
 
       - name: Install Dependencies
-        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress
+          --prefer-dist
 
       # Check-only: Auto-Commits scheitern auf Dependabot-PRs am read-only
       # GITHUB_TOKEN und machen den Check nicht-deterministisch. Lokal fixen mit:
       # vendor/bin/php-cs-fixer fix
       - name: PHP-CS-Fixer (dry-run)
-        run: vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.php --diff --dry-run --allow-risky=yes
+        run: vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.php --diff --dry-run
+          --allow-risky=yes
 
   build-laravel:
     runs-on: ubuntu-latest
@@ -43,7 +45,7 @@ jobs:
           coverage: none
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           # sass im Lockfile verlangt Node >=20.19; Vite 8 (PR-Pfad) >=20.19/22.12
           node-version: '22'
@@ -53,7 +55,8 @@ jobs:
         run: php -r "file_exists('.env') || copy('.env.example', '.env');"
 
       - name: Install Dependencies
-        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress
+          --prefer-dist
 
       - name: Generate key
         run: php artisan key:generate
