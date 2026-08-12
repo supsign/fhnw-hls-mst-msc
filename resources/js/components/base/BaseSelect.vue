@@ -1,10 +1,6 @@
 <template>
   <div class="grid w-full">
-    <label
-      v-if="label"
-      class="px-1 text-black"
-      for="input"
-      :title="tooltip">{{ label }}</label>
+    <label v-if="label" class="px-1 text-black" for="input" :title="tooltip">{{ label }}</label>
     <Multiselect
       v-model="modelValue"
       v-bind="$attrs"
@@ -29,7 +25,7 @@
 <script setup lang="ts" generic="T">
 import Multiselect from '@vueform/multiselect';
 
-type Props = {
+interface Props {
   clearable?: boolean;
   disabled?: boolean;
   error?: string;
@@ -37,7 +33,7 @@ type Props = {
   hideSelected?: boolean;
   label?: string;
   mode?: Multiselect['mode'];
-  noLimit?: boolean
+  noLimit?: boolean;
   optionLabel?: string;
   options: T[];
   required?: boolean;
@@ -46,12 +42,8 @@ type Props = {
   searchKey?: string;
   tooltip?: string;
   valueProp?: string;
-};
-type Emits = {
-  change: [value: T];
-  deselect: [value: T];
-  select: [value: T];
-};
+}
+interface Emits { change: [value: T]; deselect: [value: T]; select: [value: T] }
 
 withDefaults(defineProps<Props>(), {
   error: undefined,
@@ -61,7 +53,7 @@ withDefaults(defineProps<Props>(), {
   optionLabel: 'label',
   rules: '',
   searchKey: 'name',
-  valueProp: 'id'
+  valueProp: 'id',
 });
 defineEmits<Emits>();
 
@@ -72,30 +64,30 @@ const modelValue = defineModel<number | T>();
 
 <style>
 .multiselect-custom {
-    --ms-border-color: #d1d5db;
-    --ms-radius: 0rem;
-    --ms-ring-width: 0px;
-    --ms-option-py: 0.25rem;
-    --ms-border-color-active: #d1d5db;
-    --ms-dropdown-border-color: #d1d5db;
-    --ms-option-color-pointed: #1f2937;
-    --ms-option-bg-selected:#fde70e;
-    --ms-option-color-selected: #000000;
-    --ms-option-color-selected-pointed: #000000;
-    --ms-option-bg-selected-pointed: #fde70e;
+  --ms-border-color: #d1d5db;
+  --ms-radius: 0rem;
+  --ms-ring-width: 0px;
+  --ms-option-py: 0.25rem;
+  --ms-border-color-active: #d1d5db;
+  --ms-dropdown-border-color: #d1d5db;
+  --ms-option-color-pointed: #1f2937;
+  --ms-option-bg-selected: #fde70e;
+  --ms-option-color-selected: #000000;
+  --ms-option-color-selected-pointed: #000000;
+  --ms-option-bg-selected-pointed: #fde70e;
 }
 .multiselect-custom-extend {
-    --ms-max-height: 20rem;
-    --ms-border-color: #d1d5db;
-    --ms-radius: 0rem;
-    --ms-ring-width: 0px;
-    --ms-option-py: 0.25rem;
-    --ms-border-color-active: #d1d5db;
-    --ms-dropdown-border-color: #d1d5db;
-    --ms-option-color-pointed: #1f2937;
-    --ms-option-bg-selected:#fde70e;
-    --ms-option-color-selected: #000000;
-    --ms-option-color-selected-pointed: #000000;
-    --ms-option-bg-selected-pointed: #fde70e;
+  --ms-max-height: 20rem;
+  --ms-border-color: #d1d5db;
+  --ms-radius: 0rem;
+  --ms-ring-width: 0px;
+  --ms-option-py: 0.25rem;
+  --ms-border-color-active: #d1d5db;
+  --ms-dropdown-border-color: #d1d5db;
+  --ms-option-color-pointed: #1f2937;
+  --ms-option-bg-selected: #fde70e;
+  --ms-option-color-selected: #000000;
+  --ms-option-color-selected-pointed: #000000;
+  --ms-option-bg-selected-pointed: #fde70e;
 }
 </style>

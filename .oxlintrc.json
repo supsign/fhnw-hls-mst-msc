@@ -18,9 +18,6 @@
     "**/bootstrap/cache/**",
     "resources/js/components.d.ts",
     "resources/js/types/auto-imports.d.ts",
-    "resources/js/helpers/index.ts",
-    "resources/js/interfaces/index.ts",
-    "resources/js/services/index.ts",
     "**/*.sql",
     "**/*.docx",
     "**/*.pdf",
@@ -28,29 +25,43 @@
   ],
   "plugins": ["eslint", "typescript", "unicorn", "oxc", "vue"],
   "rules": {
+    "arrow-body-style": "off",
+    "curly": "off",
     "eslint/no-ternary": "off",
     "func-style": ["error", "declaration"],
     "id-length": ["error", { "exceptions": ["_", "a", "b", "K", "T", "F", "L", "q"] }],
     "import/unambiguous": "off",
     "max-statements": "off",
+    "new-cap": "off",
     "no-magic-numbers": "off",
     "no-undefined": "off",
+    "no-use-before-define": ["error", { "functions": false, "classes": false, "variables": true }],
+    "one-var": "off",
     "oxc/no-async-await": "off",
+    "oxc/no-map-spread": "off",
     "oxc/no-optional-chaining": "off",
     "oxc/no-rest-spread-properties": "off",
+    "prefer-destructuring": "off",
     "sort-imports": "off",
     "typescript/consistent-type-definitions": "error",
     "typescript/explicit-function-return-type": "off",
     "typescript/explicit-module-boundary-types": "off",
     "typescript/no-empty-object-type": ["error", { "allowInterfaces": "with-single-extends" }],
     "unicorn/filename-case": ["error", { "cases": { "camelCase": true, "pascalCase": true } }],
+    "unicorn/no-null": "off",
+    "unicorn/relative-url-style": "off",
     "vue/define-props-destructuring": "off",
-    "vue/max-props": "off"
+    "vue/max-props": "off",
+    "vue/require-default-prop": "off"
   },
   "overrides": [
     {
       "files": ["resources/js/types/**"],
       "rules": { "typescript/consistent-type-definitions": "off" }
+    },
+    {
+      "files": ["vite.config.*"],
+      "rules": { "new-cap": "off" }
     }
   ]
 }

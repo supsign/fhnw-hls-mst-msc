@@ -1,6 +1,5 @@
 import 'sweetalert2/dist/sweetalert2.css';
 import { createApp } from 'vue';
-
 import App from './App.vue';
 import './bootstrap';
 import './index.css';

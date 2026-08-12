@@ -36,7 +36,7 @@ export interface ICourse extends IModel {
   end_semester: ISemester;
   internal_name: string;
   name: string;
-  selected_semester?: | ISemester | string;
+  selected_semester?: ISemester | string;
   semester_type: number;
   short_name: string;
   slot_id: number;

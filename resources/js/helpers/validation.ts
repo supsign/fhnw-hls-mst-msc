@@ -1,7 +1,6 @@
-import type { parsedPdfDataInput } from '../services/pdfData.service';
+import type { ParsedPdfDataInput } from '../services/pdfData.service';
 
-// eslint-disable-next-line sonarjs/cognitive-complexity
-export function validateData(pdfData: parsedPdfDataInput) {
+export function validateData(pdfData: ParsedPdfDataInput) {
   const errorBag = [];
 
   if (!pdfData.surname) {
@@ -11,11 +10,14 @@ export function validateData(pdfData: parsedPdfDataInput) {
     errorBag.push('Please type your Given Name.');
   }
   if (pdfData.master_thesis) {
-    if (pdfData.master_thesis.theses.length < 2 || !pdfData.master_thesis.theses[0] || !pdfData.master_thesis.theses[1]) {
+    if (
+      pdfData.master_thesis.theses.length < 2 ||
+      !pdfData.master_thesis.theses[0] ||
+      !pdfData.master_thesis.theses[1]
+    ) {
       errorBag.push('Please select a broad topic for your MSc Thesis.');
     }
-  }
-  else {
+  } else {
     errorBag.push('Please select a broad topic for your MSc Thesis.');
   }
 
@@ -26,8 +28,7 @@ export function validateData(pdfData: parsedPdfDataInput) {
       }
     }
   }
-  if (pdfData.statistics.moduleGroupCount.findIndex(group => group.type === 3) === -1) {
-    console.log(pdfData.statistics.moduleGroupCount.findIndex(group => group.type === 3));
+  if (pdfData.statistics.moduleGroupCount.findIndex((group) => group.type === 3) === -1) {
     if (pdfData.statistics.cluster < 3) {
       errorBag.push('You need to select at least three cluster-specific modules. Please correct.');
     }
@@ -35,8 +36,5 @@ export function validateData(pdfData: parsedPdfDataInput) {
   if (pdfData.statistics.ects < 50) {
     errorBag.push('You have selected modules worth fewer than 50 ECTS.');
   }
-  return {
-    amount: errorBag.length,
-    errors: errorBag
-  };
+  return { amount: errorBag.length, errors: errorBag };
 }

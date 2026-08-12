@@ -16,39 +16,39 @@ name: Dependabot Auto-Merge
 on: pull_request
 
 permissions:
-    contents: write
-    pull-requests: write
-    # Labels laufen ueber die Issues-API
-    issues: write
+  contents: write
+  pull-requests: write
+  # Labels laufen ueber die Issues-API
+  issues: write
 
 jobs:
-    auto-merge:
-        runs-on: ubuntu-latest
-        if: github.actor == 'dependabot[bot]'
+  auto-merge:
+    runs-on: ubuntu-latest
+    if: github.actor == 'dependabot[bot]'
 
-        env:
-            PR_URL: ${{ github.event.pull_request.html_url }}
-            GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    env:
+      PR_URL: ${{ github.event.pull_request.html_url }}
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-        steps:
-            - name: Dependabot-Metadaten holen
-              id: metadata
-              uses: dependabot/fetch-metadata@v3
+    steps:
+      - name: Dependabot-Metadaten holen
+        id: metadata
+        uses: dependabot/fetch-metadata@v3
 
-            - name: Auto-Merge nur fuer patch aktivieren
-              if: steps.metadata.outputs.update-type == 'version-update:semver-patch'
-              run: |
-                  if ! gh pr merge --auto --squash "$PR_URL"; then
-                      echo "::warning::Auto-Merge konnte nicht aktiviert werden. Meist fehlt dem Default-Branch ein Required-Status-Check, dann gilt der PR als nicht blockiert."
-                  fi
+      - name: Auto-Merge nur fuer patch aktivieren
+        if: steps.metadata.outputs.update-type == 'version-update:semver-patch'
+        run: |
+          if ! gh pr merge --auto --squash "$PR_URL"; then
+              echo "::warning::Auto-Merge konnte nicht aktiviert werden. Meist fehlt dem Default-Branch ein Required-Status-Check, dann gilt der PR als nicht blockiert."
+          fi
 
-            # Bei Gruppen-PRs meldet fetch-metadata das hoechste Update im Bundle --
-            # ein Minor oder Major in der Gruppe macht also den ganzen PR reviewpflichtig.
-            # Ein fehlendes Label darf den Job nicht scheitern lassen (das Label ist
-            # Kosmetik, kein Gate) -- daher nur Warnung statt Exit 1.
-            - name: Minor und Major fuer manuelles Review markieren
-              if: steps.metadata.outputs.update-type == 'version-update:semver-minor' || steps.metadata.outputs.update-type == 'version-update:semver-major'
-              run: |
-                  if ! gh pr edit "$PR_URL" --add-label needs-manual-review; then
-                      echo "::warning::Label needs-manual-review konnte nicht gesetzt werden (existiert es im Repo?)."
-                  fi
+      # Bei Gruppen-PRs meldet fetch-metadata das hoechste Update im Bundle --
+      # ein Minor oder Major in der Gruppe macht also den ganzen PR reviewpflichtig.
+      # Ein fehlendes Label darf den Job nicht scheitern lassen (das Label ist
+      # Kosmetik, kein Gate) -- daher nur Warnung statt Exit 1.
+      - name: Minor und Major fuer manuelles Review markieren
+        if: steps.metadata.outputs.update-type == 'version-update:semver-minor' || steps.metadata.outputs.update-type == 'version-update:semver-major'
+        run: |
+          if ! gh pr edit "$PR_URL" --add-label needs-manual-review; then
+              echo "::warning::Label needs-manual-review konnte nicht gesetzt werden (existiert es im Repo?)."
+          fi

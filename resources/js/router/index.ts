@@ -5,30 +5,15 @@ const router = createRouter({
   routes: [
     {
       children: [
-        {
-          component: () => import('../views/Home.vue'),
-          name: 'Home',
-          path: ''
-        },
-        {
-          component: () => import('../views/Config.vue'),
-          path: 'admin/config'
-        },
-        {
-          component: () => import('../views/Privacy.vue'),
-          name: 'Privacy',
-          path: 'privacy'
-        },
-        {
-          component: () => import('../views/Imprint.vue'),
-          name: 'Imprint',
-          path: 'imprint'
-        }
+        { component: () => import('../views/Home.vue'), name: 'Home', path: '' },
+        { component: () => import('../views/Config.vue'), path: 'admin/config' },
+        { component: () => import('../views/Privacy.vue'), name: 'Privacy', path: 'privacy' },
+        { component: () => import('../views/Imprint.vue'), name: 'Imprint', path: 'imprint' },
       ],
       component: () => import('../layouts/Main.vue'),
-      path: '/'
-    }
-  ]
+      path: '/',
+    },
+  ],
 });
 
 export default router;
