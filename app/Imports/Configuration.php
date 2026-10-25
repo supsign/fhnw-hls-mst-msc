@@ -9,9 +9,10 @@ use App\Imports\ConfigurationSheets\LinkSheetImport;
 use App\Imports\ConfigurationSheets\PageContentSheetImport;
 use App\Imports\ConfigurationSheets\SpecialisationSheetImport;
 use App\Imports\ConfigurationSheets\ThesisSheetImport;
+use Maatwebsite\Excel\Concerns\Import;
 use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 
-class Configuration implements WithMultipleSheets
+class Configuration implements WithMultipleSheets, Import
 {
     protected array $clusters;
 
