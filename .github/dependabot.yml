@@ -26,15 +26,22 @@ updates:
         applies-to: security-updates
         patterns:
           - '*'
-      # Routine-Updates: patch + minor gebuendelt, wird bei gruener CI
-      # automatisch gemergt (siehe .github/workflows/dependabot-auto-merge.yml).
-      composer-routine:
+      # Patch und Minor bewusst in GETRENNTEN Gruppen: fetch-metadata meldet
+      # pro PR nur das hoechste Update im Bundle, und die Auto-Merge-Policy
+      # (.github/workflows/dependabot-auto-merge.yml) merged nur patch. Eine
+      # gemischte Gruppe war dadurch fast immer "minor" und blieb liegen.
+      composer-patch:
+        applies-to: version-updates
+        patterns:
+          - '*'
+        update-types:
+          - patch
+      composer-minor:
         applies-to: version-updates
         patterns:
           - '*'
         update-types:
           - minor
-          - patch
     # Major-Updates werden bewusst NICHT gruppiert und NICHT auto-gemergt --
     # die bleiben einzelne PRs mit manuellem Review.
 
@@ -57,13 +64,19 @@ updates:
         applies-to: security-updates
         patterns:
           - '*'
-      npm-routine:
+      # Getrennte patch/minor-Gruppen aus demselben Grund wie bei composer.
+      npm-patch:
+        applies-to: version-updates
+        patterns:
+          - '*'
+        update-types:
+          - patch
+      npm-minor:
         applies-to: version-updates
         patterns:
           - '*'
         update-types:
           - minor
-          - patch
 
   - package-ecosystem: github-actions
     directory: /
@@ -79,9 +92,14 @@ updates:
       prefix: build
       include: scope
     groups:
-      github-actions:
+      # Getrennte patch/minor-Gruppen aus demselben Grund wie bei composer.
+      github-actions-patch:
+        patterns:
+          - '*'
+        update-types:
+          - patch
+      github-actions-minor:
         patterns:
           - '*'
         update-types:
           - minor
-          - patch
