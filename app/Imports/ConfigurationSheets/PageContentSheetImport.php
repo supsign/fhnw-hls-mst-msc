@@ -2,12 +2,12 @@
 
 namespace App\Imports\ConfigurationSheets;
 
+use App\Exceptions\InvalidData;
 use App\Models\PageContent;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
-use Spatie\FlareClient\Http\Exceptions\InvalidData;
 
 class PageContentSheetImport implements ToCollection, WithHeadingRow
 {

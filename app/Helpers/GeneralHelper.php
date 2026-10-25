@@ -37,7 +37,7 @@ class GeneralHelper
         return implode('', array_map('ucfirst', explode('_', $string)));
     }
 
-    public static function splitStringOnUppercase(string $string, string $delimiter, string $castTo = null): string
+    public static function splitStringOnUppercase(string $string, string $delimiter, string $castTo): string
     {
         $parts = [];
 
@@ -49,6 +49,6 @@ class GeneralHelper
             isset($parts[$j]) ? $parts[$j] .= $string[$i] : $parts[$j] = $string[$i];
         }
 
-        return implode($delimiter, $castTo ? array_map($castTo, $parts) : $parts);
+        return implode($delimiter, array_map($castTo, $parts));
     }
 }

@@ -7,7 +7,7 @@
 <div style='font-family: sans-serif; font-size: 1rem;'>
     <div>
         <div style='font-size: 1.5rem; line-height: 2rem; float: left; margin-right: 2.5rem;'>Your Study Plan MSc in Life Sciences FHWN</div>
-        <img style='height:2rem;' src="{{ asset('img/logos/fhnw-logo-klein.png') }}" alt="Logo FHNW">
+        <img style='height:2rem;' src="{{ public_path('img/logos/fhnw-logo-klein.png') }}" alt="Logo FHNW">
     </div>
     <br />
     <div>{{ $givenName }} {{ $surname }}</div>
