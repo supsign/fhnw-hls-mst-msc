@@ -23,6 +23,7 @@ class GetPdfData
     protected Semester $semester;
     protected Specialization $specialization;
     protected Semester $thesisStart;
+    protected array $thesis;
 
     public function __construct(protected GetCourseData $getCourseData)
     {

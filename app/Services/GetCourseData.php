@@ -30,7 +30,7 @@ class GetCourseData
         $this->courseGroupTitle = PageContent::getContentByName('group_title');
     }
 
-    public function __invoke(Specialization $specialization, Semester $semester = null, StudyMode $studyMode = null): stdClass
+    public function __invoke(Specialization $specialization, ?Semester $semester = null, ?StudyMode $studyMode = null): stdClass
     {
         $this->specialization = $specialization;
 

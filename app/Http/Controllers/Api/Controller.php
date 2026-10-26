@@ -42,7 +42,6 @@ class Controller extends BaseController
         $path = Storage::path('public');
         $filename = $data['filename'];
         $pdf = App::make('dompdf.wrapper');
-        $pdf->getDomPDF()->set_option('enable_php', true);
         $pdf->loadView('pdf', $data);
         $pdf->save($path.'/'.$filename);
 

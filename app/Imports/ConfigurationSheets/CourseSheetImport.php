@@ -3,6 +3,7 @@
 namespace App\Imports\ConfigurationSheets;
 
 use App\Enums\Error;
+use App\Exceptions\InvalidData;
 use App\Models\Course;
 use App\Models\CourseCourseGroup;
 use App\Models\Slot;
@@ -13,7 +14,6 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
-use Spatie\FlareClient\Http\Exceptions\InvalidData;
 
 class CourseSheetImport implements ToCollection, WithHeadingRow
 {

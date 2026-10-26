@@ -4,13 +4,13 @@ namespace App\Imports\ConfigurationSheets;
 
 use App\Enums\CourseGroupType;
 use App\Enums\Error;
+use App\Exceptions\InvalidData;
 use App\Models\CourseGroup;
 use App\Models\CourseGroupSpecialization;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
-use Spatie\FlareClient\Http\Exceptions\InvalidData;
 
 class CourseGroupSheetImport implements ToCollection, WithHeadingRow
 {
