@@ -3,12 +3,12 @@
 namespace App\Imports\ConfigurationSheets;
 
 use App\Enums\Error;
+use App\Exceptions\InvalidData;
 use App\Models\Thesis;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
-use Spatie\FlareClient\Http\Exceptions\InvalidData;
 
 class ThesisSheetImport implements ToCollection, WithHeadingRow
 {

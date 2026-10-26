@@ -1,6 +1,8 @@
 @import 'tailwindcss';
 
 @source '../**/*.{js,ts,jsx,tsx,vue,blade.php}';
+/* 'hidden' used to be picked up from the removed public/vendor/sweetalert/sweetalert.all.js; admin HTML from the configuration Excel (v-html) may rely on it */
+@source inline('hidden');
 
 @theme {
   --color-hls: #fde70e;

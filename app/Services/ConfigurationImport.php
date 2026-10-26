@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Exceptions\InvalidData;
 use App\Imports\Configuration as ConfigurationImporter;
 use App\Models\Cluster;
 use App\Models\Course;
@@ -16,7 +17,6 @@ use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Excel;
-use Spatie\FlareClient\Http\Exceptions\InvalidData;
 use stdClass;
 
 class ConfigurationImport

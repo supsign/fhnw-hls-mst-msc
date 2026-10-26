@@ -3,9 +3,13 @@
 namespace Tests\Feature;
 
 use App\Models\Course;
+use App\Services\ConfigurationImport;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use Mockery\MockInterface;
+use Tests\Support\ConfigurationWorkbook;
+use Tests\Support\RemovesCreatedFiles;
 use Tests\TestCase;
 
 /**
@@ -16,6 +20,7 @@ use Tests\TestCase;
 class AdminConfigurationTest extends TestCase
 {
     use RefreshDatabase;
+    use RemovesCreatedFiles;
 
     protected function postConfiguration(array $data): \Illuminate\Testing\TestResponse
     {
@@ -52,5 +57,31 @@ class AdminConfigurationTest extends TestCase
         ])
             ->assertStatus(422)
             ->assertJsonValidationErrors(['config_file']);
+    }
+
+    /**
+     * Eine echte xlsx bis zur Uebergabe an den Import (der selbst nur gegen MySQL
+     * laeuft, siehe ConfigurationImportTest): mimes:xlsx prueft den Dateiinhalt,
+     * die Datei landet unter config/<Originalname> auf der Default-Disk.
+     */
+    public function test_xlsx_upload_is_stored_and_handed_to_the_import(): void
+    {
+        $this->removeFilesCreatedDuringTest('local');
+        $path = tempnam(sys_get_temp_dir(), 'phpunit-xlsx-');
+        $this->beforeApplicationDestroyed(fn () => unlink($path));
+        ConfigurationWorkbook::realistic()->save($path);
+        $this->mock(ConfigurationImport::class, function (MockInterface $mock): void {
+            $mock->shouldReceive('__invoke')
+                ->once()
+                ->with('config/phpunit-konfiguration.xlsx')
+                ->andReturn((object)['status' => 'success']);
+        });
+
+        $this->postConfiguration([
+            'password' => 'admin-test-password',
+            'config_file' => new UploadedFile($path, 'phpunit-konfiguration.xlsx', null, null, true),
+        ])->assertRedirect(config('app.url').'/admin/config');
+
+        $this->assertFileEquals($path, Storage::disk('local')->path('config/phpunit-konfiguration.xlsx'));
     }
 }

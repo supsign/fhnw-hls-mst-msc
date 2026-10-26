@@ -16,8 +16,8 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      # v2.37.2 -- Release-SHA statt Branch-Commit, damit der Pin reproduzierbar bleibt
-      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240
+      # v2.40.0 -- Release-SHA statt Branch-Commit, damit der Pin reproduzierbar bleibt
+      - uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962
         with:
           php-version: '8.2'
           coverage: none
@@ -38,8 +38,8 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      # v2.37.2 -- Release-SHA statt Branch-Commit, damit der Pin reproduzierbar bleibt
-      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240
+      # v2.40.0 -- Release-SHA statt Branch-Commit, damit der Pin reproduzierbar bleibt
+      - uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962
         with:
           # composer.lock verlangt >=8.2 (symfony/string 7.2 u.a.); Laravel 9
           # supportet offiziell maximal 8.2
@@ -76,12 +76,67 @@ jobs:
           npm ci
           npm run build-prod
 
+  # Der Admin-Import (ConfigurationImport) leert die Tabellen mit MySQL-SQL
+  # (SET FOREIGN_KEY_CHECKS) und baut seine Meldungen aus MySQL-Fehlertexten;
+  # ConfigurationImportTest (Endpoint, Ersetzen, Rollback, Meldungen) wird auf
+  # sqlite uebersprungen und laeuft nur hier. --fail-on-skipped: ein Skip hiesse,
+  # dass diese Tests nicht gegen MySQL liefen. Geht ueber needs in den
+  # Required Check ci ein.
+  tests-mysql:
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: testing
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+    # Echte Umgebungsvariablen gewinnen gegen <env> in phpunit.xml (ohne force)
+    env:
+      DB_CONNECTION: mysql
+      DB_HOST: 127.0.0.1
+      DB_PORT: 3306
+      DB_DATABASE: testing
+      DB_USERNAME: root
+      DB_PASSWORD: password
+    steps:
+      - uses: actions/checkout@v7
+
+      # v2.40.0 -- Release-SHA statt Branch-Commit, damit der Pin reproduzierbar bleibt
+      - uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962
+        with:
+          php-version: '8.2'
+          extensions: mbstring, dom, curl, zip, gd, pdo_sqlite, sqlite3, pdo_mysql
+          coverage: none
+
+      - name: Copy .env
+        run: php -r "file_exists('.env') || copy('.env.example', '.env');"
+
+      - name: Install Dependencies
+        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress
+          --prefer-dist
+
+      - name: Generate key
+        run: php artisan key:generate
+
+      - name: Directory Permissions
+        run: chmod -R 777 storage bootstrap/cache
+
+      - name: Execute tests (Unit and Feature tests) via PHPUnit against MySQL
+        run: php artisan test --fail-on-skipped
+
   # Standard aus https://github.com/supsign/.github: einziger Required-Status-
   # Check im Branch-Schutz. In `needs` stehen alle Jobs dieser Datei.
   ci:
     name: ci
     if: always()
-    needs: [php-cs-fixer, build-laravel]
+    needs: [php-cs-fixer, build-laravel, tests-mysql]
     runs-on: ubuntu-latest
     steps:
       - name: Ein Job ist rot oder abgebrochen
