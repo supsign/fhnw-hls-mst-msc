@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: [main]
 
+permissions:
+  contents: read
+
 jobs:
   php-cs-fixer:
     name: PHP-CS-Fixer
@@ -77,8 +80,8 @@ jobs:
   # (SET FOREIGN_KEY_CHECKS) und baut seine Meldungen aus MySQL-Fehlertexten;
   # ConfigurationImportTest (Endpoint, Ersetzen, Rollback, Meldungen) wird auf
   # sqlite uebersprungen und laeuft nur hier. --fail-on-skipped: ein Skip hiesse,
-  # dass diese Tests nicht gegen MySQL liefen. Eigener Job, damit die Namen der
-  # Required Checks ('PHP-CS-Fixer', 'build-laravel') unveraendert bleiben.
+  # dass diese Tests nicht gegen MySQL liefen. Geht ueber needs in den
+  # Required Check ci ein.
   tests-mysql:
     runs-on: ubuntu-latest
     services:
@@ -127,3 +130,24 @@ jobs:
 
       - name: Execute tests (Unit and Feature tests) via PHPUnit against MySQL
         run: php artisan test --fail-on-skipped
+
+  # Standard aus https://github.com/supsign/.github: einziger Required-Status-
+  # Check im Branch-Schutz. In `needs` stehen alle Jobs dieser Datei.
+  ci:
+    name: ci
+    if: always()
+    needs: [php-cs-fixer, build-laravel, tests-mysql]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ein Job ist rot oder abgebrochen
+        if: contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')
+        run: exit 1
+      - run: echo "Alle Jobs gruen."
+
+  # Zentrale Dependabot-Automatik, startet nur bei gruenem ci.
+  dependabot:
+    needs: ci
+    uses: supsign/.github/.github/workflows/dependabot.yml@main
+    permissions:
+      contents: write
+      pull-requests: write
